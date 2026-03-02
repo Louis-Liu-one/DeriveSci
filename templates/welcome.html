@@ -3,20 +3,23 @@
 {% from "includes/problist.html" import problist %}
 {% from "includes/solutionlist.html" import solutionlist %}
 
+{%- macro user_name(user) -%}
+    {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
+{%- endmacro -%}
+
 {% block title %}
-    {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}的主页
-     - MathProbs
+    {{ user_name(user) }}的主页 - MathProbs
 {% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 {% endblock %}
 
 {% block navbar_title %}
-    {{ user_avatar_img(user) }}{{ user_gender(user) }}
-    {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}的主页
+    {{ user_avatar_img(user) }}{{ user_gender(user) }}{{ user_name(user) }}的主页
 {% endblock %}
 
 {% block body %}
@@ -46,22 +49,36 @@
         </a>
     {% endif %}
 </div>
-<div class="mainpart">
-    <h3>{%- if current_user == user -%}我
-        {%- else -%}{{ user.name }}{%- endif -%}通过的题目</h3>
+<div class="bodypart">
+    <h3>{{ user_name(user) }}的贡献</h3>
+    <h4>{{ user_name(user) }}通过的题目</h4>
     {% set passedprobs = user.get_passedprobs() %}
     {% if passedprobs %}
         {{ problist(passedprobs, with_source=False) }}
     {% else %}<p>暂无</p>{% endif %}
-    <h3>{%- if current_user == user -%}我
-        {%- else -%}{{ user.name }}{%- endif -%}上传的题目</h3>
+    <h4>{{ user_name(user) }}上传的题目</h4>
     {% set uploadedprobs = user.uploadedprobs.copy() %}
     {% if uploadedprobs %}
         {% do uploadedprobs.sort() %}
         {{ problist(uploadedprobs, with_source=False) }}
     {% else %}<p>暂无</p>{% endif %}
-    <h3>{%- if current_user == user -%}我
-        {%- else -%}{{ user.name }}{%- endif -%}上传的题解</h3>
+</div>
+<div class="submitpart">
+    {% if user.introduction %}
+        <h3>{{ user_name(user) }}的简介</h3>
+        {% if user == current_user %}
+        <form class="mathprobsform" method="POST"
+            action="{{ url_for('edit_introduction') }}">
+            <span>
+                <textarea name="introduction" class="submittext"
+                    spellcheck="false">{{ user.introduction }}</textarea>
+            </span>
+            <span><button class="submitbutton" type="submit">修改</button></span>
+        </form>
+        {% else %}<p>{{ user.introduction }}</p>{% endif %}
+    {% endif %}
+    <h3>{{ user_name(user) }}的文章</h3>
+    <h4>{{ user_name(user) }}上传的题解</h4>
     {% set solutions = user.solutions.copy() %}
     {% if solutions %}
         {% do solutions.sort() %}

@@ -14,9 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
-    {% block styles %}{% endblock %}
     {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') }}
     {{ moment.locale('zh-cn') }}
+    {% block styles %}{% endblock %}
 </head>
 <body>
     <div class="navbar">
@@ -48,7 +48,7 @@
                         <br>{{ unread_comments.__len__() }}条未读
                     {% else %}
                         <i class="fa-solid fa-envelope-circle-check"></i>
-                        <br>无未读信息
+                        <br>无未读
                     {% endif %}
                 </li>
             {% endif %}

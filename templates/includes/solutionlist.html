@@ -15,7 +15,8 @@
                 <tr onclick="location.href = '{{ solution.url() }}'">
                     {% if with_probno %}
                         <td class="probno" onclick="event.stopPropagation();
-                            location.href = '{{ solution.prob.url() }}'">
+                            location.href = '{{ solution.prob.url() }}'"
+                            style="width: 20%;">
                             {{ solution.probno }}</td>
                     {% endif %}
                     <td>{{ solution.title }}</td>

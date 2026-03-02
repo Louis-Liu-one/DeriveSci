@@ -2,12 +2,13 @@
 Copyright (c) 2026 Louis Liu  All rights reserved.
 
 用户操作：
-/login        登录
-/logout       登出
-/register     注册
-/unregister   注销
-/edit-profile 编辑个人简介
-/users/<uid>  查看他人主页
+/login             登录
+/logout            登出
+/register          注册
+/unregister        注销
+/edit-profile      编辑信息
+/edit-introduction 编辑简介
+/users/<uid>       查看他人主页
 /post-comment/<post_type>/<post_ident>         发表评论
 /post-comment/<post_type>/<post_ident>/<cmtid> 回复评论
 /delete-comment                                删除评论
@@ -48,6 +49,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import MetaData
 
 from anschecker import TPStatus, check_answers, testpoints_passedlist, latex
 
@@ -55,8 +57,16 @@ from anschecker import TPStatus, check_answers, testpoints_passedlist, latex
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+convention = {
+    'ix': 'ix_%(column_0_label)s',
+    'uq': 'uq_%(table_name)s_%(column_0_name)s',
+    'ck': 'ck_%(table_name)s_%(constraint_name)s',
+    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
+    'pk': 'pk_%(table_name)s',
+}
+metadata = MetaData(naming_convention=convention)
+db = SQLAlchemy(app, metadata=metadata)
+migrate = Migrate(app, db, render_as_batch=True)
 moment = Moment(app)
 
 
@@ -227,6 +237,8 @@ class Prob(db.Model):
     sourceuid = db.Column(db.Integer, db.ForeignKey('users.uid'))
     submissions = db.relationship(
         'Submission', backref='prob', cascade='all, delete')
+    images = db.relationship(
+        'ProbImage', backref='prob', cascade='all, delete')
 
     def get_answer(self):
         if not self.answer:
@@ -325,7 +337,8 @@ class ProbSolution(db.Model):
 
 class ProbImage(db.Model):
     __tablename__ = 'images'
-    probno = db.Column(db.String(16), primary_key=True)
+    probno = db.Column(
+        db.String(16), db.ForeignKey('probs.probno'), primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
     uid = db.Column(db.Integer)
     size = db.Column(db.Integer)
@@ -487,6 +500,12 @@ class Comment(db.Model):
 def get_comment(cmtid):
     if isinstance(cmtid, int):
         return db.session.get(Comment, cmtid)
+
+
+def clear_comments(post):
+    for comment in post.get_toplevel_comments():
+        db.session.delete(comment)
+    db.session.commit()
 
 
 # =========================== 讨论区路由 ===========================
@@ -721,6 +740,7 @@ def delete_prob(probno):
         return render_template('notfound.html', error='未能找到题目。')
     if current_user == prob.source:
         prob.problabels.clear()
+        clear_comments(prob)
         db.session.delete(prob)
         db.session.commit()
         return redirect(url_for('welcome'))
@@ -734,6 +754,7 @@ def delete_solution(probno, solno):
     if not solution:
         return render_template('notfound.html', error='未能找到题解。')
     if current_user == solution.user:
+        clear_comments(solution)
         db.session.delete(solution)
         db.session.commit()
         return redirect(url_for('probs', probno=probno))
@@ -810,6 +831,15 @@ def edit_profile():
         if error is None:
             return redirect(url_for('welcome'))
     return render_template('edit_profile.html', error=error)
+
+
+@app.route('/edit-introduction', methods=['POST'])
+@login_required
+def edit_introduction():
+    introduction = request.form.get('introduction')
+    current_user.introduction = introduction
+    db.session.commit()
+    return redirect(url_for('welcome'))
 
 
 @app.route('/avatars/<int:uid>')
