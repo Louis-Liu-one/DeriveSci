@@ -5,110 +5,55 @@ form.mathprobsform {
     border-collapse: collapse;
     padding: 10px 15px 10px 10px;
 }
-
-p.errormsg {
-    color: #DC143C;
-}
-
+p.errormsg { color: #DC143C; }
 form.mathprobsform span {
     display: flex;
     justify-content: right;
-    width: 100%;
-    max-width: 100%;
+    width: 100%; max-width: 100%;
     padding: 5px 3px;
     white-space: nowrap;
 }
 
-form.mathprobsform div.answer {
-    flex-grow: 1;
-}
-
-form.mathprobsform div.answer-input {
-    display: flex;
-    flex-grow: 1;
-}
-
-form.mathprobsform div.answer-input input {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-form.mathprobsform div.answer-input i {
-    font-size: 25px;
-    color: #00BFFF;
-}
-
-form.mathprobsform div.answer-input i:hover {
-    cursor: pointer;
-}
-
+form.mathprobsform div.answer { flex-grow: 1; }
+form.mathprobsform div.answer-input { display: flex; flex-grow: 1; }
+form.mathprobsform div.answer-input input { flex-grow: 1; margin-right: 10px; }
+form.mathprobsform div.answer-input i { font-size: 25px; color: #00BFFF; }
+form.mathprobsform div.answer-input i:hover { cursor: pointer; }
 form.mathprobsform div.answer ul {
-    list-style-type: none;
-    padding: 0;
-    border: 1px solid skyblue;
-    border-radius: 10px;
-}
-
+    list-style-type: none; padding: 0;
+    border: 1px solid skyblue; border-radius: 10px; }
 form.mathprobsform div.answer ul li {
     display: flex;
     align-items: center;
     padding: 8px 16px;
     border-radius: inherit;
-    font-family: Andale Mono;
+    font-family: AndaleMono;
 }
-
-form.mathprobsform div.answer ul li i {
-    font-size: 15px;
-    margin: 0 5px;
-}
-
+form.mathprobsform div.answer ul li i { font-size: 15px; margin: 0 5px; }
 form.mathprobsform div.answer ul li i.minus {
-    font-size: 18px;
-    color: #00BFFF;
-    margin-left: auto;
-}
-
-form.mathprobsform div.answer ul li i.minus:hover {
-    cursor: pointer;
-}
-
-form.mathprobsform div.answer ul li:hover {
-    background-color: aliceblue;
-}
-
-form.mathprobsform label {
-    vertical-align: top;
-}
+    font-size: 18px; color: #00BFFF; margin-left: auto; }
+form.mathprobsform div.answer ul li i.minus:hover { cursor: pointer; }
+form.mathprobsform div.answer ul li:hover { background-color: aliceblue; }
+form.mathprobsform label { vertical-align: top; }
 
 form.mathprobsform input, form.mathprobsform textarea,
     form.mathprobsform select {
     flex-grow: 1;
     min-width: 0;
-    font-family: Andale Mono;
-    font-size: 15px;
+    font-family: AndaleMono; font-size: 15px;
     padding: 5px 10px;
     line-height: 20px;
     background-color: aliceblue;
-    border: none;
-    border-radius: 10px;
+    border: none; border-radius: 10px;
 }
-
 form.mathprobsform textarea {
-    min-width: 80%;
-    min-height: 50px;
-    height: 150px;
-}
-
+    min-width: 80%; min-height: 50px; height: 150px; }
 form.mathprobsform input:focus,
     form.mathprobsform textarea:focus,
-    form.mathprobsform select:focus {
-    outline-color: lightskyblue;
-}
-
+    form.mathprobsform select:focus { outline-color: lightskyblue; }
 form.mathprobsform input::file-selector-button,
     form.mathprobsform button {
-    border: none;
-    border-radius: 10px;
+    border: none; border-radius: 10px;
     background-color: skyblue;
     color: white;
     line-height: 27px;
@@ -116,14 +61,8 @@ form.mathprobsform input::file-selector-button,
     width: 120px;
     transition-duration: 500ms;
 }
-
 form.mathprobsform input::file-selector-button:hover,
     form.mathprobsform button:hover {
-    background-color: deepskyblue;
-    cursor: pointer;
-    transition-duration: 500ms;
-}
-
-form.mathprobsform button {
-    margin-left: 10px;
-}
+    background-color: deepskyblue; cursor: pointer;
+    transition-duration: 500ms; }
+form.mathprobsform button { margin-left: 10px; }

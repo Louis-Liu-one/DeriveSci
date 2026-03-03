@@ -1,30 +1,11 @@
 
-div.commentlist {
-    clear: both;
-    font-family: Helvetica;
-}
-
-div.comment {
-    clear: both;
-    margin-top: 10px;
-}
-
+div.commentlist { clear: both; font-family: Helvetica; }
+div.comment { clear: both; margin-top: 10px; }
 div.comment span.avatar, div.comment img.avatar, div.comment i.avatar {
-    width: 36px;
-    height: 36px;
-    margin-top: 2px;
-}
-
+    width: 36px; height: 36px; margin-top: 2px; }
 div.comment img.avatar, div.comment i.avatar {
-    border-radius: 50%;
-    transition-duration: 500ms;
-}
-
-div.comment i.avatar {
-    font-size: 32px;
-    text-align: center;
-    color: black;
-}
+    border-radius: 50%; transition-duration: 500ms; }
+div.comment i.avatar { font-size: 32px; text-align: center; color: black; }
 
 div.comment img.avatar:hover, div.comment i.avatar:hover {
     box-shadow: 0 0 3px #00000080;
@@ -38,55 +19,16 @@ div.commentbody {
     margin-bottom: 10px;
 }
 
-p.commentname, p.commentfoot {
-    font-size: 13px;
-    color: gray;
-}
-
-p.commentname {
-    margin: 0 0 5px 0;
-}
-
-p.commentfoot {
-    margin: 8px 0 0 0;
-}
-
-p.commentfoot img, p.commentfoot i {
-    float: right;
-    width: 18px;
-    height: 18px;
-}
-
+p.commentname, p.commentfoot { font-size: 13px; color: gray; }
+p.commentname { margin: 0 0 5px 0; }
+p.commentfoot { margin: 8px 0 0 0; }
+p.commentfoot img, p.commentfoot i { float: right; width: 18px; height: 18px; }
 p.commentfoot img:hover {
-    background-color: #A2E3EC;
-    border-radius: 50%;
-    cursor: pointer;
-}
+    background-color: #A2E3EC; border-radius: 50%; cursor: pointer; }
+p.commentfoot i:hover { color: #5CCBE2; cursor: pointer; }
 
-p.commentfoot i:hover {
-    color: #5CCBE2;
-    cursor: pointer;
-}
-
-div.commentcontent textarea {
-    margin-top: 0;
-    margin-bottom: 0;
-    display: none;
-}
-
-div.commentcontent p {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-div.commentbody form {
-    display: none;
-    border: none;
-    clear: both;
-}
-
+div.commentcontent textarea { margin-top: 0; margin-bottom: 0; display: none; }
+div.commentcontent p { margin-top: 0; margin-bottom: 0; }
+div.commentbody form { display: none; border: none; clear: both; }
 div.commentsep {
-    clear: both;
-    border-bottom: 1px solid gray;
-    margin-bottom: 10px;
-}
+    clear: both; border-bottom: 1px solid gray; margin-bottom: 10px; }

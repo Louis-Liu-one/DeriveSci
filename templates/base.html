@@ -45,7 +45,7 @@
                     {% set unread_comments = current_user.unread_comments() %}
                     {% if unread_comments %}
                         <i class="fa-solid fa-envelope"></i>
-                        <br>{{ unread_comments.__len__() }}条未读
+                        <br>{{ unread_comments|length }} 条未读
                     {% else %}
                         <i class="fa-solid fa-envelope-circle-check"></i>
                         <br>无未读

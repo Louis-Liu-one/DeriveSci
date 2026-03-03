@@ -3,8 +3,6 @@
 {% block title %}题目标签 - MathProbs{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 {% endblock %}
 
@@ -17,10 +15,10 @@
 <div class="mainpart">
     <h3>所有标签</h3>
     <table class="labellist">
-        {% for i in range(0, labels.__len__(), 5) %}
+        {% for i in range(0, labels|length, 5) %}
             <tr>
                 {% for dif in range(5) %}
-                    {% if i + dif < labels.__len__() %}
+                    {% if i + dif < labels|length %}
                         <td style="width: 20%;" onclick="location.href
                             = '{{ labels[i + dif].url() }}'">
                             {{ labels[i + dif].labelname }}

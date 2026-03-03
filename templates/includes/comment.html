@@ -63,9 +63,9 @@
                 '{{ url_for('delete_comment') }}', '{{ comment.cmtid }}')"></i>
         {% endif %}
         {% if with_post %}
+            {% set post = comment.get_post() %}来自：{{ post }}
             <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
-                onclick="window.open(
-                    '{{ comment.get_post().url() }}', '_block')"></i>
+                onclick="window.open('{{ post.url() }}', '_block')"></i>
         {% endif %}
     </p>
     {{ commentform_sub(comment, new_window=with_post) }}

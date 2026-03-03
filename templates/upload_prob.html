@@ -2,51 +2,67 @@
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/sidebar.html" import return2post, delete_prob %}
 
-{% block title %}上传题目 - MathProbs{% endblock %}
+{% block title %}
+{% if editmode %}编辑{% else %}上传{% endif %}题目 - MathProbs
+{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
+<link rel="stylesheet" href="{{ url_for(
+    'static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <script src="{{ url_for('static', filename='edit-prob.js') }}"></script>
 {% endblock %}
 
-{% block navbar_title %}上传题目{% endblock %}
+{% block navbar_title %}
+{% if editmode %}编辑{% else %}上传{% endif %}题目
+{% endblock %}
 
 {% block body %}
 <div class="sidebar">
-    <h3 class="sidebar-title">上传题目</h3>
-<div class="mainpart">
-    <h3>上传题目</h3>
+    <h3 class="sidebar-title">
+        {% if editmode %}编辑{% else %}上传{% endif %}题目
+    </h3>
+    {% if editmode %}
+        {{ return2post(prob, "返回题目") }}
+        {{ delete_prob(prob) }}
+        {{ problabels_sidebar(prob) }}
+    {% endif %}
+<div class="bodypart">
+    <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
     <form class="mathprobsform" id="editform" method="post"
-        action="{{ url_for('upload_prob') }}" enctype="multipart/form-data">
+        action="{%- if editmode -%}
+            {{ url_for('edit_prob', probno=prob.probno) }}
+            {%- else -%}{{ url_for('upload_prob') }}{%- endif -%}"
+        enctype="multipart/form-data">
         {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
-        <span>
+        {% if not editmode %}<span>
             <label for="probno">编号：</label>
-            <input type="text" id="probno" name="probno"
-                autocomplete="off" spellcheck="false" required
+            <input required type="text" id="probno" name="probno"
+                autocomplete="off" spellcheck="false"
                 {% if probno %}value="{{ probno }}"{% endif %}>
-        </span>
+        </span>{% endif %}
         <span>
             <label for="probtitle">名称：</label>
-            <input type="text" id="probtitle" name="probtitle"
-                autocomplete="off" spellcheck="false" required
-                {% if probtitle %}value="{{ probtitle }}"{% endif %}>
+            <input required type="text" id="probtitle" name="probtitle"
+                autocomplete="off" spellcheck="false"
+                {%- if editmode -%}value="{{ prob.probtitle }}"
+                {%- elif probtitle -%}value="{{ probtitle }}"{%- endif -%}>
         </span>
         <span>
             <label for="problabels">标签：</label>
             <input type="text" id="problabels" name="problabels"
                 autocomplete="off" spellcheck="false"
                 placeholder="输入题目标签，以CSV格式"
-                {% if problabels %}value="{{ problabels }}"{% endif %}>
+                {%- if editmode -%}value="{{ list2csv(prob.as_labelnames()) }}"
+                {%- elif problabels -%}value="{{ problabels }}"{%- endif -%}>
         </span>
         <span>
             <label for="statement">描述：</label>
             <textarea id="statement" name="statement" spellcheck="false" 
                 placeholder="以Markdown格式输入题面"
-                required>{% if statement %}{{ statement }}{% endif %}</textarea>
+                required>{%- if editmode -%}{{ prob.statement }}
+                {%- elif statement -%}{{ statement }}{%- endif -%}</textarea>
         </span>
         <span>
             <label for="answer">答案：</label>
@@ -65,7 +81,7 @@
             </div>
         </span>
         <span>
-            <label for="imgfiles">图片：</label>
+            <label for="imgfiles">{% if editmode %}更多{% endif %}图片：</label>
             <input type="file" id="imgfiles" name="imgfiles"
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
@@ -75,10 +91,45 @@
             <button onclick="submitFormWithAnswers();">上传</button>
         </span>
     </form>
+</div>
+<div class="submitpart">
     <h3>预览区</h3>
     <div class="mdpreview" id="mdpreview"></div>
+    <h3>帮助</h3>
+    <div id="helps">
+        <textarea id="helpstextarea">
+这里是一些常见问题的解答。
+{% if not editmode %}
+- **如何填写题目编号？**
+
+  题目编号建议遵循统一的格式，例如物理题是四位十六进制整数加上前缀 `PHY`，如 `PHY1234`。除非经过管理员的统一，请不要使用官方题目的编号格式，即四位十六进制整数，即形如 `ABCD` 的编号。不要使用过短的编号，建议编号长于四位。
+
+  成功上传题目后不能修改编号。如果题目有大的改动，请删除题目后重新上传。
+{% endif %}
+- **如何填写答案？**
+
+  题目答案是多个测试点，每个测试点包含*变量*和*正确结果*两部分。
+  * *变量*，是指用户输入表达式中一些未知数的值。例如，用户提交表达式 $x + \sqrt y$，测试点变量为 `{"y": 4}`，则代入后结果为 $x + 2$。变量需要按照 JSON 格式输入，没有变量时置空或填`{}`。
+  * *正确结果*，是指将用户输入表达式代入给出的变量值后应该得出的值，例如上例中结果为 $x + 2$。若题目提供的正确结果与计算得的结果相同，则此测试点判为正确。正确结果中可以有未知数。
+- **什么是推荐的图片格式？**
+
+  对于几何矢量图，我们推荐 SVG 格式；对于一般图像，我们推荐 JPEG 格式。不推荐上传 PNG 格式的或过大的图片，这会使加载题目时速度较慢。
+- **为什么我的图片没有显示？**
+
+  选择图片后还要在正文中用 Markdown 语法插入图片，否则即使图片已经上传到数据库中，也不会显示。
+- **如何插入图片？**
+
+  通过 `![ImageAlt](/images/<当前题目编号>/<图片名称>)` 在 Markdown 中插入图片。例如，若题目编号为 `ABCD`，上传的图片名称为 `image.svg`，则使用
+  ```
+  ![ImageAlt](/images/ABCD/image.svg)
+  ```
+  在文中插入图片。
+        </textarea>
+    </div>
 </div>
 <script>
-    {% if answers %}addAnswersBefore({{ answers }});{% endif %}
+    {% if editmode %}addAnswersBefore({{ prob.get_answer() | tojson }});
+    {% elif answers %}addAnswersBefore({{ answers }});{% endif %}
+    renderElements([helps]);
 </script>
 {% endblock %}

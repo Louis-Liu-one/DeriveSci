@@ -7,8 +7,6 @@
 {% block title %}问题{{ prob.probno }}的提交 - MathProbs{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='submit.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
@@ -71,7 +69,5 @@
 <div class="submitpart">
     <h3>查看题解</h3>{{ solutionlist(prob.solutions) }}
 </div>
-<script>
-    renderElements([answerdiv]);
-</script>
+<script>renderElements([answerdiv]);</script>
 {% endblock %}

@@ -1,19 +1,35 @@
 
+@font-face {
+    font-family: AndaleMono;
+    src: local(AndaleMono),
+        url(/static/fonts/AndaleMono.woff2) format('woff2'),
+        url(/static/fonts/AndaleMono.woff) format('woff');
+}
+
+@font-face {
+    font-family: Helvetica;
+    src: local(Helvetica),
+        url(/static/fonts/Helvetica.woff2) format('woff2'),
+        url(/static/fonts/Helvetica.woff) format('woff');
+}
+
+@font-face {
+    font-family: Helvetica-Bold;
+    src: local(Helvetica-Bold),
+        url(/static/fonts/Helvetica-Bold.woff2) format('woff2'),
+        url(/static/fonts/Helvetica-Bold.woff) format('woff');
+}
+
 div.login-block {
     display: flex;
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    top: 0; bottom: 0; left: 0; right: 0;
     margin: auto;
-    width: 600px;
-    height: 400px;
+    width: 600px; height: 400px;
     box-shadow: -10px 10px 25px #00000080;
     border-radius: 35px;
     font-family: Helvetica;
 }
-
 div.login-block h3 {
     font-size: 1.8em;
     color: black;
@@ -22,48 +38,23 @@ div.login-block h3 {
     text-align: center;
 }
 
-div.login {
-    width: 50%;
-    margin: auto;
-}
-
-div.login form {
-    border: none;
-    margin-right: 10px;
-}
-
-div.login form span {
-    padding: 10px 5px;
-}
+div.login { width: 50%; margin: auto; }
+div.login form { border: none; margin-right: 10px; }
+div.login form span { padding: 10px 5px; }
 
 div.register-back {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    height: 100%;
+    justify-content: center; align-items: center;
+    width: 50%; height: 100%;
     margin: auto;
     background-color: #5CCBE2;
     border-radius: 35px;
     color: white;
 }
-
-div.register-front {
-    text-align: center;
-}
-
-div.register-front h2 {
-    font-weight: 700;
-}
-
-div.register-front p {
-    margin: 15px 0 25px 0;
-}
-
-div.login-block div.text-center {
-    text-align: center;
-}
-
+div.register-front { text-align: center; }
+div.register-front h2 { font-weight: 700; }
+div.register-front p { margin: 15px 0 25px 0; }
+div.login-block div.text-center { text-align: center; }
 div.login-block button.register {
     border: none;
     border-radius: 10px;
@@ -75,7 +66,6 @@ div.login-block button.register {
     transition-duration: 500ms;
     margin-bottom: 10px;
 }
-
 div.login-block button.register:hover {
     background-color: #0000C033;
     cursor: pointer;

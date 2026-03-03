@@ -284,6 +284,9 @@ class Prob(db.Model):
     def url(self):
         return url_for('probs', probno=self.probno)
 
+    def __str__(self):
+        return f'问题 {self.probno}'
+
     def __lt__(self, prob):
         return self.probno < prob.probno
 
@@ -330,6 +333,9 @@ class ProbSolution(db.Model):
         if content:
             self.content = content
         db.session.commit()
+
+    def __str__(self):
+        return f'问题 {self.probno} 的题解：{self.title}'
 
     def __lt__(self, solution):
         return self.probno < solution.probno
@@ -647,10 +653,11 @@ def edit_prob(probno):
         imgfiles = request.files.getlist('imgfiles')
         error = add_images(probno, imgfiles)
         if error is not None:
-            return render_template('edit_prob.html', prob=prob, error=error)
+            return render_template(
+                'upload_prob.html', editmode=True, prob=prob, error=error)
         prob.edit(probtitle, problabels, statement, answers)
         return redirect(prob.url())
-    return render_template('edit_prob.html', prob=prob)
+    return render_template('upload_prob.html', editmode=True, prob=prob)
 
 
 @app.route(
@@ -669,12 +676,13 @@ def edit_solution(probno, solno):
         error = add_images(probno, imgfiles)
         if error is not None:
             return render_template(
-                'edit_solution.html',
+                'upload_solution.html', editmode=True,
                 prob=solution.prob, solution=solution, error=error)
         solution.edit(soltitle, content)
         return redirect(solution.url())
     return render_template(
-        'edit_solution.html', prob=solution.prob, solution=solution)
+        'upload_solution.html', editmode=True,
+        prob=solution.prob, solution=solution)
 
 
 @app.route('/upload-prob', methods=['GET', 'POST'])

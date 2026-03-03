@@ -4,8 +4,6 @@
 {% block title %}题集 - MathProbs{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 {% endblock %}
@@ -26,7 +24,11 @@
         </a>
     {% else %}<h3 class="sidebar-title">MathProbs题集</h3>{% endif %}
 </div>
-<div class="mainpart">
+<div class="bodypart">
+    <h3>{% if query %}满足条件的{% else %}所有{% endif %}题目</h3>
+    {% if probs.first() %}{{ problist(probs) }}{% else %}<p>暂无</p>{% endif %}
+</div>
+<div class="submitpart">
     <h3>查询题目</h3>
     <form class="mathprobsform" method="post" action="{% if oflabel %}
                 {{ url_for('problistoflabel', labelname=labelname) }}
@@ -53,7 +55,5 @@
             value="{{ form.get('source', '') }}"></span>
         <span><button type="submit">查询</button></span>
     </form>
-    <h3>{% if query %}满足条件的{% else %}所有{% endif %}题目</h3>
-    {% if probs.first() %}{{ problist(probs) }}{% else %}<p>暂无</p>{% endif %}
 </div>
 {% endblock %}

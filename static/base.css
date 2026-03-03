@@ -1,4 +1,27 @@
 
+@font-face {
+    font-family: AndaleMono;
+    src: local(AndaleMono),
+        url(/static/fonts/AndaleMono.woff2) format('woff2'),
+        url(/static/fonts/AndaleMono.woff) format('woff');
+}
+
+@font-face {
+    font-family: Helvetica;
+    src: local(Helvetica),
+        url(/static/fonts/Helvetica.woff2) format('woff2'),
+        url(/static/fonts/Helvetica.woff) format('woff');
+}
+
+@font-face {
+    font-family: Helvetica-Bold;
+    src: local(Helvetica-Bold),
+        url(/static/fonts/Helvetica-Bold.woff2) format('woff2'),
+        url(/static/fonts/Helvetica-Bold.woff) format('woff');
+}
+
+/******************************* navbar *******************************/
+
 div.navbar {
     position: fixed;
     padding-left: 0px;
@@ -6,22 +29,17 @@ div.navbar {
     height: 80px;
     left: 0px;
     top: 0px;
-    background-color: #449AD5;
-    background-repeat: no-repeat;
+    background-color: #349AD5;
 }
 
-ul.navbar-items {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+ul.navbar-items { list-style: none; margin: 0; padding: 0; }
 
 ul.navbar-items li.logo-image, li.navbar-item {
     height: 80px;
     text-align: center;
     font-size: 15px;
     font-weight: bold;
-    font-family: Helvetica;
+    font-family: Helvetica-Bold;
     color: white;
     transition-duration: 500ms;
 }
@@ -52,7 +70,7 @@ ul.navbar-items li.logo-text {
     line-height: 80px;
     font-weight: bold;
     font-size: 35px;
-    font-family: Andale Mono;
+    font-family: AndaleMono;
     text-decoration: none;
     color: white;
     float: left;
@@ -101,3 +119,85 @@ li.navbar-item i {
     font-size: 36px;
     padding: 10px 0;
 }
+
+/******************************* sidebar *******************************/
+
+div.sidebar {
+    position: fixed;
+    top: 80px;
+    left: 0px;
+    background-color: #5CCBE2;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-left: 0px;
+    width: 16%;
+    height: 100%;
+    overflow-y: auto;
+    font-family: Helvetica;
+}
+
+h3.sidebar-title { color: aliceblue; text-align: right; }
+a.sidebar-link { text-decoration: none; }
+
+div.sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    line-height: 35px;
+    color: white;
+    margin-top: 7px;
+    padding-right: 10px;
+    cursor: pointer;
+    background-color: #00008019;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition-duration: 500ms;
+}
+
+div.sidebar-item img {
+    width: 27px;
+    height: 27px;
+    margin-right: 3px;
+}
+
+div.sidebar-item img.avatar {
+    width: 27px;
+    height: 27px;
+    margin-right: 3px;
+    border-radius: 50%;
+    color: white;
+}
+
+div.sidebar-item i {
+    font-size: 20px;
+    margin-right: 3px;
+}
+
+div.sidebar-item:hover {
+    transition-duration: 500ms;
+    background-color: #0000C033;
+    cursor: pointer;
+}
+
+/******************************* blocks *******************************/
+
+div.mainpart, div.bodypart, div.submitpart {
+    position: fixed;
+    top: 80px;
+    bottom: 15px;
+    margin: 15px 0 0 20px;
+    padding: 5px 12px;
+    overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: 1px 1px 3px #00000080;
+    font-family: Helvetica;
+}
+
+div.mainpart { left: 16%; width: 79%; }
+div.bodypart { left: 16%; width: 45%; }
+div.bodypart img { width: 100%; }
+div#bodydiv { display: none; }
+div.submitpart { left: 64%; width: 31%; }
+div.submitpart form.mathprobsform { border: none; padding: 0; }
+div.submitpart textarea.submittext { width: 100%; height: 80px; }
+div.submitpart h3 { clear: both; }

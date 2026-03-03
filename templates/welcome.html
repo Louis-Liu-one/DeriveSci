@@ -12,8 +12,6 @@
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 {% endblock %}
@@ -64,18 +62,22 @@
     {% else %}<p>暂无</p>{% endif %}
 </div>
 <div class="submitpart">
-    {% if user.introduction %}
+    {% if user == current_user %}
         <h3>{{ user_name(user) }}的简介</h3>
-        {% if user == current_user %}
         <form class="mathprobsform" method="POST"
             action="{{ url_for('edit_introduction') }}">
             <span>
                 <textarea name="introduction" class="submittext"
-                    spellcheck="false">{{ user.introduction }}</textarea>
+                    spellcheck="false"
+                    placeholder="输入你的简介">{{ user.introduction }}</textarea>
             </span>
-            <span><button class="submitbutton" type="submit">修改</button></span>
+            <span>
+                <button class="submitbutton" type="submit">修改</button>
+            </span>
         </form>
-        {% else %}<p>{{ user.introduction }}</p>{% endif %}
+    {% elif user.introduction %}
+        <h3>{{ user_name(user) }}的简介</h3>
+        <p>{{ user.introduction }}</p>
     {% endif %}
     <h3>{{ user_name(user) }}的文章</h3>
     <h4>{{ user_name(user) }}上传的题解</h4>

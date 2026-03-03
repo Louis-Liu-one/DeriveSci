@@ -1,46 +1,57 @@
 {% extends "base.html" %}
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/users.html" import user_sidebar %}
-{% from "includes/sidebar.html" import return2post %}
+{% from "includes/sidebar.html" import return2post, delete_solution %}
 
-{% block title %}上传题解 - MathProbs{% endblock %}
+{% block title %}
+{% if editmode %}编辑{% else %}上传{% endif %}题解 - MathProbs
+{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='blocks.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 {% endblock %}
 
-{% block navbar_title %}问题{{ prob.probno }} —— 上传题解{% endblock %}
+{% block navbar_title %}
+问题{{ prob.probno }} —— {% if editmode %}编辑{% else %}上传{% endif %}题解
+{% endblock %}
 
 {% block body %}
 <div class="sidebar">
     {{ return2post(prob, "返回题目") }}
+    {% if editmode %}
+        {{ return2post(solution, "返回题解") }}
+        {{ delete_solution(solution) }}
+    {% endif %}
     {{ problabels_sidebar(prob) }}
     <h3 class="sidebar-title">题目来源</h3>{{ user_sidebar(prob.source) }}
 </div>
-<div class="mainpart">
-    <h3>上传题解</h3>
+<div class="bodypart">
+    <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
     <form class="mathprobsform" method="post" action="
-            {{ url_for('upload_solution', probno=prob.probno) }}"
+            {%- if editmode -%}{{ url_for('edit_solution',
+                probno=prob.probno, solno=solution.solno) }}{%- else -%}
+            {{ url_for('upload_solution', probno=prob.probno) }}{%- endif -%}"
             enctype="multipart/form-data">
         {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
         <span>
             <label for="soltitle">标题：</label>
-            <input type="text" id="soltitle" name="soltitle"
-                autocomplete="off" spellcheck="false" required
-                {% if soltitle %}value="{{ soltitle }}"{% endif %}>
+            <input required type="text" id="soltitle" name="soltitle"
+                autocomplete="off" spellcheck="false"
+                {%- if editmode -%}value="{{ solution.title }}"
+                {%- elif soltitle -%}value="{{ soltitle }}"{%- endif -%}>
         </span>
         <span>
             <label for="solution">内容：</label>
             <textarea id="solution" name="solution"
                 placeholder="以Markdown格式输入题解" spellcheck="false"
-                required>{% if content %}{{ content }}{% endif %}</textarea>
+                required>{%- if editmode -%}
+                {{ solution.content }}
+                {%- elif content -%}{{ content }}{%- endif -%}</textarea>
         </span>
         <span>
-            <label for="imgfiles">图片：</label>
+            <label for="imgfiles">{% if editmode %}更多{% endif %}图片：</label>
             <input type="file" id="imgfiles" name="imgfiles"
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
@@ -50,7 +61,29 @@
             <button type="submit">上传</button>
         </span>
     </form>
+</div>
+<div class="submitpart">
     <h3>预览区</h3>
     <div class="mdpreview" id="mdpreview"></div>
+    <h3>帮助</h3>
+    <div id="helps">
+        <textarea id="helpstextarea">
+这里是一些常见问题的解答。
+- **什么是推荐的图片格式？**
+
+  对于几何矢量图，我们推荐 SVG 格式；对于一般图像，我们推荐 JPEG 格式。不推荐上传 PNG 格式的或过大的图片，这会使加载题目时速度较慢。
+- **为什么我的图片没有显示？**
+
+  选择图片后还要在正文中用 Markdown 语法插入图片，否则即使图片已经上传到数据库中，也不会显示。
+- **如何插入图片？**
+
+  通过 `![ImageAlt](/images/<当前题目编号>/<图片名称>)` 在 Markdown 中插入图片。例如，若题目编号为 `ABCD`，上传的图片名称为 `image.svg`，则使用
+  ```
+  ![ImageAlt](/images/ABCD/image.svg)
+  ```
+  在文中插入图片。
+        </textarea>
+    </div>
 </div>
+<script>renderElements([helps]);</script>
 {% endblock %}
