@@ -64,26 +64,17 @@
 </div>
 <div class="submitpart">
     <h3>预览区</h3>
-    <div class="mdpreview" id="mdpreview"></div>
-    <h3>帮助</h3>
-    <div id="helps">
-        <textarea id="helpstextarea">
-这里是一些常见问题的解答。
-- **什么是推荐的图片格式？**
-
-  对于几何矢量图，我们推荐 SVG 格式；对于一般图像，我们推荐 JPEG 格式。不推荐上传 PNG 格式的或过大的图片，这会使加载题目时速度较慢。
-- **为什么我的图片没有显示？**
-
-  选择图片后还要在正文中用 Markdown 语法插入图片，否则即使图片已经上传到数据库中，也不会显示。
-- **如何插入图片？**
-
-  通过 `![ImageAlt](/images/<当前题目编号>/<图片名称>)` 在 Markdown 中插入图片。例如，若题目编号为 `ABCD`，上传的图片名称为 `image.svg`，则使用
-  ```
-  ![ImageAlt](/images/ABCD/image.svg)
-  ```
-  在文中插入图片。
-        </textarea>
-    </div>
+    <div class="markdown-body mdpreview" id="mdpreview"></div>
+    <p class="helpslink">
+        <a target="_blank"
+            href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
+            <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
+        </a><br>
+        <a target="_blank"
+            href="{{ url_for('helps', howto='write-markdown') }}">
+            <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
+        </a>
+    </p>
 </div>
 <script>renderElements([helps]);</script>
 {% endblock %}

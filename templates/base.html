@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
@@ -25,7 +26,7 @@
                 <img src="{{ url_for('static',
                     filename='images/favicon.svg') }}"><br>MathProbs
             </li>
-            <li id="title-text" class="logo-text">
+            <li id="navbar_title" class="logo-text">
                 {% block navbar_title %}{% endblock %}
             </li>
             <li class="navbar-item">

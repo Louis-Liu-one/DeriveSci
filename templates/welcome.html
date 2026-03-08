@@ -7,9 +7,7 @@
     {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
 {%- endmacro -%}
 
-{% block title %}
-    {{ user_name(user) }}的主页 - MathProbs
-{% endblock %}
+{% block title %}{{ user_name(user) }}的主页 - MathProbs{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
@@ -69,7 +67,8 @@
             <span>
                 <textarea name="introduction" class="submittext"
                     spellcheck="false"
-                    placeholder="输入你的简介">{{ user.introduction }}</textarea>
+                    placeholder="输入你的简介">{%- if user.introduction -%}
+                    {{ user.introduction }}{%- endif -%}</textarea>
             </span>
             <span>
                 <button class="submitbutton" type="submit">修改</button>

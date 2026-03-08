@@ -94,42 +94,20 @@
 </div>
 <div class="submitpart">
     <h3>预览区</h3>
-    <div class="mdpreview" id="mdpreview"></div>
-    <h3>帮助</h3>
-    <div id="helps">
-        <textarea id="helpstextarea">
-这里是一些常见问题的解答。
-{% if not editmode %}
-- **如何填写题目编号？**
-
-  题目编号建议遵循统一的格式，例如物理题是四位十六进制整数加上前缀 `PHY`，如 `PHY1234`。除非经过管理员的统一，请不要使用官方题目的编号格式，即四位十六进制整数，即形如 `ABCD` 的编号。不要使用过短的编号，建议编号长于四位。
-
-  成功上传题目后不能修改编号。如果题目有大的改动，请删除题目后重新上传。
-{% endif %}
-- **如何填写答案？**
-
-  题目答案是多个测试点，每个测试点包含*变量*和*正确结果*两部分。
-  * *变量*，是指用户输入表达式中一些未知数的值。例如，用户提交表达式 $x + \sqrt y$，测试点变量为 `{"y": 4}`，则代入后结果为 $x + 2$。变量需要按照 JSON 格式输入，没有变量时置空或填`{}`。
-  * *正确结果*，是指将用户输入表达式代入给出的变量值后应该得出的值，例如上例中结果为 $x + 2$。若题目提供的正确结果与计算得的结果相同，则此测试点判为正确。正确结果中可以有未知数。
-- **什么是推荐的图片格式？**
-
-  对于几何矢量图，我们推荐 SVG 格式；对于一般图像，我们推荐 JPEG 格式。不推荐上传 PNG 格式的或过大的图片，这会使加载题目时速度较慢。
-- **为什么我的图片没有显示？**
-
-  选择图片后还要在正文中用 Markdown 语法插入图片，否则即使图片已经上传到数据库中，也不会显示。
-- **如何插入图片？**
-
-  通过 `![ImageAlt](/images/<当前题目编号>/<图片名称>)` 在 Markdown 中插入图片。例如，若题目编号为 `ABCD`，上传的图片名称为 `image.svg`，则使用
-  ```
-  ![ImageAlt](/images/ABCD/image.svg)
-  ```
-  在文中插入图片。
-        </textarea>
-    </div>
+    <div class="markdown-body mdpreview" id="mdpreview"></div>
+    <p class="helpslink">
+        <a target="_blank"
+            href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
+            <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
+        </a><br>
+        <a target="_blank"
+            href="{{ url_for('helps', howto='write-markdown') }}">
+            <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
+        </a>
+    </p>
 </div>
 <script>
     {% if editmode %}addAnswersBefore({{ prob.get_answer() | tojson }});
     {% elif answers %}addAnswersBefore({{ answers }});{% endif %}
-    renderElements([helps]);
 </script>
 {% endblock %}

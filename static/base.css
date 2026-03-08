@@ -20,184 +20,92 @@
         url(/static/fonts/Helvetica-Bold.woff) format('woff');
 }
 
+p.helpslink { color: gray; font-size: 13px; line-height: 25px; }
+p.helpslink a { color: inherit; text-decoration: none; }
+p.helpslink a:hover { color: #349AD5; }
+
 /******************************* navbar *******************************/
 
 div.navbar {
-    position: fixed;
-    padding-left: 0px;
-    width: 100%;
-    height: 80px;
-    left: 0px;
-    top: 0px;
-    background-color: #349AD5;
-}
+    position: fixed; padding-left: 0px;
+    width: 100%; height: 80px; left: 0px; top: 0px;
+    background-color: #349AD5; }
 
 ul.navbar-items { list-style: none; margin: 0; padding: 0; }
-
 ul.navbar-items li.logo-image, li.navbar-item {
-    height: 80px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: bold;
-    font-family: Helvetica-Bold;
-    color: white;
-    transition-duration: 500ms;
-}
-
+    height: 80px; text-align: center;
+    font-size: 15px; font-weight: bold;
+    font-family: Helvetica-Bold; color: white;
+    transition-duration: 500ms; }
 ul.navbar-items li.logo-image:hover, li.navbar-item:hover {
     transition-duration: 500ms;
-    background-color: #00008040;
-    cursor: pointer;
-}
-
+    background-color: #00008040; cursor: pointer; }
 ul.navbar-items li.logo-image {
-    width: 80px;
-    float: left;
-    margin-right: 10px;
-    padding: 0 5px;
-}
-
+    width: 80px; float: left; margin-right: 10px; padding: 0 5px; }
 ul.navbar-items li.logo-image img {
-    width: 50px;
-    height: 50px;
-    padding-top: 5px;
-}
-
+    width: 50px; height: 50px; padding-top: 5px; }
 ul.navbar-items li.logo-text {
-    display: flex;
-    align-items: center;
-    height: 80px;
-    line-height: 80px;
-    font-weight: bold;
-    font-size: 35px;
-    font-family: AndaleMono;
-    text-decoration: none;
-    color: white;
-    float: left;
-}
-
+    display: flex; align-items: center;
+    height: 80px; line-height: 80px;
+    font-weight: bold; font-size: 35px; font-family: AndaleMono;
+    text-decoration: none; color: white; float: left; }
 ul.navbar-items li.logo-text img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 0;
-    color: white;
-}
-
+    width: 50px; height: 50px;
+    border-radius: 50%; margin-right: 0; color: white; }
 ul.navbar-items li.logo-text i {
-    font-size: 45px;
-    margin-right: 0;
-    color: white;
-}
-
+    font-size: 45px; margin-right: 0; color: white; }
 ul.navbar-items li.logo-text i.gender {
-    font-size: 20px;
-    margin: 30px 15px 0 -18px;
-    -webkit-text-stroke: 1px white;
-}
+    font-size: 20px; margin: 30px 15px 0 -18px;
+    -webkit-text-stroke: 1px white; }
 
-li.navbar-item {
-    width: 72px;
-    float: right;
-    line-height: 20px;
-}
-
-li.navbar-item img {
-    width: 50px;
-    height: 50px;
-    padding-top: 3px;
-}
-
+li.navbar-item { width: 72px; float: right; line-height: 20px; }
+li.navbar-item img { width: 50px; height: 50px; padding-top: 3px; }
 li.navbar-avatar img {
-    width: 45px;
-    height: 45px;
-    padding-top: 7px;
-    border-radius: 50%;
-}
-
-li.navbar-item i {
-    font-size: 36px;
-    padding: 10px 0;
-}
+    width: 45px; height: 45px; padding-top: 7px; border-radius: 50%; }
+li.navbar-item i { font-size: 36px; padding: 10px 0; }
 
 /******************************* sidebar *******************************/
 
 div.sidebar {
-    position: fixed;
-    top: 80px;
-    left: 0px;
-    background-color: #5CCBE2;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-left: 0px;
-    width: 16%;
-    height: 100%;
-    overflow-y: auto;
-    font-family: Helvetica;
-}
-
+    position: fixed; top: 80px; left: 0px;
+    background-color: #5CCBE2; padding: 5px 10px 0 0;
+    width: 16%; height: 100%; overflow-y: auto; font-family: Helvetica; }
 h3.sidebar-title { color: aliceblue; text-align: right; }
 a.sidebar-link { text-decoration: none; }
-
 div.sidebar-item {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    line-height: 35px;
-    color: white;
-    margin-top: 7px;
-    padding-right: 10px;
-    cursor: pointer;
-    background-color: #00008019;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    transition-duration: 500ms;
-}
-
-div.sidebar-item img {
-    width: 27px;
-    height: 27px;
-    margin-right: 3px;
-}
-
+    display: flex; align-items: center; justify-content: right;
+    line-height: 35px; color: white; margin-top: 7px; padding-right: 10px;
+    cursor: pointer; background-color: #00008019; border-radius: 0 8px 8px 0;
+    transition-duration: 500ms; }
+div.sidebar-item img { width: 27px; height: 27px; margin-right: 3px; }
 div.sidebar-item img.avatar {
-    width: 27px;
-    height: 27px;
-    margin-right: 3px;
-    border-radius: 50%;
-    color: white;
-}
-
-div.sidebar-item i {
-    font-size: 20px;
-    margin-right: 3px;
-}
-
+    width: 27px; height: 27px;
+    margin-right: 3px; border-radius: 50%; color: white; }
+div.sidebar-item i { font-size: 20px; margin-right: 3px; }
 div.sidebar-item:hover {
     transition-duration: 500ms;
-    background-color: #0000C033;
-    cursor: pointer;
-}
+    background-color: #0000C033; cursor: pointer; }
 
 /******************************* blocks *******************************/
 
-div.mainpart, div.bodypart, div.submitpart {
+div.mainpart, div.bodypart, div.submitpart, div.tocblock, div.contentblock {
     position: fixed;
-    top: 80px;
-    bottom: 15px;
-    margin: 15px 0 0 20px;
-    padding: 5px 12px;
-    overflow-y: auto;
-    border-radius: 20px;
-    box-shadow: 1px 1px 3px #00000080;
-    font-family: Helvetica;
-}
-
+    top: 80px; bottom: 15px; margin: 15px 0 0 20px; padding: 12px;
+    overflow-y: auto; border-radius: 20px; box-shadow: 1px 1px 3px #00000080;
+    font-family: Helvetica; }
 div.mainpart { left: 16%; width: 79%; }
 div.bodypart { left: 16%; width: 45%; }
 div.bodypart img { width: 100%; }
-div#bodydiv { display: none; }
 div.submitpart { left: 64%; width: 31%; }
 div.submitpart form.mathprobsform { border: none; padding: 0; }
 div.submitpart textarea.submittext { width: 100%; height: 80px; }
 div.submitpart h3 { clear: both; }
+div.tocblock { left: 0; width: 22%; }
+div.tocblock h3 { margin-bottom: 0; }
+div.tocblock nav.table-of-contents ul { padding-left: 16px; }
+div.tocblock nav.table-of-contents li { padding-top: 8px; }
+div.tocblock a, div.contentblock a { text-decoration: none; color: #54AAE0; }
+div.tocblock a:hover, div.contentblock a:hover {
+    text-decoration: underline; color: #349AD5; }
+div.contentblock { left: 25.5%; width: 69%; }
+div#bodydiv, div.contentblock nav.table-of-contents { display: none; }

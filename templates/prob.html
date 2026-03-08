@@ -27,12 +27,12 @@
     {{ problabels_sidebar(prob) }}
     <h3 class="sidebar-title">题目来源</h3>{{ user_sidebar(prob.source) }}
 </div>
-<div id="bodydiv" class="bodypart">
+<div id="bodydiv" class="markdown-body bodypart">
     <textarea id="bodytext">{{ prob.statement }}</textarea>
 </div>
 <div id="submitdiv" class="submitpart">
     <h3>提交答案</h3>
-    <p style="font-size: 11px; color: gray;">
+    <p class="helpslink">
         服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。
     </p>
     <form id="answerform" class="mathprobsform" method="POST"

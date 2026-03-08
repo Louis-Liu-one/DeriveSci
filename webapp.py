@@ -9,6 +9,7 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /edit-profile      编辑信息
 /edit-introduction 编辑简介
 /users/<uid>       查看他人主页
+/helps/<howto>     查看帮助
 /post-comment/<post_type>/<post_ident>         发表评论
 /post-comment/<post_type>/<post_ident>/<cmtid> 回复评论
 /delete-comment                                删除评论
@@ -767,6 +768,17 @@ def delete_solution(probno, solno):
         db.session.commit()
         return redirect(url_for('probs', probno=probno))
     return redirect(solution.url())
+
+
+@app.route('/helps/<howto>')
+def helps(howto):
+    if not howto.endswith('.md'):
+        howto += '.md'
+    path = os.path.join(app.root_path, app.template_folder, 'helps', howto)
+    if os.path.exists(path):
+        return render_template(
+            'helps.html', filename=os.path.join('helps', howto))
+    return render_template('notfound.html', error='未能找到帮助文档。')
 
 
 # =========================== 登录系统网页 ===========================
