@@ -7,15 +7,15 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/svg+xml"
         href="{{ url_for('static', filename='images/favicon.svg') }}">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
+    <script src="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
-    {{ moment.include_moment(local_js='https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') }}
+    {{ moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') }}
     {{ moment.locale('zh-cn') }}
     {% block styles %}{% endblock %}
 </head>
