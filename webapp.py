@@ -84,7 +84,7 @@ def list2csv(ls):
 
 
 def get_helplist():
-    helppath = os.path.join(app.template_folder, 'helps')
+    helppath = os.path.join(app.root_path, app.template_folder, 'helps')
     helplist = []
     for filename in os.listdir(helppath):
         if filename.endswith('.md'):
