@@ -9,6 +9,7 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /edit-profile      编辑信息
 /edit-introduction 编辑简介
 /users/<uid>       查看他人主页
+/helps/            查看帮助列表
 /helps/<howto>     查看帮助
 /post-comment/<post_type>/<post_ident>         发表评论
 /post-comment/<post_type>/<post_ident>/<cmtid> 回复评论
@@ -29,7 +30,7 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /probs/<probno>/solutions/<solno>/edit   编辑题解
 /probs/<probno>/solutions/<solno>/delete 删除题解
 
-计划部署至：MathProbsOnline.PythonAnyWhere.com
+已部署至：MathProbsOnline.PythonAnyWhere.com
 '''
 
 import io
@@ -80,6 +81,18 @@ def list2csv(ls):
     writer = csv.writer(csvstr)
     writer.writerow(list(ls))
     return csvstr.getvalue().splitlines()[0]
+
+
+def get_helplist():
+    helppath = os.path.join(app.template_folder, 'helps')
+    helplist = []
+    for filename in os.listdir(helppath):
+        if filename.endswith('.md'):
+            with open(os.path.join(helppath, filename)) as file:
+                title = file.readline().strip()
+                if title.startswith('# '):
+                    helplist.append((filename[:-3], title[2:]))
+    return sorted(helplist)
 
 
 _utcnow = functools.partial(datetime.datetime.now, datetime.UTC)
@@ -781,6 +794,11 @@ def helps(howto):
     return render_template('notfound.html', error='未能找到帮助文档。')
 
 
+@app.route('/helps/')
+def helplist():
+    return render_template('helplist.html')
+
+
 # =========================== 登录系统网页 ===========================
 
 
@@ -909,6 +927,7 @@ def unregister():
 
 app.jinja_env.add_extension('jinja2.ext.do')
 app.add_template_global(list2csv, 'list2csv')
+app.add_template_global(get_helplist(), 'helplist')
 app.add_template_global(_utcfromnow, 'utcfromnow')
 app.add_template_global(datetime.timedelta, 'timedelta')
 app.add_template_global(TPStatus, 'TPStatus')

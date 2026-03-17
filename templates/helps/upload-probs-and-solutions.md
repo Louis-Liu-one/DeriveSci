@@ -29,7 +29,7 @@
 ### 图片上传
 
 你可以为题目、题解上传图片。上传后，图片的路径在 `/images/<（题解所属的）题目编号>/<图片文件名称>`。上传后要在正文中用 Markdown 语法插入图片。例如，若题目编号为 `ABCD`，上传的图片名称为 `image.svg`，则要使用
-```
+```markdown
 ![ImageAlt](/images/ABCD/image.svg)
 ```
 在文中插入图片。
@@ -46,21 +46,21 @@
 
 ### 如何由 LaTeX 生成 SVG？
 
-可以先将 $\LaTeX$ 编译为 DVI 文件，再用 `dvisvgm` 工具将 DVI 文件转换为 SVG 文件。$\LaTeX$ 文件建议采用 `standalone` 文档类。这里附上 `makefile`：
-```
+可以先将 $\LaTeX$ 编译为 DVI 文件，再用 `dvisvgm` 工具将 DVI 文件转换为 SVG 文件。$\LaTeX$ 文件建议采用 `standalone` 文档类。使用如下 `makefile` 即可生成：
+```makefile
 %.dvi: %.tex
     latexmk -auxdir=.aux -dvi $<
 %.svg: %.dvi
     dvisvgm -n $<
 ```
-直接使用 `make <你的 LaTeX 文件名>.tex` 即可生成 SVG 文件。
+直接使用 `make <你的 LaTeX 文件名>.tex` 生成 SVG 文件。
 
 需要注意的是，`dvisvgm` 工具可能会出现问题
 ```
 processing of PostScript specials is disabled (Ghostscript not found)
 ```
-这时，应该使用其 `--libgs=` 参数配置 GhostScript 动态库。如果你的电脑上没有 GhostScript 动态库，可以使用 Brew 安装：
-```
+这时，应该为 `dvisvgm` 命令添加 `--libgs=` 参数以配置 GhostScript 动态库。如果你的电脑上没有 GhostScript 动态库，可以使用 Brew 安装：
+```bash
 brew install ghostscript
 ```
 此时，你的 GhostScript 动态库*可能*在：

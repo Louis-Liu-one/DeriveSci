@@ -1,26 +1,37 @@
 {#
     要使用*讨论区*功能，需要：
-    1. 在模板开头引入`comment.html`，需要`with context`以使用`current_user`：
-    ```
-    {% from "includes/comment.html" import commentarea with context %}
-    ```
-    2. 要在头部引入`static/delete-comment.js`以使用删除功能；
-    3. 要在结尾引入`static/cmtform-onclick.js`以使用回复功能；
-    4. 要将`document.getElementsByClassName('commentcontent')`中所有元素包含于`toRender`列表中以使用Markdown渲染。
+    1. 在模板开头引入`comment.html`，需要`with context`以支持`current_user`：
+        ```
+        {% from "includes/comment.html" import commentarea with context %}
+        ```
+    2. 要在头部使用
+        ```
+        {{ moment.include_moment(local_js='你的moment.js的CDN或本地URL') }}
+        {{ moment.locale('zh-cn') }}
+        ```
+        引入moment.js并设置中文模式；
+    3. 要在头部引入`static/delete-comment.js`以使用删除功能；
+    4. 要在结尾引入`static/cmtform-onclick.js`以使用回复功能；
+    5. 要将`document.getElementsByClassName('commentcontent')`中所有元素
+        包含于`toRender`列表中以使用Markdown渲染。
 #}
 {% from "includes/users.html" import user_name, user_avatar_img %}
 
-{% macro comment_timestamp(comment) %}
+{%- macro comment_timestamp(comment) -%}
     {% set timediff = utcfromnow(comment.timestamp) %}
     {% set tsmoment = moment(comment.timestamp) %}
-    {% if timediff < timedelta(hours=12) %}{{ tsmoment.fromNow(refresh=True) }}
-    {% elif timediff < timedelta(days=6) %}{{ tsmoment.calendar() }}
-    {% elif timediff < timedelta(days=15) %}{{ tsmoment.fromNow(refresh=True) }}
-    {% elif timediff < timedelta(days=365) %}{{ tsmoment.format('M 月 D 日') }}
-    {% else %}{{ tsmoment.format('Y 年 M 月 D 日') }}{% endif %}
-{% endmacro %}
+    {%- if timediff < timedelta(hours=12) -%}
+        {{ tsmoment.fromNow(refresh=True) }}
+    {%- elif timediff < timedelta(days=6) -%}
+        {{ tsmoment.calendar() }}
+    {%- elif timediff < timedelta(days=15) -%}
+        {{ tsmoment.fromNow(refresh=True) }}
+    {%- elif timediff < timedelta(days=365) -%}
+        {{ tsmoment.format('M 月 D 日') }}
+    {%- else -%}{{ tsmoment.format('Y 年 M 月 D 日') }}{%- endif -%}
+{%- endmacro -%}
 
-{% macro commentform_main(post_type, post_ident) %}
+{%- macro commentform_main(post_type, post_ident) -%}
     <form id="commentform" method="POST" class="mathprobsform"
         action="{{ url_for('post_comment',
             post_type=post_type, post_ident=post_ident) }}">
@@ -28,76 +39,76 @@
             placeholder="发表见解" spellcheck="false"></textarea></span>
         <span><button type="submit">发表</button></span>
     </form>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro commentform_sub(comment, new_window=False) %}
+{%- macro commentform_sub(comment, new_window=False) -%}
 <form id="subcommentform" method="POST" class="mathprobsform"
     action="{{ url_for('post_subcomment',
         post_type=comment.post_type, post_ident=comment.post_ident,
-        cmtid=comment.cmtid) }}" {% if new_window %} target="_blank" {% endif %}>
+        cmtid=comment.cmtid) }}" {% if new_window %}target="_blank"{% endif %}>
     <span><textarea name="commenttext" class="submittext"
         placeholder="发表评论" spellcheck="false"></textarea></span>
     <span><button type="submit">发表</button></span>
 </form>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro commentbody(comment,
-    toplevel=False, secondlevel=False, with_post=False) %}
+{%- macro commentbody(comment,
+    toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="commentbody">
     <p class="commentname">
-        {{ user_name(comment.user) }}
-        {% if not toplevel and not secondlevel %}
+        {{- user_name(comment.user) -}}
+        {%- if not toplevel and not secondlevel -%}
             &#9654; {{ user_name(comment.replyto.user) }}
-        {% endif %}
+        {%- endif -%}
     </p>
     <div class="commentcontent">
         <textarea>{{ comment.content }}</textarea>
     </div>
     <p class="commentfoot">
-        {{ comment_timestamp(comment) }}
+        {{- comment_timestamp(comment) -}}
         <i id="commentbutton" title="发表评论"
             class="fa-solid fa-comment-dots"></i>
-        {% if current_user == comment.user and not with_post %}
+        {%- if current_user == comment.user and not with_post -%}
             <i id="deletebutton" title="删除评论" class="fa-solid fa-trash-can"
                 onclick="deleteComment(
                 '{{ url_for('delete_comment') }}', '{{ comment.cmtid }}')"></i>
-        {% endif %}
-        {% if with_post %}
+        {%- endif -%}
+        {%- if with_post -%}
             {% set post = comment.get_post() %}来自：{{ post }}
             <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
                 onclick="window.open('{{ post.url() }}', '_block')"></i>
-        {% endif %}
+        {%- endif -%}
     </p>
-    {{ commentform_sub(comment, new_window=with_post) }}
-    {% if toplevel %}
-        {% for subcomment in comment.get_all_replies() %}
-            {{ commentdiv(subcomment,
+    {{- commentform_sub(comment, new_window=with_post) -}}
+    {%- if toplevel -%}
+        {%- for subcomment in comment.get_all_replies() -%}
+            {{- commentdiv(subcomment,
                 secondlevel=subcomment.replyto == comment,
-                with_post=with_post) }}
-        {% endfor %}
-    {% endif %}
+                with_post=with_post) -}}
+        {%- endfor -%}
+    {%- endif -%}
 </div>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro commentdiv(comment,
-    toplevel=False, secondlevel=False, with_post=False) %}
+{%- macro commentdiv(comment,
+    toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="comment">
-    <span class="avatar" {% if comment.user %} onclick="location.href
-            = '{{ url_for('users', uid=comment.user.uid) }}'" {% endif %}>
-        {{ user_avatar_img(comment.user, 'avatar') }}
+    <span class="avatar" {% if comment.user %}onclick="location.href
+            = '{{ url_for('users', uid=comment.user.uid) }}'"{% endif %}>
+        {{- user_avatar_img(comment.user, 'avatar') -}}
     </span>
-    {{ commentbody(comment, toplevel, secondlevel, with_post) }}
+    {{- commentbody(comment, toplevel, secondlevel, with_post) -}}
 </div>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro commentarea(post_type, post_ident, comments) %}
-    {{ commentform_main(post_type, post_ident) }}
+{%- macro commentarea(post_type, post_ident, comments) -%}
+    {{- commentform_main(post_type, post_ident) -}}
     <div class="commentlist">
-        {% if comments %}
-            {% for comment in comments %}
-                {{ commentdiv(comment, toplevel=True) }}
+        {%- if comments -%}
+            {%- for comment in comments -%}
+                {{- commentdiv(comment, toplevel=True) -}}
                 <div class="commentsep"></div>
-            {% endfor %}
-        {% else %}<p>暂无讨论</p>{% endif %}
+            {%- endfor -%}
+        {%- else -%}<p>暂无讨论</p>{%- endif -%}
     </div>
-{% endmacro %}
+{%- endmacro -%}

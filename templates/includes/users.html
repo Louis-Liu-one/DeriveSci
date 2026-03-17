@@ -3,22 +3,22 @@
     {% if user %}{{ user.name }}{% else %}未知用户{% endif %}
 {%- endmacro -%}
 
-{% macro user_sidebar(user) %}
+{%- macro user_sidebar(user) -%}
     <a class="sidebar-link" {% if user %} href="{{ user.url() }}" {% endif %}>
         <div class="sidebar-item">
             {{ user_avatar_img(user, 'avatar') }}{{ user_name(user) }}
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro user_avatar_img(user, extra_class='') %}
-    {% if user and user.avatar %}
+{%- macro user_avatar_img(user, extra_class='') -%}
+    {%- if user and user.avatar -%}
         <img class="{{ extra_class }}"
             src="{{ url_for('avatarfile', uid=user.uid) }}">
-    {% else %}<i class="fa-solid fa-user {{ extra_class }}"></i>{% endif %}
-{% endmacro %}
+    {%- else -%}<i class="fa-solid fa-user {{ extra_class }}"></i>{%- endif -%}
+{%- endmacro -%}
 
-{% macro select_gender(default_gender=None) %}
+{%- macro select_gender(default_gender=None) -%}
     <select id="gender" name="gender">
         <option value="0" hidden>未选择</option>
         <option value="1">男性 Mars</option>
@@ -30,30 +30,30 @@
         <option value="7">变性 Transgender</option>
         <option value="8">非二元性别 Non-binary</option>
     </select>
-    {% if default_gender %}
+    {%- if default_gender -%}
         <script>gender.value = '{{ default_gender }}';</script>
-    {% endif %}
-{% endmacro %}
+    {%- endif -%}
+{%- endmacro -%}
 
-{% macro user_gender(user) %}
-    {% if user.gender == 1 %}
+{%- macro user_gender(user) -%}
+    {%- if user.gender == 1 -%}
         <i class="gender fa-solid fa-mars" style="color: #4B93EB;"></i>
-    {% elif user.gender == 2 %}
+    {%- elif user.gender == 2 -%}
         <i class="gender fa-solid fa-venus" style="color: #D86475;"></i>
-    {% elif user.gender == 3 %}
+    {%- elif user.gender == 3 -%}
         <i class="gender fa-solid fa-mars-and-venus" style="color: #917BB0;"></i>
-    {% elif user.gender == 4 %}
+    {%- elif user.gender == 4 -%}
         <i class="gender fa-solid fa-genderless" style="color: #6E844F;"></i>
-    {% elif user.gender == 5 %}
+    {%- elif user.gender == 5 -%}
         <i class="gender fa-solid fa-neuter" style="color: #917B00;"></i>
-    {% elif user.gender == 6 %}
+    {%- elif user.gender == 6 -%}
         <i class="gender fa-solid fa-mercury" style="background-image: linear-gradient(to bottom, #4B93EB, #D86475);
             background-clip: text; -webkit-text-fill-color: transparent;"></i>
-    {% elif user.gender == 7 %}
+    {%- elif user.gender == 7 -%}
         <i class="gender fa-solid fa-transgender" style="background-image: linear-gradient(to right, #6E844F, #917BB0);
             background-clip: text; -webkit-text-fill-color: transparent;"></i>
-    {% elif user.gender == 8 %}
+    {%- elif user.gender == 8 -%}
         <i class="gender fa-solid fa-non-binary" style="background-image: linear-gradient(to right bottom, #4B93EB, #6E844F, #D86475);
             background-clip: text; -webkit-text-fill-color: transparent;"></i>
-    {% else %}<i class="gender fa-solid"></i>{% endif %}
-{% endmacro %}
+    {%- else -%}<i class="gender fa-solid"></i>{%- endif -%}
+{%- endmacro -%}

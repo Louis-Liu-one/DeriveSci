@@ -1,56 +1,56 @@
 
-{% macro return2post(post, text) %}
+{%- macro return2post(post, text) -%}
     <a class="sidebar-link" href="{{ post.url() }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-circle-left"></i>{{ text }}
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro view_solution(prob) %}
+{%- macro view_solution(prob) -%}
     <a class="sidebar-link"
         {% if prob.solutions %} href="{{ prob.solutions[0].url() }}" {% endif %}>
         <div class="sidebar-item"><i class="fa-solid fa-key"></i>查看题解</div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro upload_solution(prob) %}
+{%- macro upload_solution(prob) -%}
     <a class="sidebar-link"
             href="{{ url_for('upload_solution', probno=prob.probno) }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-cloud-arrow-up"></i>上传题解
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro edit_prob(prob) %}
+{%- macro edit_prob(prob) -%}
     <a class="sidebar-link"
         href="{{ url_for('edit_prob', probno=prob.probno) }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-pen-to-square"></i>编辑题目
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro edit_solution(solution) %}
+{%- macro edit_solution(solution) -%}
     <a class="sidebar-link" href="{{ url_for('edit_solution',
             probno=solution.probno, solno=solution.solno) }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-pen-to-square"></i>编辑题解
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro delete_prob(prob) %}
+{%- macro delete_prob(prob) -%}
     <a class="sidebar-link" onclick="return confirm('确定要删除题目？');"
             href="{{ url_for('delete_prob', probno=prob.probno) }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-trash-can"></i>删除题目
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}
 
-{% macro delete_solution(solution) %}
+{%- macro delete_solution(solution) -%}
     <a class="sidebar-link"  onclick="return confirm('确定要删除题解？');"
             href="{{ url_for('delete_solution',
             probno=solution.probno, solno=solution.solno) }}">
@@ -58,4 +58,4 @@
             <i class="fa-solid fa-trash-can"></i>删除题解
         </div>
     </a>
-{% endmacro %}
+{%- endmacro -%}

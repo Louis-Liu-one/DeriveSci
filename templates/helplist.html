@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}帮助列表 - MathProbs{% endblock %}
+
+{% block navbar_title %}帮助列表{% endblock %}
+
+{% block body %}
+<div class="sidebar">
+    <h3 class="sidebar-title">帮助列表</h3>
+    <a class="sidebar-link" href="{{ url_for('welcome') }}">
+        <div class="sidebar-item">
+            <i class="fa-solid fa-circle-left"></i>返回主页
+        </div>
+    </a>
+</div>
+<div class="mainpart">
+    <p><b>以下是可用的帮助页面：</b></p>
+    <nav class="table-of-contents"><ul>
+        {%- for howto, title in helplist -%}
+            <li><a target="_blank"
+                href="{{ url_for('helps', howto=howto) }}">
+                {{- title -}}
+            </a></li>
+        {%- endfor -%}
+    </ul></nav>
+</div>
+{% endblock %}

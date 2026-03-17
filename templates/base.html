@@ -1,4 +1,11 @@
 {% from "includes/users.html" import user_avatar_img %}
+
+{%- macro navbar_item(url, icon, text) -%}
+    <a href="{{ url }}" target="_blank"><li class="navbar-item">
+        <i class="fa-solid fa-{{ icon }}"></i><br>{{ text }}
+    </li></a>
+{%- endmacro -%}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,9 +22,7 @@
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
-    {{ moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') }}
-    {{ moment.locale('zh-cn') }}
-    {% block styles %}{% endblock %}
+    {%- block styles -%}{%- endblock -%}
 </head>
 <body>
     <div class="navbar">
@@ -27,43 +32,33 @@
                     filename='images/favicon.svg') }}"><br>MathProbs
             </li>
             <li id="navbar_title" class="logo-text">
-                {% block navbar_title %}{% endblock %}
+                {%- block navbar_title -%}{%- endblock -%}
             </li>
-            <li class="navbar-item">
-                <i class="fa-solid fa-circle-info"></i><br>帮助
-            </li>
-            <li class="navbar-item"
-                    onclick="location.href = '{{ url_for('labellist') }}'">
-                <i class="fa-solid fa-tags"></i><br>标签
-            </li>
-            <li class="navbar-item"
-                    onclick="location.href = '{{ url_for('problist') }}'">
-                <i class="fa-solid fa-book"></i><br>题集
-            </li>
-            {% if current_user and current_user.is_authenticated %}
-                <li class="navbar-item" onclick="location.href
-                    = '{{ url_for('unread_comments') }}'">
-                    {% set unread_comments = current_user.unread_comments() %}
-                    {% if unread_comments %}
-                        <i class="fa-solid fa-envelope"></i>
-                        <br>{{ unread_comments|length }} 条未读
-                    {% else %}
-                        <i class="fa-solid fa-envelope-circle-check"></i>
-                        <br>无未读
-                    {% endif %}
+            {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
+            {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
+            {{- navbar_item(url_for('problist'), 'book', '题集') -}}
+            {%- if current_user and current_user.is_authenticated -%}
+                {% set unread_comments = current_user.unread_comments() %}
+                {%- if unread_comments -%}
+                    {{ navbar_item(url_for('unread_comments'), 'envelope',
+                        unread_comments|length|string + ' 条未读') }}
+                {%- else -%}
+                    {{ navbar_item(url_for('unread_comments'),
+                        'envelope-circle-check', '无未读') }}
+                {%- endif -%}
+            {%- endif -%}
+            <a href="{{ url_for('welcome') }}" target="_blank">
+                <li class="navbar-item navbar-avatar">
+                    {%- if current_user and current_user.is_authenticated -%}
+                        {{- user_avatar_img(current_user) -}}
+                        <br>{{ current_user.name }}
+                    {%- else -%}
+                        <i class="fa-solid fa-user"></i><br>未登录
+                    {%- endif -%}
                 </li>
-            {% endif %}
-            <li class="navbar-item navbar-avatar" onclick="location.href
-                    = '{{ url_for('welcome') }}'">
-                {% if current_user and current_user.is_authenticated %}
-                    {{ user_avatar_img(current_user) }}
-                    <br>{{ current_user.name }}
-                {% else %}
-                    <i class="fa-solid fa-user"></i><br>未登录
-                {% endif %}
-            </li>
+            </a>
         </ul>
     </div>
-    {% block body %}{% endblock %}
+    <div class="below-navbar">{% block body %}{% endblock %}</div>
 </body>
 </html>

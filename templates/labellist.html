@@ -15,18 +15,18 @@
 <div class="mainpart">
     <h3>所有标签</h3>
     <table class="labellist">
-        {% for i in range(0, labels|length, 5) %}
+        {%- for i in range(0, labels|length, 5) -%}
             <tr>
-                {% for dif in range(5) %}
-                    {% if i + dif < labels|length %}
-                        <td style="width: 20%;" onclick="location.href
+                {%- for dif in range(5) -%}
+                    {%- if i + dif < labels|length -%}
+                        <td onclick="location.href
                             = '{{ labels[i + dif].url() }}'">
-                            {{ labels[i + dif].labelname }}
+                            {{- labels[i + dif].labelname -}}
                         </td>
-                    {% endif %}
-                {% endfor %}
+                    {%- endif -%}
+                {%- endfor -%}
             </tr>
-        {% endfor %}
+        {%- endfor -%}
     </table>
 </div>
 {% endblock %}

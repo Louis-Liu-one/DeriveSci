@@ -1,6 +1,7 @@
 
 const md = markdownit({html: true})
-    .use(texmath, {engine: katex, delimiters: ['dollars', 'brackets']});
+    .use(texmath, {engine: katex, delimiters: ['dollars', 'brackets'],
+        katexOptions: {strict: false}});
 if (window.hljs) md.options['highlight'] = function (str, lang) {
         if (lang && hljs.getLanguage(lang))
             try { return hljs.highlight(

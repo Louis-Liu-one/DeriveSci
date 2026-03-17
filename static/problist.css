@@ -41,7 +41,8 @@ table.labellist {
     width: 100%; border: 2px solid lightskyblue;
     border-spacing: 0; border-radius: 7px; }
 table.labellist tr { height: 35px; }
-table.labellist td { text-align: center; transition-duration: 500ms; }
+table.labellist td {
+    width: 20%; text-align: center; transition-duration: 500ms; }
 table.labellist td:hover {
     background-color: lightskyblue; cursor: pointer;
     transition-duration: 500ms; }

@@ -1,25 +1,25 @@
 
-{% macro problabels_sidebar(prob) %}
-    {% if prob.problabels %}
+{%- macro problabels_sidebar(prob) -%}
+    {%- if prob.problabels -%}
         <h3 class="sidebar-title">题目标签</h3>
-        {% for label in prob.problabels %}
+        {%- for label in prob.problabels -%}
             <a class="sidebar-link" href="{{ url_for(
                     'problistoflabel', labelname=label.labelname) }}">
                 <div class="sidebar-item">{{ label.labelname }}</div>
             </a>
-        {% endfor %}
-    {% endif %}
-{% endmacro %}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
 
-{% macro problabels_problist(prob) %}
+{%- macro problabels_problist(prob) -%}
     <td class="problabels">
-        {% if prob.problabels %}
-            {% for problabel in prob.problabels %}
+        {%- if prob.problabels -%}
+            {%- for problabel in prob.problabels -%}
                 <a class="problabel" href="{{ url_for(
                     'problistoflabel', labelname=problabel.labelname) }}">
-                    {{ problabel.labelname }}
+                    {{- problabel.labelname -}}
                 </a>
-            {% endfor %}
-        {% else %}无标签{% endif %}
+            {%- endfor -%}
+        {%- else -%}无标签{%- endif -%}
     </td>
-{% endmacro %}
+{%- endmacro -%}

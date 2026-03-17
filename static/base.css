@@ -1,24 +1,16 @@
 
 @font-face {
-    font-family: AndaleMono;
-    src: local(AndaleMono),
+    font-family: AndaleMono; src: local(Andale Mono),
         url(/static/fonts/AndaleMono.woff2) format('woff2'),
-        url(/static/fonts/AndaleMono.woff) format('woff');
-}
-
+        url(/static/fonts/AndaleMono.woff) format('woff'); }
 @font-face {
-    font-family: Helvetica;
-    src: local(Helvetica),
+    font-family: Helvetica; src: local(Helvetica),
         url(/static/fonts/Helvetica.woff2) format('woff2'),
-        url(/static/fonts/Helvetica.woff) format('woff');
-}
-
+        url(/static/fonts/Helvetica.woff) format('woff'); }
 @font-face {
-    font-family: Helvetica-Bold;
-    src: local(Helvetica-Bold),
+    font-family: Helvetica-Bold; src: local(Helvetica-Bold),
         url(/static/fonts/Helvetica-Bold.woff2) format('woff2'),
-        url(/static/fonts/Helvetica-Bold.woff) format('woff');
-}
+        url(/static/fonts/Helvetica-Bold.woff) format('woff'); }
 
 p.helpslink { color: gray; font-size: 13px; line-height: 25px; }
 p.helpslink a { color: inherit; text-decoration: none; }
@@ -27,8 +19,8 @@ p.helpslink a:hover { color: #349AD5; }
 /******************************* navbar *******************************/
 
 div.navbar {
-    position: fixed; padding-left: 0px;
-    width: 100%; height: 80px; left: 0px; top: 0px;
+    position: fixed; padding-left: 0;
+    width: 100%; height: 80px; left: 0; top: 0;
     background-color: #349AD5; }
 
 ul.navbar-items { list-style: none; margin: 0; padding: 0; }
@@ -47,7 +39,7 @@ ul.navbar-items li.logo-image img {
 ul.navbar-items li.logo-text {
     display: flex; align-items: center;
     height: 80px; line-height: 80px;
-    font-weight: bold; font-size: 35px; font-family: AndaleMono;
+    font-weight: bold; font-size: 30px; font-family: AndaleMono;
     text-decoration: none; color: white; float: left; }
 ul.navbar-items li.logo-text img {
     width: 50px; height: 50px;
@@ -64,10 +56,13 @@ li.navbar-avatar img {
     width: 45px; height: 45px; padding-top: 7px; border-radius: 50%; }
 li.navbar-item i { font-size: 36px; padding: 10px 0; }
 
+div.below-navbar {
+    position: fixed; top: 80px; left: 0;
+    width: 100%; height: calc(100% - 80px); display: flex; }
+
 /******************************* sidebar *******************************/
 
 div.sidebar {
-    position: fixed; top: 80px; left: 0px;
     background-color: #5CCBE2; padding: 5px 10px 0 0;
     width: 16%; height: 100%; overflow-y: auto; font-family: Helvetica; }
 h3.sidebar-title { color: aliceblue; text-align: right; }
@@ -89,23 +84,23 @@ div.sidebar-item:hover {
 /******************************* blocks *******************************/
 
 div.mainpart, div.bodypart, div.submitpart, div.tocblock, div.contentblock {
-    position: fixed;
-    top: 80px; bottom: 15px; margin: 15px 0 0 20px; padding: 12px;
+    margin: 15px 5px 15px 10px; padding: 12px;
     overflow-y: auto; border-radius: 20px; box-shadow: 1px 1px 3px #00000080;
     font-family: Helvetica; }
-div.mainpart { left: 16%; width: 79%; }
-div.bodypart { left: 16%; width: 45%; }
+div.mainpart { width: 79%; }
+div.bodypart { width: 45%; }
 div.bodypart img { width: 100%; }
-div.submitpart { left: 64%; width: 31%; }
+div.submitpart { width: 31%; }
 div.submitpart form.mathprobsform { border: none; padding: 0; }
 div.submitpart textarea.submittext { width: 100%; height: 80px; }
 div.submitpart h3 { clear: both; }
-div.tocblock { left: 0; width: 22%; }
+div.tocblock { width: 22%; }
 div.tocblock h3 { margin-bottom: 0; }
-div.tocblock nav.table-of-contents ul { padding-left: 16px; }
-div.tocblock nav.table-of-contents li { padding-top: 8px; }
-div.tocblock a, div.contentblock a { text-decoration: none; color: #54AAE0; }
-div.tocblock a:hover, div.contentblock a:hover {
+nav.table-of-contents ul { padding-left: 16px; }
+nav.table-of-contents li { padding-top: 8px; }
+nav.table-of-contents a, div.contentblock a {
+    text-decoration: none; color: #54AAE0; }
+nav.table-of-contents a:hover, div.contentblock a:hover {
     text-decoration: underline; color: #349AD5; }
-div.contentblock { left: 25.5%; width: 69%; }
+div.contentblock { width: 71%; }
 div#bodydiv, div.contentblock nav.table-of-contents { display: none; }

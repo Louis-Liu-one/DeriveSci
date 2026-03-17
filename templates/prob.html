@@ -10,6 +10,8 @@
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='comment.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+{{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
+{{- moment.locale('zh-cn') -}}
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <script src="{{ url_for('static', filename='delete-comment.js') }}"></script>
 {% endblock %}
@@ -18,14 +20,12 @@
 
 {% block body %}
 <div class="sidebar">
-    {% if current_user == prob.source %}
-        {{ edit_prob(prob) }}
-        {{ delete_prob(prob) }}
-    {% endif %}
-    {{ view_solution(prob) }}
-    {{ upload_solution(prob) }}
-    {{ problabels_sidebar(prob) }}
-    <h3 class="sidebar-title">题目来源</h3>{{ user_sidebar(prob.source) }}
+    {%- if current_user == prob.source -%}
+        {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
+    {%- endif -%}
+    {{- view_solution(prob) }}{{ upload_solution(prob) -}}
+    {{- problabels_sidebar(prob) -}}
+    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
 </div>
 <div id="bodydiv" class="markdown-body bodypart">
     <textarea id="bodytext">{{ prob.statement }}</textarea>
@@ -42,7 +42,7 @@
         <span><button class="submitbutton" type="submit">提交</button></span>
     </form>
     <h3>讨论区</h3>
-    {{ commentarea('prob', prob.probno, prob.get_toplevel_comments()) }}
+    {{- commentarea('prob', prob.probno, prob.get_toplevel_comments()) -}}
 </div>
 <script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>

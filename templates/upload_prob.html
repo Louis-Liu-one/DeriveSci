@@ -21,13 +21,13 @@
 {% block body %}
 <div class="sidebar">
     <h3 class="sidebar-title">
-        {% if editmode %}编辑{% else %}上传{% endif %}题目
+        {%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目
     </h3>
-    {% if editmode %}
-        {{ return2post(prob, "返回题目") }}
-        {{ delete_prob(prob) }}
-        {{ problabels_sidebar(prob) }}
-    {% endif %}
+    {%- if editmode -%}
+        {{- return2post(prob, "返回题目") -}}
+        {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
+    {%- endif -%}
+</div>
 <div class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
     <form class="mathprobsform" id="editform" method="post"
@@ -35,13 +35,13 @@
             {{ url_for('edit_prob', probno=prob.probno) }}
             {%- else -%}{{ url_for('upload_prob') }}{%- endif -%}"
         enctype="multipart/form-data">
-        {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
-        {% if not editmode %}<span>
+        {%- if error -%}<p class="errormsg">错误：{{ error }}</p>{%- endif -%}
+        {%- if not editmode -%}<span>
             <label for="probno">编号：</label>
             <input required type="text" id="probno" name="probno"
                 autocomplete="off" spellcheck="false"
                 {% if probno %}value="{{ probno }}"{% endif %}>
-        </span>{% endif %}
+        </span>{%- endif -%}
         <span>
             <label for="probtitle">名称：</label>
             <input required type="text" id="probtitle" name="probtitle"
@@ -107,7 +107,7 @@
     </p>
 </div>
 <script>
-    {% if editmode %}addAnswersBefore({{ prob.get_answer() | tojson }});
-    {% elif answers %}addAnswersBefore({{ answers }});{% endif %}
+    {%- if editmode -%}addAnswersBefore({{ prob.get_answer() | tojson }});
+    {%- elif answers -%}addAnswersBefore({{ answers }});{%- endif -%}
 </script>
 {% endblock %}

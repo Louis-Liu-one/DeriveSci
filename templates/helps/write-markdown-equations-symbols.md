@@ -376,3 +376,5 @@ $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 ## 参考与引用
 
 我们在编写这一文档时，参考了《$\LaTeX$ 入门》一书中的第四章有关公式的内容。如有侵权，请联系删除。
+
+符号表浩如烟海，不胜枚举者，可至[此处](https://katex.org/docs/supported.html)查看。
