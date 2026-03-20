@@ -39,7 +39,7 @@
 <div id="submitdiv" class="submitpart">
     <h3>更多题解</h3>{{- solutionlist(suggested) -}}
     <h3>讨论区</h3>
-    {{- commentarea('solution', solution.get_post_ident(),
+    {{- commentarea(1, solution.get_post_ident(),
         solution.get_toplevel_comments()) -}}
 </div>
 <script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>

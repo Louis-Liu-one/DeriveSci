@@ -42,7 +42,7 @@
         <span><button class="submitbutton" type="submit">提交</button></span>
     </form>
     <h3>讨论区</h3>
-    {{- commentarea('prob', prob.probno, prob.get_toplevel_comments()) -}}
+    {{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
 </div>
 <script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>

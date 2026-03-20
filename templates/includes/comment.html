@@ -58,7 +58,7 @@
     <p class="commentname">
         {{- user_name(comment.user) -}}
         {%- if not toplevel and not secondlevel -%}
-            &#9654; {{ user_name(comment.replyto.user) }}
+            &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
         {%- endif -%}
     </p>
     <div class="commentcontent">
@@ -73,7 +73,7 @@
                 onclick="deleteComment(
                 '{{ url_for('delete_comment') }}', '{{ comment.cmtid }}')"></i>
         {%- endif -%}
-        {%- if with_post -%}
+        {%- if with_post -%} &nbsp;
             {% set post = comment.get_post() %}来自：{{ post }}
             <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
                 onclick="window.open('{{ post.url() }}', '_block')"></i>

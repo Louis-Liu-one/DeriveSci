@@ -2,7 +2,7 @@
 table.problist {
     width: 100%; border: 2px solid lightskyblue;
     border-spacing: 0; border-radius: 7px; }
-table.problist tr { height: 35px; transition-duration: 500ms; }
+table.problist tr { height: 36px; transition-duration: 500ms; }
 table.problist tr:nth-child(even) { background-color: aliceblue; }
 table.problist tr:not(.probhead):hover {
     background-color: lightblue; cursor: pointer;
@@ -27,13 +27,9 @@ table.problist td.probno:hover, table.problist td.source:hover,
     background-color: skyblue; transition-duration: 500ms; cursor: pointer; }
 
 table.problist a.problabel {
-    text-decoration: none;
-    color: black;
-    border: 1px solid paleturquoise; border-radius: 5px;
-    display: inline-block;
-    padding-left: 3px; padding-right: 3px;
-    transition-duration: 500ms;
-}
+    text-decoration: none; font-size: 15px; color: black;
+    margin: 2px 6px 2px 0; border: 1px solid paleturquoise; border-radius: 5px;
+    display: inline-block; padding: 2px 4px; transition-duration: 500ms; }
 table.problist a.problabel:hover {
     background-color: paleturquoise;
     transition-duration: 500ms; cursor: pointer; }

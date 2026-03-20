@@ -279,7 +279,7 @@ class Prob(db.Model):
 
     def get_toplevel_comments(self):
         return Comment.query.filter(db.and_(
-            Comment.post_type == 'prob', Comment.post_ident == self.probno,
+            Comment.post_type == 0, Comment.post_ident == self.probno,
             Comment.replyto_id.is_(None))).order_by(
             Comment.timestamp.desc()).all()
 
@@ -337,7 +337,7 @@ class ProbSolution(db.Model):
     def get_toplevel_comments(self):
         post_ident = self.get_post_ident()
         return Comment.query.filter(db.and_(
-            Comment.post_type == 'solution', Comment.post_ident == post_ident,
+            Comment.post_type == 1, Comment.post_ident == post_ident,
             Comment.replyto_id.is_(None))).order_by(
             Comment.timestamp.desc()).all()
 
@@ -492,10 +492,10 @@ class Comment(db.Model):
     content = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=_utcnow)
     replyto_id = db.Column(db.Integer, db.ForeignKey('comments.cmtid'))
-    # 帖子类型为'prob'，标识符为题目编号
-    # 帖子类型为'solution'，标识符为CSV格式的题目编号与题解编号的组合
-    post_type = db.Column(db.String(16), nullable=False)  # 帖子类型
-    post_ident = db.Column(db.Text, nullable=False)       # 帖子标识符
+    # 帖子类型为0，帖子为题目，标识符为题目编号
+    # 帖子类型为1，帖子为题解，标识符为CSV格式的题目编号与题解编号的组合
+    post_type = db.Column(db.Integer, nullable=False)  # 帖子类型
+    post_ident = db.Column(db.Text, nullable=False)    # 帖子标识符
     replyto = db.relationship(
         'Comment', back_populates='replies', remote_side=[cmtid])
     replies = db.relationship(
@@ -507,11 +507,12 @@ class Comment(db.Model):
             start=self.replies.copy()))
 
     def get_post(self):
-        if self.post_type == 'prob':
+        if self.post_type == 0:
             return get_prob(self.post_ident)
-        elif self.post_type == 'solution':
+        elif self.post_type == 1:
             probno, solno = csv2list(self.post_ident)
             return get_solution(probno, int(solno))
+        # 未知帖子类型
 
     def __lt__(self, comment):
         return self.timestamp < comment.timestamp
@@ -531,7 +532,7 @@ def clear_comments(post):
 # =========================== 讨论区路由 ===========================
 
 
-@app.route('/post-comment/<post_type>/<post_ident>', methods=['POST'])
+@app.route('/post-comment/<int:post_type>/<post_ident>', methods=['POST'])
 @login_required
 def post_comment(post_type, post_ident):
     content = request.form.get('commenttext')
@@ -544,7 +545,8 @@ def post_comment(post_type, post_ident):
 
 
 @app.route(
-    '/post-comment/<post_type>/<post_ident>/<int:cmtid>', methods=['POST'])
+    '/post-comment/<int:post_type>/<post_ident>/<int:cmtid>',
+    methods=['POST'])
 @login_required
 def post_subcomment(post_type, post_ident, cmtid):
     content = request.form.get('commenttext')

@@ -39,7 +39,7 @@ ul.navbar-items li.logo-image img {
 ul.navbar-items li.logo-text {
     display: flex; align-items: center;
     height: 80px; line-height: 80px;
-    font-weight: bold; font-size: 30px; font-family: AndaleMono;
+    font-weight: bold; font-size: 32px; font-family: AndaleMono;
     text-decoration: none; color: white; float: left; }
 ul.navbar-items li.logo-text img {
     width: 50px; height: 50px;
