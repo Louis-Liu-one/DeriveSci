@@ -40,9 +40,8 @@ form.mathprobsform input::file-selector-button,
     form.mathprobsform button {
     border: none; border-radius: 10px; background-color: skyblue; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
-    transition-duration: 500ms; }
+    transition-duration: .5s; }
 form.mathprobsform input::file-selector-button:hover,
     form.mathprobsform button:hover {
-    background-color: deepskyblue; cursor: pointer;
-    transition-duration: 500ms; }
+    background-color: deepskyblue; cursor: pointer; transition-duration: .5s; }
 form.mathprobsform button { margin-left: 10px; }

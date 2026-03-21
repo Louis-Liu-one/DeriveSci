@@ -1,4 +1,4 @@
-# 如何编写 Markdown
+# Markdown 指南
 
 ## 摘要
 
@@ -52,7 +52,7 @@ Heading 2
 
 ## 公式
 
-由于 Markdown 公式内容较多，故不在此处展示，可以前往[如何编写 Markdown 公式]({{ url_for('helps', howto='write-markdown-equations') }})一节浏览。
+我们为 Markdown 文本提供了 $\KaTeX$ 公式的支持。由于公式内容较多，故不在此处展示，可以前往[KaTeX 公式指南]({{ url_for('helps', howto='write-katex') }})一节浏览。
 
 ## 引用
 

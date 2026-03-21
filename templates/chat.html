@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% from "includes/users.html" import user_name %}
+
+{% set all_chats = current_user.all_chats() %}
+
+{% block title %}私信聊天 - MathProbs{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+{% endblock %}
+
+{% block navbar_title %}私信聊天{% endblock %}
+
+{% block body %}
+<div class="sidebar">
+    <a class="sidebar-link" href="{{ url_for('welcome') }}">
+        <div class="sidebar-item">
+            <i class="fa-solid fa-circle-left"></i>返回主页
+        </div>
+    </a>
+    <a class="sidebar-link" target="_blank" href="{{ url_for('edit_profile') }}">
+        <div class="sidebar-item">
+            <i class="fa-solid fa-user-pen"></i>修改信息
+        </div>
+    </a>
+    <a class="sidebar-link" href="{{ url_for('logout') }}">
+        <div class="sidebar-item">
+            <i class="fa-solid fa-right-from-bracket"></i>退出登录
+        </div>
+    </a>
+</div>
+<div class="mainpart">
+    <div class="chat-container">
+        <div class="user-list" id="userlist">
+            {%- set ns = namespace(active=False) -%}
+            {%- for uid in all_chats -%}
+                {%- set user = find_user(uid) -%}
+                {%- if uid == activeuser.uid -%}
+                    {%- set ns.active = True -%}
+                {%- endif -%}
+                <div class="user-item
+                    {%- if uid == activeuser.uid %} active{%- endif -%}"
+                    onclick="switchUser(this, {{ uid }});">
+                    {{- user_avatar_img(user) -}}{{- user_name(user) -}}
+                </div>
+            {%- endfor -%}
+            {%- if activeuser and not ns.active -%}
+                <div class="user-item active"
+                    onclick="switchUser(this, {{ activeuser.uid }});">
+                    {{- user_avatar_img(activeuser) -}}
+                    {{- user_name(activeuser) -}}
+                </div>
+            {%- endif -%}
+        </div>
+        <div class="chat-box">
+            <div class="chat-header" id="chattitle">
+                {%- if activeuser -%}正在和 {{ activeuser.name }} 聊天
+                {%- else -%}消息列表{%- endif -%}
+            </div>
+            <div class="message-area" id="msgarea"></div>
+            <form method="POST" action="{{ url_for('chat') }}">
+                <div class="send-area">
+                    <input type="text" name="message"
+                        id="msginput" placeholder="输入消息……"
+                        {%- if not activeuser -%}disabled{%- endif -%}>
+                    <input type="hidden" name="target" id="target"
+                        {%- if activeuser -%}
+                        value="{{ activeuser.uid }}"{%- endif -%}>
+                    <button type="submit" id="msgbutton"
+                        {%- if not activeuser -%}disabled
+                        {%- endif -%}>发送</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='chat-setup.js') }}"></script>
+<script>
+    all_chats = {{ all_chats|tojson }};
+    {%- if activeuser -%}
+        addMessages(all_chats[{{ activeuser.uid }}]);
+    {%- endif -%}
+</script>
+{% endblock %}

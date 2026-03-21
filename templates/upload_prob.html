@@ -107,7 +107,7 @@
     </p>
 </div>
 <script>
-    {%- if editmode -%}addAnswersBefore({{ prob.get_answer() | tojson }});
+    {%- if editmode -%}addAnswersBefore({{ prob.get_answer()|tojson }});
     {%- elif answers -%}addAnswersBefore({{ answers }});{%- endif -%}
 </script>
 {% endblock %}

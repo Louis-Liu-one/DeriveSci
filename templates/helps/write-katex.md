@@ -1,14 +1,16 @@
-# 如何编写 Markdown 公式
+# KaTeX 公式指南
 
 ## 摘要
 
-**Markdown** 是一种轻量级标记语言。我们的网站中所有的题目、题解、评论等需要或可能需要格式化排版的内容全部使用 Markdown 输入。由于 Markdown 公式内容较多，故单分为此篇。其它 Markdown 语法可以在[此处]({{ url_for('helps', howto='write-markdown') }})找到。
+**Markdown** 是一种轻量级标记语言。我们的网站中所有的题目、题解、评论等需要或可能需要格式化排版的内容全部使用 Markdown 输入。我们为 Markdown 输入添加了 $\KaTeX$ 公式的支持。由于 $\KaTeX$ 公式内容较多，故单分为此篇。其它 Markdown 语法可以在[此处]({{ url_for('helps', howto='write-markdown') }})找到。
+
+本篇内容仅包含常用的公式用法，更多内容参见[此处](https://katex.org/docs/support_table)。
 
 ## 公式语法基础
 
 ### 行内公式与行间公式
 
-在 Markdown 中，数学公式以 $\LaTeX$ 语法解析。行内公式以 `$` 符号包围，行间公式以 `$$` 符号包围。例如：`$x^2 + 2x + 1$` 渲染得到 $x^2 + 2x + 1$，
+在 $\KaTeX$ 中，行内公式要用 `$` 符号包围，行间公式要用 `$$` 符号包围。例如：`$x^2 + 2x + 1$` 渲染得到 $x^2 + 2x + 1$，
 ```latex
 $$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 ```
@@ -270,7 +272,7 @@ $$
 
 ### 数学符号
 
-公式中可以插入各种符号。前往[这里]({{ url_for('helps', howto='write-markdown-equations-symbols') }})查看符号表。
+公式中可以插入各种符号。前往[这里]({{ url_for('helps', howto='write-katex-symbols') }})查看符号表。
 
 ### 正文文字
 
@@ -287,3 +289,5 @@ $$ E = mc^2 \Rightarrow \text{能量} = \text{质量} \times \text{光速}^2 $$
 ## 参考与引用
 
 我们在编写这一文档时，参考了《$\LaTeX$ 入门》一书中的第四章有关公式的内容。如有侵权，请联系删除。
+
+本篇内容仅包含常用的公式用法，难免有疏漏之处，有关 $\KaTeX$ 公式的所有内容参见[此处](https://katex.org/docs/support_table)。

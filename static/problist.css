@@ -1,21 +1,21 @@
 
 table.problist {
-    width: 100%; border: 2px solid lightskyblue;
-    border-spacing: 0; border-radius: 7px; }
-table.problist tr { height: 36px; transition-duration: 500ms; }
+    width: 100%; border: 2px solid #A8D5F7;
+    border-spacing: 0; border-radius: 12px; overflow: hidden; }
+table.problist tr { height: 36px; transition-duration: .5s; }
 table.problist tr:nth-child(even) { background-color: aliceblue; }
 table.problist tr:not(.probhead):hover {
-    background-color: lightblue; cursor: pointer;
-    transition-duration: 500ms; }
-table.problist th { text-align: left; background-color: lightskyblue; }
+    background-color: #D0EFFF; cursor: pointer;
+    transition-duration: .5s; }
+table.problist th { text-align: left; background-color: #A8D5F7; }
 table.problist td, table.problist th { border: none; }
 table.problist td.probno { width: 15%; font-family: AndaleMono;
-    transition-duration: 500ms; }
+    transition-duration: .5s; }
 table.problist td.problabels { width: 35%; }
 table.problist td.source { width: 20%; }
 table.problist td.soluser { width: 40%; }
 table.problist td.source, table.problist td.soluser {
-    transition-duration: 500ms; }
+    transition-duration: .5s; }
 table.problist td.source div, table.problist td.soluser div {
     display: flex; align-items: center; }
 table.problist td.source div img, table.problist td.soluser div img {
@@ -24,21 +24,23 @@ table.problist td.source div i, table.problist td.soluser div i {
     font-size: 20px; margin: 0 2px; }
 table.problist td.probno:hover, table.problist td.source:hover,
     table.problist td.soluser:hover {
-    background-color: skyblue; transition-duration: 500ms; cursor: pointer; }
+    background-color: #B0EFFF;
+    transition-duration: .5s; cursor: pointer; }
 
 table.problist a.problabel {
     text-decoration: none; font-size: 15px; color: black;
-    margin: 2px 6px 2px 0; border: 1px solid paleturquoise; border-radius: 5px;
-    display: inline-block; padding: 2px 4px; transition-duration: 500ms; }
+    background: #D0EFFF; margin: 2px 6px 2px 0;
+    border: 1px solid #D0EFFF; border-radius: 5px;
+    display: inline-block; padding: 2px 4px; transition-duration: .5s; }
 table.problist a.problabel:hover {
-    background-color: paleturquoise;
-    transition-duration: 500ms; cursor: pointer; }
+    background-color: #A8D5F7;
+    transition-duration: .5s; cursor: pointer; }
 table.labellist {
     width: 100%; border: 2px solid lightskyblue;
     border-spacing: 0; border-radius: 7px; }
 table.labellist tr { height: 35px; }
 table.labellist td {
-    width: 20%; text-align: center; transition-duration: 500ms; }
+    width: 20%; text-align: center; transition-duration: .5s; }
 table.labellist td:hover {
     background-color: lightskyblue; cursor: pointer;
-    transition-duration: 500ms; }
+    transition-duration: .5s; }

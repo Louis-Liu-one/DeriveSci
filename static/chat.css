@@ -1,0 +1,47 @@
+
+div.mainpart { padding: 0; }
+div.chat-container { width: 100%; height: 100%; display: flex; }
+
+div.user-list {
+    width: 200px; background: aliceblue;
+    border-right: 1px solid #EEE; padding: 15px; }
+div.user-item {
+    display: flex; align-items: center;
+    padding: 12px 10px; margin-bottom: 10px;
+    border-radius: 15px; cursor: pointer; transition: .2s; }
+div.user-item:hover, div.user-item.active { background: #0000F008; }
+div.user-item img {
+    height: 25px; max-width: 30px; margin-right: 5px; border-radius: 50%; }
+div.user-item i { font-size: 20px; margin: 0 3px; }
+
+div.chat-box { display: flex; flex: 1; flex-direction: column; }
+div.chat-header { padding: 15px; border-bottom: 1px solid #EEE; }
+div.message-area {
+    flex: 1; padding: 20px; overflow-y: auto; background: white; }
+div.message-area div.message {
+    display: table; margin-bottom: 15px; max-width: 50%;
+    word-wrap: break-word; word-break: break-all;
+    white-space: pre-wrap; overflow: hidden; padding: 8px 12px;
+    border-radius: 15px; line-height: 1.5; }
+div.message-area div.my-message {
+    background: #5CCBE2; color: white;
+    margin-left: auto; border-top-right-radius: 0; }
+div.message-area div.other-message {
+    background: #F1F1F1; color: #333;
+    margin-right: auto; border-top-left-radius: 0; }
+
+div.send-area { display: flex; padding: 15px; border-top: 1px solid #EEE; }
+div.send-area input#msginput {
+    flex-grow: 1; min-width: 0; font-family: AndaleMono; font-size: 15px;
+    padding: 5px 10px; line-height: 27px;
+    background-color: aliceblue; border: none; border-radius: 18px; }
+div.send-area input#msginput:focus { outline-color: lightskyblue; }
+div.send-area input#msginput:disabled { cursor: not-allowed; }
+div.send-area button {
+    border: none; border-radius: 18px; background-color: skyblue; color: white;
+    line-height: 27px; font-size: 15px; width: 120px;
+    margin-left: 15px; transition-duration: .5s; }
+div.send-area button:hover {
+    background-color: deepskyblue; cursor: pointer; transition-duration: .5s; }
+div.send-area button:disabled {
+    background-color: skyblue; cursor: not-allowed; }

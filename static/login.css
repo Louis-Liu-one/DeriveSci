@@ -15,7 +15,7 @@
 div.login-block {
     display: flex; position: absolute; top: 0; bottom: 0; left: 0; right: 0;
     margin: auto; width: 600px; height: 400px;
-    box-shadow: -10px 10px 25px #00000080; border-radius: 35px;
+    box-shadow: -10px 10px 25px #0008; border-radius: 35px;
     font-family: Helvetica; }
 div.login-block h3 {
     font-size: 1.8em; color: black; margin: 0;
@@ -37,6 +37,6 @@ div.login-block button.register {
     border: none; border-radius: 10px;
     background-color: #00008019; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
-    transition-duration: 500ms; margin-bottom: 10px; }
+    transition-duration: .5s; margin-bottom: 10px; }
 div.login-block button.register:hover {
-    background-color: #0000C033; cursor: pointer; transition-duration: 500ms; }
+    background-color: #0000C033; cursor: pointer; transition-duration: .5s; }

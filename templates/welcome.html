@@ -27,7 +27,8 @@
                 <i class="fa-solid fa-cloud-arrow-up"></i>上传题目
             </div>
         </a>
-        <a class="sidebar-link" href="{{ url_for('edit_profile') }}">
+        <a class="sidebar-link" target="_blank"
+            href="{{ url_for('edit_profile') }}">
             <div class="sidebar-item">
                 <i class="fa-solid fa-user-pen"></i>修改信息
             </div>
@@ -41,6 +42,12 @@
                 onclick="return confirm('确定要注销账户？');">
             <div class="sidebar-item">
                 <i class="fa-solid fa-person-circle-minus"></i>注销账户
+            </div>
+        </a>
+    {%- else -%}
+        <a class="sidebar-link" href="{{ url_for('chat', activeuid=user.uid) }}">
+            <div class="sidebar-item">
+                <i class="fa-solid fa-comments"></i>私信聊天
             </div>
         </a>
     {%- endif -%}

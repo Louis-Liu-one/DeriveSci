@@ -168,15 +168,37 @@ class User(db.Model, UserMixin):
             if score == 100])
 
     def unread_comments(self):
-        return Comment.query.filter(db.and_(
-            True if self.cmtlastvisit is None
-            else self.cmtlastvisit < Comment.timestamp,
-            Comment.replyto.has(Comment.uid == self.uid))).order_by(
+        return Comment.query.filter(
+            (True if self.cmtlastvisit is None
+            else self.cmtlastvisit < Comment.timestamp)
+            & (Comment.replyto.has(Comment.uid == self.uid))).order_by(
             Comment.timestamp.desc()).all()
 
     def update_cmtlastvisit(self):
         self.cmtlastvisit = _utcnow()
         db.session.commit()
+
+    def chat_to(self, uid, msg):
+        message = Comment(user=self, content=str(msg),
+            post_type=2, post_ident=str(uid))
+        db.session.add(message)
+        db.session.commit()
+
+    def all_chats(self):
+        chats_list = Comment.query.filter(
+            (Comment.post_type == 2) & ((Comment.uid == self.uid)
+                | (Comment.post_ident == str(self.uid)))
+            ).order_by(Comment.timestamp.asc()).all()
+        chats = {}
+        for chatmsg in chats_list:
+            other, name, flag = chatmsg.uid, chatmsg.user.name, True
+            if other == self.uid:
+                other, flag = int(chatmsg.post_ident), False
+                name = find_user(other).name
+            if other not in chats:
+                chats[other] = []
+            chats[other].append((chatmsg.content, flag))
+        return chats
 
     def url(self):
         return url_for('users', uid=self.uid)
@@ -278,9 +300,9 @@ class Prob(db.Model):
         return answer_eval, testpoints, submission
 
     def get_toplevel_comments(self):
-        return Comment.query.filter(db.and_(
+        return Comment.query.filter(
             Comment.post_type == 0, Comment.post_ident == self.probno,
-            Comment.replyto_id.is_(None))).order_by(
+            Comment.replyto_id.is_(None)).order_by(
             Comment.timestamp.desc()).all()
 
     def edit(self, probtitle, problabels, statement, answer):
@@ -336,9 +358,9 @@ class ProbSolution(db.Model):
 
     def get_toplevel_comments(self):
         post_ident = self.get_post_ident()
-        return Comment.query.filter(db.and_(
+        return Comment.query.filter(
             Comment.post_type == 1, Comment.post_ident == post_ident,
-            Comment.replyto_id.is_(None))).order_by(
+            Comment.replyto_id.is_(None)).order_by(
             Comment.timestamp.desc()).all()
 
     def edit(self, title, content):
@@ -411,7 +433,7 @@ def search_probs(form, extra_req=None):
         requirements.append(extra_req)
     if not requirements:
         return Prob.query.order_by(Prob.probno.asc()), flag
-    return Prob.query.filter(db.and_(*requirements)).order_by(
+    return Prob.query.filter(*requirements).order_by(
         Prob.probno.asc()), flag
 
 
@@ -494,6 +516,7 @@ class Comment(db.Model):
     replyto_id = db.Column(db.Integer, db.ForeignKey('comments.cmtid'))
     # 帖子类型为0，帖子为题目，标识符为题目编号
     # 帖子类型为1，帖子为题解，标识符为CSV格式的题目编号与题解编号的组合
+    # 帖子类型为2，帖子为私信，标识符为信息接收用户ID，不使用replyto、replies字段
     post_type = db.Column(db.Integer, nullable=False)  # 帖子类型
     post_ident = db.Column(db.Text, nullable=False)    # 帖子标识符
     replyto = db.relationship(
@@ -512,6 +535,8 @@ class Comment(db.Model):
         elif self.post_type == 1:
             probno, solno = csv2list(self.post_ident)
             return get_solution(probno, int(solno))
+        elif self.post_type == 2:
+            return None  # 私信信息，无实际对象
         # 未知帖子类型
 
     def __lt__(self, comment):
@@ -856,6 +881,18 @@ def users(uid):
     return render_template('notfound.html', error='未能找到用户。')
 
 
+@app.route('/chat', methods=['GET', 'POST'])
+@login_required
+def chat():
+    if request.method == 'POST':
+        message = request.form.get('message')
+        targetuid = int(request.form.get('target'))
+        current_user.chat_to(targetuid, message)
+        return render_template('chat.html', activeuser=find_user(targetuid))
+    activeuid = request.args.get('activeuid')
+    return render_template('chat.html', activeuser=find_user(activeuid))
+
+
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -900,7 +937,7 @@ def avatarfile(uid):
             client_time = datetime.datetime.strptime(
                 if_modified_since, '%a, %d %b %Y %H:%M:%S GMT')
             if client_time >= user.avlastmodified.replace(microsecond=0):
-                return '', 304
+                return '', 304  # 已缓存
         except ValueError:
             return '', 400  # 时间格式错误，无法处理
     response = make_response(user.avatar)
@@ -930,6 +967,7 @@ def unregister():
 app.jinja_env.add_extension('jinja2.ext.do')
 app.add_template_global(list2csv, 'list2csv')
 app.add_template_global(get_helplist(), 'helplist')
+app.add_template_global(find_user, 'find_user')
 app.add_template_global(_utcfromnow, 'utcfromnow')
 app.add_template_global(datetime.timedelta, 'timedelta')
 app.add_template_global(TPStatus, 'TPStatus')
