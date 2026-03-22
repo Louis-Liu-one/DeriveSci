@@ -12,7 +12,7 @@ from pyparsing import identchars, identbodychars
 from pyparsing import ParserElement, ParseException
 
 
-__all__ = ['latex', 'fpparse', 'fpeval', 'ParseException']
+__all__ = ['fpparse', 'fpeval', 'ParseException']
 
 sp.init_printing()                                 # 调试用
 indent = functools.partial(indent, prefix='    ')  # 调试用

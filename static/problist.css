@@ -24,7 +24,7 @@ table.problist td.source div i, table.problist td.soluser div i {
     font-size: 20px; margin: 0 2px; }
 table.problist td.probno:hover, table.problist td.source:hover,
     table.problist td.soluser:hover {
-    background-color: #B0EFFF;
+    background-color: #BBEFFF;
     transition-duration: .5s; cursor: pointer; }
 
 table.problist a.problabel {

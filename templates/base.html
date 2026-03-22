@@ -37,7 +37,20 @@
             {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
             {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {{- navbar_item(url_for('chat'), 'comments', '私信') -}}
+            {%- if current_user and current_user.is_authenticated -%}
+                <a href="{{ url_for('chat') }}" target="_blank">
+                    <li class="navbar-item">
+                        <i class="fa-solid fa-comments"></i><br>私信
+                        {%- set unread_chats_num
+                            = current_user.unread_chats_num() -%}
+                        {%- if unread_chats_num -%}
+                            <div class="unread-badge">
+                                {{- unread_chats_num -}}
+                            </div>
+                        {%- endif -%}
+                    </li>
+                </a>
+            {%- endif -%}
             {%- if current_user and current_user.is_authenticated -%}
                 {% set unread_comments = current_user.unread_comments() %}
                 {%- if unread_comments -%}

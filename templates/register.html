@@ -7,7 +7,7 @@
 <form class="mathprobsform" action="{{ url_for('register') }}"
     method="post" enctype="multipart/form-data">
     <h3>注册</h3>
-    {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
+    {%- if error -%}<p class="errormsg">错误：{{ error }}</p>{%- endif -%}
     <span>
         <label for="username">用户名：</label>
         <input id="username" name="username" type="text"

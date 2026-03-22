@@ -15,6 +15,11 @@
 p.helpslink { color: gray; font-size: 13px; line-height: 25px; }
 p.helpslink a { color: inherit; text-decoration: none; }
 p.helpslink a:hover { color: #349AD5; }
+.disabled { cursor: not-allowed !important; }
+div.unread-badge {
+    position: absolute; top: -8px; right: -8px; min-width: 18px; height: 18px;
+    line-height: 18px; border-radius: 9px; background: #f56c6c; color: white;
+    font-size: 11px; text-align: center; }
 
 /******************************* navbar *******************************/
 
@@ -50,11 +55,13 @@ ul.navbar-items li.logo-text i.gender {
     font-size: 20px; margin: 30px 15px 0 -18px;
     -webkit-text-stroke: 1px white; }
 
-li.navbar-item { width: 72px; float: right; line-height: 20px; }
+li.navbar-item {
+    position: relative; width: 72px; float: right; line-height: 20px; }
 li.navbar-item img { width: 50px; height: 50px; padding-top: 3px; }
 li.navbar-avatar img {
     width: 45px; height: 45px; padding-top: 7px; border-radius: 50%; }
 li.navbar-item i { font-size: 36px; padding: 10px 0; }
+li.navbar-item div.unread-badge { top: 5px; right: 5px; }
 
 div.below-navbar {
     position: fixed; top: 80px; left: 0;
@@ -77,9 +84,8 @@ div.sidebar-item img.avatar {
     width: 27px; height: 27px;
     margin-right: 3px; border-radius: 50%; color: white; }
 div.sidebar-item i { font-size: 20px; margin-right: 3px; }
-div.sidebar-item:hover {
-    transition-duration: .5s;
-    background-color: #0000C033; cursor: pointer; }
+div.sidebar-item:not(.disabled):hover {
+    transition-duration: .5s; background-color: #0000C033; }
 
 /******************************* blocks *******************************/
 

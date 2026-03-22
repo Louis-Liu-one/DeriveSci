@@ -3,7 +3,8 @@
 {% block title %}登录 - MathProbs{% endblock %}
 
 {% block form %}
-<form class="mathprobsform" action="{{ url_for('login') }}" method="post">
+<form class="mathprobsform" method="post"
+    action="{{ url_for('login', next=next) }}">
     <h3>登录</h3>
     {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
     <span>
@@ -28,7 +29,7 @@
 {% block right_block %}
 <h2>没有账号？</h2>
 <p>立即注册</p>
-<a href="{{ url_for('register') }}">
+<a href="{{ url_for('register', next=next) }}">
     <button class="register" type="button">注册</button>
 </a>
 <h2>不想登录或注册？</h2>

@@ -8,10 +8,20 @@
 {%- endmacro -%}
 
 {%- macro view_solution(prob) -%}
-    <a class="sidebar-link" target="_blank"
-        {% if prob.solutions %} href="{{ prob.solutions[0].url() }}" {% endif %}>
-        <div class="sidebar-item"><i class="fa-solid fa-key"></i>查看题解</div>
-    </a>
+    {%- if prob.solutions -%}
+        <a class="sidebar-link" target="_blank"
+            href="{{ prob.solutions[0].url() }}">
+            <div class="sidebar-item">
+                <i class="fa-solid fa-key"></i>查看题解
+            </div>
+        </a>
+    {%- else -%}
+        <a class="sidebar-link" target="_blank">
+            <div class="sidebar-item disabled">
+                <i class="fa-solid fa-ban"></i>暂无题解
+            </div>
+        </a>
+    {%- endif -%}
 {%- endmacro -%}
 
 {%- macro upload_solution(prob) -%}

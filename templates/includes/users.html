@@ -4,8 +4,8 @@
 {%- endmacro -%}
 
 {%- macro user_sidebar(user) -%}
-    <a class="sidebar-link" {% if user %} href="{{ user.url() }}" {% endif %}>
-        <div class="sidebar-item">
+    <a class="sidebar-link"{% if user %} href="{{ user.url() }}"{% endif %}>
+        <div class="sidebar-item{% if not user %} disabled{% endif %}">
             {{ user_avatar_img(user, 'avatar') }}{{ user_name(user) }}
         </div>
     </a>
@@ -31,7 +31,7 @@
         <option value="8">非二元性别 Non-binary</option>
     </select>
     {%- if default_gender -%}
-        <script>gender.value = '{{ default_gender }}';</script>
+        <script>gender.value = ({{ default_gender|tojson }}).toString();</script>
     {%- endif -%}
 {%- endmacro -%}
 

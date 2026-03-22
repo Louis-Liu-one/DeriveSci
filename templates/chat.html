@@ -41,44 +41,57 @@
                 <div class="user-item
                     {%- if uid == activeuser.uid %} active{%- endif -%}"
                     onclick="switchUser(this, {{ uid }});">
-                    {{- user_avatar_img(user) -}}{{- user_name(user) -}}
+                    <div class="avatar-wrap">
+                        {{- user_avatar_img(user) -}}
+                        {%- if all_chats[uid]['unread'] -%}
+                            <div class="unread-badge">
+                                {{- all_chats[uid]['unread'] -}}
+                            </div>
+                        {%- endif -%}
+                    </div>
+                    {{- user_name(user) -}}
                 </div>
             {%- endfor -%}
             {%- if activeuser and not ns.active -%}
                 <div class="user-item active"
                     onclick="switchUser(this, {{ activeuser.uid }});">
-                    {{- user_avatar_img(activeuser) -}}
-                    {{- user_name(activeuser) -}}
+                    <div class="avatar-wrap">
+                        {{- user_avatar_img(activeuser) -}}
+                    </div>{{- user_name(activeuser) -}}
                 </div>
+            {%- elif not all_chats -%}
+                <p class="helpslink">暂无私信对象，前往其他用户的主页添加私信。</p>
             {%- endif -%}
         </div>
         <div class="chat-box">
             <div class="chat-header" id="chattitle">
-                {%- if activeuser -%}正在和 {{ activeuser.name }} 聊天
+                {%- if activeuser -%}
+                    <div class="avatar-wrap">
+                        {{- user_avatar_img(activeuser) -}}
+                    </div>{{- user_name(activeuser) -}}
                 {%- else -%}消息列表{%- endif -%}
             </div>
             <div class="message-area" id="msgarea"></div>
-            <form method="POST" action="{{ url_for('chat') }}">
-                <div class="send-area">
-                    <input type="text" name="message"
-                        id="msginput" placeholder="输入消息……"
-                        {%- if not activeuser -%}disabled{%- endif -%}>
-                    <input type="hidden" name="target" id="target"
-                        {%- if activeuser -%}
-                        value="{{ activeuser.uid }}"{%- endif -%}>
-                    <button type="submit" id="msgbutton"
-                        {%- if not activeuser -%}disabled
-                        {%- endif -%}>发送</button>
-                </div>
-            </form>
+            <div class="send-area">
+                <input type="text" name="message" id="msginput"
+                    placeholder="输入消息……" autocomplete="off"
+                    {%- if not activeuser -%}disabled{%- endif -%}>
+                <input type="hidden" name="target" id="target"
+                    {%- if activeuser -%}
+                    value="{{ activeuser.uid }}"{%- endif -%}>
+                <button type="button" id="msgbutton" onclick="sendMessage()"
+                    {%- if not activeuser -%}disabled
+                    {%- endif -%}>发送</button>
+            </div>
         </div>
     </div>
 </div>
 <script src="{{ url_for('static', filename='chat-setup.js') }}"></script>
 <script>
     all_chats = {{ all_chats|tojson }};
+    currentUid = {{ current_user.uid|tojson }};
     {%- if activeuser -%}
-        addMessages(all_chats[{{ activeuser.uid }}]);
+        addMessages(all_chats[{{ activeuser.uid|tojson }}].messages);
     {%- endif -%}
 </script>
 {% endblock %}

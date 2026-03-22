@@ -16,53 +16,52 @@
 
 {% block body %}
 <div class="sidebar">
-    {{ return2post(prob, "返回题目") }}
-    {{ problabels_sidebar(prob) }}
-    <h3 class="sidebar-title">题目来源</h3>{{ user_sidebar(prob.source) }}
+    {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
+    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
 </div>
 <div class="bodypart">
     <h3>提交状态</h3>
     <div class="tpstatus">
-        {% for status in testpoints %}
-            {% if status == TPStatus.CORRECT %}
+        {%- for status in testpoints -%}
+            {%- if status == TPStatus.CORRECT -%}
                 <i class="fa-solid fa-circle-check"
                     title="答案正确" style="color: #72C040;"></i>
-            {% elif status == TPStatus.INCORRECT %}
+            {%- elif status == TPStatus.INCORRECT -%}
                 <i class="fa-solid fa-circle-xmark"
                     title="答案错误" style="color: #D75746;"></i>
-            {% elif status == TPStatus.PARSEERR %}
+            {%- elif status == TPStatus.PARSEERR -%}
                 <i class="fa-solid fa-circle-exclamation"
                     title="解析错误" style="color: #D75746;"></i>
-            {% elif status == TPStatus.EVALERR %}
+            {%- elif status == TPStatus.EVALERR -%}
                 <i class="fa-solid fa-circle-question"
                     title="求值错误" style="color: #D75746;"></i>
-            {% elif status == TPStatus.TIMEOUT %}
+            {%- elif status == TPStatus.TIMEOUT -%}
                 <i class="fa-solid fa-clock"
                     title="超时错误" style="color: #E89F3C;"></i>
-            {% elif status == TPStatus.ANSERR %}
+            {%- elif status == TPStatus.ANSERR -%}
                 <i class="fa-solid fa-circle-minus"
                     title="题目提供的答案无法解析，请联系提供者{{- user_name(
                         prob.source) -}}" style="color: #636D88;"></i>
-            {% endif %}
-        {% endfor %}
+            {%- endif -%}
+        {%- endfor -%}
     </div>
     <p><strong>我的答案：</strong><pre>{{ submission.answer }}</pre></p>
     <p>
         <strong>我的得分：</strong>
-        {% if submission.score == 100 %}
+        {%- if submission.score == 100 -%}
             <font color="#72C040"><b>100</b></font>
-        {% elif submission.score >= 80 %}
+        {%- elif submission.score >= 80 -%}
             <font color="#E89F3C"><b>{{ submission.score }}</b></font>
-        {% elif submission.score >= 40 %}
+        {%- elif submission.score >= 40 -%}
             <font color="#E07B41"><b>{{ submission.score }}</b></font>
-        {% else %}
+        {%- else -%}
             <font color="#D75746"><b>{{ submission.score }}</b></font>
-        {% endif %}
+        {%- endif -%}
     </p>
     <div id="answerdiv">
         <textarea id="answertext">**求值结果：**
-            {% if answer_latex %}${{ answer_latex }}$
-            {% else %}无法求值{% endif %}
+            {%- if answer_latex %} ${{ answer_latex }}$
+            {%- else %} 无法求值{%- endif -%}
         </textarea>
     </div>
 </div>

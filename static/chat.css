@@ -10,21 +10,26 @@ div.user-item {
     padding: 12px 10px; margin-bottom: 10px;
     border-radius: 15px; cursor: pointer; transition: .2s; }
 div.user-item:hover, div.user-item.active { background: #0000F008; }
-div.user-item img {
-    height: 25px; max-width: 30px; margin-right: 5px; border-radius: 50%; }
-div.user-item i { font-size: 20px; margin: 0 3px; }
+div.avatar-wrap {
+    position: relative; width: 30px; height: 30px; margin-right: 5px;
+    align-content: center; }
+div.avatar-wrap img {
+    height: 100%; max-width: 100%; border-radius: 50%; }
+div.avatar-wrap i { font-size: 25px; }
 
 div.chat-box { display: flex; flex: 1; flex-direction: column; }
-div.chat-header { padding: 15px; border-bottom: 1px solid #EEE; }
+div.chat-header {
+    display: flex; align-items: center;
+    padding: 15px; border-bottom: 1px solid #EEE; }
+div.chat-header div.avatar-wrap div.unread-badge { display: none; }
 div.message-area {
     flex: 1; padding: 20px; overflow-y: auto; background: white; }
 div.message-area div.message {
-    display: table; margin-bottom: 15px; max-width: 50%;
-    word-wrap: break-word; word-break: break-all;
-    white-space: pre-wrap; overflow: hidden; padding: 8px 12px;
+    display: table; margin-bottom: 15px; max-width: 60%;
+    word-wrap: anywhere; padding: 8px 12px;
     border-radius: 15px; line-height: 1.5; }
 div.message-area div.my-message {
-    background: #5CCBE2; color: white;
+    background: #4CBBEB; color: white;
     margin-left: auto; border-top-right-radius: 0; }
 div.message-area div.other-message {
     background: #F1F1F1; color: #333;
