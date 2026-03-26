@@ -138,9 +138,11 @@ class User(db.Model, UserMixin):
         db.session.add(message)
         db.session.commit()
 
-    def all_chats(self):
+    def all_chats(self, from_time=None):
+        if from_time is None:
+            from_time = datetime.datetime.min
         chats_list = Comment.query.filter(
-            Comment.post_type == 2,
+            Comment.post_type == 2, Comment.timestamp > from_time,
             (Comment.uid == self.uid) | (Comment.post_ident == str(self.uid))
             ).order_by(Comment.timestamp.asc()).all()
         chats, lastvisits = {}, {}
@@ -154,8 +156,8 @@ class User(db.Model, UserMixin):
                 'content': chatmsg.content, 'othersend': othersend,
                 'timestamp': chatmsg.timestamp.isoformat()})
             if other not in lastvisits:
-                lastvisits[other] = get_chatlastvisit(
-                    self.uid, other).lastvisit
+                lastvisits[other] = max(get_chatlastvisit(
+                    self.uid, other).lastvisit, from_time)
             chats[other]['unread'] += othersend \
                 and lastvisits[other] < chatmsg.timestamp
         return chats
@@ -172,18 +174,6 @@ class User(db.Model, UserMixin):
                     self.uid, other).lastvisit
             unread_num += lastvisits[other] < chatmsg.timestamp
         return unread_num
-
-    def spec_user_chats(self, uid, from_time=None):
-        if from_time is None:
-            from_time = datetime.datetime.min.replace(tzinfo=datetime.UTC)
-        return [{
-            'content': chatmsg.content, 'othersend': True,
-            'timestamp': chatmsg.timestamp.isoformat()}
-            for chatmsg in Comment.query.filter(
-            Comment.post_type == 2,
-            Comment.post_ident == str(self.uid), Comment.uid == int(uid),
-            Comment.timestamp > from_time
-            ).order_by(Comment.timestamp.asc()).all()]
 
     def url(self):
         return url_for('users', uid=self.uid)

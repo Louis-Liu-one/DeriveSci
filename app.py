@@ -434,13 +434,12 @@ def api_chat_send():
 @app.route('/api/chat/messages', methods=['POST'])
 def api_chat_messages():
     try:
-        receiver_uid = request.json.get('receiver_uid')
-        sender_uid = request.json.get('sender_uid')
+        receiver_uid = int(request.json.get('receiver_uid'))
         lastmsgtime = request.json.get('lastmsgtime')
-        return jsonify(find_user(receiver_uid).spec_user_chats(
-            sender_uid, datetime.datetime.fromisoformat(lastmsgtime)))
+        return jsonify(find_user(receiver_uid).all_chats(
+            datetime.datetime.fromisoformat(lastmsgtime)))
     except BaseException as err:
-        return jsonify([])
+        return jsonify({})
 
 
 @app.route('/edit-profile', methods=['GET', 'POST'])

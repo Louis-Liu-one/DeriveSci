@@ -21,7 +21,7 @@ div.chat-box { display: flex; flex: 1; flex-direction: column; }
 div.chat-header {
     display: flex; align-items: center;
     padding: 15px; border-bottom: 1px solid #EEE; }
-div.chat-header div.avatar-wrap div.unread-badge { display: none; }
+div.chat-header div.unread-badge { display: none !important; }
 div.message-area {
     flex: 1; padding: 20px; overflow-y: auto; background: white; }
 div.message-area div.message {

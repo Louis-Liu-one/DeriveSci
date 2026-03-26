@@ -22,9 +22,9 @@ deactivate
 FLASK_SECRET_KEY=密钥...
 export FLASK_SECRET_KEY
 ```
-你也可以将上述命令加入`webenv/bin/activate`中。然后，运行`webapp.py`，或从他处导入：
+你也可以将上述命令加入`webenv/bin/activate`中。然后，运行`app.py`，或从他处导入：
 ```python
-from webapp import app
+from app import app
 app.run()
 ```
 此时，网页可在`localhost:5000`访问。
