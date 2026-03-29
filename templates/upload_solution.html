@@ -43,7 +43,7 @@
         </span>
         <span>
             <label for="solution">内容：</label>
-            <textarea id="solution" name="solution"
+            <textarea id="solution" name="solution" class="tall"
                 placeholder="以Markdown格式输入题解" spellcheck="false"
                 required>{%- if editmode -%}
                 {{ solution.content }}
@@ -67,7 +67,7 @@
     <p class="helpslink">
         <a target="_blank"
             href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
-            <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
+            <i class="fa-solid fa-circle-info"></i> 有关上传题解的帮助……
         </a><br>
         <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
             <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……

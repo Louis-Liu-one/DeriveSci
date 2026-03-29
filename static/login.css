@@ -37,6 +37,6 @@ div.login-block button.register {
     border: none; border-radius: 10px;
     background-color: #00008019; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
-    transition-duration: .5s; margin-bottom: 10px; }
+    transition: .5s; margin-bottom: 10px; }
 div.login-block button.register:hover {
-    background-color: #0000C033; cursor: pointer; transition-duration: .5s; }
+    background-color: #0000C033; cursor: pointer; transition: .5s; }

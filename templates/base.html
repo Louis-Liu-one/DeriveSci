@@ -1,8 +1,9 @@
 {% from "includes/users.html" import user_avatar_img %}
 
-{%- macro navbar_item(url, icon, text) -%}
+{%- macro navbar_item(url, icon, text, unread=0) -%}
     <a href="{{ url }}" target="_blank"><li class="navbar-item">
         <i class="fa-solid fa-{{ icon }}"></i><br>{{ text }}
+        {%- if unread %}<div class="unread-badge">{{ unread }}</div>{% endif -%}
     </li></a>
 {%- endmacro -%}
 
@@ -17,10 +18,12 @@
     <script src="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     {%- block styles -%}{%- endblock -%}
 </head>
@@ -38,28 +41,16 @@
             {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('problist'), 'book', '题集') -}}
             {%- if current_user and current_user.is_authenticated -%}
-                <a href="{{ url_for('chat') }}" target="_blank">
-                    <li class="navbar-item">
-                        <i class="fa-solid fa-comments"></i><br>私信
-                        {%- set unread_chats_num
-                            = current_user.unread_chats_num() -%}
-                        {%- if unread_chats_num -%}
-                            <div class="unread-badge">
-                                {{- unread_chats_num -}}
-                            </div>
-                        {%- endif -%}
-                    </li>
-                </a>
-            {%- endif -%}
-            {%- if current_user and current_user.is_authenticated -%}
-                {% set unread_comments = current_user.unread_comments() %}
+                {%- set unread_comments = current_user.unread_comments() -%}
                 {%- if unread_comments -%}
-                    {{ navbar_item(url_for('unread_comments'), 'envelope',
-                        unread_comments|length|string + ' 条未读') }}
+                    {{- navbar_item(url_for('chat', view_comments=True),
+                        'envelope', '评论', unread_comments|length) -}}
                 {%- else -%}
-                    {{ navbar_item(url_for('unread_comments'),
-                        'envelope-circle-check', '无未读') }}
+                    {{- navbar_item(url_for('chat', view_comments=True),
+                        'envelope-circle-check', '评论') -}}
                 {%- endif -%}
+                {{- navbar_item(url_for('chat'), 'comments', '私信',
+                    current_user.unread_chats_num()) -}}
             {%- endif -%}
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">

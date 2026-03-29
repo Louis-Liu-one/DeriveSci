@@ -45,8 +45,8 @@ div.send-area input#msginput:disabled { cursor: not-allowed; }
 div.send-area button {
     border: none; border-radius: 18px; background-color: skyblue; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
-    margin-left: 15px; transition-duration: .5s; }
+    margin-left: 15px; transition: .5s; }
 div.send-area button:hover {
-    background-color: deepskyblue; cursor: pointer; transition-duration: .5s; }
+    background-color: deepskyblue; cursor: pointer; transition: .5s; }
 div.send-area button:disabled {
     background-color: skyblue; cursor: not-allowed; }

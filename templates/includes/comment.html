@@ -76,7 +76,7 @@
         {%- if with_post -%} &nbsp;
             {% set post = comment.get_post() %}来自：{{ post }}
             <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
-                onclick="window.open('{{ post.url() }}', '_block')"></i>
+                onclick="window.open('{{ post.url() }}', '_blank')"></i>
         {%- endif -%}
     </p>
     {{- commentform_sub(comment, new_window=with_post) -}}

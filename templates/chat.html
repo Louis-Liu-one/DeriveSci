@@ -1,11 +1,25 @@
 {% extends "base.html" %}
 {% from "includes/users.html" import user_name %}
+{% if view_comments %}
+    {% from "includes/comment.html" import commentdiv with context %}
+{% endif %}
 
 {% set all_chats = current_user.all_chats() %}
 
 {% block title %}私信聊天 - MathProbs{% endblock %}
 
 {% block styles %}
+{%- if view_comments -%}
+    <link rel="stylesheet" href="{{-
+        url_for('static', filename='comment.css') -}}">
+    <link rel="stylesheet" href="{{-
+        url_for('static', filename='formstyle.css') -}}">
+    {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
+    {{- moment.locale('zh-cn') -}}
+    <script src="{{ url_for('static', filename='md-render.js') }}"></script>
+    <script src="{{-
+        url_for('static', filename='delete-comment.js') -}}"></script>
+{%- endif -%}
 <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
 {% endblock %}
 
@@ -32,14 +46,21 @@
 <div class="mainpart">
     <div class="chat-container">
         <div class="user-list" id="userlist">
+            {%- if view_comments -%}
+            <div class="user-item active" id="viewcomments">
+                <div class="avatar-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>未读评论
+            </div>
+            {%- endif -%}
             {%- set ns = namespace(active=False) -%}
             {%- for uid in all_chats -%}
                 {%- set user = find_user(uid) -%}
-                {%- if uid == activeuser.uid -%}
+                {%- if activeuser and uid == activeuser.uid -%}
                     {%- set ns.active = True -%}
                 {%- endif -%}
-                <div class="user-item
-                    {%- if uid == activeuser.uid %} active{%- endif -%}"
+                <div class="user-item {% if
+                    activeuser and uid == activeuser.uid -%}active{% endif %}"
                     onclick="switchUser(this, {{ uid }});">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(user) -}}
@@ -67,15 +88,32 @@
             {%- endif -%}
         </div>
         <div class="chat-box">
-            <div class="chat-header" id="chattitle">
-                {%- if activeuser -%}
-                    <div class="avatar-wrap">
-                        {{- user_avatar_img(activeuser) -}}
-                    </div>{{- user_name(activeuser) -}}
-                {%- else -%}消息列表{%- endif -%}
-            </div>
-            <div class="message-area" id="msgarea"></div>
-            <div class="send-area">
+            {%- if view_comments -%}
+                <div class="chat-header" id="chattitle">未读评论</div>
+                <div class="message-area" id="msgarea">
+                    {% set unread_comments = current_user.unread_comments() %}
+                    {% if unread_comments %}
+                        <div class="commentlist">
+                            {% for comment in unread_comments %}
+                                {{ commentdiv(comment, with_post=True) }}
+                                <div class="commentsep"></div>
+                            {% endfor %}
+                        </div>
+                    {% else %}<p>暂无</p>{% endif %}
+                    {% do current_user.update_cmtlastvisit() %}
+                </div>
+            {%- else -%}
+                <div class="chat-header" id="chattitle">
+                    {%- if activeuser -%}
+                        <div class="avatar-wrap">
+                            {{- user_avatar_img(activeuser) -}}
+                        </div>{{- user_name(activeuser) -}}
+                    {%- else -%}消息列表{%- endif -%}
+                </div>
+                <div class="message-area" id="msgarea"></div>
+            {%- endif -%}
+            <div class="send-area{% if view_comments %} hidden{% endif %}"
+                id="sendarea">
                 <input type="text" name="message" id="msginput"
                     placeholder="输入消息……" autocomplete="off"
                     {%- if not activeuser -%}disabled{%- endif -%}>
@@ -97,4 +135,11 @@
         addMessages(all_chats[{{ activeuser.uid|tojson }}].messages);
     {%- endif -%}
 </script>
+{%- if view_comments -%}
+    <script src="{{-
+        url_for('static', filename='cmtform-onclick.js') -}}"></script>
+    <script>
+        renderElements([...document.getElementsByClassName('commentcontent')]);
+    </script>
+{%- endif -%}
 {% endblock %}

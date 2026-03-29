@@ -59,8 +59,8 @@
         </span>
         <span>
             <label for="statement">描述：</label>
-            <textarea id="statement" name="statement" spellcheck="false" 
-                placeholder="以Markdown格式输入题面"
+            <textarea id="statement" name="statement" spellcheck="false"
+                placeholder="以Markdown格式输入题面" class="tall"
                 required>{%- if editmode -%}{{ prob.statement }}
                 {%- elif statement -%}{{ statement }}{%- endif -%}</textarea>
         </span>
@@ -69,7 +69,7 @@
             <div class="answer">
                 <div class="answer-input">
                     <input type="text" id="context" name="context"
-                        autocomplete="off" spellcheck="false" 
+                        autocomplete="off" spellcheck="false"
                         placeholder="以JSON格式输入各变量，无变量则此项置空或填{}">
                     <input type="text" id="answer" name="answer"
                         autocomplete="off" spellcheck="false"

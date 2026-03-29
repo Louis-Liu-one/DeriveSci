@@ -1,3 +1,8 @@
+'''MathProbsOnline.PythonAnyWhere.com
+Copyright (c) 2026 Louis Liu  All rights reserved.
+
+数据库模型模块，实现网站所需的数据库操作。
+'''
 
 import io
 import csv
@@ -6,7 +11,7 @@ import datetime
 import functools
 import mimetypes
 
-from flask import Response, url_for
+from flask import url_for
 from flask_login import LoginManager, UserMixin, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -17,8 +22,7 @@ from anschecker import check_answers, testpoints_passedlist
 
 
 __all__ = [
-    'db', 'migrate', 'login_manager',
-    'csv2list', 'list2csv', 'utcfromnow',
+    'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow',
     'find_user', 'register_user', 'unregister_user',
     'Prob', 'ProbImage', 'ProbLabel',
     'get_prob', 'search_probs', 'add_prob',
@@ -35,7 +39,16 @@ convention = {
 }
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
+login_manager = LoginManager()
+login_manager.login_view = 'login'
 migrate = Migrate(db=db)
+
+
+def init_app(app):
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
+    db.init_app(app)
+    migrate.init_app(app)
+    login_manager.init_app(app)
 
 
 def csv2list(csvstr):
@@ -57,9 +70,6 @@ def utcfromnow(timestamp):
 
 
 # =========================== 用户数据库与登录系统 ===========================
-
-login_manager = LoginManager()
-login_manager.login_view = 'login'
 
 
 class User(db.Model, UserMixin):
@@ -362,9 +372,6 @@ class ProbImage(db.Model):
     mimetype = db.Column(db.String(64))
     data = db.Column(db.LargeBinary)
 
-    def to_response(self):
-        return Response(self.data, mimetype=self.mimetype)
-
 
 class ProbLabel(db.Model):
     __tablename__ = 'labels'
@@ -551,7 +558,7 @@ class Comment(db.Model):
             return get_solution(probno, int(solno))
         elif self.post_type == 2:
             return None  # 私信信息，无实际对象
-        # 未知帖子类型
+        return None  # 未知帖子类型
 
     def __lt__(self, comment):
         return self.timestamp < comment.timestamp

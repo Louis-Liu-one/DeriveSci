@@ -266,12 +266,12 @@ $$ a \heartsuit b \quad a \mathbin\heartsuit b $$
 
 可以使用 `\stackrel` 命令在关系符上方添加描述。其接受两个参数，第一个表示要添加的描述，第二个表示下方的关系符。例如：
 ```latex
-$$ \mathrm{2CuO + C \stackrel\triangle= 2Cu + CO_2} $$
+$$ \mathrm{CO + CuO \stackrel\triangle= Cu + CO_2} $$
 ```
-$$ \mathrm{2CuO + C \stackrel\triangle= 2Cu + CO_2} $$
+$$ \mathrm{CO + CuO \stackrel\triangle= Cu + CO_2} $$
 当然，本例中还可以使用 `\triangleq` 渲染 $\triangleq$ 得到类似的效果。
 
-然而，当描述文字过长时，上述用法可能有所不足。这时，可以利用如下命令生成更好的效果：
+然而，当描述文字过长时，上述用法可能有所不足。这时，可以利用如下以 `\x` 开头的命令生成更好的效果：
 
 命令 | 效果 | 命令 | 效果 | 命令 | 效果
 :--------------------: | :----------------------------------------------: | :--------------------: | :----------------------------------------------: |  :--------------------: | :----------------------------------------------:
@@ -284,9 +284,9 @@ $$ \mathrm{2CuO + C \stackrel\triangle= 2Cu + CO_2} $$
 ```
 其中方括号包围的是可选参数，可以省略。如下是一个例子：
 ```latex
-$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2} $$
+$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2 \uparrow} $$
 ```
-$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2} $$
+$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2 \uparrow} $$
 
 ## 括号与定界符
 

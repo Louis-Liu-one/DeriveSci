@@ -1,21 +1,22 @@
-'''MathProbsOnline
+'''MathProbsOnline.PythonAnyWhere.com
 Copyright (c) 2026 Louis Liu  All rights reserved.
+
+我们的网站支持如下的路由。
 
 用户操作：
 /login             登录
-/logout            登出
+/logout            登出*
 /register          注册
-/unregister        注销
+/unregister        注销*
 /edit-profile      编辑信息
-/edit-introduction 编辑简介
+/edit-introduction 编辑简介*
 /users/<uid>       查看他人主页
 /helps/            查看帮助列表
 /helps/<howto>     查看帮助
 /chat              私信聊天
-/post-comment/<post_type>/<post_ident>         发表评论
-/post-comment/<post_type>/<post_ident>/<cmtid> 回复评论
-/delete-comment                                删除评论
-/unread-comments                               未读评论
+/post-comment/<post_type>/<post_ident>         发表评论*
+/post-comment/<post_type>/<post_ident>/<cmtid> 回复评论*
+/delete-comment                                删除评论*
 
 题目：
 /upload-prob         上传题目
@@ -23,18 +24,21 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /labels/<labelname>  单个标签
 /probs/              题集
 /probs/<probno>                 题目<probno>
-/probs/<probno>/submit          提交题目<probno>的答案
+/probs/<probno>/submit          提交题目<probno>的答案*
 /probs/<probno>/edit            编辑题目
-/probs/<probno>/delete          删除题目
+/probs/<probno>/delete          删除题目*
 /probs/<probno>/upload-solution 上传题解
 /probs/<probno>/solutions/<solno>        查看题解
 /probs/<probno>/solutions/<solno>/edit   编辑题解
-/probs/<probno>/solutions/<solno>/delete 删除题解
+/probs/<probno>/solutions/<solno>/delete 删除题解*
+/images/<probno>/<filename>              题目/题解图片
 
-API：
+API：*
 /api/chat/update-lastvisit 更新上次查看私信的时间
 /api/chat/send             发送私信
 /api/chat/messages         获取新收到的私信
+
+标*的是无法通过输入网址查看的路由。
 
 已部署至：MathProbsOnline.PythonAnyWhere.com
 '''
@@ -55,10 +59,7 @@ from anschecker import TPStatus, latex
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
-db.init_app(app)
-migrate.init_app(app)
-login_manager.init_app(app)
+init_app(app)
 moment = Moment(app)
 
 
@@ -114,12 +115,6 @@ def delete_comment():
     return redirect(comment.get_post().url())
 
 
-@app.route('/unread-comments')
-@login_required
-def unread_comments():
-    return render_template('unread_comments.html')
-
-
 # =========================== 题目各项网页 ===========================
 
 
@@ -165,7 +160,17 @@ def probs(probno):
 @app.route('/images/<probno>/<imagename>')
 def imagefile(probno, imagename):
     image = db.session.get(ProbImage, (probno, imagename))
-    return '' if image is None else image.to_response()
+    if not image:
+        return '', 404  # 未找到
+    etag = hashlib.md5(image.data).hexdigest()
+    if_none_match = request.headers.get('If-None-Match')
+    if if_none_match and if_none_match == etag:
+        return '', 304
+    response = make_response(image.data)
+    response.headers['Content-Type'] = image.mimetype
+    response.headers['ETag'] = etag
+    response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存10min
+    return response
 
 
 @app.route('/probs/<probno>/submit', methods=['POST'])
@@ -404,6 +409,9 @@ def users(uid):
 @app.route('/chat')
 @login_required
 def chat():
+    view_comments = request.args.get('view_comments')
+    if view_comments:
+        return render_template('chat.html', view_comments=True)
     activeuid = request.args.get('activeuid')
     return render_template('chat.html', activeuser=find_user(activeuid))
 

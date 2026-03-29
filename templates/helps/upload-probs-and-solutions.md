@@ -57,7 +57,7 @@
 %.svg: %.dvi
     dvisvgm -n $<
 ```
-直接使用 `make <你的 LaTeX 文件名>.tex` 生成 SVG 文件。
+直接使用 `make <你的 LaTeX 文件名>.svg` 生成 SVG 文件。
 
 需要注意的是，`dvisvgm` 工具可能会出现问题
 ```

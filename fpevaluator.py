@@ -215,7 +215,7 @@ class FPExpression(FPElement):
         result = self.expr.subs(symbols_dict).subs(functions_dict)
         if local_scope:
             self.stack.pop_context()
-        return result
+        return _as_sympy(result)
 
 
 class ReturnStatement(FPElement):
@@ -395,8 +395,9 @@ def _as_spident(tokens):
     identifier = tokens[0]
     if hasattr(sp, identifier):
         constant = getattr(sp, identifier)
-        return sp.Symbol(identifier) if isinstance(
-            constant, _function_type | sp.Lambda) else constant
+        return constant if isinstance(
+            constant, sp.Basic) and not isinstance(
+            constant, sp.Lambda) else sp.Symbol(identifier)
     return sp.Symbol(identifier)
 
 
@@ -620,8 +621,8 @@ BNFs:
 <funcdefine>  ::= IDENTIFIER LPAREN [ IDENTIFIER { "," IDENTIFIER } [ "," ] ]
                   RPAREN "=" ( <expr> | <stmtsblock> )
 <return>      ::= "return" <expr>
-<judgement>   ::= "if" <primary> ( <statement> ";" | <stmtsblock> )
-                  [ "else" ( <statement> ";" | <stmtsblock> ) ]
+<judgement>   ::= "if" <primary> [ ( <statement> ";" | <stmtsblock> ) "else" ]
+                  ( <statement> | <stmtsblock> )
 <whileloop>   ::= "while" <primary> ( <statement> | <stmtsblock> )
 <global>      ::= "global" IDENTIFIER { "," IDENTIFIER } [ "," ]
 <nonlocal>    ::= "nonlocal" IDENTIFIER { "," IDENTIFIER } [ "," ]
@@ -684,9 +685,9 @@ RULE_funcdefine = (
     ).set_parse_action(_funcdefine_stmt)
 RULE_return = (KW_RETURN + RULE_expr).set_parse_action(_return_stmt)
 RULE_judgement = (
-    KW_IF + RULE_primary + ((RULE_statement + SEMICOL) | RULE_stmtsblock)
-    + Opt(KW_ELSE + ((RULE_statement + SEMICOL) | RULE_stmtsblock))
-    ).set_parse_action(_judgement)
+    KW_IF + RULE_primary + Opt(((
+        RULE_statement + SEMICOL) | RULE_stmtsblock) + KW_ELSE)
+    + (RULE_statement | RULE_stmtsblock)).set_parse_action(_judgement)
 RULE_whileloop = (
     KW_WHILE + RULE_primary
     + (RULE_statement | RULE_stmtsblock)).set_parse_action(_whileloop)
@@ -710,7 +711,7 @@ RULE_stmtsblock << (
 
 def fpparse(string):
     '''解析语句为语法树。'''
-    parse_result = RULE_statements.parse_string(string, parse_all=True)[0]
+    parse_result = RULE_statements.parse_string(string)[0]
     parse_result.setup_stack(ProgramStack())
     return parse_result
 
@@ -720,4 +721,4 @@ def fpeval(parsed_string, context=None):
     if context is not None:
         parsed_string.setup_stack(ProgramStack({
             _ident2symbol(key): val for key, val in context.items()}))
-    return sp.simplify(parsed_string.do())
+    return sp.simplify(_as_sympy(parsed_string.do()))

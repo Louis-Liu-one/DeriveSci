@@ -13,7 +13,7 @@
 
 {%- macro user_avatar_img(user, extra_class='') -%}
     {%- if user and user.avatar -%}
-        <img class="{{ extra_class }}"
+        <img {% if extra_class -%}class="{{ extra_class }}"{%- endif -%}
             src="{{ url_for('avatarfile', uid=user.uid) }}">
     {%- else -%}<i class="fa-solid fa-user {{ extra_class }}"></i>{%- endif -%}
 {%- endmacro -%}

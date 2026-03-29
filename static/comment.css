@@ -4,11 +4,10 @@ div.comment { clear: both; margin-top: 10px; }
 div.comment span.avatar, div.comment img.avatar, div.comment i.avatar {
     width: 36px; height: 36px; margin-top: 2px; }
 div.comment img.avatar, div.comment i.avatar {
-    border-radius: 50%; transition-duration: .5s; }
+    border-radius: 50%; transition: .5s; }
 div.comment i.avatar { font-size: 32px; text-align: center; color: black; }
 div.comment img.avatar:hover, div.comment i.avatar:hover {
-    box-shadow: 0 0 3px #0008; cursor: pointer;
-    transition-duration: .5s; }
+    box-shadow: 0 0 3px #0008; cursor: pointer; transition: .5s; }
 
 div.commentbody {
     float: right; width: calc(100% - 48px); margin-bottom: 10px; }

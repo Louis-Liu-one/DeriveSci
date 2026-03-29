@@ -33,15 +33,15 @@ form.mathprobsform input, form.mathprobsform textarea,
     background-color: aliceblue; border: none; border-radius: 10px; }
 form.mathprobsform textarea {
     min-width: 80%; min-height: 50px; height: 150px; }
+form.mathprobsform textarea.tall { height: 250px; }
 form.mathprobsform input:focus,
     form.mathprobsform textarea:focus,
     form.mathprobsform select:focus { outline-color: lightskyblue; }
 form.mathprobsform input::file-selector-button,
     form.mathprobsform button {
     border: none; border-radius: 10px; background-color: skyblue; color: white;
-    line-height: 27px; font-size: 15px; width: 120px;
-    transition-duration: .5s; }
+    line-height: 27px; font-size: 15px; width: 120px; transition: .5s; }
 form.mathprobsform input::file-selector-button:hover,
     form.mathprobsform button:hover {
-    background-color: deepskyblue; cursor: pointer; transition-duration: .5s; }
+    background-color: deepskyblue; cursor: pointer; transition: .5s; }
 form.mathprobsform button { margin-left: 10px; }

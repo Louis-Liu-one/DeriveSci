@@ -62,6 +62,8 @@ async function updateUserLastVisit(receiver_uid, sender_uid)
 }
 
 async function switchUser(element, uid) {
+    sendarea.className = 'send-area';
+    viewcomments.style.display = 'none';
     if (target.value == uid) return;
     elements[uid] = element;
     msginput.disabled = msgbutton.disabled = false;

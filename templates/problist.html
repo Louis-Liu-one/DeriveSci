@@ -47,11 +47,11 @@
             placeholder="查询内容中含有指定文本的题目"></span>
         <span><label for="problabels">标签：</label>
         <input type="text" id="problabels" name="problabels" autocomplete="off"
-            placeholder="输入题目标签，以CSV格式" spellcheck="false" 
+            placeholder="输入题目标签，以CSV格式" spellcheck="false"
             value="{{ form.get('problabels', '') }}"></span>
         <span><label for="source">来源：</label>
         <input type="text" id="source" name="source" autocomplete="off"
-            placeholder="输入用户名称，以CSV格式" spellcheck="false" 
+            placeholder="输入用户名称，以CSV格式" spellcheck="false"
             value="{{ form.get('source', '') }}"></span>
         <span><button type="submit">查询</button></span>
     </form>

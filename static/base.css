@@ -16,9 +16,10 @@ p.helpslink { color: gray; font-size: 13px; line-height: 25px; }
 p.helpslink a { color: inherit; text-decoration: none; }
 p.helpslink a:hover { color: #349AD5; }
 .disabled { cursor: not-allowed !important; }
+.hidden { display: none !important; }
 div.unread-badge {
     position: absolute; top: -8px; right: -8px; min-width: 18px; height: 18px;
-    line-height: 18px; border-radius: 9px; background: #f56c6c; color: white;
+    line-height: 18px; border-radius: 9px; background: #f56C6C; color: white;
     font-size: 11px; text-align: center; }
 
 /******************************* navbar *******************************/
@@ -30,13 +31,10 @@ div.navbar {
 
 ul.navbar-items { list-style: none; margin: 0; padding: 0; }
 ul.navbar-items li.logo-image, li.navbar-item {
-    height: 80px; text-align: center;
-    font-size: 15px; font-weight: bold;
-    font-family: Helvetica-Bold; color: white;
-    transition-duration: .5s; }
+    height: 80px; text-align: center; color: white; transition: .5s;
+    font-size: 15px; font-weight: bold; font-family: Helvetica-Bold; }
 ul.navbar-items li.logo-image:hover, li.navbar-item:hover {
-    transition-duration: .5s;
-    background-color: #0084; cursor: pointer; }
+    transition: .5s; background-color: #0082; cursor: pointer; }
 ul.navbar-items li.logo-image {
     width: 80px; float: left; margin-right: 10px; padding: 0 5px; }
 ul.navbar-items li.logo-image img {
@@ -61,7 +59,7 @@ li.navbar-item img { width: 50px; height: 50px; padding-top: 3px; }
 li.navbar-avatar img {
     width: 45px; height: 45px; padding-top: 7px; border-radius: 50%; }
 li.navbar-item i { font-size: 36px; padding: 10px 0; }
-li.navbar-item div.unread-badge { top: 5px; right: 5px; }
+li.navbar-item div.unread-badge { top: 6px; right: 6px; font-size: 12px; }
 
 div.below-navbar {
     position: fixed; top: 80px; left: 0;
@@ -70,22 +68,23 @@ div.below-navbar {
 /******************************* sidebar *******************************/
 
 div.sidebar {
-    background-color: #5CCBE2; padding: 5px 10px 0 0; margin-right: 15px;
+    background-color: #5CCBE2; padding: 5px 5px 0 0; margin-right: 15px;
     width: 16%; height: 100%; overflow-y: auto; font-family: Helvetica; }
-h3.sidebar-title { color: aliceblue; text-align: right; }
+h3.sidebar-title { color: aliceblue; text-align: right; margin-right: 5px; }
 a.sidebar-link { text-decoration: none; }
 div.sidebar-item {
     display: flex; align-items: center; justify-content: right;
-    line-height: 35px; color: white; margin-top: 7px; padding-right: 10px;
+    line-height: 36px; color: white; margin-top: 10px; padding-right: 10px;
     cursor: pointer; background-color: #00008019; border-radius: 0 8px 8px 0;
-    transition-duration: .5s; }
+    transform: translateX(-5px); transition: .5s; }
 div.sidebar-item img { width: 27px; height: 27px; margin-right: 3px; }
 div.sidebar-item img.avatar {
     width: 27px; height: 27px;
-    margin-right: 3px; border-radius: 50%; color: white; }
-div.sidebar-item i { font-size: 20px; margin-right: 3px; }
+    margin-right: 5px; border-radius: 50%; color: white; }
+div.sidebar-item i { font-size: 20px; margin-right: 5px; }
 div.sidebar-item:not(.disabled):hover {
-    transition-duration: .5s; background-color: #0000C033; }
+    transition: transform background-color .6s ease-out;
+    transform: translateX(0); background-color: #0000C033; }
 
 /******************************* blocks *******************************/
 
@@ -100,7 +99,7 @@ div.submitpart { width: 30%; }
 div.submitpart form.mathprobsform { border: none; padding: 0; }
 div.submitpart textarea.submittext { width: 100%; height: 80px; }
 div.submitpart h3 { clear: both; }
-div.tocblock { width: 24%; }
+div.tocblock { width: 24%; margin-left: 10px; }
 div.tocblock h3 { margin-bottom: 0; }
 nav.table-of-contents ul { padding-left: 16px; }
 nav.table-of-contents li { padding-top: 8px; }
