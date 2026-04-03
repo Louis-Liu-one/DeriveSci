@@ -35,7 +35,7 @@ async function updateMessages()
             }
             setUnreadCircle(uid, new_chats[uid].unread);
         }
-    } catch (e) { }
+    } catch (err) { }
 }
 
 async function sendMessage()
@@ -47,7 +47,7 @@ async function sendMessage()
                 receiver_uid: parseInt(target.value), sender_uid: currentUid,
                 message: msginput.value})});
         msginput.value = '';
-    } catch (e) { }
+    } catch (err) { alert('发送失败'); }
 }
 
 async function updateUserLastVisit(receiver_uid, sender_uid)

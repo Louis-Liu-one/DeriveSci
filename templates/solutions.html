@@ -26,7 +26,7 @@
 <div class="sidebar">
     {{- return2post(prob, "返回题目") -}}
     {{- upload_solution(prob) -}}
-    {%- if current_user == solution.user -%}
+    {%- if current_user == solution.user or current_user.isadmin -%}
         {{- edit_solution(solution) -}}{{- delete_solution(solution) -}}
     {%- endif -%}
     {{- problabels_sidebar(prob) -}}

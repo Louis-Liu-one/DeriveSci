@@ -15,7 +15,9 @@
 {% endblock %}
 
 {% block navbar_title %}
-{{ user_avatar_img(user) }}{{ user_gender(user) }}{{ user_name(user) }}的主页
+{{ user_avatar_img(user) }}{{ user_gender(user) -}}
+{%- if user.isadmin -%}<i class="admin fa-solid fa-user-tie"></i>{%- endif -%}
+{{- user_name(user) }}的主页
 {% endblock %}
 
 {% block body %}

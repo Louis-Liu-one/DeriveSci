@@ -54,9 +54,9 @@
             {%- endif -%}
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
-                    {%- if current_user and current_user.is_authenticated -%}
+                    {%- if current_user.is_authenticated -%}
                         {{- user_avatar_img(current_user) -}}
-                        <br>{{ current_user.name }}
+                        <br>{{- current_user.name -}}
                     {%- else -%}
                         <i class="fa-solid fa-user"></i><br>未登录
                     {%- endif -%}

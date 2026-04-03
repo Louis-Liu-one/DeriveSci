@@ -479,7 +479,8 @@ def _as_general_parencall(result, *argslist, check_sympyfunc=True):
             result = result(*args, **str_kwargs)
             flag = False
             continue
-        elif check_sympyfunc and flag and hasattr(sp, str(result)):
+        elif check_sympyfunc and flag and \
+            not str(result).startswith('_') and hasattr(sp, str(result)):
             function = getattr(sp, str(result))
             if isinstance(function, _function_type):
                 result = function(*args, **str_kwargs)
@@ -520,6 +521,9 @@ def _as_primary(tokens):
         while index < len(attributes) and attributes[index] != DOT:
             argslist.append(attributes[index])
             index += 1
+        if str(identifier).startswith('_'):
+            raise NameError(
+                'cannot call function or method that starts with underline')
         function = getattr(result, str(identifier))
         if argslist:
             result = _as_general_parencall(
@@ -572,8 +576,8 @@ def _as_stmtsblock(tokens):
     return StatementsBlock(tokens[0])
 
 
-ASSIGN, PLUS, MINUS, TIMES, DIVIDE, POWER, DOT = map(Literal, '=+-*/^.')
-LIT_COMMA, COL = map(Literal, ',:')
+PLUS, MINUS, TIMES, DIVIDE, POWER = map(Literal, '+-*/^')
+ASSIGN, DOT, LIT_COMMA, COL = map(Literal, '=.,:')
 COMP_LT, COMP_LE, COMP_EQ, COMP_NE, COMP_GE, COMP_GT = map(
     Literal, ['<', '<=', '==', '!=', '>=', '>'])
 COMPARISON = COMP_LE | COMP_GE | COMP_NE | COMP_EQ | COMP_LT | COMP_GT
@@ -709,10 +713,11 @@ RULE_stmtsblock << (
     LBRACE + RULE_statements + RBRACE).set_parse_action(_as_stmtsblock)
 
 
-def fpparse(string):
+def fpparse(string, setup_stack=True):
     '''解析语句为语法树。'''
-    parse_result = RULE_statements.parse_string(string)[0]
-    parse_result.setup_stack(ProgramStack())
+    parse_result = RULE_statements.parse_string(string, parse_all=True)[0]
+    if setup_stack:
+        parse_result.setup_stack(ProgramStack())
     return parse_result
 
 

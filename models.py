@@ -89,6 +89,7 @@ class User(db.Model, UserMixin):
     solutions = db.relationship('ProbSolution', backref='user')
     comments = db.relationship('Comment', backref='user')
     cmtlastvisit = db.Column(db.DateTime, default=_utcnow)
+    isadmin = db.Column(db.Boolean, default=False)
 
     def verify_password(self, password):
         return False if self.password is None else \
@@ -260,6 +261,7 @@ class Prob(db.Model):
         'Submission', backref='prob', cascade='all, delete')
     images = db.relationship(
         'ProbImage', backref='prob', cascade='all, delete')
+    isofficial = db.Column(db.Boolean, default=False)
 
     def get_answer(self):
         if not self.answer:
@@ -296,7 +298,8 @@ class Prob(db.Model):
         if statement:
             self.statement = statement
         self.answer = answer
-        self.problabels = {get_label(labelname) for labelname in problabels}
+        self.problabels = {get_label(
+            labelname, create=True) for labelname in problabels}
         db.session.commit()
 
     def as_labelnames(self):
@@ -410,6 +413,9 @@ def search_probs(form, extra_req=None):
         if source:
             requirements.append(db.or_(
                 Prob.source == user for user in source))
+    if form.get('probtype') in ('officialprobs', 'noofficialprobs'):
+        requirements.append(Prob.isofficial == (
+            form['probtype'] == 'officialprobs'))
     flag = bool(requirements)
     if extra_req is not None:
         requirements.append(extra_req)
@@ -471,17 +477,19 @@ def add_images(probno, imgfiles):
     db.session.commit()
 
 
-def get_label(labelname):
+def get_label(labelname, create=False):
     if isinstance(labelname, str):
-        return db.session.get(ProbLabel, labelname)
+        label = db.session.get(ProbLabel, labelname)
+        if create and label is None:
+            label = ProbLabel(labelname=labelname)
+            db.session.add(label)
+            db.session.commit()
+        return label
 
 
 def add2labels(labelnames, prob):
     for labelname in set(labelnames):
-        label = get_label(labelname)
-        if label is None:
-            label = ProbLabel(labelname=labelname)
-            db.session.add(label)
+        label = get_label(labelname, create=True)
         label.probs.add(prob)
     db.session.commit()
 

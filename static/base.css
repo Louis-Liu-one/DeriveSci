@@ -25,9 +25,8 @@ div.unread-badge {
 /******************************* navbar *******************************/
 
 div.navbar {
-    position: fixed; padding-left: 0;
-    width: 100%; height: 80px; left: 0; top: 0;
-    background-color: #34AAE0; }
+    position: fixed; padding-left: 0; width: 100%; height: 80px;
+    left: 0; top: 0; background-color: #34AAE0; }
 
 ul.navbar-items { list-style: none; margin: 0; padding: 0; }
 ul.navbar-items li.logo-image, li.navbar-item {
@@ -52,6 +51,7 @@ ul.navbar-items li.logo-text i {
 ul.navbar-items li.logo-text i.gender {
     font-size: 20px; margin: 30px 15px 0 -18px;
     -webkit-text-stroke: 1px white; }
+ul.navbar-items li.logo-text i.admin { font-size: 30px; margin-right: 5px; }
 
 li.navbar-item {
     position: relative; width: 72px; float: right; line-height: 20px; }
@@ -76,7 +76,7 @@ div.sidebar-item {
     display: flex; align-items: center; justify-content: right;
     line-height: 36px; color: white; margin-top: 10px; padding-right: 10px;
     cursor: pointer; background-color: #00008019; border-radius: 0 8px 8px 0;
-    transform: translateX(-5px); transition: .5s; }
+    transform: translateX(-3px); transition: .5s; }
 div.sidebar-item img { width: 27px; height: 27px; margin-right: 3px; }
 div.sidebar-item img.avatar {
     width: 27px; height: 27px;

@@ -53,7 +53,16 @@
         <input type="text" id="source" name="source" autocomplete="off"
             placeholder="输入用户名称，以CSV格式" spellcheck="false"
             value="{{ form.get('source', '') }}"></span>
+        <span><label for="isofficial">类型：</label>
+        <select id="probtype" name="probtype">
+            <option value="all">所有题目</option>
+            <option value="officialprobs">仅官方题目</option>
+            <option value="noofficialprobs">仅非官方题目</option>
+        </select></span>
         <span><button type="submit">查询</button></span>
     </form>
 </div>
+{%- if form.get('probtype') -%}
+    <script>probtype.value = ({{ form['probtype']|tojson }}).toString();</script>
+{%- endif -%}
 {% endblock %}

@@ -34,9 +34,10 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /images/<probno>/<filename>              题目/题解图片
 
 API：*
-/api/chat/update-lastvisit 更新上次查看私信的时间
-/api/chat/send             发送私信
-/api/chat/messages         获取新收到的私信
+/api/chat/update-lastvisit   更新上次查看私信的时间
+/api/chat/send               发送私信
+/api/chat/messages           获取新收到的私信
+/api/admin/set-official-prob 将题目添加到官方题集
 
 标*的是无法通过输入网址查看的路由。
 
@@ -48,7 +49,7 @@ import random
 import hashlib
 import datetime
 
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, abort, url_for
 from flask import render_template, redirect, make_response
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_moment import Moment
@@ -121,9 +122,10 @@ def delete_comment():
 @app.route('/probs/', methods=['GET', 'POST'])
 def problist():
     form = {}
+    keys = 'probno', 'probtitle', 'statement', \
+        'problabels', 'source', 'probtype'
     if request.method == 'POST':
-        for key in (
-                'probno', 'probtitle', 'statement', 'problabels', 'source'):
+        for key in keys:
             form[key] = request.form.get(key)
     probs, query = search_probs(form)
     return render_template(
@@ -138,9 +140,10 @@ def labellist():
 @app.route('/labels/<labelname>', methods=['GET', 'POST'])
 def problistoflabel(labelname):
     form = {}
+    keys = 'probno', 'probtitle', 'statement', \
+        'problabels', 'source', 'probtype'
     if request.method == 'POST':
-        for key in (
-                'probno', 'probtitle', 'statement', 'problabels', 'source'):
+        for key in keys:
             form[key] = request.form.get(key)
     probs, query = search_probs(form, Prob.problabels.any(
         ProbLabel.labelname == labelname))
@@ -207,7 +210,7 @@ def edit_prob(probno):
     prob = get_prob(probno)
     if not prob:
         return render_template('notfound.html', error='未能找到题目。')
-    if current_user != prob.source:
+    if current_user != prob.source and not current_user.isadmin:
         return redirect(prob.url())
     if request.method == 'POST':
         probtitle = request.form.get('probtitle')
@@ -233,7 +236,7 @@ def edit_solution(probno, solno):
     solution = get_solution(probno, solno)
     if not solution:
         return render_template('notfound.html', error='未能找到题解。')
-    if current_user != solution.user:
+    if current_user != solution.user and not current_user.isadmin:
         return redirect(solution.url())
     if request.method == 'POST':
         soltitle = request.form.get('soltitle')
@@ -312,7 +315,7 @@ def delete_prob(probno):
     prob = get_prob(probno)
     if not prob:
         return render_template('notfound.html', error='未能找到题目。')
-    if current_user == prob.source:
+    if current_user == prob.source or current_user.isadmin:
         prob.problabels.clear()
         clear_comments(prob)
         db.session.delete(prob)
@@ -327,12 +330,26 @@ def delete_solution(probno, solno):
     solution = get_solution(probno, solno)
     if not solution:
         return render_template('notfound.html', error='未能找到题解。')
-    if current_user == solution.user:
+    if current_user == solution.user or current_user.isadmin:
         clear_comments(solution)
         db.session.delete(solution)
         db.session.commit()
-        return redirect(url_for('probs', probno=probno))
+        return redirect(solution.prob.url())
     return redirect(solution.url())
+
+
+@app.route('/api/admin/set-official-prob', methods=['POST'])
+@login_required
+def api_set_official_prob():
+    if not current_user.isadmin:
+        abort(403)
+    probno = request.json.get('probno')
+    prob = get_prob(probno)
+    if not prob:
+        return {'ok': False, 'error': '未能找到题目。'}, 400
+    prob.isofficial = not prob.isofficial
+    db.session.commit()
+    return {'ok': True, 'isofficial': prob.isofficial}
 
 
 @app.route('/helps/<howto>')
@@ -424,7 +441,7 @@ def api_chat_update_lastvisit():
         update_chatlastvisit(receiver_uid, sender_uid)
         return {'ok': True}
     except BaseException as err:
-        return {'ok': False, 'error': str(err)}
+        return {'ok': False, 'error': str(err)}, 400
 
 
 @app.route('/api/chat/send', methods=['POST'])
@@ -436,7 +453,7 @@ def api_chat_send():
         find_user(sender_uid).chat_to(receiver_uid, message)
         return {'ok': True}
     except BaseException as err:
-        return {'ok': False, 'error': str(err)}
+        return {'ok': False, 'error': str(err)}, 400
 
 
 @app.route('/api/chat/messages', methods=['POST'])
@@ -447,7 +464,7 @@ def api_chat_messages():
         return jsonify(find_user(receiver_uid).all_chats(
             datetime.datetime.fromisoformat(lastmsgtime)))
     except BaseException as err:
-        return jsonify({})
+        return {}, 400
 
 
 @app.route('/edit-profile', methods=['GET', 'POST'])

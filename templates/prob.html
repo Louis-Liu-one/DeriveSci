@@ -14,16 +14,31 @@
 {{- moment.locale('zh-cn') -}}
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <script src="{{ url_for('static', filename='delete-comment.js') }}"></script>
+{%- if current_user.isadmin -%}
+    <script src="{{ url_for('static',
+        filename='set-official-prob.js') }}"></script>
+{%- endif -%}
 {% endblock %}
 
 {% block navbar_title %}问题{{ prob.probno }} {{ prob.probtitle }}{% endblock %}
 
 {% block body %}
 <div class="sidebar">
-    {%- if current_user == prob.source -%}
+    {%- if current_user == prob.source or current_user.isadmin -%}
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
     {%- endif -%}
     {{- view_solution(prob) }}{{ upload_solution(prob) -}}
+    {%- if current_user.isadmin -%}
+        <a class="sidebar-link" id="setofficial" data-probno="{{ prob.probno }}">
+            <div class="sidebar-item" id="setofficialdiv">
+                {%- if prob.isofficial -%}
+                    <i class="fa-solid fa-circle-minus"></i>从官方题目移除
+                {%- else -%}
+                    <i class="fa-solid fa-circle-plus"></i>添加到官方题目
+                {%- endif -%}
+            </div>
+        </a>
+    {%- endif -%}
     {{- problabels_sidebar(prob) -}}
     <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
 </div>
@@ -31,6 +46,8 @@
     <textarea id="bodytext">{{ prob.statement }}</textarea>
 </div>
 <div id="submitdiv" class="submitpart">
+    <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}"
+        id="isofficialtip">本题是官方题目。</p>
     <h3>提交答案</h3>
     <p class="helpslink">
         服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。
@@ -39,6 +56,12 @@
         action="{{ url_for('submit', probno=prob.probno) }}">
         <span><textarea name="answertext" class="submittext"
             placeholder="按照要求提交答案" spellcheck="false"></textarea></span>
+        <p class="helpslink">
+            <a target="_blank" href="{{ url_for(
+                'helps', howto='submit-answers') }}">
+                <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
+            </a>
+        </p>
         <span><button class="submitbutton" type="submit">提交</button></span>
     </form>
     <h3>讨论区</h3>
@@ -48,5 +71,8 @@
 <script>
     renderElements([
         bodydiv, ...document.getElementsByClassName('commentcontent')]);
+    {%- if current_user.isadmin -%}
+        setofficial.addEventListener('click', setOfficialProb);
+    {%- endif -%}
 </script>
 {% endblock %}
