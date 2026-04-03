@@ -74,7 +74,7 @@
                     <input type="text" id="answer" name="answer"
                         autocomplete="off" spellcheck="false"
                         placeholder="输入答案">
-                    <i onclick="addAnswerHTML(context, answer);"
+                    <i onclick="addAnswerHTML(context, answer)"
                         class="fa-solid fa-circle-plus"></i>
                 </div>
                 <ul id="ulanswerlist"></ul>
@@ -86,9 +86,16 @@
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
         <span>
+            {%- if not editmode and current_user.isadmin -%}
+                <label for="isofficial">加入到官方题目？</label>
+                <input type="checkbox" name="isofficial" id="isofficial"
+                {%- if isofficial %} checked{% endif %}>
+            {%- endif -%}
+        </span>
+        <span>
             <button type="button" onclick="renderElement(
-                mdpreview, statement.value, 'block');">预览</button>
-            <button onclick="submitFormWithAnswers();">上传</button>
+                mdpreview, statement.value, 'block')">预览</button>
+            <button onclick="submitFormWithAnswers()">上传</button>
         </span>
     </form>
 </div>

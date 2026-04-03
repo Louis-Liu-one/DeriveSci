@@ -37,23 +37,23 @@
 
 {%- macro user_gender(user) -%}
     {%- if user.gender == 1 -%}
-        <i class="gender fa-solid fa-mars" style="color: #4B93EB;"></i>
+        <i class="gender fa-solid fa-mars" style="color: #4B93EB"></i>
     {%- elif user.gender == 2 -%}
-        <i class="gender fa-solid fa-venus" style="color: #D86475;"></i>
+        <i class="gender fa-solid fa-venus" style="color: #D86475"></i>
     {%- elif user.gender == 3 -%}
-        <i class="gender fa-solid fa-mars-and-venus" style="color: #917BB0;"></i>
+        <i class="gender fa-solid fa-mars-and-venus" style="color: #917BB0"></i>
     {%- elif user.gender == 4 -%}
-        <i class="gender fa-solid fa-genderless" style="color: #6E844F;"></i>
+        <i class="gender fa-solid fa-genderless" style="color: #6E844F"></i>
     {%- elif user.gender == 5 -%}
-        <i class="gender fa-solid fa-neuter" style="color: #917B00;"></i>
+        <i class="gender fa-solid fa-neuter" style="color: #917B00"></i>
     {%- elif user.gender == 6 -%}
         <i class="gender fa-solid fa-mercury" style="background-image: linear-gradient(to bottom, #4B93EB, #D86475);
-            background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            background-clip: text; -webkit-text-fill-color: transparent"></i>
     {%- elif user.gender == 7 -%}
         <i class="gender fa-solid fa-transgender" style="background-image: linear-gradient(to right, #6E844F, #917BB0);
-            background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            background-clip: text; -webkit-text-fill-color: transparent"></i>
     {%- elif user.gender == 8 -%}
         <i class="gender fa-solid fa-non-binary" style="background-image: linear-gradient(to right bottom, #4B93EB, #6E844F, #D86475);
-            background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            background-clip: text; -webkit-text-fill-color: transparent"></i>
     {%- else -%}<i class="gender fa-solid"></i>{%- endif -%}
 {%- endmacro -%}

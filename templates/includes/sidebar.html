@@ -52,7 +52,7 @@
 {%- endmacro -%}
 
 {%- macro delete_prob(prob) -%}
-    <a class="sidebar-link" onclick="return confirm('确定要删除题目？');"
+    <a class="sidebar-link" onclick="return confirm('确定要删除题目？')"
             href="{{ url_for('delete_prob', probno=prob.probno) }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-trash-can"></i>删除题目
@@ -61,7 +61,7 @@
 {%- endmacro -%}
 
 {%- macro delete_solution(solution) -%}
-    <a class="sidebar-link"  onclick="return confirm('确定要删除题解？');"
+    <a class="sidebar-link"  onclick="return confirm('确定要删除题解？')"
             href="{{ url_for('delete_solution',
             probno=solution.probno, solno=solution.solno) }}">
         <div class="sidebar-item">

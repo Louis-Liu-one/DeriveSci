@@ -61,7 +61,7 @@
                 {%- endif -%}
                 <div class="user-item {% if
                     activeuser and uid == activeuser.uid -%}active{% endif %}"
-                    onclick="switchUser(this, {{ uid }});">
+                    onclick="switchUser(this, {{ uid }})">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(user) -}}
                         {%- if all_chats[uid]['unread'] -%}
@@ -69,7 +69,7 @@
                                 {{- all_chats[uid]['unread']|tojson -}}
                             </div>
                         {%- else -%}
-                            <div class="unread-badge" style="display: none;">
+                            <div class="unread-badge" style="display: none">
                             </div>
                         {%- endif -%}
                     </div>
@@ -78,7 +78,7 @@
             {%- endfor -%}
             {%- if activeuser and not ns.active -%}
                 <div class="user-item active"
-                    onclick="switchUser(this, {{ activeuser.uid|tojson }});">
+                    onclick="switchUser(this, {{ activeuser.uid|tojson }})">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(activeuser) -}}
                     </div>{{- user_name(activeuser) -}}

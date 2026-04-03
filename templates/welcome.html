@@ -41,7 +41,7 @@
             </div>
         </a>
         <a class="sidebar-link" href="{{ url_for('unregister') }}"
-                onclick="return confirm('确定要注销账户？');">
+                onclick="return confirm('确定要注销账户？')">
             <div class="sidebar-item">
                 <i class="fa-solid fa-person-circle-minus"></i>注销账户
             </div>
@@ -91,8 +91,7 @@
     <h4>{{ user_name(user) }}上传的题解</h4>
     {%- set solutions = user.solutions.copy() -%}
     {%- if solutions -%}
-        {%- do solutions.sort() -%}
-        {{- solutionlist(solutions,
+        {%- do solutions.sort() -%}{{- solutionlist(solutions,
             with_head=True, with_probno=True, with_user=False) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </div>

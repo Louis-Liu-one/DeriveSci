@@ -20,7 +20,12 @@
 
 运算符 | 意义 | 优先级 | 备注
 :---: | --- | :---: | ---
-`^` | 乘方运算 | 6 | 右结合
+`(...)` | 括号 | 9
+`\|...\|` | 取绝对值 | 9 | 用法与括号相同
+`!` | 阶乘运算 | 8 | 一元右结合
+`^` | 乘方运算 | 7 | 二元右结合
+`+` | 取正号   | 6 | 一元左结合
+`-` | 取负号   | 6 | 一元左结合
 `*` | 乘法运算 | 5
 `/` | 除法运算 | 5
 `+` | 加法运算 | 4
@@ -59,6 +64,7 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 用法 | 意义
 :-: | ---
 `Pow(x, n)` 或 `x^n`、`sqrt(x)` 或 `x^(1/2)` | 指数或平方根
+`Abs(x)` 或 `\|x\|` | 取绝对值
 `exp(x)` 或 `E^x` | 以 $\mathrm e$ 为底的指数函数
 `log(x)` 或 `ln(x)`、`log(x, b)` 或 `ln(x, b)` | 自然对数或以 $b$ 为底的对数
 `factorial(x)` | 阶乘
@@ -189,24 +195,22 @@ return 36;
 
 使用 `global 变量名1, 变量名2, ...` 语句将一些变量名递归添加为当前作用域及其祖先作用域的全局变量名。使用 `nonlocal 变量名1, 变量名2, ...` 语句将一些变量名添加为当前作用域的非局部变量名。
 
-## 全部 BNF
+## Backus-Naur 范式
 
-我们使用的语言的 BNF 范式如下：
+我们使用的语言的 BNF 如下：
 ```bnf
 <atom>        ::= IDENTIFIER | FLOAT_ATOM | INT_ATOM
 
 <kwargs>      ::= IDENTIFIER "=" <expr> { "," IDENTIFIER "=" <expr> }
-<funcargs>    ::= "(" { <expr> "," }
-                  [ [ <expr> "," ] <kwargs> | <expr> ] [ "," ] ")"
+<funcargs>    ::= "(" { <expr> "," } [ [ <expr> "," ] <kwargs> | <expr> ] [ "," ] ")"
 <slice>       ::= "[" { <expr> "," } <expr> [ "," ] "]"
-<parencall>    ::= IDENTIFIER ( <funcargs> | <slice> )+
-<array>       ::= "[" [ { ( <array> | <expr> ) "," }
-                  ( <array> | <expr> ) [ "," ] ] "]"
-<parenexpr>   ::= "(" <expr> ")"
-<primary>     ::= ( <array> | <parenexpr> | <parencall> | <atom> )
-                  { "." IDENTIFIER { <funcargs> | <slice> } }
+<parencall>   ::= IDENTIFIER ( <funcargs> | <slice> )+
+<array>       ::= "[" [ { ( <array> | <expr> ) "," } ( <array> | <expr> ) [ "," ] ] "]"
+<parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
+<primary>     ::= ( <array> | <parenexpr> | <parencall> | <atom> ) { "." IDENTIFIER { <funcargs> | <slice> } }
 
-<power>       ::= <primary> { "^" <primary> }
+<factorial>   ::= <primary> { "!" }
+<power>       ::= <factorial> { "^" <factorial> }
 <factor>      ::= { "+" | "-" } <power>
 <term>        ::= <factor> { "*" <factor> | "/" <factor> }
 <sum>         ::= <term> { "+" <term> | "-" <term> }
@@ -217,18 +221,37 @@ return 36;
 <expr>        ::= <disjunction>
 
 <assignment>  ::= IDENTIFIER "=" <expr>
-<funcdefine>  ::= IDENTIFIER LPAREN [ IDENTIFIER { "," IDENTIFIER } [ "," ] ]
-                  RPAREN "=" ( <expr> | <stmtsblock> )
+<funcdefine>  ::= IDENTIFIER LPAREN [ IDENTIFIER { "," IDENTIFIER } [ "," ] ] RPAREN "=" ( <expr> | <stmtsblock> )
 <return>      ::= "return" <expr>
-<judgement>   ::= "if" <primary> [ ( <statement> ";" | <stmtsblock> ) "else" ]
-                  ( <statement> | <stmtsblock> )
+<judgement>   ::= "if" <primary> [ ( <statement> ";" | <stmtsblock> ) "else" ] ( <statement> | <stmtsblock> )
 <whileloop>   ::= "while" <primary> ( <statement> | <stmtsblock> )
 <global>      ::= "global" IDENTIFIER { "," IDENTIFIER } [ "," ]
 <nonlocal>    ::= "nonlocal" IDENTIFIER { "," IDENTIFIER } [ "," ]
-<statement>   ::= <assignment> | <funcdefine> | <return>
-                  | <judgement> | <whileloop> | <global> | <nonlocal>
-                  | <stmtsblock> | <expr>
+<statement>   ::= <assignment> | <funcdefine> | <return> | <judgement> | <whileloop> | <global> | <nonlocal> | <stmtsblock> | <expr>
 <statements>  ::= <statement> { ";" <statement> } [ ";" ]
 <stmtsblock>  ::= "{" <statements> "}"
 ```
 其中 `IDENTIFIER` 指变量名这类标识符，即开头是字母或下划线，后面紧跟任意个字母、数字或下划线的字符串；`FLOAT_ATOM` 指浮点数；`INT_ATOM` 指整数。
+
+## 常见问题与解答
+
+### 为什么我提交正确的答案后仍显示错误或超时？
+
+中国大陆连接服务器所需时间较长，且服务器硬件设施不佳，可能是服务器的问题，尝试多提交几次。
+
+### 为什么我提交答案后得到满分却显示“无法求值”？
+
+服务器硬件设施不佳，单独求值时也可能产生无故超时等问题。单独求值结果不重要，可以忽略这一问题。
+
+### 测试点的不同图标各有什么意义？
+
+图标 | 意义
+:-: | ---
+<i class="fa-solid fa-circle-check" style="color: #72C040"></i> | 答案正确
+<i class="fa-solid fa-circle-xmark" style="color: #D75746"></i> | 答案错误，答案与题目作者提供的答案不符
+<i class="fa-solid fa-circle-exclamation" style="color: #D75746"></i> | 解析错误，答案存在语法错误等
+<i class="fa-solid fa-circle-question" style="color: #D75746"></i> | 求值错误，答案存在运行时错误等
+<i class="fa-solid fa-clock" style="color: #E89F3C"></i> | 超时错误，答案的解析与求值时间超过指定时间
+<i class="fa-solid fa-circle-minus" style="color: #636D88"></i> | 作者提供的答案存在语法错误、运行时错误、超时等问题，此时请联系题目作者
+
+你也可以将鼠标在测试点图标上悬停一段时间，然后就能看到测试点的状态。

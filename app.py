@@ -201,7 +201,7 @@ def solutions(probno, solno):
     solutions.remove(solution)
     suggested = random.sample(solutions, min(len(solutions), 3))
     return render_template(
-        'solutions.html', prob=prob, solution=solution, suggested=suggested)
+        'solution.html', prob=prob, solution=solution, suggested=suggested)
 
 
 @app.route('/probs/<probno>/edit', methods=['GET', 'POST'])
@@ -266,20 +266,24 @@ def upload_prob():
         statement = request.form.get('statement')
         answers = request.form.get('answers')
         imgfiles = request.files.getlist('imgfiles')
+        isofficial = current_user.isadmin and request.form.get(
+            'isofficial') == 'on'
         error = add_images(probno, imgfiles)
         if error is not None:
             return render_template(
                 'upload_prob.html', probno=probno, probtitle=probtitle,
                 problabels=request.form.get('problabels'),
-                statement=statement, answers=answers, error=error)
+                statement=statement, answers=answers,
+                isofficial=isofficial, error=error)
         status, prob = add_prob(
-            probno=probno, probtitle=probtitle,
-            statement=statement, answer=answers, source=current_user)
+            probno=probno, probtitle=probtitle, statement=statement,
+            answer=answers, source=current_user, isofficial=isofficial)
         if not status:
             return render_template(
                 'upload_prob.html', probno=probno, probtitle=probtitle,
                 problabels=request.form.get('problabels'),
-                statement=statement, answers=answers, error=prob)
+                statement=statement, answers=answers,
+                isofficial=isofficial, error=prob)
         add2labels(problabels, prob)
         return redirect(prob.url())
     return render_template('upload_prob.html')

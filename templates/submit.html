@@ -25,23 +25,23 @@
         {%- for status in testpoints -%}
             {%- if status == TPStatus.CORRECT -%}
                 <i class="fa-solid fa-circle-check"
-                    title="答案正确" style="color: #72C040;"></i>
+                    title="答案正确" style="color: #72C040"></i>
             {%- elif status == TPStatus.INCORRECT -%}
                 <i class="fa-solid fa-circle-xmark"
-                    title="答案错误" style="color: #D75746;"></i>
+                    title="答案错误" style="color: #D75746"></i>
             {%- elif status == TPStatus.PARSEERR -%}
                 <i class="fa-solid fa-circle-exclamation"
-                    title="解析错误" style="color: #D75746;"></i>
+                    title="解析错误" style="color: #D75746"></i>
             {%- elif status == TPStatus.EVALERR -%}
                 <i class="fa-solid fa-circle-question"
-                    title="求值错误" style="color: #D75746;"></i>
+                    title="求值错误" style="color: #D75746"></i>
             {%- elif status == TPStatus.TIMEOUT -%}
                 <i class="fa-solid fa-clock"
-                    title="超时错误" style="color: #E89F3C;"></i>
+                    title="超时错误" style="color: #E89F3C"></i>
             {%- elif status == TPStatus.ANSERR -%}
                 <i class="fa-solid fa-circle-minus"
                     title="题目提供的答案无法解析，请联系提供者{{- user_name(
-                        prob.source) -}}" style="color: #636D88;"></i>
+                        prob.source) -}}" style="color: #636D88"></i>
             {%- endif -%}
         {%- endfor -%}
     </div>
@@ -64,6 +64,11 @@
             {%- else %} 无法求值{%- endif -%}
         </textarea>
     </div>
+    <p class="helpslink">
+        <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
+            <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
+        </a>
+    </p>
 </div>
 <div class="submitpart">
     <h3>查看题解</h3>{{ solutionlist(prob.solutions) }}

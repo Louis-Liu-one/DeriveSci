@@ -409,17 +409,21 @@ def _as_spint(tokens):
     return sp.Integer(tokens[0])
 
 
-def _process_binops(tokens, specprocs=None, reverse=False):
-    result, *tokens = reversed(tokens) if reverse else tokens
+def _process_binops(tokens, specprocs=None, right_assoc=False):
+    result, *tokens = reversed(tokens) if right_assoc else tokens
     for i in range(0, len(tokens), 2):
         operator, operand = tokens[i], tokens[i + 1]
         result = specprocs[operator](*(
-            (operand, result) if reverse else (result, operand)))
+            (operand, result) if right_assoc else (result, operand)))
     return result
 
 
-def _process_unops(tokens, specprocs=None):
-    *tokens, result = tokens
+def _process_unops(tokens, specprocs=None, right_assoc=False):
+    if right_assoc:
+        result, *tokens = tokens
+    else:
+        *tokens, result = tokens
+        tokens.reverse()
     for operator in tokens:
         if isinstance(operator, Literal | str):
             result = specprocs[operator](result) \
@@ -437,7 +441,9 @@ _as_term = functools.partial(
     _process_binops, specprocs={'*': operator.mul, '/': operator.truediv})
 _as_factor = functools.partial(_process_unops, specprocs={'-': operator.neg})
 _as_power = functools.partial(
-    _process_binops, specprocs={'^': operator.pow}, reverse=True)
+    _process_binops, specprocs={'^': operator.pow}, right_assoc=True)
+_as_factorial = functools.partial(
+    _process_unops, specprocs={'!': sp.factorial}, right_assoc=True)
 _statements = functools.partial(Statements)
 
 
@@ -511,6 +517,11 @@ def _as_parencall(tokens):
     return _as_general_parencall(*tokens)
 
 
+def _as_absvalue(tokens):
+    _, expr, _ = tokens
+    return sp.Abs(expr)
+
+
 def _as_primary(tokens):
     result, *attributes = tokens
     index = 0
@@ -576,8 +587,8 @@ def _as_stmtsblock(tokens):
     return StatementsBlock(tokens[0])
 
 
-PLUS, MINUS, TIMES, DIVIDE, POWER = map(Literal, '+-*/^')
-ASSIGN, DOT, LIT_COMMA, COL = map(Literal, '=.,:')
+PLUS, MINUS, TIMES, DIVIDE, POWER, ABS = map(Literal, '+-*/^|')
+ASSIGN, DOT, LIT_COMMA, COL, EXCL = map(Literal, '=.,:!')
 COMP_LT, COMP_LE, COMP_EQ, COMP_NE, COMP_GE, COMP_GT = map(
     Literal, ['<', '<=', '==', '!=', '>=', '>'])
 COMPARISON = COMP_LE | COMP_GE | COMP_NE | COMP_EQ | COMP_LT | COMP_GT
@@ -607,11 +618,12 @@ BNFs:
 <parencall>    ::= IDENTIFIER ( <funcargs> | <slice> )+
 <array>       ::= "[" [ { ( <array> | <expr> ) "," }
                   ( <array> | <expr> ) [ "," ] ] "]"
-<parenexpr>   ::= "(" <expr> ")"
+<parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
 <primary>     ::= ( <array> | <parenexpr> | <parencall> | <atom> )
                   { "." IDENTIFIER { <funcargs> | <slice> } }
 
-<power>       ::= <primary> { "^" <primary> }
+<factorial>   ::= <primary> { "!" }
+<power>       ::= <factorial> { "^" <factorial> }
 <factor>      ::= { "+" | "-" } <power>
 <term>        ::= <factor> { "*" <factor> | "/" <factor> }
 <sum>         ::= <term> { "+" <term> | "-" <term> }
@@ -656,14 +668,17 @@ RULE_parencall = (IDENTIFIER + OneOrMore(
 RULE_array << (LSQBRK + Opt(ZeroOrMore(
     (RULE_array | RULE_expr) + COMMA) + (RULE_array | RULE_expr) + Opt(COMMA))
     + RSQBRK).set_parse_action(_as_array)
-RULE_parenexpr = LPAREN + RULE_expr + RPAREN
+RULE_parenexpr = (LPAREN + RULE_expr + RPAREN) | (
+    ABS + RULE_expr + ABS).set_parse_action(_as_absvalue)
 RULE_primary = (
     (RULE_array | RULE_parenexpr | RULE_parencall | RULE_atom)
     + ZeroOrMore(DOT + IDENTIFIER + ZeroOrMore(RULE_funcargs | RULE_slice))
     ).set_parse_action(_as_primary)
 
-RULE_power = (RULE_primary + ZeroOrMore(
-    POWER + RULE_primary)).set_parse_action(_as_power)
+RULE_factorial = (RULE_primary + ZeroOrMore(
+    EXCL)).set_parse_action(_as_factorial)
+RULE_power = (RULE_factorial + ZeroOrMore(
+    POWER + RULE_factorial)).set_parse_action(_as_power)
 RULE_factor = (
     ZeroOrMore(PLUS | MINUS) + RULE_power).set_parse_action(_as_factor)
 RULE_term = (RULE_factor + ZeroOrMore(
