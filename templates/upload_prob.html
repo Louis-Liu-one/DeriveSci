@@ -115,6 +115,6 @@
 </div>
 <script>
     {%- if editmode -%}addAnswersBefore({{ prob.get_answer()|tojson }});
-    {%- elif answers -%}addAnswersBefore({{ answers }});{%- endif -%}
+    {%- elif answers -%}addAnswersBefore({{ answers|tojson }});{%- endif -%}
 </script>
 {% endblock %}

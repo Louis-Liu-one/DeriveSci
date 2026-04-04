@@ -7,6 +7,8 @@
 {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
 {%- endmacro -%}
 
+{% block load_markdown %}{% endblock %}
+
 {% block title %}{{ user_name(user) }}的主页 - MathProbs{% endblock %}
 
 {% block styles %}
@@ -15,7 +17,7 @@
 {% endblock %}
 
 {% block navbar_title %}
-{{ user_avatar_img(user) }}{{ user_gender(user) -}}
+{{- user_avatar_img(user) -}}{{- user_gender(user) -}}
 {%- if user.isadmin -%}<i class="admin fa-solid fa-user-tie"></i>{%- endif -%}
 {{- user_name(user) }}的主页
 {% endblock %}
@@ -65,7 +67,8 @@
     {%- set uploadedprobs = user.uploadedprobs.copy() -%}
     {%- if uploadedprobs -%}
         {%- do uploadedprobs.sort() -%}
-        {{- problist(uploadedprobs, with_source=False) -}}
+        {{- problist(uploadedprobs,
+            with_source=False, with_review_status=True) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </div>
 <div class="submitpart">

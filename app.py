@@ -38,6 +38,7 @@ API：*
 /api/chat/send               发送私信
 /api/chat/messages           获取新收到的私信
 /api/admin/set-official-prob 将题目添加到官方题集
+/api/admin/review-prob       通过/拒绝题目的审核
 
 标*的是无法通过输入网址查看的路由。
 
@@ -74,6 +75,13 @@ def get_helplist():
                 if title.startswith('# '):
                     helplist.append((filename[:-3], title[2:]))
     return sorted(helplist)
+
+
+@app.route('/<path:unknown>')
+def unknown_url(unknown):
+    if unknown.lower().startswith('api/'):
+        abort(404)
+    return render_template('notfound.html', error=f'未能找到路由“/{unknown}”。')
 
 
 # =========================== 讨论区路由 ===========================
@@ -121,15 +129,21 @@ def delete_comment():
 
 @app.route('/probs/', methods=['GET', 'POST'])
 def problist():
+    reviewmode = request.args.get('reviewmode') == 'True'
+    if reviewmode and not (
+            current_user.is_authenticated and current_user.isadmin):
+        return redirect(url_for('problist'))
     form = {}
     keys = 'probno', 'probtitle', 'statement', \
-        'problabels', 'source', 'probtype'
+        'problabels', 'source', 'probtype', \
+        'review_status' if reviewmode else ''
     if request.method == 'POST':
         for key in keys:
             form[key] = request.form.get(key)
-    probs, query = search_probs(form)
+    probs, query = search_probs(form, reviewmode=reviewmode)
     return render_template(
-        'problist.html', probs=probs, query=query, form=form)
+        'problist.html', reviewmode=reviewmode,
+        probs=probs, query=query, form=form)
 
 
 @app.route('/labels/')
@@ -155,7 +169,7 @@ def problistoflabel(labelname):
 @app.route('/probs/<probno>')
 def probs(probno):
     prob = get_prob(probno)
-    if prob:
+    if prob and prob.viewable_for(current_user):
         return render_template('prob.html', prob=prob)
     return render_template('notfound.html', error='未能找到题目。')
 
@@ -181,7 +195,7 @@ def imagefile(probno, imagename):
 def submit(probno):
     answer = request.form.get('answertext')
     prob = get_prob(probno)
-    if not prob:
+    if not prob or not prob.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题目。')
     answer_eval, testpoints, submission = prob.add_submission(
         current_user, answer)
@@ -191,10 +205,27 @@ def submit(probno):
         prob=prob, submission=submission, testpoints=testpoints)
 
 
+@app.route('/api/admin/review-prob', methods=['POST'])
+@login_required
+def api_review_prob():
+    if not current_user.isadmin:
+        abort(403)
+    probno = request.json.get('probno')
+    accept = bool(request.json.get('accept'))
+    prob = get_prob(probno)
+    if not prob:
+        abort(404)
+    prob.review_status = 1 if accept else 0
+    db.session.commit()
+    return {
+        'ok': True, 'accept': accept,
+        'url': prob.url() if accept else url_for('problist')}
+
+
 @app.route('/probs/<probno>/solutions/<int:solno>')
 def solutions(probno, solno):
     solution = get_solution(probno, solno)
-    if not solution:
+    if not solution or not solution.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题解。')
     prob = solution.prob
     solutions = prob.solutions.copy()
@@ -210,7 +241,7 @@ def edit_prob(probno):
     prob = get_prob(probno)
     if not prob:
         return render_template('notfound.html', error='未能找到题目。')
-    if current_user != prob.source and not current_user.isadmin:
+    if not prob.editable_for(current_user):
         return redirect(prob.url())
     if request.method == 'POST':
         probtitle = request.form.get('probtitle')
@@ -234,7 +265,7 @@ def edit_prob(probno):
 @login_required
 def edit_solution(probno, solno):
     solution = get_solution(probno, solno)
-    if not solution:
+    if not solution or not solution.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题解。')
     if current_user != solution.user and not current_user.isadmin:
         return redirect(solution.url())
@@ -268,6 +299,7 @@ def upload_prob():
         imgfiles = request.files.getlist('imgfiles')
         isofficial = current_user.isadmin and request.form.get(
             'isofficial') == 'on'
+        review_status = 1 if current_user.isadmin else -1
         error = add_images(probno, imgfiles)
         if error is not None:
             return render_template(
@@ -277,7 +309,8 @@ def upload_prob():
                 isofficial=isofficial, error=error)
         status, prob = add_prob(
             probno=probno, probtitle=probtitle, statement=statement,
-            answer=answers, source=current_user, isofficial=isofficial)
+            answer=answers, source=current_user,
+            review_status=review_status, isofficial=isofficial)
         if not status:
             return render_template(
                 'upload_prob.html', probno=probno, probtitle=probtitle,
@@ -317,29 +350,30 @@ def upload_solution(probno):
 @login_required
 def delete_prob(probno):
     prob = get_prob(probno)
-    if not prob:
+    if not prob or not prob.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题目。')
-    if current_user == prob.source or current_user.isadmin:
-        prob.problabels.clear()
-        clear_comments(prob)
-        db.session.delete(prob)
-        db.session.commit()
-        return redirect(url_for('welcome'))
-    return redirect(prob.url())
+    if not prob.editable_for(current_user):
+        return redirect(prob.url())
+    prob.problabels.clear()
+    clear_comments(prob)
+    db.session.delete(prob)
+    db.session.commit()
+    return redirect(url_for('welcome'))
 
 
 @app.route('/probs/<probno>/solutions/<int:solno>/delete')
 @login_required
 def delete_solution(probno, solno):
     solution = get_solution(probno, solno)
-    if not solution:
+    prob = solution.prob
+    if not solution or not solution.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题解。')
-    if current_user == solution.user or current_user.isadmin:
-        clear_comments(solution)
-        db.session.delete(solution)
-        db.session.commit()
-        return redirect(solution.prob.url())
-    return redirect(solution.url())
+    if not solution.editable_for(current_user):
+        return redirect(solution.url())
+    clear_comments(solution)
+    db.session.delete(solution)
+    db.session.commit()
+    return redirect(prob.url())
 
 
 @app.route('/api/admin/set-official-prob', methods=['POST'])
@@ -430,7 +464,7 @@ def users(uid):
 @app.route('/chat')
 @login_required
 def chat():
-    view_comments = request.args.get('view_comments')
+    view_comments = request.args.get('view_comments') == 'True'
     if view_comments:
         return render_template('chat.html', view_comments=True)
     activeuid = request.args.get('activeuid')

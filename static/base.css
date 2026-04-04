@@ -49,7 +49,7 @@ ul.navbar-items li.logo-text img {
 ul.navbar-items li.logo-text i {
     font-size: 45px; margin-right: 0; color: white; }
 ul.navbar-items li.logo-text i.gender {
-    font-size: 20px; margin: 30px 15px 0 -18px;
+    font-size: 20px; margin: 30px 10px 0 -20px;
     -webkit-text-stroke: 1px white; }
 ul.navbar-items li.logo-text i.admin { font-size: 30px; margin-right: 5px; }
 

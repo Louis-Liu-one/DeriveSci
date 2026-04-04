@@ -485,8 +485,8 @@ def _as_general_parencall(result, *argslist, check_sympyfunc=True):
             result = result(*args, **str_kwargs)
             flag = False
             continue
-        elif check_sympyfunc and flag and \
-            not str(result).startswith('_') and hasattr(sp, str(result)):
+        elif check_sympyfunc and flag and not str(
+                result).startswith('_') and hasattr(sp, str(result)):
             function = getattr(sp, str(result))
             if isinstance(function, _function_type):
                 result = function(*args, **str_kwargs)

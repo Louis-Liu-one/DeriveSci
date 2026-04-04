@@ -4,7 +4,8 @@
 {%- endmacro -%}
 
 {%- macro user_sidebar(user) -%}
-    <a class="sidebar-link"{% if user %} href="{{ user.url() }}"{% endif %}>
+    <a class="sidebar-link"
+        {%- if user %} href="{{ user.url() }}" target="_blank"{%- endif -%}>
         <div class="sidebar-item{% if not user %} disabled{% endif %}">
             {{ user_avatar_img(user, 'avatar') }}{{ user_name(user) }}
         </div>

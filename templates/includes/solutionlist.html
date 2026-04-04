@@ -11,19 +11,22 @@
                 </tr>
             {%- endif -%}
             {%- for solution in solutions -%}
-                <tr onclick="location.href = '{{ solution.url() }}'">
+                <tr data-url="{{ solution.url() }}"
+                    onclick="window.open(this.dataset.url)">
                     {%- if with_probno -%}
-                        <td class="probno" onclick="event.stopPropagation();
-                            location.href = '{{ solution.prob.url() }}'"
+                        <td class="probno"{%- if solution.prob -%}
+                            data-url="{{ solution.prob.url() }}"
+                            onclick="event.stopPropagation();
+                                window.open(this.dataset.url)"{%- endif -%}
                             style="width: 25%">
                             {{- solution.probno -}}</td>
                     {%- endif -%}
-                    <td>{{ solution.title }}</td>
+                    <td>{{- solution.title -}}</td>
                     {%- if with_user -%}
-                        <td class="soluser" {%- if solution.user -%}
+                        <td class="soluser"{%- if solution.user -%}
+                            data-url="{{ solution.user.url() }}"
                             onclick="event.stopPropagation();
-                                location.href = '{{ solution.user.url() }}'"
-                                {%- endif -%}>
+                                window.open(this.dataset.url)"{%- endif -%}>
                             <div>
                                 {{- user_avatar_img(solution.user) -}}
                                 {{- user_name(solution.user) -}}

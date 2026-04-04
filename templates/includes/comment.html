@@ -70,13 +70,15 @@
             class="fa-solid fa-comment-dots"></i>
         {%- if current_user == comment.user and not with_post -%}
             <i id="deletebutton" title="删除评论" class="fa-solid fa-trash-can"
+                data-url="{{ url_for('delete_comment') }}"
                 onclick="deleteComment(
-                '{{ url_for('delete_comment') }}', '{{ comment.cmtid }}')"></i>
+                    this.dataset.url, '{{ comment.cmtid }}')"></i>
         {%- endif -%}
         {%- if with_post -%} &nbsp;
             {% set post = comment.get_post() %}来自：{{ post }}
             <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
-                onclick="window.open('{{ post.url() }}', '_blank')"></i>
+                data-url="{{ post.url() }}"
+                onclick="window.open(this.dataset.url)"></i>
         {%- endif -%}
     </p>
     {{- commentform_sub(comment, new_window=with_post) -}}
@@ -93,8 +95,9 @@
 {%- macro commentdiv(comment,
     toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="comment">
-    <span class="avatar" {% if comment.user %}onclick="location.href
-            = '{{ url_for('users', uid=comment.user.uid) }}'"{% endif %}>
+    <span class="avatar" {%- if comment.user -%}
+        data-url="{{ url_for('users', uid=comment.user.uid) }}"
+        onclick="window.open(this.dataset.url)"{%- endif -%}>
         {{- user_avatar_img(comment.user, 'avatar') -}}
     </span>
     {{- commentbody(comment, toplevel, secondlevel, with_post) -}}

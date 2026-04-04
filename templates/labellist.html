@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block load_markdown %}{% endblock %}
+
 {% block title %}题目标签 - MathProbs{% endblock %}
 
 {% block styles %}
@@ -19,8 +21,8 @@
             <tr>
                 {%- for dif in range(5) -%}
                     {%- if i + dif < labels|length -%}
-                        <td onclick="location.href
-                            = '{{ labels[i + dif].url() }}'">
+                        <td data-url="{{ labels[i + dif].url() }}"
+                            onclick="window.open(this.dataset.url)">
                             {{- labels[i + dif].labelname -}}
                         </td>
                     {%- endif -%}

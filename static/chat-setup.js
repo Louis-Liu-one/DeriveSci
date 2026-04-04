@@ -13,8 +13,7 @@ window.addEventListener('beforeunload', (event) => {
         {type: "application/json; charset=UTF-8"}));
 });
 
-async function updateMessages()
-{
+async function updateMessages() {
     if (!activeUser) return;
     try {
         const response = await fetch(`/api/chat/messages`, {
@@ -38,8 +37,7 @@ async function updateMessages()
     } catch (err) { }
 }
 
-async function sendMessage()
-{
+async function sendMessage() {
     try {
         await fetch('/api/chat/send', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -50,8 +48,7 @@ async function sendMessage()
     } catch (err) { alert('发送失败'); }
 }
 
-async function updateUserLastVisit(receiver_uid, sender_uid)
-{
+async function updateUserLastVisit(receiver_uid, sender_uid) {
     try {
         const response = await fetch('/api/chat/update-lastvisit', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -71,7 +68,7 @@ async function switchUser(element, uid) {
     activeUser = element; target.value = uid;
     chattitle.innerHTML = activeUser.innerHTML;
     activeUser.className = 'user-item active';
-    redCircle = activeUser.querySelector('div.unread-badge')
+    redCircle = activeUser.querySelector('div.unread-badge');
     if (redCircle) redCircle.style.display = 'none';
     msgarea.innerHTML = '';
     if (uid in all_chats) addMessages(all_chats[uid].messages);

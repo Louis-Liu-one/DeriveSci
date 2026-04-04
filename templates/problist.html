@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% from "includes/problist.html" import problist %}
 
+{% block load_markdown %}{% endblock %}
+
 {% block title %}题集 - MathProbs{% endblock %}
 
 {% block styles %}
@@ -9,30 +11,51 @@
 {% endblock %}
 
 {% block navbar_title %}
-    {% if oflabel %}标签：{{ labelname }}
-    {% else %}题集{% endif %}
+{%- if oflabel -%}标签：{{- labelname -}}{%- else -%}题集{%- endif -%}
 {% endblock %}
 
 {% block body %}
 <div class="sidebar">
-    {% if oflabel %}
+    {%- if oflabel -%}
         <h3 class="sidebar-title">题目标签</h3>
         <a class="sidebar-link" href="{{ url_for('labellist') }}">
             <div class="sidebar-item">
                 <i class="fa-solid fa-tags"></i>所有标签
             </div>
         </a>
-    {% else %}<h3 class="sidebar-title">MathProbs题集</h3>{% endif %}
+    {%- else -%}
+        <h3 class="sidebar-title">MathProbs题集</h3>
+        {%- if current_user.is_authenticated and current_user.isadmin -%}
+            {%- if reviewmode -%}
+                <a class="sidebar-link" href="{{ url_for('problist') }}">
+                    <div class="sidebar-item">
+                        <i class="fa-solid fa-book"></i>普通模式
+                    </div>
+                </a>
+            {%- else -%}
+                <a class="sidebar-link" href="{{ url_for(
+                    'problist', reviewmode=True) }}">
+                    <div class="sidebar-item">
+                        <i class="fa-solid fa-book-open-reader"></i>审核模式
+                    </div>
+                </a>
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
 </div>
 <div class="bodypart">
     <h3>{% if query %}满足条件的{% else %}所有{% endif %}题目</h3>
-    {% if probs.first() %}{{ problist(probs) }}{% else %}<p>暂无</p>{% endif %}
+    {%- if probs.first() and reviewmode -%}
+        {{- problist(probs, with_review_status=True) -}}
+    {%- elif not reviewmode -%}{{- problist(probs) -}}
+    {%- else -%}<p>暂无</p>{%- endif -%}
 </div>
 <div class="submitpart">
     <h3>查询题目</h3>
     <form class="mathprobsform" method="post" action="{% if oflabel %}
                 {{ url_for('problistoflabel', labelname=labelname) }}
-            {% else %}{{ url_for('problist') }}{% endif %}">
+            {% else %}{{ url_for('problist',
+                reviewmode=True if reviewmode else False) }}{% endif %}">
         <span><label for="probno">编号：</label>
         <input type="text" id="probno" name="probno" autocomplete="off"
             value="{{ form.get('probno', '') }}" spellcheck="false"
@@ -53,7 +76,16 @@
         <input type="text" id="source" name="source" autocomplete="off"
             placeholder="输入用户名称，以CSV格式" spellcheck="false"
             value="{{ form.get('source', '') }}"></span>
-        <span><label for="isofficial">类型：</label>
+        {%- if reviewmode -%}
+            <span><label for="review_status">状态：</label>
+            <select id="review_status" name="review_status">
+                <option value="all">所有题目</option>
+                <option value="toreview">待审核的题目</option>
+                <option value="accepted">已通过的题目</option>
+                <option value="rejected">已拒绝的题目</option>
+            </select></span>
+        {%- endif -%}
+        <span><label for="probtype">类型：</label>
         <select id="probtype" name="probtype">
             <option value="all">所有题目</option>
             <option value="officialprobs">仅官方题目</option>
@@ -62,7 +94,12 @@
         <span><button type="submit">查询</button></span>
     </form>
 </div>
-{%- if form.get('probtype') -%}
-    <script>probtype.value = ({{ form['probtype']|tojson }}).toString();</script>
-{%- endif -%}
+<script>
+    {%- if form.get('probtype') -%}
+        probtype.value = ({{ form['probtype']|tojson }}).toString();
+    {%- endif -%}
+    {%- if form.get('review_status') -%}
+        review_status.value = ({{ form['review_status']|tojson }}).toString();
+    {%- endif -%}
+</script>
 {% endblock %}

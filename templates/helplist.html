@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block load_markdown %}{% endblock %}
+
 {% block title %}帮助列表 - MathProbs{% endblock %}
 
 {% block navbar_title %}帮助列表{% endblock %}
@@ -17,8 +19,7 @@
     <p><b>以下是可用的帮助页面：</b></p>
     <nav class="table-of-contents"><ul>
         {%- for howto, title in helplist -%}
-            <li><a target="_blank"
-                href="{{ url_for('helps', howto=howto) }}">
+            <li><a target="_blank" href="{{ url_for('helps', howto=howto) }}">
                 {{- title -}}
             </a></li>
         {%- endfor -%}

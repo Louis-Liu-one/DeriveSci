@@ -6,6 +6,8 @@
 
 {% set all_chats = current_user.all_chats() %}
 
+{%- if not view_comments -%}{% block load_markdown %}{% endblock %}{%- endif -%}
+
 {% block title %}私信聊天 - MathProbs{% endblock %}
 
 {% block styles %}
@@ -78,7 +80,7 @@
             {%- endfor -%}
             {%- if activeuser and not ns.active -%}
                 <div class="user-item active"
-                    onclick="switchUser(this, {{ activeuser.uid|tojson }})">
+                    onclick="switchUser(this, {{ activeuser.uid }})">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(activeuser) -}}
                     </div>{{- user_name(activeuser) -}}

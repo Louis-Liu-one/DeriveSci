@@ -261,6 +261,7 @@ class Prob(db.Model):
         'Submission', backref='prob', cascade='all, delete')
     images = db.relationship(
         'ProbImage', backref='prob', cascade='all, delete')
+    review_status = db.Column(db.Integer, default=-1)
     isofficial = db.Column(db.Boolean, default=False)
 
     def get_answer(self):
@@ -301,6 +302,13 @@ class Prob(db.Model):
         self.problabels = {get_label(
             labelname, create=True) for labelname in problabels}
         db.session.commit()
+
+    def viewable_for(self, user):
+        return self.review_status == 1 or user.is_authenticated and (
+            user == self.source or user.isadmin)
+
+    def editable_for(self, user):
+        return user.is_authenticated and (user == self.source or user.isadmin)
 
     def as_labelnames(self):
         return {label.labelname for label in self.problabels}
@@ -358,6 +366,12 @@ class ProbSolution(db.Model):
             self.content = content
         db.session.commit()
 
+    def viewable_for(self, user):
+        return self.prob.viewable_for(user) or user == self.user
+
+    def editable_for(self, user):
+        return user.is_authenticated and (user == self.user or user.isadmin)
+
     def __str__(self):
         return f'问题 {self.probno} 的题解：{self.title}'
 
@@ -392,7 +406,7 @@ def get_prob(probno):
         return db.session.get(Prob, probno)
 
 
-def search_probs(form, extra_req=None):
+def search_probs(form, extra_req=None, reviewmode=False):
     requirements = []
     if form.get('probno'):
         requirements.append(Prob.probno == form['probno'])
@@ -416,9 +430,16 @@ def search_probs(form, extra_req=None):
     if form.get('probtype') in ('officialprobs', 'noofficialprobs'):
         requirements.append(Prob.isofficial == (
             form['probtype'] == 'officialprobs'))
+    if reviewmode and form.get('review_status') in (
+            'toreview', 'accepted', 'rejected'):
+        requirements.append(Prob.review_status == {
+            'toreview': -1, 'rejected': 0, 'accepted': 1}
+            [form['review_status']])
     flag = bool(requirements)
     if extra_req is not None:
         requirements.append(extra_req)
+    if not reviewmode:
+        requirements.append(Prob.review_status == 1)
     if not requirements:
         return Prob.query.order_by(Prob.probno.asc()), flag
     return Prob.query.filter(*requirements).order_by(

@@ -21,6 +21,7 @@ table.problist td.source div img, table.problist td.soluser div img {
     margin-right: 5px; border-radius: 50%; }
 table.problist td.source div i, table.problist td.soluser div i {
     font-size: 20px; margin: 0 2px 0 1px; }
+table.problist td.review-status { width: 10%; }
 table.problist td.probno:hover, table.problist td.source:hover,
     table.problist td.soluser:hover {
     background-color: #BBEFFF; transition: .5s; cursor: pointer; }

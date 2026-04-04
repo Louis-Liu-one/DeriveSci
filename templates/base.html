@@ -15,15 +15,17 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/svg+xml"
         href="{{ url_for('static', filename='images/favicon.svg') }}">
-    <script src="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
-    <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
-    <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
-    <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
-    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
-    <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
+    {%- block load_markdown -%}
+        <script src="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
+        <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
+        <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+        <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+    {%- endblock -%}
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     {%- block styles -%}{%- endblock -%}
 </head>
@@ -40,7 +42,7 @@
             {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
             {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {%- if current_user and current_user.is_authenticated -%}
+            {%- if current_user.is_authenticated -%}
                 {%- set unread_comments = current_user.unread_comments() -%}
                 {%- if unread_comments -%}
                     {{- navbar_item(url_for('chat', view_comments=True),
