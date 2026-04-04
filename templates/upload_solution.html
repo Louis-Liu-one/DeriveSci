@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='edit-solution.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}
@@ -28,26 +29,24 @@
 </div>
 <div class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
-    <form class="mathprobsform" method="post" action="
-            {%- if editmode -%}{{ url_for('edit_solution',
-                probno=prob.probno, solno=solution.solno) }}{%- else -%}
-            {{ url_for('upload_solution', probno=prob.probno) }}{%- endif -%}"
-            enctype="multipart/form-data">
-        {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
+    <form class="mathprobsform" id="editform" enctype="multipart/form-data">
+        <input type="hidden" name="probno" id="probno" value="{{ prob.probno }}">
+        {%- if editmode -%}
+            <input type="hidden" name="solno" id="solno"
+                value="{{ solution.solno }}">
+        {%- endif -%}
         <span>
             <label for="soltitle">标题：</label>
             <input required type="text" id="soltitle" name="soltitle"
                 autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ solution.title }}"
-                {%- elif soltitle -%}value="{{ soltitle }}"{%- endif -%}>
+                {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
         </span>
         <span>
             <label for="solution">内容：</label>
             <textarea id="solution" name="solution" class="tall"
-                placeholder="以Markdown格式输入题解" spellcheck="false"
-                required>{%- if editmode -%}
-                {{ solution.content }}
-                {%- elif content -%}{{ content }}{%- endif -%}</textarea>
+                placeholder="以Markdown格式输入题解" spellcheck="false" required>
+                {%- if editmode -%}{{ solution.content }}{%- endif -%}
+            </textarea>
         </span>
         <span>
             <label for="imgfiles">{% if editmode %}更多{% endif %}图片：</label>
@@ -57,7 +56,11 @@
         <span>
             <button type="button" onclick="renderElement(
                 mdpreview, solution.value, 'block')">预览</button>
-            <button type="submit">上传</button>
+            {%- if editmode -%}
+                <button type="button" onclick="editSolution()">上传</button>
+            {%- else -%}
+                <button type="button" onclick="uploadSolution()">上传</button>
+            {%- endif -%}
         </span>
     </form>
 </div>

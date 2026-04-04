@@ -12,10 +12,13 @@
     'static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <script src="{{ url_for('static', filename='edit-prob.js') }}"></script>
+{%- if editmode -%}
+    <script src="{{ url_for('static', filename='prob-utils.js') }}"></script>
+{%- endif -%}
 {% endblock %}
 
 {% block navbar_title %}
-{% if editmode %}编辑{% else %}上传{% endif %}题目
+{%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目
 {% endblock %}
 
 {% block body %}
@@ -30,39 +33,36 @@
 </div>
 <div class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
-    <form class="mathprobsform" id="editform" method="post"
-        action="{%- if editmode -%}
-            {{ url_for('edit_prob', probno=prob.probno) }}
-            {%- else -%}{{ url_for('upload_prob') }}{%- endif -%}"
-        enctype="multipart/form-data">
-        {%- if error -%}<p class="errormsg">错误：{{ error }}</p>{%- endif -%}
-        {%- if not editmode -%}<span>
-            <label for="probno">编号：</label>
-            <input required type="text" id="probno" name="probno"
-                autocomplete="off" spellcheck="false"
-                {% if probno %}value="{{ probno }}"{% endif %}>
-        </span>{%- endif -%}
+    <form class="mathprobsform" id="editform" enctype="multipart/form-data">
+        {%- if not editmode -%}
+            <span>
+                <label for="probno">编号：</label>
+                <input required type="text" id="probno" name="probno"
+                    autocomplete="off" spellcheck="false">
+            </span>
+        {%- else -%}
+            <input type="hidden" id="probno" name="probno"
+                value="{{ prob.probno }}">
+        {%- endif -%}
         <span>
             <label for="probtitle">名称：</label>
             <input required type="text" id="probtitle" name="probtitle"
                 autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ prob.probtitle }}"
-                {%- elif probtitle -%}value="{{ probtitle }}"{%- endif -%}>
+                {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
         </span>
         <span>
             <label for="problabels">标签：</label>
             <input type="text" id="problabels" name="problabels"
                 autocomplete="off" spellcheck="false"
-                placeholder="输入题目标签，以CSV格式"
-                {%- if editmode -%}value="{{ list2csv(prob.as_labelnames()) }}"
-                {%- elif problabels -%}value="{{ problabels }}"{%- endif -%}>
+                placeholder="输入题目标签，以CSV格式"{%- if editmode -%}
+                value="{{ list2csv(prob.as_labelnames()) }}"{%- endif -%}>
         </span>
         <span>
             <label for="statement">描述：</label>
             <textarea id="statement" name="statement" spellcheck="false"
-                placeholder="以Markdown格式输入题面" class="tall"
-                required>{%- if editmode -%}{{ prob.statement }}
-                {%- elif statement -%}{{ statement }}{%- endif -%}</textarea>
+                placeholder="以Markdown格式输入题面" class="tall" required>
+                {%- if editmode -%}{{ prob.statement }}{%- endif -%}
+            </textarea>
         </span>
         <span>
             <label for="answer">答案：</label>
@@ -95,7 +95,11 @@
         <span>
             <button type="button" onclick="renderElement(
                 mdpreview, statement.value, 'block')">预览</button>
-            <button onclick="submitFormWithAnswers()">上传</button>
+            {%- if editmode -%}
+                <button type="button" onclick="editProb()">上传</button>
+            {%- else -%}
+                <button type="button" onclick="uploadProb()">上传</button>
+            {%- endif -%}
         </span>
     </form>
 </div>
@@ -113,8 +117,7 @@
         </a>
     </p>
 </div>
-<script>
-    {%- if editmode -%}addAnswersBefore({{ prob.get_answer()|tojson }});
-    {%- elif answers -%}addAnswersBefore({{ answers|tojson }});{%- endif -%}
-</script>
+{%- if editmode -%}
+    <script>addAnswersBefore({{ prob.get_answer()|tojson }});</script>
+{%- endif -%}
 {% endblock %}

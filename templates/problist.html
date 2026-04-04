@@ -56,41 +56,58 @@
                 {{ url_for('problistoflabel', labelname=labelname) }}
             {% else %}{{ url_for('problist',
                 reviewmode=True if reviewmode else False) }}{% endif %}">
-        <span><label for="probno">编号：</label>
-        <input type="text" id="probno" name="probno" autocomplete="off"
-            value="{{ form.get('probno', '') }}" spellcheck="false"
-            placeholder="查询特定编号的题目"></span>
-        <span><label for="probtitle">名称：</label>
-        <input type="text" id="probtitle" name="probtitle" autocomplete="off"
-            value="{{ form.get('probtitle', '') }}" spellcheck="false"
-            placeholder="查询标题中含有指定文本的题目"></span>
-        <span><label for="statement">内容：</label>
-        <input type="text" id="statement" name="statement" autocomplete="off"
-            value="{{ form.get('statement', '') }}" spellcheck="false"
-            placeholder="查询内容中含有指定文本的题目"></span>
-        <span><label for="problabels">标签：</label>
-        <input type="text" id="problabels" name="problabels" autocomplete="off"
-            placeholder="输入题目标签，以CSV格式" spellcheck="false"
-            value="{{ form.get('problabels', '') }}"></span>
-        <span><label for="source">来源：</label>
-        <input type="text" id="source" name="source" autocomplete="off"
-            placeholder="输入用户名称，以CSV格式" spellcheck="false"
-            value="{{ form.get('source', '') }}"></span>
+        <span>
+            <label for="probno">编号：</label>
+            <input type="text" id="probno" name="probno" autocomplete="off"
+                value="{{ form.get('probno', '') }}" spellcheck="false"
+                placeholder="查询特定编号的题目">
+        </span>
+        <span>
+            <label for="probtitle">名称：</label>
+            <input type="text" id="probtitle" name="probtitle"
+                autocomplete="off" spellcheck="false"
+                value="{{ form.get('probtitle', '') }}"
+                placeholder="查询标题中含有指定文本的题目">
+        </span>
+        <span>
+            <label for="statement">内容：</label>
+            <input type="text" id="statement" name="statement"
+                autocomplete="off" spellcheck="false"
+                value="{{ form.get('statement', '') }}"
+                placeholder="查询内容中含有指定文本的题目">
+        </span>
+        <span>
+            <label for="problabels">标签：</label>
+            <input type="text" id="problabels" name="problabels"
+                autocomplete="off" spellcheck="false"
+                placeholder="输入题目标签，以CSV格式"
+                value="{{ form.get('problabels', '') }}">
+        </span>
+        <span>
+            <label for="source">来源：</label>
+            <input type="text" id="source" name="source" autocomplete="off"
+                placeholder="输入用户名称，以CSV格式" spellcheck="false"
+                value="{{ form.get('source', '') }}">
+        </span>
         {%- if reviewmode -%}
-            <span><label for="review_status">状态：</label>
-            <select id="review_status" name="review_status">
-                <option value="all">所有题目</option>
-                <option value="toreview">待审核的题目</option>
-                <option value="accepted">已通过的题目</option>
-                <option value="rejected">已拒绝的题目</option>
-            </select></span>
+            <span>
+                <label for="review_status">状态：</label>
+                <select id="review_status" name="review_status">
+                    <option value="all">所有题目</option>
+                    <option value="toreview">待审核的题目</option>
+                    <option value="accepted">已通过的题目</option>
+                    <option value="rejected">已拒绝的题目</option>
+                </select>
+            </span>
         {%- endif -%}
-        <span><label for="probtype">类型：</label>
-        <select id="probtype" name="probtype">
-            <option value="all">所有题目</option>
-            <option value="officialprobs">仅官方题目</option>
-            <option value="noofficialprobs">仅非官方题目</option>
-        </select></span>
+        <span>
+            <label for="probtype">类型：</label>
+            <select id="probtype" name="probtype">
+                <option value="all">所有题目</option>
+                <option value="officialprobs">仅官方题目</option>
+                <option value="noofficialprobs">仅非官方题目</option>
+            </select>
+        </span>
         <span><button type="submit">查询</button></span>
     </form>
 </div>

@@ -24,17 +24,36 @@ function removeAnswer(index) {
     answerlist_js.splice(index, 1);
 }
 
-function submitFormWithAnswers() {
-    const answerlist_input = document.createElement('input');
-    answerlist_input.type = 'hidden';
-    answerlist_input.name = 'answers';
-    answerlist_input.value = JSON.stringify(answerlist_js);
-    editform.appendChild(answerlist_input);
-    editform.submit();
-}
-
 function addAnswersBefore(answerlist_jsbefore) {
     for (var i = 0; i < answerlist_jsbefore.length; i++)
         addAnswer(JSON.stringify(
             answerlist_jsbefore[i][0]), answerlist_jsbefore[i][1]);
+}
+
+async function uploadProb() {
+    const answerlist_input = document.createElement('input');
+    answerlist_input.type = 'hidden'; answerlist_input.name = 'answers';
+    answerlist_input.value = JSON.stringify(answerlist_js);
+    editform.appendChild(answerlist_input);
+    try {
+        const response = await fetch('/api/prob/upload', {
+            method: 'POST', body: new FormData(editform)});
+        const data = await response.json();
+        if (data.ok) location.replace(data.url);
+        else alert(`操作失败：${data.error}`);
+    } catch (err) { alert(`操作失败：${err}`); }
+}
+
+async function editProb() {
+    const answerlist_input = document.createElement('input');
+    answerlist_input.type = 'hidden'; answerlist_input.name = 'answers';
+    answerlist_input.value = JSON.stringify(answerlist_js);
+    editform.appendChild(answerlist_input);
+    try {
+        const response = await fetch('/api/prob/edit', {
+            method: 'POST', body: new FormData(editform)});
+        const data = await response.json();
+        if (data.ok) location.replace(data.url);
+        else alert(`操作失败：${data.error}`);
+    } catch (err) { alert(`操作失败：${err}`); }
 }

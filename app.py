@@ -19,26 +19,30 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /delete-comment                                删除评论*
 
 题目：
-/upload-prob         上传题目
-/labels/             所有标签
-/labels/<labelname>  单个标签
-/probs/              题集
-/probs/<probno>                 题目<probno>
-/probs/<probno>/submit          提交题目<probno>的答案*
-/probs/<probno>/edit            编辑题目
-/probs/<probno>/delete          删除题目*
-/probs/<probno>/upload-solution 上传题解
-/probs/<probno>/solutions/<solno>        查看题解
-/probs/<probno>/solutions/<solno>/edit   编辑题解
-/probs/<probno>/solutions/<solno>/delete 删除题解*
-/images/<probno>/<filename>              题目/题解图片
+/upload-prob           上传题目
+/labels/               所有标签
+/labels/<labelname>    单个标签
+/probs/                题集
+/probs/<probno>        题目<probno>
+/probs/<probno>/submit 提交题目<probno>的答案*
+/probs/<probno>/edit   编辑题目
+/probs/<probno>/upload-solution        上传题解
+/probs/<probno>/solutions/<solno>      查看题解
+/probs/<probno>/solutions/<solno>/edit 编辑题解
+/images/<probno>/<filename>            题目/题解图片
 
 API：*
-/api/chat/update-lastvisit   更新上次查看私信的时间
-/api/chat/send               发送私信
-/api/chat/messages           获取新收到的私信
-/api/admin/set-official-prob 将题目添加到官方题集
-/api/admin/review-prob       通过/拒绝题目的审核
+/api/prob/upload           上传题目
+/api/prob/set-official     将题目添加到官方题集
+/api/prob/review           通过/拒绝题目的审核
+/api/prob/edit             编辑题目
+/api/prob/delete           删除题目
+/api/solution/upload       上传题解
+/api/solution/edit         编辑题解
+/api/solution/delete       删除题解
+/api/chat/update-lastvisit 更新上次查看私信的时间
+/api/chat/send             发送私信
+/api/chat/messages         获取新收到的私信
 
 标*的是无法通过输入网址查看的路由。
 
@@ -77,11 +81,9 @@ def get_helplist():
     return sorted(helplist)
 
 
-@app.route('/<path:unknown>')
-def unknown_url(unknown):
-    if unknown.lower().startswith('api/'):
-        abort(404)
-    return render_template('notfound.html', error=f'未能找到路由“/{unknown}”。')
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('notfound.html', error='未能找到页面。'), 404
 
 
 # =========================== 讨论区路由 ===========================
@@ -134,9 +136,8 @@ def problist():
             current_user.is_authenticated and current_user.isadmin):
         return redirect(url_for('problist'))
     form = {}
-    keys = 'probno', 'probtitle', 'statement', \
-        'problabels', 'source', 'probtype', \
-        'review_status' if reviewmode else ''
+    keys = 'probno', 'probtitle', 'statement', 'problabels', 'source', \
+        'probtype', 'review_status' if reviewmode else ''
     if request.method == 'POST':
         for key in keys:
             form[key] = request.form.get(key)
@@ -205,9 +206,114 @@ def submit(probno):
         prob=prob, submission=submission, testpoints=testpoints)
 
 
-@app.route('/api/admin/review-prob', methods=['POST'])
+@app.route('/probs/<probno>/solutions/<int:solno>')
+def solutions(probno, solno):
+    solution = get_solution(probno, solno)
+    if not solution or not solution.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到题解。')
+    prob = solution.prob
+    solutions = prob.solutions.copy()
+    solutions.remove(solution)
+    suggested = random.sample(solutions, min(len(solutions), 3))
+    return render_template(
+        'solution.html', prob=prob, solution=solution, suggested=suggested)
+
+
+@app.route('/probs/<probno>/edit')
 @login_required
+def edit_prob(probno):
+    prob = get_prob(probno)
+    if not prob:
+        return render_template('notfound.html', error='未能找到题目。')
+    if not prob.editable_for(current_user):
+        return redirect(prob.url())
+    return render_template('upload_prob.html', editmode=True, prob=prob)
+
+
+@app.route('/probs/<probno>/solutions/<int:solno>/edit')
+@login_required
+def edit_solution(probno, solno):
+    solution = get_solution(probno, solno)
+    if not solution or not solution.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到题解。')
+    if current_user != solution.user and not current_user.isadmin:
+        return redirect(solution.url())
+    return render_template(
+        'upload_solution.html', editmode=True,
+        prob=solution.prob, solution=solution)
+
+
+@app.route('/upload-prob')
+@login_required
+def upload_prob():
+    return render_template('upload_prob.html')
+
+
+@app.route('/probs/<probno>/upload-solution')
+@login_required
+def upload_solution(probno):
+    prob = get_prob(probno)
+    if not prob:
+        return render_template('notfound.html', error='未能找到题目。')
+    return render_template('upload_solution.html', prob=prob)
+
+
+@app.route('/api/prob/upload', methods=['POST'])
+def api_upload_prob():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno = request.form.get('probno')
+    probtitle = request.form.get('probtitle')
+    problabels = [
+        labelname.replace(' ', '')
+        for labelname in csv2list(request.form.get('problabels'))]
+    statement = request.form.get('statement')
+    answers = request.form.get('answers')
+    imgfiles = request.files.getlist('imgfiles')
+    isofficial = current_user.isadmin and request.form.get(
+        'isofficial') == 'on'
+    review_status = 1 if current_user.isadmin else -1
+    error = add_images(probno, imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}
+    status, prob = add_prob(
+        probno=probno, probtitle=probtitle, statement=statement,
+        answer=answers, source=current_user,
+        review_status=review_status, isofficial=isofficial)
+    if not status:
+        return {'ok': False, 'error': str(prob)}
+    add2labels(problabels, prob)
+    return {'ok': True, 'url': prob.url()}
+
+
+@app.route('/api/prob/edit', methods=['POST'])
+def api_edit_prob():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno = request.form.get('probno')
+    prob = get_prob(probno)
+    if not prob:
+        abort(404)
+    if not prob.editable_for(current_user):
+        abort(403)
+    probtitle = request.form.get('probtitle')
+    problabels = [
+        labelname.replace(' ', '')
+        for labelname in csv2list(request.form.get('problabels'))]
+    statement = request.form.get('statement')
+    answers = request.form.get('answers')
+    imgfiles = request.files.getlist('imgfiles')
+    error = add_images(probno, imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}
+    prob.edit(probtitle, problabels, statement, answers)
+    return {'ok': True, 'url': prob.url()}
+
+
+@app.route('/api/prob/review', methods=['POST'])
 def api_review_prob():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
     if not current_user.isadmin:
         abort(403)
     probno = request.json.get('probno')
@@ -222,163 +328,10 @@ def api_review_prob():
         'url': prob.url() if accept else url_for('problist')}
 
 
-@app.route('/probs/<probno>/solutions/<int:solno>')
-def solutions(probno, solno):
-    solution = get_solution(probno, solno)
-    if not solution or not solution.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题解。')
-    prob = solution.prob
-    solutions = prob.solutions.copy()
-    solutions.remove(solution)
-    suggested = random.sample(solutions, min(len(solutions), 3))
-    return render_template(
-        'solution.html', prob=prob, solution=solution, suggested=suggested)
-
-
-@app.route('/probs/<probno>/edit', methods=['GET', 'POST'])
-@login_required
-def edit_prob(probno):
-    prob = get_prob(probno)
-    if not prob:
-        return render_template('notfound.html', error='未能找到题目。')
-    if not prob.editable_for(current_user):
-        return redirect(prob.url())
-    if request.method == 'POST':
-        probtitle = request.form.get('probtitle')
-        problabels = [
-            labelname.replace(' ', '')
-            for labelname in csv2list(request.form.get('problabels'))]
-        statement = request.form.get('statement')
-        answers = request.form.get('answers')
-        imgfiles = request.files.getlist('imgfiles')
-        error = add_images(probno, imgfiles)
-        if error is not None:
-            return render_template(
-                'upload_prob.html', editmode=True, prob=prob, error=error)
-        prob.edit(probtitle, problabels, statement, answers)
-        return redirect(prob.url())
-    return render_template('upload_prob.html', editmode=True, prob=prob)
-
-
-@app.route(
-    '/probs/<probno>/solutions/<int:solno>/edit', methods=['GET', 'POST'])
-@login_required
-def edit_solution(probno, solno):
-    solution = get_solution(probno, solno)
-    if not solution or not solution.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题解。')
-    if current_user != solution.user and not current_user.isadmin:
-        return redirect(solution.url())
-    if request.method == 'POST':
-        soltitle = request.form.get('soltitle')
-        content = request.form.get('solution')
-        imgfiles = request.files.getlist('imgfiles')
-        error = add_images(probno, imgfiles)
-        if error is not None:
-            return render_template(
-                'upload_solution.html', editmode=True,
-                prob=solution.prob, solution=solution, error=error)
-        solution.edit(soltitle, content)
-        return redirect(solution.url())
-    return render_template(
-        'upload_solution.html', editmode=True,
-        prob=solution.prob, solution=solution)
-
-
-@app.route('/upload-prob', methods=['GET', 'POST'])
-@login_required
-def upload_prob():
-    if request.method == 'POST':
-        probno = request.form.get('probno')
-        probtitle = request.form.get('probtitle')
-        problabels = [
-            labelname.replace(' ', '')
-            for labelname in csv2list(request.form.get('problabels'))]
-        statement = request.form.get('statement')
-        answers = request.form.get('answers')
-        imgfiles = request.files.getlist('imgfiles')
-        isofficial = current_user.isadmin and request.form.get(
-            'isofficial') == 'on'
-        review_status = 1 if current_user.isadmin else -1
-        error = add_images(probno, imgfiles)
-        if error is not None:
-            return render_template(
-                'upload_prob.html', probno=probno, probtitle=probtitle,
-                problabels=request.form.get('problabels'),
-                statement=statement, answers=answers,
-                isofficial=isofficial, error=error)
-        status, prob = add_prob(
-            probno=probno, probtitle=probtitle, statement=statement,
-            answer=answers, source=current_user,
-            review_status=review_status, isofficial=isofficial)
-        if not status:
-            return render_template(
-                'upload_prob.html', probno=probno, probtitle=probtitle,
-                problabels=request.form.get('problabels'),
-                statement=statement, answers=answers,
-                isofficial=isofficial, error=prob)
-        add2labels(problabels, prob)
-        return redirect(prob.url())
-    return render_template('upload_prob.html')
-
-
-@app.route('/probs/<probno>/upload-solution', methods=['GET', 'POST'])
-@login_required
-def upload_solution(probno):
-    prob = get_prob(probno)
-    if not prob:
-        return render_template('notfound.html', error='未能找到题目。')
-    if request.method == 'POST':
-        soltitle = request.form.get('soltitle')
-        content = request.form.get('solution')
-        imgfiles = request.files.getlist('imgfiles')
-        error = add_images(probno, imgfiles)
-        if error is not None:
-            return render_template(
-                'upload_solution.html', prob=prob,
-                soltitle=soltitle, content=content, error=error)
-        status, solution = add_solution(probno, soltitle, content)
-        if not status:
-            return render_template(
-                'upload_solution.html', prob=prob,
-                soltitle=soltitle, content=content, error=solution)
-        return redirect(solution.url())
-    return render_template('upload_solution.html', prob=prob)
-
-
-@app.route('/probs/<probno>/delete')
-@login_required
-def delete_prob(probno):
-    prob = get_prob(probno)
-    if not prob or not prob.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题目。')
-    if not prob.editable_for(current_user):
-        return redirect(prob.url())
-    prob.problabels.clear()
-    clear_comments(prob)
-    db.session.delete(prob)
-    db.session.commit()
-    return redirect(url_for('welcome'))
-
-
-@app.route('/probs/<probno>/solutions/<int:solno>/delete')
-@login_required
-def delete_solution(probno, solno):
-    solution = get_solution(probno, solno)
-    prob = solution.prob
-    if not solution or not solution.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题解。')
-    if not solution.editable_for(current_user):
-        return redirect(solution.url())
-    clear_comments(solution)
-    db.session.delete(solution)
-    db.session.commit()
-    return redirect(prob.url())
-
-
-@app.route('/api/admin/set-official-prob', methods=['POST'])
-@login_required
+@app.route('/api/prob/set-official', methods=['POST'])
 def api_set_official_prob():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
     if not current_user.isadmin:
         abort(403)
     probno = request.json.get('probno')
@@ -388,6 +341,80 @@ def api_set_official_prob():
     prob.isofficial = not prob.isofficial
     db.session.commit()
     return {'ok': True, 'isofficial': prob.isofficial}
+
+
+@app.route('/api/prob/delete', methods=['POST'])
+def api_delete_prob():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno = request.json.get('probno')
+    prob = get_prob(probno)
+    if not prob or not prob.viewable_for(current_user):
+        return {'ok': False, 'error': '未能找到题目。'}, 400
+    if not prob.editable_for(current_user):
+        abort(403)
+    prob.problabels.clear()
+    clear_comments(prob)
+    db.session.delete(prob)
+    db.session.commit()
+    return {'ok': True, 'url': url_for('problist')}
+
+
+@app.route('/api/solution/upload', methods=['POST'])
+def api_upload_solution():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno = request.form.get('probno')
+    prob = get_prob(probno)
+    if not prob:
+        abort(404)
+    soltitle = request.form.get('soltitle')
+    content = request.form.get('solution')
+    imgfiles = request.files.getlist('imgfiles')
+    error = add_images(probno, imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}
+    status, solution = add_solution(probno, soltitle, content)
+    if not status:
+        return {'ok': False, 'error': str(solution)}
+    return {'ok': True, 'url': solution.url()}
+
+
+@app.route('/api/solution/edit', methods=['POST'])
+def api_edit_solution():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno, solno = request.form.get('probno'), int(request.form.get('solno'))
+    solution = get_solution(probno, solno)
+    if not solution or not solution.viewable_for(current_user):
+        abort(404)
+    if not solution.editable_for(current_user):
+        abort(403)
+    soltitle = request.form.get('soltitle')
+    content = request.form.get('solution')
+    imgfiles = request.files.getlist('imgfiles')
+    error = add_images(probno, imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}
+    solution.edit(soltitle, content)
+    return {'ok': True, 'url': solution.url()}
+
+
+@app.route('/api/solution/delete', methods=['POST'])
+def api_delete_solution():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 400
+    probno, solno = request.json.get('probno'), int(request.json.get('solno'))
+    solution = get_solution(probno, solno)
+    prob_url = solution.prob.url()
+    if not solution or not solution.viewable_for(current_user):
+        return {'ok': False, 'error': '未能找到题解。'}, 400
+    if not solution.editable_for(current_user):
+        abort(403)
+    clear_comments(solution)
+    db.session.delete(solution)
+    db.session.commit()
+    return {'ok': True, 'url': prob_url}
 
 
 @app.route('/helps/<howto>')

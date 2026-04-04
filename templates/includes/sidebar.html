@@ -1,3 +1,6 @@
+{#
+    如果要使用`delete_prob`、`delete_solution`宏，则需要导入`prob-utils.js`。
+#}
 
 {%- macro return2post(post, text) -%}
     <a class="sidebar-link" href="{{ post.url() }}">
@@ -52,8 +55,8 @@
 {%- endmacro -%}
 
 {%- macro delete_prob(prob) -%}
-    <a class="sidebar-link" onclick="return confirm('确定要删除题目？')"
-            href="{{ url_for('delete_prob', probno=prob.probno) }}">
+    <a class="sidebar-link" data-probno="{{ prob.probno }}"
+        onclick="if (confirm('确定要删除题目？')) deleteProb(this.dataset.probno)">
         <div class="sidebar-item">
             <i class="fa-solid fa-trash-can"></i>删除题目
         </div>
@@ -61,9 +64,9 @@
 {%- endmacro -%}
 
 {%- macro delete_solution(solution) -%}
-    <a class="sidebar-link"  onclick="return confirm('确定要删除题解？')"
-            href="{{ url_for('delete_solution',
-            probno=solution.probno, solno=solution.solno) }}">
+    <a class="sidebar-link" data-probno="{{ solution.probno }}"
+        data-solno="{{ solution.solno }}" onclick="if (confirm('确定要删除题解？'))
+            deleteSolution(this.dataset.probno, this.dataset.solno)">
         <div class="sidebar-item">
             <i class="fa-solid fa-trash-can"></i>删除题解
         </div>
