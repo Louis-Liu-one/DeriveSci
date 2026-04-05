@@ -15,8 +15,8 @@
 {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
 {{- moment.locale('zh-cn') -}}
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
-<script src="{{ url_for('static', filename='delete-comment.js') }}"></script>
 <script src="{{ url_for('static', filename='prob-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='comment-utils.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}
@@ -43,7 +43,6 @@
     {{- commentarea(1, solution.get_post_ident(),
         solution.get_toplevel_comments()) -}}
 </div>
-<script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>
     renderElements([
         bodyBlock, ...document.getElementsByClassName('commentcontent')]);

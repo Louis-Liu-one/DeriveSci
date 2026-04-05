@@ -403,8 +403,7 @@ class ProbLabel(db.Model):
 
 
 def get_prob(probno):
-    if isinstance(probno, str):
-        return db.session.get(Prob, probno)
+    return db.session.get(Prob, str(probno))
 
 
 def search_probs(form, extra_req=None, reviewmode=False):
@@ -464,8 +463,7 @@ def add_prob(**kwargs):
 
 
 def get_solution(probno, solno):
-    if isinstance(probno, str) and isinstance(solno, int):
-        return db.session.get(ProbSolution, (probno, solno))
+    return db.session.get(ProbSolution, (str(probno), int(solno)))
 
 
 def add_solution(probno, title, content):
@@ -500,13 +498,12 @@ def add_images(probno, imgfiles):
 
 
 def get_label(labelname, create=False):
-    if isinstance(labelname, str):
-        label = db.session.get(ProbLabel, labelname)
-        if create and label is None:
-            label = ProbLabel(labelname=labelname)
-            db.session.add(label)
-            db.session.commit()
-        return label
+    label = db.session.get(ProbLabel, str(labelname))
+    if create and label is None:
+        label = ProbLabel(labelname=str(labelname))
+        db.session.add(label)
+        db.session.commit()
+    return label
 
 
 def add2labels(labelnames, prob):
@@ -590,13 +587,15 @@ class Comment(db.Model):
             return None  # 私信信息，无实际对象
         return None  # 未知帖子类型
 
+    def editable_for(self, user):
+        return user.is_authenticated and (user == self.user or user.isadmin)
+
     def __lt__(self, comment):
         return self.timestamp < comment.timestamp
 
 
-def get_comment(cmtid):
-    if isinstance(cmtid, int):
-        return db.session.get(Comment, cmtid)
+def get_comment(commentid):
+    return db.session.get(Comment, int(commentid))
 
 
 def clear_comments(post):

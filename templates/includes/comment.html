@@ -1,19 +1,19 @@
 {#
     要使用*讨论区*功能，需要：
-    1. 在模板开头引入`comment.html`，需要`with context`以支持`current_user`：
+    1. 在模板开头引入 `comment.html`，需要 `with context` 以支持 `current_user` 变量：
         ```
-        {% from "includes/comment.html" import commentarea with context %}
+        {% from "includes/comment.html" import 你需要的函数 with context %}
         ```
     2. 要在头部使用
         ```
         {{ moment.include_moment(local_js='你的moment.js的CDN或本地URL') }}
         {{ moment.locale('zh-cn') }}
         ```
-        引入moment.js并设置中文模式；
-    3. 要在头部引入`static/delete-comment.js`以使用删除功能；
-    4. 要在结尾引入`static/cmtform-onclick.js`以使用回复功能；
-    5. 要将`document.getElementsByClassName('commentcontent')`中所有元素
-        包含于`toRender`列表中以使用Markdown渲染。
+        加载 Moment 模块并设置中文模式；
+    3. 要在头部加载 `static/comment-utils.js` 以保证正常使用；
+    4. 如果要渲染评论中的 Markdown，则要先加载 `static/md-render.js`，然后要将
+        `document.getElementsByClassName('commentcontent')` 中所有元素传入
+        `renderElements()` 中即可实现渲染。
 #}
 {% from "includes/users.html" import user_name, user_avatar_img %}
 
@@ -70,9 +70,7 @@
             class="fa-solid fa-comment-dots"></i>
         {%- if current_user == comment.user and not with_post -%}
             <i title="删除评论" class="fa-solid fa-trash-can"
-                data-url="{{ url_for('delete_comment') }}"
-                onclick="deleteComment(
-                    this.dataset.url, '{{ comment.cmtid }}')"></i>
+                onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
         {%- endif -%}
         {%- if with_post -%} &nbsp;
             {% set post = comment.get_post() %}来自：{{ post }}
@@ -94,7 +92,7 @@
 
 {%- macro commentdiv(comment,
     toplevel=False, secondlevel=False, with_post=False) -%}
-<div class="comment">
+<div class="comment" data-commentid="{{ comment.cmtid }}">
     <span class="avatar" {%- if comment.user -%}
         data-url="{{ url_for('users', uid=comment.user.uid) }}"
         onclick="window.open(this.dataset.url)"{%- endif -%}>

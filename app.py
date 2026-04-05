@@ -4,18 +4,17 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 我们的网站支持如下的路由。
 
 用户操作：
-/login             登录
-/logout            登出*
-/register          注册
-/unregister        注销*
-/edit-profile      编辑信息
-/users/<uid>       查看他人主页
-/helps/            查看帮助列表
-/helps/<howto>     查看帮助
-/chat              私信聊天
+/login         登录
+/logout        登出*
+/register      注册
+/unregister    注销*
+/edit-profile  编辑信息
+/users/<uid>   查看他人主页
+/helps/        查看帮助列表
+/helps/<howto> 查看帮助
+/chat          私信聊天
 /post-comment/<post_type>/<post_ident>         发表评论*
 /post-comment/<post_type>/<post_ident>/<cmtid> 回复评论*
-/delete-comment                                删除评论*
 
 题目：
 /upload-prob                           上传题目
@@ -39,6 +38,7 @@ API：*
 /api/solution/upload        上传题解
 /api/solution/edit          编辑题解
 /api/solution/delete        删除题解
+/api/comment/delete         删除评论
 /api/chat/update-lastvisit  更新上次查看私信的时间
 /api/chat/send              发送私信
 /api/chat/messages          获取新收到的私信
@@ -117,15 +117,19 @@ def post_subcomment(post_type, post_ident, cmtid):
     return redirect(comment.get_post().url())
 
 
-@app.route('/delete-comment', methods=['POST'])
-@login_required
-def delete_comment():
-    cmtid = int(request.form.get('cmtid'))
-    comment = get_comment(cmtid)
-    if comment and current_user == comment.user:
-        db.session.delete(comment)
-        db.session.commit()
-    return redirect(comment.get_post().url())
+@app.route('/api/comment/delete', methods=['POST'])
+def api_delete_comment():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    commentid = int(request.json.get('commentid'))
+    comment = get_comment(commentid)
+    if not comment:
+        return {'ok': False, 'error': '未找到评论，此条评论可能已被删除。'}, 404
+    if not comment.editable_for(current_user):
+        abort(403)  # 无删除评论的权限
+    db.session.delete(comment)
+    db.session.commit()
+    return {'ok': True}
 
 
 # =========================== 题目各项网页 ===========================

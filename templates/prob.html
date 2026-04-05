@@ -14,9 +14,8 @@
 {%- if prob.review_status == 1 -%}
     {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
     {{- moment.locale('zh-cn') -}}
-    <script src="{{ url_for('static',
-        filename='delete-comment.js') }}"></script>
 {%- endif -%}
+<script src="{{ url_for('static', filename='comment-utils.js') }}"></script>
 <script src="{{ url_for('static', filename='prob-utils.js') }}"></script>
 {% endblock %}
 
@@ -97,7 +96,6 @@
         {{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
     {%- endif -%}
 </div>
-<script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>
     renderElements([
         bodyBlock, ...document.getElementsByClassName('commentcontent')]);

@@ -1,18 +1,4 @@
 
-let activeUser = document.getElementsByClassName('user-item active')[0];
-let timeOfLastMessage = '';
-let elements = {};
-messageInputElement.addEventListener('keypress', (event) => {
-    if (event.key == 'Enter' && messageInputElement.value) sendMessage(); });
-
-window.addEventListener('beforeunload', (event) => {
-    if (!target.value) return;
-    navigator.sendBeacon('/api/chat/update-lastvisit', new Blob(
-        [JSON.stringify({
-            receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
-        {type: "application/json; charset=UTF-8"}));
-});
-
 async function updateMessages() {
     if (!activeUser) return;
     try {
@@ -49,12 +35,12 @@ async function sendMessage() {
     } catch (err) { alert('发送失败'); }
 }
 
-async function updateUserLastVisit(receiver_uid, sender_uid) {
+async function updateUserLastVisit(receiverUid, senderUid) {
     try {
         const response = await fetch('/api/chat/update-lastvisit', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                receiver_uid: receiver_uid, sender_uid: sender_uid})});
+                receiver_uid: receiverUid, sender_uid: senderUid})});
         const result = await response.json();
     } catch (err) { console.error(err); }
 }
@@ -80,8 +66,7 @@ async function switchUser(element, uid) {
 function setUnreadCircle(uid, num) {
     if (!(uid in elements) || !num) return;
     redCircle = elements[uid].querySelector('div.unread-badge');
-    redCircle.style.display = 'inline';
-    redCircle.textContent = num;
+    redCircle.style.display = 'inline'; redCircle.textContent = num;
 }
 
 function addMessages(messages) {
@@ -103,4 +88,18 @@ function addMessage(messageInfo) {
     allChats[target.value].messages.push(messageInfo);
 }
 
-setInterval(updateMessages, 2000);
+document.addEventListener('DOMContentLoaded', () => {
+    window.activeUser
+        = document.getElementsByClassName('user-item active')[0];
+    window.timeOfLastMessage = ''; window.elements = {};
+    messageInputElement.addEventListener('keypress', (event) => {
+        if (event.key == 'Enter'
+            && messageInputElement.value) sendMessage(); });
+    setInterval(updateMessages, 2000); });
+
+window.addEventListener('beforeunload', (event) => {
+    if (!target.value) return;
+    navigator.sendBeacon('/api/chat/update-lastvisit', new Blob(
+        [JSON.stringify({
+            receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
+        {type: 'application/json; charset=UTF-8'})); });
