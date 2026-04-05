@@ -33,29 +33,29 @@
 </div>
 <div class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
-    <form class="mathprobsform" id="editform" enctype="multipart/form-data">
+    <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
         {%- if not editmode -%}
             <span>
-                <label for="probno">编号：</label>
-                <input required type="text" id="probno" name="probno"
+                <label for="probNo">编号：</label>
+                <input required type="text" id="probNo" name="probno"
                     autocomplete="off" spellcheck="false">
             </span>
         {%- else -%}
-            <input type="hidden" id="probno" name="probno"
+            <input type="hidden" id="probNo" name="probno"
                 value="{{ prob.probno }}">
         {%- endif -%}
         <span>
-            <label for="probtitle">名称：</label>
-            <input required type="text" id="probtitle" name="probtitle"
+            <label for="probTitle">名称：</label>
+            <input required type="text" id="probTitle" name="probtitle"
                 autocomplete="off" spellcheck="false"
                 {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
         </span>
         <span>
-            <label for="problabels">标签：</label>
-            <input type="text" id="problabels" name="problabels"
+            <label for="probLabel">标签：</label>
+            <div class="label-input" id="labelArea"></div>
+            <input type="text" id="probLabel" name="problabel"
                 autocomplete="off" spellcheck="false"
-                placeholder="输入题目标签，以CSV格式"{%- if editmode -%}
-                value="{{ list2csv(prob.as_labelnames()) }}"{%- endif -%}>
+                placeholder="输入题目标签，按回车键添加">
         </span>
         <span>
             <label for="statement">描述：</label>
@@ -65,36 +65,38 @@
             </textarea>
         </span>
         <span>
-            <label for="answer">答案：</label>
+            <label for="answerInputElement">答案：</label>
             <div class="answer">
                 <div class="answer-input">
-                    <input type="text" id="context" name="context"
+                    <input type="text" id="contextInputElement" name="context"
                         autocomplete="off" spellcheck="false"
-                        placeholder="以JSON格式输入各变量，无变量则此项置空或填{}">
-                    <input type="text" id="answer" name="answer"
+                        placeholder="以JSON格式输入各变量，可置空">
+                    <input type="text" id="answerInputElement" name="answer"
                         autocomplete="off" spellcheck="false"
                         placeholder="输入答案">
-                    <i onclick="addAnswerHTML(context, answer)"
-                        class="fa-solid fa-circle-plus"></i>
+                    <i class="fa-solid fa-circle-plus" onclick="addAnswerHTML(
+                        contextInputElement, answerInputElement)"></i>
                 </div>
-                <ul id="ulanswerlist"></ul>
+                <ul id="answerListElement"></ul>
             </div>
         </span>
         <span>
-            <label for="imgfiles">{% if editmode %}更多{% endif %}图片：</label>
-            <input type="file" id="imgfiles" name="imgfiles"
+            <label for="imageFiles">
+                {%- if editmode -%}更多{%- endif -%}图片：
+            </label>
+            <input type="file" id="imageFiles" name="imgfiles"
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
         <span>
             {%- if not editmode and current_user.isadmin -%}
-                <label for="isofficial">加入到官方题目？</label>
-                <input type="checkbox" name="isofficial" id="isofficial"
-                {%- if isofficial %} checked{% endif %}>
+                <label for="addToOfficial">加入到官方题目？</label>
+                <input type="checkbox" name="isofficial" id="addToOfficial"
+                {%- if isofficial %}checked{% endif %}>
             {%- endif -%}
         </span>
         <span>
             <button type="button" onclick="renderElement(
-                mdpreview, statement.value, 'block')">预览</button>
+                mdPreview, statement.value, 'block')">预览</button>
             {%- if editmode -%}
                 <button type="button" onclick="editProb()">上传</button>
             {%- else -%}
@@ -105,7 +107,7 @@
 </div>
 <div class="submitpart">
     <h3>预览区</h3>
-    <div class="markdown-body mdpreview" id="mdpreview"></div>
+    <div class="markdown-body mdpreview" id="mdPreview"></div>
     <p class="helpslink">
         <a target="_blank"
             href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
@@ -117,7 +119,11 @@
         </a>
     </p>
 </div>
-{%- if editmode -%}
-    <script>addAnswersBefore({{ prob.get_answer()|tojson }});</script>
-{%- endif -%}
+<script>
+    probLabel.addEventListener('keydown', addLabel);
+    {%- if editmode -%}
+        addRawAnswers({{ prob.get_answer()|list|tojson }});
+        addRawLabels({{ prob.as_labelnames()|list|tojson }});
+    {%- endif -%}
+</script>
 {% endblock %}

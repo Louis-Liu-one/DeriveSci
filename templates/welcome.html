@@ -74,21 +74,20 @@
 <div class="submitpart">
     {%- if user == current_user -%}
         <h3>{{ user_name(user) }}的简介</h3>
-        <form class="mathprobsform" method="POST"
-            action="{{ url_for('edit_introduction') }}">
+        <form class="mathprobsform">
             <span>
-                <textarea name="introduction" class="submittext"
-                    spellcheck="false"
+                <textarea id="introduction" name="introduction"
+                    class="submittext" spellcheck="false"
                     placeholder="输入你的简介">{%- if user.introduction -%}
                     {{ user.introduction }}{%- endif -%}</textarea>
             </span>
             <span>
-                <button class="submitbutton" type="submit">修改</button>
+                <button id="editIntroductionButton"
+                    class="submitbutton" type="button">修改</button>
             </span>
         </form>
     {%- elif user.introduction -%}
-        <h3>{{ user_name(user) }}的简介</h3>
-        <p>{{ user.introduction }}</p>
+        <h3>{{ user_name(user) }}的简介</h3><p>{{ user.introduction }}</p>
     {%- endif -%}
     <h3>{{ user_name(user) }}的文章</h3>
     <h4>{{ user_name(user) }}上传的题解</h4>
@@ -98,4 +97,15 @@
             with_head=True, with_probno=True, with_user=False) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </div>
+<script>
+    editIntroductionButton.addEventListener('click', async (event) => {
+        try {
+            const response = await fetch('/api/user/edit-introduction', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({introduction: introduction.value})});
+            const data = await response.json();
+            if (data.ok) alert('修改成功');
+            else alert(`修改失败：${data.error}`);
+        } catch (err) { alert(`修改失败：${err}`); } });
+</script>
 {% endblock %}

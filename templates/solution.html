@@ -34,10 +34,10 @@
     <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
     <h3 class="sidebar-title">题解来源</h3>{{- user_sidebar(solution.user) -}}
 </div>
-<div id="bodydiv" class="markdown-body bodypart">
-    <textarea id="bodytext">{{ solution.content }}</textarea>
+<div id="bodyBlock" class="markdown-body bodypart">
+    <textarea id="bodyText">{{ solution.content }}</textarea>
 </div>
-<div id="submitdiv" class="submitpart">
+<div id="submitBlock" class="submitpart">
     <h3>更多题解</h3>{{- solutionlist(suggested) -}}
     <h3>讨论区</h3>
     {{- commentarea(1, solution.get_post_ident(),
@@ -46,6 +46,6 @@
 <script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>
     renderElements([
-        bodydiv, ...document.getElementsByClassName('commentcontent')]);
+        bodyBlock, ...document.getElementsByClassName('commentcontent')]);
 </script>
 {% endblock %}

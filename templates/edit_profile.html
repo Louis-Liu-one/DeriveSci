@@ -4,13 +4,11 @@
 {% block title %}修改信息 - MathProbs{% endblock %}
 
 {% block form %}
-<form class="mathprobsform" action="{{ url_for('edit_profile') }}"
-    method="post" enctype="multipart/form-data">
+<form id="editForm" class="mathprobsform" enctype="multipart/form-data">
     <h3>修改信息</h3>
-    {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
     <span>
-        <label for="username">用户名：</label>
-        <input id="username" name="username" type="text"
+        <label for="userName">用户名：</label>
+        <input id="userName" name="username" type="text"
             spellcheck="false" placeholder="输入用户名"
             autocomplete="username" value="{{ current_user.name }}" required>
     </span>
@@ -25,9 +23,9 @@
             autocomplete="new-password">
     </span>
     <span>
-        <label for="confirmpassword">确认密码：</label>
-        <input id="confirmpassword" name="confirmpassword" type="password"
-            spellcheck="false" placeholder="再次确认密码"
+        <label for="passwordConfirmation">确认密码：</label>
+        <input id="passwordConfirmation" name="password_confirmation"
+            type="password" spellcheck="false" placeholder="再次确认密码"
             autocomplete="new-password">
     </span>
     <span>
@@ -35,8 +33,18 @@
         <input id="avatar" name="avatar" type="file"
             formenctype="multipart/form-data" accept="image/*">
     </span>
-    <span><button type="submit">修改</button></span>
+    <span><button id="editProfileButton" type="button">修改</button></span>
 </form>
+<script>
+    editProfileButton.addEventListener('click', async (event) => {
+        try {
+            const response = await fetch('/api/user/edit-profile', {
+                method: 'POST', body: new FormData(editForm)});
+            const data = await response.json();
+            if (data.ok) location.replace(data.url);
+            else alert(`操作失败：${data.error}`);
+        } catch (err) { alert(`操作失败：${err}`); } });
+</script>
 {% endblock %}
 
 {% block right_block %}

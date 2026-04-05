@@ -28,15 +28,14 @@ div.login form span { padding: 10px 5px; }
 div.register-back {
     display: flex; justify-content: center; align-items: center;
     width: 50%; height: 100%; margin: auto;
-    background-color: #5CCBE2; border-radius: 35px; color: white; }
+    background: #5CCBE2; border-radius: 35px; color: white; }
 div.register-front { text-align: center; }
 div.register-front h2 { font-weight: 700; }
 div.register-front p { margin: 15px 0 25px 0; }
 div.login-block div.text-center { text-align: center; }
 div.login-block button.register {
-    border: none; border-radius: 10px;
-    background-color: #00008019; color: white;
+    border: none; border-radius: 10px; background: #00008019; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
     transition: .5s; margin-bottom: 10px; }
 div.login-block button.register:hover {
-    background-color: #0000C033; cursor: pointer; transition: .5s; }
+    background: #0000C033; cursor: pointer; transition: .5s; }

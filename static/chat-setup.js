@@ -1,9 +1,9 @@
 
 let activeUser = document.getElementsByClassName('user-item active')[0];
-let lastmsgtime = '';
+let timeOfLastMessage = '';
 let elements = {};
-msginput.addEventListener('keypress', (event) => {
-    if (event.key == 'Enter' && msginput.value) sendMessage(); });
+messageInputElement.addEventListener('keypress', (event) => {
+    if (event.key == 'Enter' && messageInputElement.value) sendMessage(); });
 
 window.addEventListener('beforeunload', (event) => {
     if (!target.value) return;
@@ -16,21 +16,22 @@ window.addEventListener('beforeunload', (event) => {
 async function updateMessages() {
     if (!activeUser) return;
     try {
-        const response = await fetch(`/api/chat/messages`, {
+        const response = await fetch('/api/chat/messages', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                receiver_uid: currentUid, lastmsgtime: lastmsgtime})});
+                receiver_uid: currentUid, lastmsgtime: timeOfLastMessage})});
         const new_chats = await response.json();
         for (let uid in new_chats) {
             if (new_chats[uid].messages) {
                 messages = new_chats[uid].messages;
-                if (uid != target.value) all_chats[uid].messages
-                    = all_chats[uid].messages.concat(messages);
+                if (uid != target.value) allChats[uid].messages
+                    = allChats[uid].messages.concat(messages);
                 else addMessages(messages);
-                new_lastmsgtime = messages[messages.length - 1].timestamp;
-                if (!lastmsgtime
-                    || lastmsgtime && lastmsgtime < new_lastmsgtime)
-                    lastmsgtime = new_lastmsgtime;
+                updatedTimeOfLastMessage
+                    = messages[messages.length - 1].timestamp;
+                if (!timeOfLastMessage || timeOfLastMessage
+                    && timeOfLastMessage < updatedTimeOfLastMessage)
+                    timeOfLastMessage = updatedTimeOfLastMessage;
             }
             setUnreadCircle(uid, new_chats[uid].unread);
         }
@@ -43,8 +44,8 @@ async function sendMessage() {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 receiver_uid: parseInt(target.value), sender_uid: currentUid,
-                message: msginput.value})});
-        msginput.value = '';
+                message: messageInputElement.value})});
+        messageInputElement.value = '';
     } catch (err) { alert('发送失败'); }
 }
 
@@ -59,20 +60,20 @@ async function updateUserLastVisit(receiver_uid, sender_uid) {
 }
 
 async function switchUser(element, uid) {
-    sendarea.className = 'send-area';
-    if (window.viewcomments) viewcomments.style.display = 'none';
+    messageSenderArea.className = 'send-area';
+    if (window.viewCommentsItem) viewCommentsItem.style.display = 'none';
     if (target.value == uid) return;
     elements[uid] = element;
-    msginput.disabled = msgbutton.disabled = false;
+    messageInputElement.disabled = messageSenderButton.disabled = false;
     if (activeUser) activeUser.className = 'user-item';
     activeUser = element; target.value = uid;
-    chattitle.innerHTML = activeUser.innerHTML;
+    messageAreaTitle.innerHTML = activeUser.innerHTML;
     activeUser.className = 'user-item active';
     redCircle = activeUser.querySelector('div.unread-badge');
     if (redCircle) redCircle.style.display = 'none';
-    msgarea.innerHTML = '';
-    if (uid in all_chats) addMessages(all_chats[uid].messages);
-    else all_chats[uid] = {messages: []};
+    messageArea.innerHTML = '';
+    if (uid in allChats) addMessages(allChats[uid].messages);
+    else allChats[uid] = {messages: []};
     await updateUserLastVisit(currentUid, uid);
 }
 
@@ -85,10 +86,10 @@ function setUnreadCircle(uid, num) {
 
 function addMessages(messages) {
     for (let i in messages) addMessage(messages[i]);
-    new_lastmsgtime = messages[messages.length - 1].timestamp;
-    if (messages.length && (!lastmsgtime
-        || lastmsgtime && lastmsgtime < new_lastmsgtime))
-        lastmsgtime = new_lastmsgtime;
+    updatedTimeOfLastMessage = messages[messages.length - 1].timestamp;
+    if (messages.length && (!timeOfLastMessage
+        || timeOfLastMessage && timeOfLastMessage < updatedTimeOfLastMessage))
+        timeOfLastMessage = updatedTimeOfLastMessage;
 }
 
 function addMessage(messageInfo) {
@@ -96,10 +97,10 @@ function addMessage(messageInfo) {
     divElement.className = messageInfo.othersend
         ? 'message other-message' : 'message my-message';
     divElement.innerText = messageInfo.content;
-    msgarea.appendChild(divElement);
-    msgarea.scrollTop = msgarea.scrollHeight;
-    if (!target.value) all_chats[target.value] = {messages: []};
-    all_chats[target.value].messages.push(messageInfo);
+    messageArea.appendChild(divElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
+    if (!target.value) allChats[target.value] = {messages: []};
+    allChats[target.value].messages.push(messageInfo);
 }
 
 setInterval(updateMessages, 2000);

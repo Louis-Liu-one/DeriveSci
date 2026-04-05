@@ -9,7 +9,6 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /register          注册
 /unregister        注销*
 /edit-profile      编辑信息
-/edit-introduction 编辑简介*
 /users/<uid>       查看他人主页
 /helps/            查看帮助列表
 /helps/<howto>     查看帮助
@@ -19,30 +18,32 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /delete-comment                                删除评论*
 
 题目：
-/upload-prob           上传题目
-/labels/               所有标签
-/labels/<labelname>    单个标签
-/probs/                题集
-/probs/<probno>        题目<probno>
-/probs/<probno>/submit 提交题目<probno>的答案*
-/probs/<probno>/edit   编辑题目
+/upload-prob                           上传题目
+/labels/                               所有标签
+/labels/<labelname>                    单个标签
+/probs/                                题集
+/probs/<probno>                        题目<probno>
+/probs/<probno>/submit                 提交题目<probno>的答案*
+/probs/<probno>/edit                   编辑题目
 /probs/<probno>/upload-solution        上传题解
 /probs/<probno>/solutions/<solno>      查看题解
 /probs/<probno>/solutions/<solno>/edit 编辑题解
 /images/<probno>/<filename>            题目/题解图片
 
 API：*
-/api/prob/upload           上传题目
-/api/prob/set-official     将题目添加到官方题集
-/api/prob/review           通过/拒绝题目的审核
-/api/prob/edit             编辑题目
-/api/prob/delete           删除题目
-/api/solution/upload       上传题解
-/api/solution/edit         编辑题解
-/api/solution/delete       删除题解
-/api/chat/update-lastvisit 更新上次查看私信的时间
-/api/chat/send             发送私信
-/api/chat/messages         获取新收到的私信
+/api/prob/upload            上传题目
+/api/prob/set-official      将题目添加到官方题集
+/api/prob/review            通过/拒绝题目的审核
+/api/prob/edit              编辑题目
+/api/prob/delete            删除题目
+/api/solution/upload        上传题解
+/api/solution/edit          编辑题解
+/api/solution/delete        删除题解
+/api/chat/update-lastvisit  更新上次查看私信的时间
+/api/chat/send              发送私信
+/api/chat/messages          获取新收到的私信
+/api/user/edit-profile      编辑个人资料
+/api/user/edit-introduction 编辑个人简介
 
 标*的是无法通过输入网址查看的路由。
 
@@ -50,6 +51,7 @@ API：*
 '''
 
 import os
+import json
 import random
 import hashlib
 import datetime
@@ -261,12 +263,10 @@ def upload_solution(probno):
 @app.route('/api/prob/upload', methods=['POST'])
 def api_upload_prob():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno = request.form.get('probno')
     probtitle = request.form.get('probtitle')
-    problabels = [
-        labelname.replace(' ', '')
-        for labelname in csv2list(request.form.get('problabels'))]
+    problabels = json.loads(request.form.get('problabels', '[]'))
     statement = request.form.get('statement')
     answers = request.form.get('answers')
     imgfiles = request.files.getlist('imgfiles')
@@ -275,13 +275,13 @@ def api_upload_prob():
     review_status = 1 if current_user.isadmin else -1
     error = add_images(probno, imgfiles)
     if error is not None:
-        return {'ok': False, 'error': str(error)}
+        return {'ok': False, 'error': str(error)}, 400
     status, prob = add_prob(
         probno=probno, probtitle=probtitle, statement=statement,
         answer=answers, source=current_user,
         review_status=review_status, isofficial=isofficial)
     if not status:
-        return {'ok': False, 'error': str(prob)}
+        return {'ok': False, 'error': str(prob)}, 400
     add2labels(problabels, prob)
     return {'ok': True, 'url': prob.url()}
 
@@ -289,23 +289,21 @@ def api_upload_prob():
 @app.route('/api/prob/edit', methods=['POST'])
 def api_edit_prob():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno = request.form.get('probno')
     prob = get_prob(probno)
     if not prob:
-        abort(404)
+        abort(404)  # 未找到题目
     if not prob.editable_for(current_user):
-        abort(403)
+        abort(403)  # 无编辑权限
     probtitle = request.form.get('probtitle')
-    problabels = [
-        labelname.replace(' ', '')
-        for labelname in csv2list(request.form.get('problabels'))]
+    problabels = json.loads(request.form.get('problabels', '[]'))
     statement = request.form.get('statement')
     answers = request.form.get('answers')
     imgfiles = request.files.getlist('imgfiles')
     error = add_images(probno, imgfiles)
     if error is not None:
-        return {'ok': False, 'error': str(error)}
+        return {'ok': False, 'error': str(error)}, 400
     prob.edit(probtitle, problabels, statement, answers)
     return {'ok': True, 'url': prob.url()}
 
@@ -313,14 +311,14 @@ def api_edit_prob():
 @app.route('/api/prob/review', methods=['POST'])
 def api_review_prob():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     if not current_user.isadmin:
-        abort(403)
+        abort(403)  # 无审核题目的权限
     probno = request.json.get('probno')
     accept = bool(request.json.get('accept'))
     prob = get_prob(probno)
     if not prob:
-        abort(404)
+        abort(404)  # 未找到题目
     prob.review_status = 1 if accept else 0
     db.session.commit()
     return {
@@ -331,13 +329,13 @@ def api_review_prob():
 @app.route('/api/prob/set-official', methods=['POST'])
 def api_set_official_prob():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     if not current_user.isadmin:
-        abort(403)
+        abort(403)  # 无编辑官方题集的权限
     probno = request.json.get('probno')
     prob = get_prob(probno)
     if not prob:
-        return {'ok': False, 'error': '未能找到题目。'}, 400
+        abort(404)  # 未找到题目
     prob.isofficial = not prob.isofficial
     db.session.commit()
     return {'ok': True, 'isofficial': prob.isofficial}
@@ -346,13 +344,13 @@ def api_set_official_prob():
 @app.route('/api/prob/delete', methods=['POST'])
 def api_delete_prob():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno = request.json.get('probno')
     prob = get_prob(probno)
     if not prob or not prob.viewable_for(current_user):
-        return {'ok': False, 'error': '未能找到题目。'}, 400
+        abort(404)  # 未找到题目
     if not prob.editable_for(current_user):
-        abort(403)
+        abort(403)  # 无删除权限
     prob.problabels.clear()
     clear_comments(prob)
     db.session.delete(prob)
@@ -363,39 +361,39 @@ def api_delete_prob():
 @app.route('/api/solution/upload', methods=['POST'])
 def api_upload_solution():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno = request.form.get('probno')
     prob = get_prob(probno)
     if not prob:
-        abort(404)
+        abort(404)  # 未找到题目
     soltitle = request.form.get('soltitle')
     content = request.form.get('solution')
     imgfiles = request.files.getlist('imgfiles')
     error = add_images(probno, imgfiles)
     if error is not None:
-        return {'ok': False, 'error': str(error)}
+        return {'ok': False, 'error': str(error)}, 400
     status, solution = add_solution(probno, soltitle, content)
     if not status:
-        return {'ok': False, 'error': str(solution)}
+        return {'ok': False, 'error': str(solution)}, 400
     return {'ok': True, 'url': solution.url()}
 
 
 @app.route('/api/solution/edit', methods=['POST'])
 def api_edit_solution():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno, solno = request.form.get('probno'), int(request.form.get('solno'))
     solution = get_solution(probno, solno)
     if not solution or not solution.viewable_for(current_user):
-        abort(404)
+        abort(404)  # 未找到题解
     if not solution.editable_for(current_user):
-        abort(403)
+        abort(403)  # 无修改权限
     soltitle = request.form.get('soltitle')
     content = request.form.get('solution')
     imgfiles = request.files.getlist('imgfiles')
     error = add_images(probno, imgfiles)
     if error is not None:
-        return {'ok': False, 'error': str(error)}
+        return {'ok': False, 'error': str(error)}, 400
     solution.edit(soltitle, content)
     return {'ok': True, 'url': solution.url()}
 
@@ -403,14 +401,14 @@ def api_edit_solution():
 @app.route('/api/solution/delete', methods=['POST'])
 def api_delete_solution():
     if not current_user.is_authenticated:
-        return {'ok': False, 'error': '用户未登录。'}, 400
+        return {'ok': False, 'error': '用户未登录。'}, 401
     probno, solno = request.json.get('probno'), int(request.json.get('solno'))
     solution = get_solution(probno, solno)
     prob_url = solution.prob.url()
     if not solution or not solution.viewable_for(current_user):
-        return {'ok': False, 'error': '未能找到题解。'}, 400
+        abort(404)  # 未找到题解
     if not solution.editable_for(current_user):
-        abort(403)
+        abort(403)  # 无删除权限
     clear_comments(solution)
     db.session.delete(solution)
     db.session.commit()
@@ -463,10 +461,10 @@ def register():
         name = request.form.get('username')
         gender = int(request.form.get('gender'))
         password = request.form.get('password')
-        confirmpassword = request.form.get('confirmpassword')
+        password_confirmation = request.form.get('password_confirmation')
         avatar = request.files.get('avatar')
         status, user = register_user(
-            name, gender, password, confirmpassword, avatar)
+            name, gender, password, password_confirmation, avatar)
         if status:
             login_user(user, remember=True)
             return redirect(nextpage if nextpage else url_for('welcome'))
@@ -491,7 +489,7 @@ def users(uid):
 @app.route('/chat')
 @login_required
 def chat():
-    view_comments = request.args.get('view_comments') == 'True'
+    view_comments = request.args.get('view_comments', 'False') == 'True'
     if view_comments:
         return render_template('chat.html', view_comments=True)
     activeuid = request.args.get('activeuid')
@@ -503,6 +501,8 @@ def api_chat_update_lastvisit():
     try:
         receiver_uid = request.json.get('receiver_uid')
         sender_uid = request.json.get('sender_uid')
+        if not receiver_uid or not sender_uid:
+            return {'ok': False, 'error': '未能找到用户。'}, 400
         update_chatlastvisit(receiver_uid, sender_uid)
         return {'ok': True}
     except BaseException as err:
@@ -527,35 +527,42 @@ def api_chat_messages():
         receiver_uid = int(request.json.get('receiver_uid'))
         lastmsgtime = request.json.get('lastmsgtime')
         return jsonify(find_user(receiver_uid).all_chats(
-            datetime.datetime.fromisoformat(lastmsgtime)))
+            datetime.datetime.fromisoformat(
+                lastmsgtime)) if lastmsgtime else None)
     except BaseException as err:
         return {}, 400
 
 
-@app.route('/edit-profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    error = None
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        confirmpassword = request.form.get('confirmpassword')
-        avatar = request.files.get('avatar')
-        gender = int(request.form.get('gender'))
-        error = current_user.edit_profile(
-            username, password, confirmpassword, avatar, gender)
-        if error is None:
-            return redirect(url_for('welcome'))
-    return render_template('edit_profile.html', error=error)
+@app.route('/api/user/edit-profile', methods=['POST'])
+def api_edit_profile():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    username = request.form.get('username')
+    password = request.form.get('password')
+    password_confirmation = request.form.get('password_confirmation')
+    avatar = request.files.get('avatar')
+    gender = int(request.form.get('gender'))
+    error = current_user.edit_profile(
+        username, password, password_confirmation, avatar, gender)
+    if error is None:
+        return {'ok': True, 'url': url_for('welcome')}
+    return {'ok': False, 'error': str(error)}, 400
 
 
-@app.route('/edit-introduction', methods=['POST'])
-@login_required
-def edit_introduction():
-    introduction = request.form.get('introduction')
+@app.route('/api/user/edit-introduction', methods=['POST'])
+def api_edit_introduction():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    introduction = request.json.get('introduction')
     current_user.introduction = introduction
     db.session.commit()
-    return redirect(url_for('welcome'))
+    return {'ok': True}
+
+
+@app.route('/edit-profile')
+@login_required
+def edit_profile():
+    return render_template('edit_profile.html')
 
 
 @app.route('/avatars/<int:uid>')

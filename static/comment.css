@@ -17,7 +17,7 @@ p.commentname { margin: 0 0 5px 0; }
 p.commentfoot { margin: 8px 0 0 0; }
 p.commentfoot img, p.commentfoot i { float: right; width: 18px; height: 18px; }
 p.commentfoot img:hover {
-    background-color: #A2E3EC; border-radius: 50%; cursor: pointer; }
+    background: #A2E3EC; border-radius: 50%; cursor: pointer; }
 p.commentfoot i:hover { color: #5CCBE2; cursor: pointer; }
 
 div.commentcontent textarea { margin-top: 0; margin-bottom: 0; display: none; }

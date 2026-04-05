@@ -57,14 +57,14 @@
             {% else %}{{ url_for('problist',
                 reviewmode=True if reviewmode else False) }}{% endif %}">
         <span>
-            <label for="probno">编号：</label>
-            <input type="text" id="probno" name="probno" autocomplete="off"
+            <label for="probNo">编号：</label>
+            <input type="text" id="probNo" name="probno" autocomplete="off"
                 value="{{ form.get('probno', '') }}" spellcheck="false"
                 placeholder="查询特定编号的题目">
         </span>
         <span>
-            <label for="probtitle">名称：</label>
-            <input type="text" id="probtitle" name="probtitle"
+            <label for="probTitle">名称：</label>
+            <input type="text" id="probTitle" name="probtitle"
                 autocomplete="off" spellcheck="false"
                 value="{{ form.get('probtitle', '') }}"
                 placeholder="查询标题中含有指定文本的题目">
@@ -77,8 +77,8 @@
                 placeholder="查询内容中含有指定文本的题目">
         </span>
         <span>
-            <label for="problabels">标签：</label>
-            <input type="text" id="problabels" name="problabels"
+            <label for="probLabels">标签：</label>
+            <input type="text" id="probLabels" name="problabels"
                 autocomplete="off" spellcheck="false"
                 placeholder="输入题目标签，以CSV格式"
                 value="{{ form.get('problabels', '') }}">
@@ -91,8 +91,8 @@
         </span>
         {%- if reviewmode -%}
             <span>
-                <label for="review_status">状态：</label>
-                <select id="review_status" name="review_status">
+                <label for="reviewStatus">状态：</label>
+                <select id="reviewStatus" name="review_status">
                     <option value="all">所有题目</option>
                     <option value="toreview">待审核的题目</option>
                     <option value="accepted">已通过的题目</option>
@@ -101,8 +101,8 @@
             </span>
         {%- endif -%}
         <span>
-            <label for="probtype">类型：</label>
-            <select id="probtype" name="probtype">
+            <label for="probType">类型：</label>
+            <select id="probType" name="probtype">
                 <option value="all">所有题目</option>
                 <option value="officialprobs">仅官方题目</option>
                 <option value="noofficialprobs">仅非官方题目</option>
@@ -113,10 +113,10 @@
 </div>
 <script>
     {%- if form.get('probtype') -%}
-        probtype.value = ({{ form['probtype']|tojson }}).toString();
+        probType.value = ({{ form['probtype']|tojson }}).toString();
     {%- endif -%}
     {%- if form.get('review_status') -%}
-        review_status.value = ({{ form['review_status']|tojson }}).toString();
+        reviewStatus.value = ({{ form['review_status']|tojson }}).toString();
     {%- endif -%}
 </script>
 {% endblock %}

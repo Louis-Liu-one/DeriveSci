@@ -96,12 +96,12 @@ class User(db.Model, UserMixin):
             check_password_hash(self.password, password)
 
     def edit_profile(
-            self, name, password, confirmpassword, avatarfile, gender):
+            self, name, password, password_confirmation, avatarfile, gender):
         user_exists = db.session.query(
             User.query.filter_by(name=name).exists()).scalar()
         if name != self.name and user_exists:
             return '用户名与其他用户重复。'
-        elif password != confirmpassword:
+        elif password != password_confirmation:
             return '密码与确认密码不一致。'
         elif not name:
             return '用户名不能为空。'
@@ -206,10 +206,11 @@ def load_user(uid):
     return find_user(uid)
 
 
-def register_user(name, gender, password, confirmpassword, avatarfile):
+def register_user(name, gender, password, password_confirmation, avatarfile):
     user_exists = db.session.query(
         User.query.filter_by(name=name).exists()).scalar()
-    if name and password and not user_exists and password == confirmpassword:
+    if name and password and not user_exists \
+            and password == password_confirmation:
         user = User(
             name=name, gender=gender,
             password=generate_password_hash(password))
@@ -219,7 +220,7 @@ def register_user(name, gender, password, confirmpassword, avatarfile):
         db.session.add(user)
         db.session.commit()
         return True, user
-    elif password != confirmpassword:
+    elif password != password_confirmation:
         return False, '密码与确认密码不一致。'
     elif user_exists:
         return False, '用户名与其他用户重复。'

@@ -3,10 +3,10 @@ table.problist {
     width: 100%; border: 2px solid #A8D5F7;
     border-spacing: 0; border-radius: 12px; overflow: hidden; }
 table.problist tr { height: 36px; transition: .5s; }
-table.problist tr:nth-child(even) { background-color: aliceblue; }
+table.problist tr:nth-child(even) { background: aliceblue; }
 table.problist tr:not(.probhead):hover {
-    background-color: #D0EFFF; cursor: pointer; transition: .5s; }
-table.problist th { text-align: left; background-color: #A8D5F7; }
+    background: #D0EFFF; cursor: pointer; transition: .5s; }
+table.problist th { text-align: left; background: #A8D5F7; }
 table.problist td, table.problist th { border: none; }
 table.problist td.probno {
     width: 15%; font-family: AndaleMono; transition: .5s; }
@@ -24,7 +24,7 @@ table.problist td.source div i, table.problist td.soluser div i {
 table.problist td.review-status { width: 10%; }
 table.problist td.probno:hover, table.problist td.source:hover,
     table.problist td.soluser:hover {
-    background-color: #BBEFFF; transition: .5s; cursor: pointer; }
+    background: #BBEFFF; transition: .5s; cursor: pointer; }
 
 table.problist a.problabel {
     text-decoration: none; font-size: 15px; color: black;
@@ -35,6 +35,7 @@ table.problist a.problabel:hover {
     background: #A8D5F7; border-color: #A8D5F7;
     transform: translateY(-.6px) scale(1.01); box-shadow: 0 3px 6px #1E40AF10;
     transition: .5s ease-out; cursor: pointer; }
+
 table.labellist {
     width: 100%; border: 2px solid lightskyblue;
     border-spacing: 0; border-radius: 7px; }

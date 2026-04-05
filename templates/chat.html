@@ -6,7 +6,9 @@
 
 {% set all_chats = current_user.all_chats() %}
 
-{%- if not view_comments -%}{% block load_markdown %}{% endblock %}{%- endif -%}
+{% block load_markdown %}
+    {%- if view_comments -%}{{- super() -}}{%- endif -%}
+{% endblock %}
 
 {% block title %}私信聊天 - MathProbs{% endblock %}
 
@@ -47,13 +49,13 @@
 </div>
 <div class="mainpart">
     <div class="chat-container">
-        <div class="user-list" id="userlist">
+        <div class="user-list">
             {%- if view_comments -%}
-            <div class="user-item active" id="viewcomments">
-                <div class="avatar-wrap">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>未读评论
-            </div>
+                <div class="user-item active" id="viewCommentsItem">
+                    <div class="avatar-wrap">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>未读评论
+                </div>
             {%- endif -%}
             {%- set ns = namespace(active=False) -%}
             {%- for uid in all_chats -%}
@@ -91,8 +93,8 @@
         </div>
         <div class="chat-box">
             {%- if view_comments -%}
-                <div class="chat-header" id="chattitle">未读评论</div>
-                <div class="message-area" id="msgarea">
+                <div class="chat-header" id="messageAreaTitle">未读评论</div>
+                <div class="message-area" id="messageArea">
                     {% set unread_comments = current_user.unread_comments() %}
                     {% if unread_comments %}
                         <div class="commentlist">
@@ -105,36 +107,36 @@
                     {% do current_user.update_cmtlastvisit() %}
                 </div>
             {%- else -%}
-                <div class="chat-header" id="chattitle">
+                <div class="chat-header" id="messageAreaTitle">
                     {%- if activeuser -%}
                         <div class="avatar-wrap">
                             {{- user_avatar_img(activeuser) -}}
                         </div>{{- user_name(activeuser) -}}
                     {%- else -%}消息列表{%- endif -%}
                 </div>
-                <div class="message-area" id="msgarea"></div>
+                <div class="message-area" id="messageArea"></div>
             {%- endif -%}
             <div class="send-area{% if view_comments %} hidden{% endif %}"
-                id="sendarea">
-                <input type="text" name="message" id="msginput"
+                id="messageSenderArea">
+                <input type="text" name="message" id="messageInputElement"
                     placeholder="输入消息……" autocomplete="off"
                     {%- if not activeuser -%}disabled{%- endif -%}>
                 <input type="hidden" name="target" id="target"
                     {%- if activeuser -%}
                     value="{{ activeuser.uid }}"{%- endif -%}>
-                <button type="button" id="msgbutton" onclick="sendMessage()"
-                    {%- if not activeuser -%}disabled
-                    {%- endif -%}>发送</button>
+                <button type="button" id="messageSenderButton"
+                    onclick="sendMessage()"
+                    {%- if not activeuser -%}disabled{%- endif -%}>发送</button>
             </div>
         </div>
     </div>
 </div>
 <script src="{{ url_for('static', filename='chat-setup.js') }}"></script>
 <script>
-    all_chats = {{ all_chats|tojson }};
+    allChats = {{ all_chats|tojson }};
     currentUid = {{ current_user.uid|tojson }};
     {%- if activeuser -%}
-        addMessages(all_chats[{{ activeuser.uid|tojson }}].messages);
+        addMessages(allChats[{{ activeuser.uid|tojson }}].messages);
     {%- endif -%}
 </script>
 {%- if view_comments -%}

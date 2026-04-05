@@ -1,13 +1,11 @@
 
-try {
-    if (commentbutton.length === undefined) {
-        commentbutton = [commentbutton]; subcommentform = [subcommentform];
+if (window.commentSenderButton) {
+    if (commentSenderButton.length === undefined) {
+        commentSenderButton = [commentSenderButton];
+        subCommentForm = [subCommentForm];
     }
-    for (let i = 0; i < commentbutton.length; i++) {
-        commentbutton[i].addEventListener('click', function (event) {
-            if (subcommentform[i].style.display != 'inline')
-                subcommentform[i].style.display = 'inline';
-            else subcommentform[i].style.display = 'none';
-        });
-    }
-} catch (e) { /* when commentbutton is not defined */ }
+    Array.from(subCommentForm).forEach((form, i) => {
+        commentSenderButton[i].addEventListener('click', (event) => {
+            if (form.style.display != 'inline') form.style.display = 'inline';
+            else form.style.display = 'none'; }); });
+}

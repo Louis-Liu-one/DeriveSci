@@ -29,15 +29,15 @@
 </div>
 <div class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
-    <form class="mathprobsform" id="editform" enctype="multipart/form-data">
-        <input type="hidden" name="probno" id="probno" value="{{ prob.probno }}">
+    <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
+        <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
         {%- if editmode -%}
-            <input type="hidden" name="solno" id="solno"
+            <input type="hidden" name="solno" id="solNo"
                 value="{{ solution.solno }}">
         {%- endif -%}
         <span>
-            <label for="soltitle">标题：</label>
-            <input required type="text" id="soltitle" name="soltitle"
+            <label for="solTitle">标题：</label>
+            <input required type="text" id="solTitle" name="soltitle"
                 autocomplete="off" spellcheck="false"
                 {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
         </span>
@@ -49,13 +49,13 @@
             </textarea>
         </span>
         <span>
-            <label for="imgfiles">{% if editmode %}更多{% endif %}图片：</label>
-            <input type="file" id="imgfiles" name="imgfiles"
+            <label for="imageFiles">{% if editmode %}更多{% endif %}图片：</label>
+            <input type="file" id="imageFiles" name="imgfiles"
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
         <span>
             <button type="button" onclick="renderElement(
-                mdpreview, solution.value, 'block')">预览</button>
+                mdPreview, solution.value, 'block')">预览</button>
             {%- if editmode -%}
                 <button type="button" onclick="editSolution()">上传</button>
             {%- else -%}
@@ -66,7 +66,7 @@
 </div>
 <div class="submitpart">
     <h3>预览区</h3>
-    <div class="markdown-body mdpreview" id="mdpreview"></div>
+    <div class="markdown-body mdpreview" id="mdPreview"></div>
     <p class="helpslink">
         <a target="_blank"
             href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">

@@ -32,7 +32,7 @@
 {%- endmacro -%}
 
 {%- macro commentform_main(post_type, post_ident) -%}
-    <form id="commentform" method="POST" class="mathprobsform"
+    <form id="commentForm" method="POST" class="mathprobsform"
         action="{{ url_for('post_comment',
             post_type=post_type, post_ident=post_ident) }}">
         <span><textarea name="commenttext" class="submittext"
@@ -42,7 +42,7 @@
 {%- endmacro -%}
 
 {%- macro commentform_sub(comment, new_window=False) -%}
-<form id="subcommentform" method="POST" class="mathprobsform"
+<form id="subCommentForm" method="POST" class="mathprobsform"
     action="{{ url_for('post_subcomment',
         post_type=comment.post_type, post_ident=comment.post_ident,
         cmtid=comment.cmtid) }}" {% if new_window %}target="_blank"{% endif %}>
@@ -66,17 +66,17 @@
     </div>
     <p class="commentfoot">
         {{- comment_timestamp(comment) -}}
-        <i id="commentbutton" title="发表评论"
+        <i id="commentSenderButton" title="发表评论"
             class="fa-solid fa-comment-dots"></i>
         {%- if current_user == comment.user and not with_post -%}
-            <i id="deletebutton" title="删除评论" class="fa-solid fa-trash-can"
+            <i title="删除评论" class="fa-solid fa-trash-can"
                 data-url="{{ url_for('delete_comment') }}"
                 onclick="deleteComment(
                     this.dataset.url, '{{ comment.cmtid }}')"></i>
         {%- endif -%}
         {%- if with_post -%} &nbsp;
             {% set post = comment.get_post() %}来自：{{ post }}
-            <i id="gotopostbutton" title="前往帖子" class="fa-solid fa-newspaper"
+            <i title="前往帖子" class="fa-solid fa-newspaper"
                 data-url="{{ post.url() }}"
                 onclick="window.open(this.dataset.url)"></i>
         {%- endif -%}

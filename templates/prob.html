@@ -29,8 +29,9 @@
     {%- endif -%}
     {{- view_solution(prob) }}{{ upload_solution(prob) -}}
     {%- if current_user.isadmin -%}
-        <a class="sidebar-link" id="setofficial" data-probno="{{ prob.probno }}">
-            <div class="sidebar-item" id="setofficialdiv">
+        <a class="sidebar-link" id="officialSidebarSetter"
+            data-probno="{{ prob.probno }}">
+            <div class="sidebar-item" id="officialSetterBlock">
                 {%- if prob.isofficial -%}
                     <i class="fa-solid fa-circle-minus"></i>从官方题目移除
                 {%- else -%}
@@ -42,12 +43,12 @@
     {{- problabels_sidebar(prob) -}}
     <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
 </div>
-<div id="bodydiv" class="markdown-body bodypart">
-    <textarea id="bodytext">{{ prob.statement }}</textarea>
+<div id="bodyBlock" class="markdown-body bodypart">
+    <textarea id="bodyText">{{ prob.statement }}</textarea>
 </div>
-<div id="submitdiv" class="submitpart">
+<div id="submitBlock" class="submitpart">
     {%- if prob.review_status != 1 -%}
-        <p class="helpslink hidden" id="isofficialtip">本题是官方题目。</p>
+        <p class="helpslink hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}
             {%- if prob.review_status == 0 -%}
                 <p class="helpslink">你的题目未通过审核。</p>
@@ -69,13 +70,13 @@
         {%- endif -%}
     {%- else -%}
         <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}"
-            id="isofficialtip">本题是官方题目。</p>
+            id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.answer != '[]' -%}
             <h3>提交答案</h3>
             <p class="helpslink">
                 服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。
             </p>
-            <form id="answerform" class="mathprobsform" method="POST"
+            <form class="mathprobsform" method="POST"
                 action="{{ url_for('submit', probno=prob.probno) }}">
                 <span>
                     <textarea name="answertext" class="submittext"
@@ -99,9 +100,9 @@
 <script src="{{ url_for('static', filename='cmtform-onclick.js') }}"></script>
 <script>
     renderElements([
-        bodydiv, ...document.getElementsByClassName('commentcontent')]);
+        bodyBlock, ...document.getElementsByClassName('commentcontent')]);
     {%- if current_user.isadmin -%}
-        setofficial.addEventListener('click', setOfficialProb);
+        officialSidebarSetter.addEventListener('click', setOfficialProb);
     {%- endif -%}
 </script>
 {% endblock %}

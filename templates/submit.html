@@ -58,8 +58,8 @@
             <font color="#D75746"><b>{{ submission.score }}</b></font>
         {%- endif -%}
     </p>
-    <div id="answerdiv">
-        <textarea id="answertext">**求值结果：**
+    <div id="answerBlock">
+        <textarea id="answerText">**求值结果：**
             {%- if answer_latex %} ${{ answer_latex }}$
             {%- else %} 无法求值{%- endif -%}
         </textarea>
@@ -71,7 +71,7 @@
     </p>
 </div>
 <div class="submitpart">
-    <h3>查看题解</h3>{{ solutionlist(prob.solutions) }}
+    <h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}
 </div>
-<script>renderElements([answerdiv]);</script>
+<script>renderElements([answerBlock]);</script>
 {% endblock %}

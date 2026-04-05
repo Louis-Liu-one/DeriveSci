@@ -9,8 +9,8 @@
     <h3>注册</h3>
     {%- if error -%}<p class="errormsg">错误：{{ error }}</p>{%- endif -%}
     <span>
-        <label for="username">用户名：</label>
-        <input id="username" name="username" type="text"
+        <label for="userName">用户名：</label>
+        <input id="userName" name="username" type="text"
             spellcheck="false" placeholder="请输入用户名"
             autocomplete="username" required>
     </span>
@@ -22,9 +22,9 @@
             autocomplete="new-password" required>
     </span>
     <span>
-        <label for="confirmpassword">确认：</label>
-        <input id="confirmpassword" name="confirmpassword" type="password"
-            spellcheck="false" placeholder="再次确认密码"
+        <label for="passwordConfirmation">确认：</label>
+        <input id="passwordConfirmation" name="password_confirmation"
+            type="password" spellcheck="false" placeholder="再次确认密码"
             autocomplete="new-password" required>
     </span>
     <span>

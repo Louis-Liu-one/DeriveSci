@@ -8,8 +8,8 @@
     <h3>登录</h3>
     {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
     <span>
-        <label for="username">用户名：</label>
-        <input id="username" name="username" type="text"
+        <label for="userName">用户名：</label>
+        <input id="userName" name="username" type="text"
             spellcheck="false" placeholder="请输入用户名"
             autocomplete="username" required>
     </span>
@@ -27,13 +27,11 @@
 {% endblock %}
 
 {% block right_block %}
-<h2>没有账号？</h2>
-<p>立即注册</p>
+<h2>没有账号？</h2><p>立即注册</p>
 <a href="{{ url_for('register', next=next) }}">
     <button class="register" type="button">注册</button>
 </a>
-<h2>不想登录或注册？</h2>
-<p>直接看题</p>
+<h2>不想登录或注册？</h2><p>直接看题</p>
 <a href="{{ url_for('problist') }}">
     <button class="register" type="button">题集</button>
 </a>
