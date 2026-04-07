@@ -161,32 +161,30 @@ class FPSliceList:
 class FPElement:
     '''一切语法树结点的基类。
 
-    语法树求值之前必须调用`setup_stack()`初始化调用栈。
+    语法树求值之前必须调用 `setup_stack()` 初始化调用栈。
     '''
 
     def __init__(self, children=None):
         '''初始化语法树结点。
 
-        `children`参数提供结点的孩子，即与结点关联的其它结点，
-        为`setup_stack()`方法使用。
+        `children` 参数提供结点的孩子，即与结点关联的其它结点，
+        为 `setup_stack()` 方法使用。
         '''
         self.children = [] if children is None else children
         self.stack = None
 
     def setup_stack(self, stack):
+        '''初始化调用栈，求值前务必进行。'''
         self.stack = stack
         for child in self.children:
             child.setup_stack(stack)
 
-    def __str__(self):
-        return repr(self)
-
     def do(self, context=None, local_scope=False):
         '''执行语句，求得程序返回值。
 
-        为保证接口统一，子类覆盖的`do()`方法要实现`context`参数。
-        `context`参数接受一个字典，若指定了`local_scope=True`，
-        则在调用栈中创建新的变量作用域，其包含的初始变量在`context`中。
+        为保证接口统一，子类覆盖的 `do()` 方法要实现 `context` 参数。
+        `context` 参数接受一个字典，若指定了 `local_scope=True`，
+        则在调用栈中创建新的变量作用域，其包含的初始变量在 `context` 中。
         '''
         pass
 
@@ -569,14 +567,10 @@ def _whileloop(tokens):
     return WhileLoop(_as_fpelement(condition), body)
 
 
-def _globalstmt(tokens):
-    _, *identifiers = tokens
-    return GlobalStatement(identifiers)
-
-
-def _nonlocalstmt(tokens):
-    _, *identifiers = tokens
-    return NonlocalStatement(identifiers)
+def _global_nonlocal_stmt(tokens):
+    keyword, *identifiers = tokens
+    return GlobalStatement(identifiers) if keyword == 'global' \
+        else NonlocalStatement(identifiers)
 
 
 def _as_statement(tokens):
@@ -710,15 +704,13 @@ RULE_judgement = (
 RULE_whileloop = (
     KW_WHILE + RULE_primary
     + (RULE_statement | RULE_stmtsblock)).set_parse_action(_whileloop)
-RULE_global = (
-    KW_GLOBAL + IDENTIFIER + ZeroOrMore(COMMA + IDENTIFIER) + Opt(COMMA)
-    ).set_parse_action(_globalstmt)
-RULE_nonlocal = (
-    KW_NONLOCAL + IDENTIFIER + ZeroOrMore(COMMA + IDENTIFIER) + Opt(COMMA)
-    ).set_parse_action(_nonlocalstmt)
+RULE_global_nonlocal = (
+    (KW_GLOBAL | KW_NONLOCAL) + IDENTIFIER
+    + ZeroOrMore(COMMA + IDENTIFIER) + Opt(COMMA)
+    ).set_parse_action(_global_nonlocal_stmt)
 RULE_statement << (
     RULE_assignment | RULE_funcdefine | RULE_return
-    | RULE_judgement | RULE_whileloop | RULE_global | RULE_nonlocal
+    | RULE_judgement | RULE_whileloop | RULE_global_nonlocal
     | RULE_stmtsblock | RULE_expr).set_parse_action(_as_statement)
 
 RULE_statements = (

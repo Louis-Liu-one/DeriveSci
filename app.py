@@ -440,7 +440,7 @@ def helplist():
 
 @app.route('/')
 def home():
-    return redirect(url_for('welcome'))
+    return render_template('homepage.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])

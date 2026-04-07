@@ -3,7 +3,10 @@
 
 {% block load_markdown %}{% endblock %}
 
-{% block title %}题集 - MathProbs{% endblock %}
+{% block title %}
+{%- if oflabel -%}标签：{{- labelname }} {% else -%}题集 {% endif -%}
+- MathProbs
+{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
@@ -45,10 +48,10 @@
 </div>
 <div class="bodypart">
     <h3>{% if query %}满足条件的{% else %}所有{% endif %}题目</h3>
-    {%- if probs.first() and reviewmode -%}
+    {%- if not probs.first() -%}<p>暂无</p>
+    {%- elif reviewmode -%}
         {{- problist(probs, with_review_status=True) -}}
-    {%- elif not reviewmode -%}{{- problist(probs) -}}
-    {%- else -%}<p>暂无</p>{%- endif -%}
+    {%- else -%}{{- problist(probs) -}}{%- endif -%}
 </div>
 <div class="submitpart">
     <h3>查询题目</h3>

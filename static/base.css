@@ -12,91 +12,99 @@
         url(/static/fonts/Helvetica-Bold.woff2) format('woff2'),
         url(/static/fonts/Helvetica-Bold.woff) format('woff'); }
 
-p.helpslink { color: gray; font-size: 13px; line-height: 25px; }
+p.helpslink { color: #6C757D; font-size: 13px; line-height: 25px; }
 p.helpslink a { color: inherit; text-decoration: none; }
-p.helpslink a:hover { color: #349AD5; }
-.disabled { cursor: not-allowed !important; }
+p.helpslink a:hover { color: #34AAE0; }
+.disabled { cursor: not-allowed !important; opacity: .6; }
 .hidden { display: none !important; }
 div.unread-badge {
-    position: absolute; top: -8px; right: -8px; min-width: 18px; height: 18px;
-    line-height: 18px; border-radius: 9px; background: #f56C6C; color: white;
-    font-size: 11px; text-align: center; }
+    position: absolute; top: 0; right: 0; min-width: 18px; height: 18px;
+    line-height: 18px; border-radius: 50%; background: #FF4D4F; color: white;
+    font-size: 11px; font-weight: bold; text-align: center;
+    box-shadow: 0 2px 5px #00000026; z-index: 10; }
 
 /******************************* navbar *******************************/
 
 div.navbar {
-    position: fixed; padding-left: 0; width: 100%; height: 80px;
-    left: 0; top: 0; background: #34AAE0; }
-
-ul.navbar-items { list-style: none; margin: 0; padding: 0; }
-ul.navbar-items li.logo-image, li.navbar-item {
-    height: 80px; text-align: center; color: white; transition: .5s;
-    font-size: 15px; font-weight: bold; font-family: Helvetica-Bold; }
-ul.navbar-items li.logo-image:hover, li.navbar-item:hover {
-    transition: .5s; background: #0082; cursor: pointer; }
+    position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+    background: #34AAE0; box-shadow: 0 2px 10px #00000019;
+    z-index: 1000; display: flex; align-items: center; }
+ul.navbar-items {
+    list-style: none; height: 100%; display: flex; align-items: center;
+    gap: 3px; margin: 0; padding: 0 6px 0 0; width: 100%; }
+ul.navbar-items li {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; }
 ul.navbar-items li.logo-image {
-    width: 80px; float: left; margin-right: 10px; padding: 0 5px; }
-ul.navbar-items li.logo-image img {
-    width: 50px; height: 50px; padding-top: 5px; }
+    width: 80px; color: white; font-size: 15px; font-family: Helvetica-Bold;
+    text-align: center; overflow: hidden; margin: 0 8px; }
 ul.navbar-items li.logo-text {
-    display: flex; align-items: center;
-    height: 80px; line-height: 80px;
-    font-weight: bold; font-size: 32px; font-family: AndaleMono;
-    text-decoration: none; color: white; float: left; }
+    font-family: AndaleMono; font-size: 28px; font-weight: bold; color: white;
+    flex-direction: row; align-items: center; height: 100%; line-height: 100%;
+    margin-right: auto; white-space: nowrap; }
 ul.navbar-items li.logo-text img {
-    width: 50px; height: 50px;
-    border-radius: 50%; margin-right: 0; color: white; }
-ul.navbar-items li.logo-text i {
-    font-size: 45px; margin-right: 0; color: white; }
+    width: 45px; height: 45px; border-radius: 50%; margin-right: 10px;
+    object-fit: cover; }
+ul.navbar-items li.logo-text i { font-size: 32px; color: white; }
 ul.navbar-items li.logo-text i.gender {
     font-size: 20px; margin: 30px 10px 0 -20px;
     -webkit-text-stroke: 1px white; }
-ul.navbar-items li.logo-text i.admin { font-size: 30px; margin-right: 5px; }
-
-li.navbar-item {
-    position: relative; width: 72px; float: right; line-height: 20px; }
-li.navbar-item img { width: 50px; height: 50px; padding-top: 3px; }
-li.navbar-avatar img {
-    width: 45px; height: 45px; padding-top: 7px; border-radius: 50%; }
-li.navbar-item i { font-size: 36px; padding: 10px 0; }
-li.navbar-item div.unread-badge { top: 6px; right: 6px; font-size: 12px; }
+ul.navbar-items li.logo-text i.admin { font-size: 24px; margin-right: 4px; }
+ul.navbar-items li.navbar-item {
+    position: relative; width: 64px; color: white; line-height: 15px;
+    font-family: Helvetica-Bold; font-size: 15px; font-weight: bold;
+    text-align: center; border-radius: 8px; transition: all .2s ease;
+    padding: 4px 1px; margin: 0 1px; overflow: hidden; }
+ul.navbar-items li.navbar-item i, ul.navbar-items li.navbar-item img,
+ul.navbar-items li.logo-image img {
+    font-size: 30px; height: 36px; margin: 3px 0 -5px 0; }
+ul.navbar-items li.logo-image img { height: 48px; margin-bottom: -15px; }
+ul.navbar-items li.navbar-item img { border-radius: 50%; }
+ul.navbar-items li.navbar-item:hover { background: #FFFFFF2E; }
+ul.navbar-items a {
+    text-decoration: none !important; color: inherit !important; }
 
 div.below-navbar {
-    position: fixed; top: 80px; left: 0;
-    width: 100%; height: calc(100% - 80px); display: flex; }
+    display: flex; position: fixed;
+    top: 80px; left: 0; width: 100%; height: calc(100vh - 80px); }
 
 /******************************* sidebar *******************************/
 
 div.sidebar {
-    background: #5CCBE2; padding: 5px 5px 0 0; margin-right: 15px;
-    width: 16%; height: 100%; overflow-y: auto; font-family: Helvetica; }
-h3.sidebar-title { color: aliceblue; text-align: right; margin-right: 5px; }
-a.sidebar-link { text-decoration: none; }
+    width: 220px; height: 100%; background: #F8FAFC;
+    border-right: 1px solid #E6E8EB; overflow-y: auto; font-family: Helvetica;
+    padding: 15px 0; box-shadow: 2px 0 8px #0000000A; margin-right: 18px; }
+h3.sidebar-title {
+    color: #34AAE0; text-align: right; margin: 18px 18px 12px 0;
+    font-size: 14px; font-weight: bold; text-transform: uppercase;
+    letter-spacing: .5px; }
 div.sidebar-item {
     display: flex; align-items: center; justify-content: flex-end;
-    line-height: 36px; color: white; margin-top: 10px; padding-right: 10px;
-    cursor: pointer; background: #00008019; border-radius: 0 8px 8px 0;
-    transform: translateX(-3px); transition: .5s; }
-div.sidebar-item img { width: 27px; height: 27px; margin-right: 3px; }
+    height: 40px; color: #2D3748; margin: 7px 8px 7px 0; padding-right: 16px;
+    background: #E8F4F8; border-radius: 0 8px 8px 0;
+    border-right: 3px solid transparent; transition: all .25s ease; }
+div.sidebar-item i, div.sidebar-item img {
+    margin-right: 10px !important; width: 18px; height: 18px;
+    font-size: 16px; color: #34AAE0; }
 div.sidebar-item img.avatar {
-    width: 27px; height: 27px;
-    margin-right: 5px; border-radius: 50%; color: white; }
-div.sidebar-item i { font-size: 20px; margin-right: 5px; }
+    width: 24px; height: 24px; border-radius: 50%; margin-right: 6px; }
 div.sidebar-item:not(.disabled):hover {
-    transition: transform background-color .6s ease-out;
-    transform: translateX(0); background: #0000C033; }
+    background: #34AAE0; color: white; border-right: 3px solid #1D7DAC;
+    cursor: pointer; }
+div.sidebar-item:hover i { color: white; }
+div.sidebar-item.disabled { color: #999; background: #F1F5F9; }
+a.sidebar-link { text-decoration: none; color: inherit; }
 
 /******************************* blocks *******************************/
 
 div.mainpart, div.bodypart, div.submitpart, div.tocblock, div.contentblock {
-    margin: 15px 15px 15px 0; padding: 12px; flex-grow: 1;
-    overflow-y: auto; border-radius: 20px; box-shadow: 1px 1px 3px #0008;
-    font-family: Helvetica; }
+    margin: 15px 18px 15px 0; padding: 18px; flex-grow: 1; overflow-y: auto;
+    border-radius: 12px; box-shadow: 0 2px 8px #0000000F;
+    background: white; font-family: Helvetica; }
 div.mainpart { width: 80%; }
 div.bodypart { width: 45%; }
 div.bodypart img { width: 100%; }
 div.submitpart { width: 30%; }
-div.submitpart form.mathprobsform { border: none; padding: 0; }
 div.submitpart textarea.submittext { width: 100%; height: 80px; }
 div.submitpart h3 { clear: both; }
 div.tocblock { width: 24%; margin-left: 10px; }
@@ -104,8 +112,8 @@ div.tocblock h3 { margin-bottom: 0; }
 nav.table-of-contents ul { padding-left: 16px; }
 nav.table-of-contents li { padding-top: 8px; }
 nav.table-of-contents a, div.contentblock a {
-    text-decoration: none; color: #54AAE0; }
+    text-decoration: none; color: #34AAE0; }
 nav.table-of-contents a:hover, div.contentblock a:hover {
-    text-decoration: underline; color: #349AD5; }
+    text-decoration: underline; }
 div.contentblock { width: 71%; }
 div#bodyBlock, div.contentblock nav.table-of-contents { display: none; }

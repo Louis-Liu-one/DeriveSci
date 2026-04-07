@@ -39,21 +39,6 @@
             <li id="navbarTitleElement" class="logo-text">
                 {%- block navbar_title -%}{%- endblock -%}
             </li>
-            {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
-            {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
-            {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {%- if current_user.is_authenticated -%}
-                {%- set unread_comments = current_user.unread_comments() -%}
-                {%- if unread_comments -%}
-                    {{- navbar_item(url_for('chat', view_comments=True),
-                        'envelope', '评论', unread_comments|length) -}}
-                {%- else -%}
-                    {{- navbar_item(url_for('chat', view_comments=True),
-                        'envelope-circle-check', '评论') -}}
-                {%- endif -%}
-                {{- navbar_item(url_for('chat'), 'comments', '私信',
-                    current_user.unread_chats_num()) -}}
-            {%- endif -%}
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}
@@ -64,6 +49,21 @@
                     {%- endif -%}
                 </li>
             </a>
+            {%- if current_user.is_authenticated -%}
+                {{- navbar_item(url_for('chat'), 'comments', '私信',
+                    current_user.unread_chats_num()) -}}
+                {%- set unread_comments = current_user.unread_comments() -%}
+                {%- if unread_comments -%}
+                    {{- navbar_item(url_for('chat', view_comments=True),
+                        'envelope', '评论', unread_comments|length) -}}
+                {%- else -%}
+                    {{- navbar_item(url_for('chat', view_comments=True),
+                        'envelope-circle-check', '评论') -}}
+                {%- endif -%}
+            {%- endif -%}
+            {{- navbar_item(url_for('problist'), 'book', '题集') -}}
+            {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
+            {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
         </ul>
     </div>
     <div class="below-navbar">{% block body %}{% endblock %}</div>

@@ -1,0 +1,63 @@
+
+div.home-container {
+    display: flex; width: 100%; margin: 0 auto; padding: 2rem;
+    gap: 3rem; font-family: Helvetica; }
+
+section.problems-section {
+    flex: 1; display: flex; flex-direction: column; gap: 1.5rem; }
+section.problems-section h2.section-title {
+    font-size: 1.5rem; font-weight: 600; color: #34AAE0; margin-bottom: .5rem;
+    display: flex; align-items: center; gap: .5rem; }
+section.problems-section h2.section-title i { color: #5BC0EB; }
+section.problems-section div.problems-grid {
+    display: grid; gap: 1.2rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+section.problems-section div.problem-card {
+    background: white; border-radius: 12px;
+    box-shadow: 0 4px 6px -1px #00000019, 0 2px 4px -1px #0000000F;
+    overflow: hidden; transition: all .3s ease; cursor: pointer;
+    aspect-ratio: 1; display: flex; flex-direction: column; }
+section.problems-section div.problem-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 15px -3px #00000019, 0 4px 6px -2px #0000000C; }
+section.problems-section div.problem-img {
+    flex: 1; background-color: #E0F7FA; padding: .5rem;
+    display: flex; align-items: center; justify-content: center; }
+section.problems-section div.problem-img i {
+    font-size: 2.5rem; color: #34AAE0; }
+section.problems-section div.problem-info {
+    padding: .75rem; text-align: center; }
+section.problems-section div.problem-title {
+    font-weight: 500; font-size: .9rem; color: #0F7B9C;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+section.intro-section {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 2rem; border-radius: 16px;
+    background: linear-gradient(135deg, #E0F7FA 0%, #F0FCFD 100%);
+    box-shadow: 0 10px 15px -3px #34AAE019; }
+section.intro-section h1.main-title {
+    font-size: 2.5rem; font-weight: 700; color: #0F7B9C;
+    margin-bottom: 1.5rem; line-height: 1.2; }
+section.intro-section h1.main-title span { color: #34AAE0; }
+section.intro-section p.description {
+    font-size: 1.1rem; color: #475569; margin-bottom: 2rem; max-width: 96%; }
+section.intro-section p.description strong { font-family: Helvetica-Bold; }
+section.intro-section p.description a {
+    text-decoration: none; color: #34AAE0; }
+section.intro-section p.description a:hover { text-decoration: underline; }
+
+section.intro-section div.links-section {
+    display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+section.intro-section div.links-section a.link-btn {
+    display: inline-flex; align-items: center;
+    gap: .5rem; padding: .75rem 1.25rem; background: white; color: #34AAE0;
+    border-radius: 8px; text-decoration: none; font-weight: 500;
+    transition: all .3s ease; box-shadow: 0 2px 4px #0000000C; }
+section.intro-section div.links-section a.link-btn:hover {
+    background: #34AAE0; color: white; transform: translateY(-2px);
+    box-shadow: 0 4px 8px #34AAE033; }
+section.intro-section div.links-section a.link-btn.primary {
+    background: #34AAE0; color: white; }
+section.intro-section div.links-section a.link-btn.primary:hover {
+    background: #0F7B9C; }

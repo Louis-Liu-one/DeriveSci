@@ -1,6 +1,6 @@
 
 div.mdpreview {
-    border: 2px solid lightskyblue;
-    border-radius: 10px; border-collapse: collapse;
-    padding: 10px; margin-top: 15px; }
+    border: 1px solid #E6E8EB; border-spacing: 0;
+    border-radius: 12px; border-collapse: collapse;
+    box-shadow: 0 2px 8px #0000000F; padding: 10px; margin-top: 15px; }
 div.mdpreview img { display: block; margin: 0 auto; width: 100%; }

@@ -16,7 +16,8 @@
         {%- if prob.problabels -%}
             {%- for problabel in prob.problabels -%}
                 <a class="problabel" target="_blank" href="{{ url_for(
-                    'problistoflabel', labelname=problabel.labelname) }}">
+                    'problistoflabel', labelname=problabel.labelname) }}"
+                    onclick="event.stopPropagation()">
                     {{- problabel.labelname -}}
                 </a>
             {%- endfor -%}

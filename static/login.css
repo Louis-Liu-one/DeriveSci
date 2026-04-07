@@ -14,21 +14,22 @@
 
 div.login-block {
     display: flex; position: absolute; top: 0; bottom: 0; left: 0; right: 0;
-    margin: auto; width: 600px; height: 400px;
-    box-shadow: -10px 10px 25px #0008; border-radius: 35px;
-    font-family: Helvetica; }
+    margin: auto; width: 720px; height: 475px; font-family: Helvetica;
+    box-shadow: -10px 10px 25px #0008; border-radius: 45px; }
 div.login-block h3 {
     font-size: 1.8em; color: black; margin: 0;
     padding-bottom: 10px; text-align: center; }
 
 div.login { width: 50%; margin: auto; }
-div.login form { border: none; margin-right: 10px; }
+div.login form {
+    border: none; box-shadow: none;
+    background: transparent; margin-right: 10px; }
 div.login form span { padding: 10px 5px; }
 
 div.register-back {
     display: flex; justify-content: center; align-items: center;
     width: 50%; height: 100%; margin: auto;
-    background: #5CCBE2; border-radius: 35px; color: white; }
+    background: #34AAE0; border-radius: 45px; color: white; }
 div.register-front { text-align: center; }
 div.register-front h2 { font-weight: 700; }
 div.register-front p { margin: 15px 0 25px 0; }

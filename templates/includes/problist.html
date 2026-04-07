@@ -27,9 +27,9 @@
                 {%- endif -%}
                 {%- if with_review_status -%}
                     <td class="review-status">
-                        {%- if prob.review_status == -1 -%}待审核
-                        {%- elif prob.review_status == 0 -%}已拒绝
-                        {%- else -%}已通过{%- endif -%}
+                        {%- if prob.review_status == -1 -%}待审
+                        {%- elif prob.review_status == 0 -%}拒绝
+                        {%- else -%}通过{%- endif -%}
                     </td>
                 {%- endif -%}
             </tr>

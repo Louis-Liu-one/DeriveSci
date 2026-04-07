@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{%- macro problem_card(icon, labelname) -%}
+    <div class="problem-card"
+        data-url="{{ url_for('problistoflabel', labelname=labelname) }}"
+        onclick="window.open(this.dataset.url)">
+        <div class="problem-img"><i class="fa-solid fa-{{ icon }}"></i></div>
+        <div class="problem-info">
+            <div class="problem-title">{{ labelname }}</div>
+        </div>
+    </div>
+{%- endmacro -%}
+
+{% block title %}欢迎 - MathProbs{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
+{% endblock %}
+
+{% block navbar_title %}欢迎{% endblock %}
+
+{% block body %}
+<div class="home-container">
+    <section class="problems-section">
+        <h2 class="section-title"><i class="fas fa-book-open"></i>精选专题</h2>
+        <div class="problems-grid">
+            {{- problem_card('shapes', '平面几何') -}}
+            {{- problem_card('chart-line', '解析几何') -}}
+            {{- problem_card('square-root-variable', '代数') -}}
+            {{- problem_card('calculator', '数论') -}}
+            {{- problem_card('infinity', '微积分') -}}
+            {{- problem_card('dice', '概率论') -}}
+        </div>
+    </section>
+    <section class="intro-section">
+        <h1 class="main-title">探索数学之美，<br><span>解锁解题智慧</span></h1>
+        <p class="description">
+            欢迎来到 <strong>MathProbsOnline</strong>，我是 <a href="
+            {{- url_for('users', uid=2) -}}" target="_blank">LYX</a>。<br>
+            我编篡此集，旨在探讨数学难题，提升数学能力，与广大数学爱好者同飨数学之美。<br>
+            非常欢迎各位访问我的网站，祝各位学又所获，不断精进。<br>
+            网站草创之初，很多题目没有上传，一些页面没有实现，敬请谅解。
+        </p>
+        <div class="links-section">
+            <a href="{{ url_for('problist') }}" class="link-btn primary">
+                <i class="fa-solid fa-compass"></i>开始探索
+            </a>
+            <a href="https://github.com/Louis-Liu-one/MathProbsOnline"
+                target="_blank" class="link-btn">
+                <i class="fa-brands fa-github"></i>GitHub 仓库
+            </a>
+            <a href="https://gitee.com/Louis-Liu-one/MathProbsOnline"
+                target="_blank" class="link-btn">
+                <i class="fa-brands fa-gitee"></i>Gitee 仓库
+            </a>
+            <a href="{{ url_for('helplist') }}" target="_blank" class="link-btn">
+                <i class="fa-solid fa-question-circle"></i>常见问题
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}

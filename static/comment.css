@@ -1,27 +1,55 @@
 
-div.commentlist { clear: both; font-family: Helvetica; }
-div.comment { clear: both; margin-top: 10px; }
-div.comment span.avatar, div.comment img.avatar, div.comment i.avatar {
-    width: 36px; height: 36px; margin-top: 2px; }
-div.comment img.avatar, div.comment i.avatar {
-    border-radius: 50%; transition: .5s; }
-div.comment i.avatar { font-size: 32px; text-align: center; color: black; }
-div.comment img.avatar:hover, div.comment i.avatar:hover {
-    box-shadow: 0 0 3px #0008; cursor: pointer; transition: .5s; }
-
+div.commentlist {
+    clear: both;  font-family: Helvetica;  margin: 15px 0; padding: 18px;
+    border: 1px solid #E6E8EB; border-radius: 12px;
+    box-shadow: 0 2px 8px #0000000F; background: white; }
+div.comment {  clear: both;  margin-top: 16px; }
 div.commentbody {
-    float: right; width: calc(100% - 48px); margin-bottom: 10px; }
+    width: 100%; margin-bottom: 8px; display: flex;
+    justify-content: space-between; border-radius: 8px; background: #F8FAFC;
+    transition: all .25s ease; }
+div.commentbody:hover {
+    box-shadow: 0 2px 10px #00000010; background: #E8F4F8; }
 
-p.commentname, p.commentfoot { font-size: 13px; color: #999; }
-p.commentname { margin: 0 0 5px 0; }
-p.commentfoot { margin: 8px 0 0 0; }
-p.commentfoot img, p.commentfoot i { float: right; width: 18px; height: 18px; }
+div.commentbody span.avatar { float: left; flex: 0 0 auto; margin: 8px; }
+div.commentbody img.avatar, div.commentbody i.avatar {
+    width: 40px;  height: 40px;  margin-top: 2px;  flex-shrink: 0; }
+div.commentbody img.avatar, div.commentbody i.avatar {
+    border-radius: 50%; transition: all .25s ease;
+    border: 2px solid transparent; }
+div.commentbody i.avatar {
+    font-size: 32px; text-align: center; color: #34AAE0; line-height: 40px; }
+div.commentbody img.avatar:hover,  div.commentbody i.avatar:hover {
+    box-shadow: 0 0 6px #34AAE080; cursor: pointer; border-color: #34AAE0;
+    transform: scale(1.05); }
+
+div.commentbody span.commentbodytext {
+    flex-grow: 1; word-wrap: anywhere; margin: 0 8px 8px 0; }
+p.commentname, p.commentfoot {
+    font-size: 13px; color: #2D3748; font-family: Helvetica; }
+p.commentname { margin-bottom: 0; font-weight: bold; color: #34AAE0; }
+p.commentfoot { margin: 10px 0 0 0; color: #6C757D; }
+p.commentfoot img, p.commentfoot i {
+    float: right; width: 20px; height: 20px; margin-left: 8px;
+    transition: all .2s ease; color: #6C757D; }
 p.commentfoot img:hover {
-    background: #A2E3EC; border-radius: 50%; cursor: pointer; }
-p.commentfoot i:hover { color: #5CCBE2; cursor: pointer; }
+    background: #34AAE0; border-radius: 50%; cursor: pointer;
+    transform: scale(1.1); }
+p.commentfoot i:hover {
+    color: #34AAE0; cursor: pointer; transform: scale(1.1); }
+div.commentcontent textarea {
+    margin-top: 0; margin-bottom: 0; display: none; }
+div.commentcontent p {
+    margin-top: 0; margin-bottom: 0; line-height: 1.6;
+    color: #2D3748; padding: 4px 0; }
 
-div.commentcontent textarea { margin-top: 0; margin-bottom: 0; display: none; }
-div.commentcontent p { margin-top: 0; margin-bottom: 0; }
-div.commentbody form { display: none; border: none; clear: both; }
+form#subCommentForm {
+    display: none; border: none; box-shadow: none;
+    background: transparent; clear: both; }
+div.subcomments { padding-left: 30px; }
 div.commentsep {
-    clear: both; border-bottom: 1px solid #EEE; margin-bottom: 18px; }
+    clear: both; border-bottom: 1px solid #E6E8EB;
+    margin: 20px 0 16px 0; position: relative; }
+div.commentsep::after {
+    content: ""; position: absolute; bottom: -1px; left: 0;
+    width: 40px; height: 1px; background: #34AAE0; }

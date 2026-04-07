@@ -52,52 +52,60 @@
 </form>
 {%- endmacro -%}
 
+{%- macro commentavatar(comment) -%}
+    <span class="avatar"{%- if comment.user -%}
+        data-url="{{ url_for('users', uid=comment.user.uid) }}"
+        onclick="window.open(this.dataset.url)"{%- endif -%}>
+        {{- user_avatar_img(comment.user, 'avatar') -}}
+    </span>
+{%- endmacro -%}
+
 {%- macro commentbody(comment,
     toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="commentbody">
-    <p class="commentname">
-        {{- user_name(comment.user) -}}
-        {%- if not toplevel and not secondlevel -%}
-            &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
-        {%- endif -%}
-    </p>
-    <div class="commentcontent">
-        <textarea>{{ comment.content }}</textarea>
-    </div>
-    <p class="commentfoot">
-        {{- comment_timestamp(comment) -}}
-        <i id="commentSenderButton" title="发表评论"
-            class="fa-solid fa-comment-dots"></i>
-        {%- if current_user == comment.user and not with_post -%}
-            <i title="删除评论" class="fa-solid fa-trash-can"
-                onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
-        {%- endif -%}
-        {%- if with_post -%} &nbsp;
-            {% set post = comment.get_post() %}来自：{{ post }}
-            <i title="前往帖子" class="fa-solid fa-newspaper"
-                data-url="{{ post.url() }}"
-                onclick="window.open(this.dataset.url)"></i>
-        {%- endif -%}
-    </p>
-    {{- commentform_sub(comment, new_window=with_post) -}}
-    {%- if toplevel -%}
+    {{- commentavatar(comment) -}}
+    <span class="commentbodytext">
+        <p class="commentname">
+            {{- user_name(comment.user) -}}
+            {%- if not toplevel and not secondlevel -%}
+                &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
+            {%- endif -%}
+        </p>
+        <div class="commentcontent">
+            <textarea>{{ comment.content }}</textarea>
+        </div>
+    </span>
+</div>
+<p class="commentfoot">
+    {{- comment_timestamp(comment) -}}
+    <i id="commentSenderButton" title="发表评论"
+        class="fa-solid fa-comment-dots"></i>
+    {%- if current_user == comment.user and not with_post -%}
+        <i title="删除评论" class="fa-solid fa-trash-can"
+            onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
+    {%- endif -%}
+    {%- if with_post -%} &nbsp;
+        {% set post = comment.get_post() %}来自：{{ post }}
+        <i title="前往帖子" class="fa-solid fa-newspaper"
+            data-url="{{ post.url() }}"
+            onclick="window.open(this.dataset.url)"></i>
+    {%- endif -%}
+</p>
+{{- commentform_sub(comment, new_window=with_post) -}}
+{%- if toplevel -%}
+    <div class="subcomments">
         {%- for subcomment in comment.get_all_replies() -%}
             {{- commentdiv(subcomment,
                 secondlevel=subcomment.replyto == comment,
                 with_post=with_post) -}}
         {%- endfor -%}
-    {%- endif -%}
-</div>
+    </div>
+{%- endif -%}
 {%- endmacro -%}
 
 {%- macro commentdiv(comment,
     toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="comment" data-commentid="{{ comment.cmtid }}">
-    <span class="avatar" {%- if comment.user -%}
-        data-url="{{ url_for('users', uid=comment.user.uid) }}"
-        onclick="window.open(this.dataset.url)"{%- endif -%}>
-        {{- user_avatar_img(comment.user, 'avatar') -}}
-    </span>
     {{- commentbody(comment, toplevel, secondlevel, with_post) -}}
 </div>
 {%- endmacro -%}
