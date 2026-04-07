@@ -135,7 +135,8 @@
     allChats = {{ all_chats|tojson }};
     currentUid = {{ current_user.uid|tojson }};
     {%- if activeuser -%}
-        addMessages(allChats[{{ activeuser.uid|tojson }}].messages);
+        document.addEventListener('DOMContentLoaded', () => {
+            addMessages(allChats[{{ activeuser.uid|tojson }}].messages); });
     {%- endif -%}
     {%- if view_comments -%}
         renderElements([...document.getElementsByClassName('commentcontent')]);
