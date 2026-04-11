@@ -1,10 +1,15 @@
 {% extends "form.html" %}
 {% from "includes/users.html" import select_gender %}
 
+{% block static_files %}
+<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
+{% endblock %}
+
 {% block title %}修改信息 - MathProbs{% endblock %}
 
 {% block form %}
-<form id="editForm" class="mathprobsform" enctype="multipart/form-data">
+<form id="editForm" class="mathprobsform" enctype="multipart/form-data"
+    onsubmit="userEditProfile(); return false">
     <h3>修改信息</h3>
     <span>
         <label for="userName">用户名：</label>
@@ -33,18 +38,8 @@
         <input id="avatar" name="avatar" type="file"
             formenctype="multipart/form-data" accept="image/*">
     </span>
-    <span><button id="editProfileButton" type="button">修改</button></span>
+    <span><button type="submit">修改</button></span>
 </form>
-<script>
-    editProfileButton.addEventListener('click', async (event) => {
-        try {
-            const response = await fetch('/api/user/edit-profile', {
-                method: 'POST', body: new FormData(editForm)});
-            const data = await response.json();
-            if (data.ok) location.replace(data.url);
-            else alert(`操作失败：${data.error}`);
-        } catch (err) { alert(`操作失败：${err}`); } });
-</script>
 {% endblock %}
 
 {% block right_block %}

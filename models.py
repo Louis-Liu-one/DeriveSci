@@ -24,8 +24,7 @@ from anschecker import check_answers, testpoints_passedlist
 __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow',
     'find_user', 'register_user', 'unregister_user',
-    'Prob', 'ProbImage', 'ProbLabel',
-    'get_prob', 'search_probs', 'add_prob',
+    'Prob', 'ProbImage', 'ProbLabel', 'get_prob', 'search_probs', 'add_prob',
     'get_solution', 'add_solution', 'add_images', 'add2labels',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
 ]

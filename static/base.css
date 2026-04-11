@@ -91,7 +91,7 @@ div.sidebar-item img.avatar {
 div.sidebar-item:not(.disabled):hover {
     background: #34AAE0; color: white; border-right: 3px solid #1D7DAC;
     cursor: pointer; }
-div.sidebar-item:hover i { color: white; }
+div.sidebar-item:not(.disabled):hover i { color: white; }
 div.sidebar-item.disabled { color: #999; background: #F1F5F9; }
 a.sidebar-link { text-decoration: none; color: inherit; }
 

@@ -3,8 +3,6 @@ form.mathprobsform {
     border: 1px solid #E6E8EB; border-radius: 12px; border-collapse: collapse;
     padding: 18px; background: white; box-shadow: 0 2px 8px #0000000F;
     font-family: Helvetica; }
-p.errormsg {
-    color: #FF4D4F; margin: 0 0 12px 0; font-size: 13px; line-height: 20px; }
 form.mathprobsform span {
     display: flex; justify-content: flex-end; width: 100%; max-width: 100%;
     padding: 8px 3px; white-space: nowrap; }

@@ -1,12 +1,15 @@
 {% extends "form.html" %}
 
+{% block static_files %}
+<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
+{% endblock %}
+
 {% block title %}登录 - MathProbs{% endblock %}
 
 {% block form %}
-<form class="mathprobsform" method="post"
-    action="{{ url_for('login', next=next) }}">
+<form class="mathprobsform" id="loginForm" data-nextpage="{{ next }}"
+    onsubmit="userLogin(); return false">
     <h3>登录</h3>
-    {% if error %}<p class="errormsg">错误：{{ error }}</p>{% endif %}
     <span>
         <label for="userName">用户名：</label>
         <input id="userName" name="username" type="text"
@@ -21,7 +24,7 @@
     </span>
     <span><button type="submit">登录</button></span>
     <p style="font-size: 11px; color: gray">
-        初次进入或清空缓存后需要加载CDN，速度可能较慢，请耐心等待。
+        初次进入或清空缓存后需要加载 CDN，速度可能较慢，请耐心等待。
     </p>
 </form>
 {% endblock %}

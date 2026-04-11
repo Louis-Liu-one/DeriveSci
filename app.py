@@ -88,7 +88,7 @@ def page_not_found(error):
     return render_template('notfound.html', error='未能找到页面。'), 404
 
 
-# =========================== 讨论区路由 ===========================
+# =========================== 讨论区各路由与API ===========================
 
 
 @app.route('/post-comment/<int:post_type>/<post_ident>', methods=['POST'])
@@ -132,7 +132,7 @@ def api_delete_comment():
     return {'ok': True}
 
 
-# =========================== 题目各项网页 ===========================
+# =========================== 题目各项网页与API ===========================
 
 
 @app.route('/probs/', methods=['GET', 'POST'])
@@ -178,7 +178,7 @@ def probs(probno):
     prob = get_prob(probno)
     if prob and prob.viewable_for(current_user):
         return render_template('prob.html', prob=prob)
-    return render_template('notfound.html', error='未能找到题目。')
+    return render_template('notfound.html', error='未能找到题目。'), 404
 
 
 @app.route('/images/<probno>/<imagename>')
@@ -203,7 +203,7 @@ def submit(probno):
     answer = request.form.get('answertext')
     prob = get_prob(probno)
     if not prob or not prob.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题目。')
+        return render_template('notfound.html', error='未能找到题目。'), 404
     answer_eval, testpoints, submission = prob.add_submission(
         current_user, answer)
     return render_template(
@@ -216,7 +216,7 @@ def submit(probno):
 def solutions(probno, solno):
     solution = get_solution(probno, solno)
     if not solution or not solution.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题解。')
+        return render_template('notfound.html', error='未能找到题解。'), 404
     prob = solution.prob
     solutions = prob.solutions.copy()
     solutions.remove(solution)
@@ -230,7 +230,7 @@ def solutions(probno, solno):
 def edit_prob(probno):
     prob = get_prob(probno)
     if not prob:
-        return render_template('notfound.html', error='未能找到题目。')
+        return render_template('notfound.html', error='未能找到题目。'), 404
     if not prob.editable_for(current_user):
         return redirect(prob.url())
     return render_template('upload_prob.html', editmode=True, prob=prob)
@@ -241,7 +241,7 @@ def edit_prob(probno):
 def edit_solution(probno, solno):
     solution = get_solution(probno, solno)
     if not solution or not solution.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题解。')
+        return render_template('notfound.html', error='未能找到题解。'), 404
     if current_user != solution.user and not current_user.isadmin:
         return redirect(solution.url())
     return render_template(
@@ -260,7 +260,7 @@ def upload_prob():
 def upload_solution(probno):
     prob = get_prob(probno)
     if not prob:
-        return render_template('notfound.html', error='未能找到题目。')
+        return render_template('notfound.html', error='未能找到题目。'), 404
     return render_template('upload_solution.html', prob=prob)
 
 
@@ -297,7 +297,7 @@ def api_edit_prob():
     probno = request.form.get('probno')
     prob = get_prob(probno)
     if not prob:
-        abort(404)  # 未找到题目
+        return {'ok': False, 'error': '未能找到题目。'}, 404
     if not prob.editable_for(current_user):
         abort(403)  # 无编辑权限
     probtitle = request.form.get('probtitle')
@@ -322,7 +322,7 @@ def api_review_prob():
     accept = bool(request.json.get('accept'))
     prob = get_prob(probno)
     if not prob:
-        abort(404)  # 未找到题目
+        return {'ok': False, 'error': '未能找到题目。'}, 404
     prob.review_status = 1 if accept else 0
     db.session.commit()
     return {
@@ -339,7 +339,7 @@ def api_set_official_prob():
     probno = request.json.get('probno')
     prob = get_prob(probno)
     if not prob:
-        abort(404)  # 未找到题目
+        return {'ok': False, 'error': '未能找到题目。'}, 404
     prob.isofficial = not prob.isofficial
     db.session.commit()
     return {'ok': True, 'isofficial': prob.isofficial}
@@ -352,7 +352,7 @@ def api_delete_prob():
     probno = request.json.get('probno')
     prob = get_prob(probno)
     if not prob or not prob.viewable_for(current_user):
-        abort(404)  # 未找到题目
+        return {'ok': False, 'error': '未能找到题目。'}, 404
     if not prob.editable_for(current_user):
         abort(403)  # 无删除权限
     prob.problabels.clear()
@@ -369,7 +369,7 @@ def api_upload_solution():
     probno = request.form.get('probno')
     prob = get_prob(probno)
     if not prob:
-        abort(404)  # 未找到题目
+        return {'ok': False, 'error': '未能找到题目。'}, 404
     soltitle = request.form.get('soltitle')
     content = request.form.get('solution')
     imgfiles = request.files.getlist('imgfiles')
@@ -389,7 +389,7 @@ def api_edit_solution():
     probno, solno = request.form.get('probno'), int(request.form.get('solno'))
     solution = get_solution(probno, solno)
     if not solution or not solution.viewable_for(current_user):
-        abort(404)  # 未找到题解
+        return {'ok': False, 'error': '未能找到题解。'}, 404
     if not solution.editable_for(current_user):
         abort(403)  # 无修改权限
     soltitle = request.form.get('soltitle')
@@ -410,7 +410,7 @@ def api_delete_solution():
     solution = get_solution(probno, solno)
     prob_url = solution.prob.url()
     if not solution or not solution.viewable_for(current_user):
-        abort(404)  # 未找到题解
+        return {'ok': False, 'error': '未能找到题解。'}, 404
     if not solution.editable_for(current_user):
         abort(403)  # 无删除权限
     clear_comments(solution)
@@ -427,7 +427,7 @@ def helps(howto):
     if os.path.exists(path):
         return render_template(
             'helps.html', filename=os.path.join('helps', howto))
-    return render_template('notfound.html', error='未能找到帮助文档。')
+    return render_template('notfound.html', error='未能找到帮助文档。'), 404
 
 
 @app.route('/helps/')
@@ -435,7 +435,7 @@ def helplist():
     return render_template('helplist.html')
 
 
-# =========================== 登录系统网页 ===========================
+# =========================== 用户操作网页与API ===========================
 
 
 @app.route('/')
@@ -443,37 +443,46 @@ def home():
     return render_template('homepage.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/user/login', methods=['POST'])
+def api_user_login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = find_user(username, 'name')
+    if user is not None and user.verify_password(password):
+        login_user(user, remember=True)
+        return {'ok': True}
+    return {'ok': False, 'error': '用户名或密码错误。'}, 400
+
+
+@app.route('/api/user/register', methods=['POST'])
+def api_user_register():
+    name = request.form.get('username')
+    gender = int(request.form.get('gender'))
+    password = request.form.get('password')
+    password_confirmation = request.form.get('password_confirmation')
+    avatar = request.files.get('avatar')
+    status, user = register_user(
+        name, gender, password, password_confirmation, avatar)
+    if status:
+        login_user(user, remember=True)
+        return {'ok': True}
+    return {'ok': False, 'error': str(user)}, 400
+
+
+@app.route('/login')
 def login():
-    error, nextpage = None, request.args.get('next')
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user = find_user(username, 'name')
-        if user is not None and user.verify_password(password):
-            login_user(user, remember=True)
-            return redirect(nextpage if nextpage else url_for('welcome'))
-        else:
-            error = '用户名或密码错误。'
-    return render_template('login.html', next=nextpage, error=error)
+    nextpage = request.args.get('next')
+    if not nextpage:
+        nextpage = url_for('welcome')
+    return render_template('login.html', next=nextpage)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register')
 def register():
-    error, nextpage = None, request.args.get('next')
-    if request.method == 'POST':
-        name = request.form.get('username')
-        gender = int(request.form.get('gender'))
-        password = request.form.get('password')
-        password_confirmation = request.form.get('password_confirmation')
-        avatar = request.files.get('avatar')
-        status, user = register_user(
-            name, gender, password, password_confirmation, avatar)
-        if status:
-            login_user(user, remember=True)
-            return redirect(nextpage if nextpage else url_for('welcome'))
-        error = user
-    return render_template('register.html', next=nextpage, error=error)
+    nextpage = request.args.get('next')
+    if not nextpage:
+        nextpage = url_for('welcome')
+    return render_template('register.html', next=nextpage)
 
 
 @app.route('/welcome')
@@ -487,7 +496,7 @@ def users(uid):
     user = find_user(uid)
     if user:
         return render_template('welcome.html', user=find_user(uid))
-    return render_template('notfound.html', error='未能找到用户。')
+    return render_template('notfound.html', error='未能找到用户。'), 404
 
 
 @app.route('/chat')
@@ -581,7 +590,7 @@ def avatarfile(uid):
     if_none_match = request.headers.get('If-None-Match')
     if_modified_since = request.headers.get('If-Modified-Since')
     if if_none_match and if_none_match == etag:
-        return '', 304
+        return '', 304  # 已缓存
     if if_modified_since:
         try:
             client_time = datetime.datetime.strptime(
