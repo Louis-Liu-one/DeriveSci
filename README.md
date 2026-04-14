@@ -31,12 +31,12 @@ app.run()
 
 - 初始化Flask-Migrate时，使用
 ```bash
-flask --app webapp.py db init
+flask db init
 ```
 代码进行修改后，更新数据库时，使用
 ```bash
-flask --app webapp.py db migrate -m '描述...'
-flask --app webapp.py db upgrade
+flask db migrate -m '描述...'
+flask db upgrade
 ```
 
 ## 部署域名

@@ -6,10 +6,10 @@ async function updateMessages() {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 receiver_uid: currentUid, lastmsgtime: timeOfLastMessage})});
-        const new_chats = await response.json();
-        for (let uid in new_chats) {
-            if (new_chats[uid].messages) {
-                messages = new_chats[uid].messages;
+        const newChats = await response.json();
+        for (let uid in newChats) {
+            if (newChats[uid].messages) {
+                messages = newChats[uid].messages;
                 if (uid != target.value) allChats[uid].messages
                     = allChats[uid].messages.concat(messages);
                 else addMessages(messages);
@@ -19,7 +19,7 @@ async function updateMessages() {
                     && timeOfLastMessage < updatedTimeOfLastMessage)
                     timeOfLastMessage = updatedTimeOfLastMessage;
             }
-            setUnreadCircle(uid, new_chats[uid].unread);
+            setUnreadCircle(uid, newChats[uid].unread);
         }
     } catch (err) { }
 }
@@ -58,7 +58,7 @@ async function switchUser(element, uid) {
     redCircle = activeUser.querySelector('div.unread-badge');
     if (redCircle) redCircle.style.display = 'none';
     messageArea.innerHTML = '';
-    if (uid in allChats) addMessages(allChats[uid].messages);
+    if (uid in allChats) addMessages(allChats[uid].messages, true);
     else allChats[uid] = {messages: []};
     await updateUserLastVisit(currentUid, uid);
 }
@@ -69,23 +69,23 @@ function setUnreadCircle(uid, num) {
     redCircle.style.display = 'inline'; redCircle.textContent = num;
 }
 
-function addMessages(messages) {
-    for (let i in messages) addMessage(messages[i]);
+function addMessages(messages, noAllChats) {
+    for (let i in messages) addMessage(messages[i], noAllChats);
     updatedTimeOfLastMessage = messages[messages.length - 1].timestamp;
     if (messages.length && (!timeOfLastMessage
         || timeOfLastMessage && timeOfLastMessage < updatedTimeOfLastMessage))
         timeOfLastMessage = updatedTimeOfLastMessage;
 }
 
-function addMessage(messageInfo) {
+function addMessage(messageInfo, noAllChats) {
     const divElement = document.createElement('div');
-    divElement.className = messageInfo.othersend
-        ? 'message other-message' : 'message my-message';
+    divElement.className = messageInfo.othersend ? 'message other-message' : 'message my-message';
     divElement.innerText = messageInfo.content;
     messageArea.appendChild(divElement);
     messageArea.scrollTop = messageArea.scrollHeight;
     if (!target.value) allChats[target.value] = {messages: []};
-    allChats[target.value].messages.push(messageInfo);
+    if (typeof noAllChats === 'undefined' && !noAllChats)
+        allChats[target.value].messages.push(messageInfo);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -93,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         = document.getElementsByClassName('user-item active')[0];
     window.timeOfLastMessage = ''; window.elements = {};
     messageInputElement.addEventListener('keypress', (event) => {
-        if (event.key == 'Enter'
-            && messageInputElement.value) sendMessage(); });
+        if (event.key == 'Enter' && messageInputElement.value) sendMessage(); });
     setInterval(updateMessages, 2000); });
 
 window.addEventListener('beforeunload', (event) => {

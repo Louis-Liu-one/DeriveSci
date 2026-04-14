@@ -42,10 +42,12 @@ API：*
 /api/chat/update-lastvisit  更新上次查看私信的时间
 /api/chat/send              发送私信
 /api/chat/messages          获取新收到的私信
+/api/user/login             登录
+/api/user/register          注册
 /api/user/edit-profile      编辑个人资料
 /api/user/edit-introduction 编辑个人简介
 
-标*的是无法通过输入网址查看的路由。
+标*的是使用 POST 方法的路由，所有 API 路由仅限 POST 方法。
 
 已部署至：MathProbsOnline.PythonAnyWhere.com
 '''
@@ -624,7 +626,6 @@ def unregister():
 
 
 app.jinja_env.add_extension('jinja2.ext.do')
-app.add_template_global(list2csv, 'list2csv')
 app.add_template_global(get_helplist(), 'helplist')
 app.add_template_global(find_user, 'find_user')
 app.add_template_global(utcfromnow, 'utcfromnow')
