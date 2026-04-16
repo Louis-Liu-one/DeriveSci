@@ -6,7 +6,7 @@
 
 {% block title %}问题{{ prob.probno }}的提交 - MathProbs{% endblock %}
 
-{% block styles %}
+{% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='submit.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>

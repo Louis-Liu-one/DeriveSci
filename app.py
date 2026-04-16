@@ -610,19 +610,24 @@ def avatarfile(uid):
     return response
 
 
-@app.route('/logout')
-@login_required
-def logout():
+@app.route('/api/user/logout', methods=['POST'])
+def api_user_logout():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
     logout_user()
-    return redirect(url_for('home'))
+    return {'ok': True, 'url': url_for('home')}, 400
 
 
-@app.route('/unregister')
-@login_required
-def unregister():
-    unregister_user(current_user)
-    logout_user()
-    return redirect(url_for('home'))
+@app.route('/api/user/unregister', methods=['POST'])
+def api_user_unregister():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    try:
+        unregister_user(current_user)
+        logout_user()
+        return {'ok': True, 'url': url_for('home')}
+    except Exception as err:
+        return {'ok': False, 'error': str(err)}, 400
 
 
 app.jinja_env.add_extension('jinja2.ext.do')

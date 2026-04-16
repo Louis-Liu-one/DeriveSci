@@ -11,9 +11,10 @@
 
 {% block title %}{{ user_name(user) }}的主页 - MathProbs{% endblock %}
 
-{% block styles %}
+{% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}
@@ -37,13 +38,14 @@
                 <i class="fa-solid fa-user-pen"></i>修改信息
             </div>
         </a>
-        <a class="sidebar-link" href="{{ url_for('logout') }}">
+        <a class="sidebar-link" href="javascript:void(0)"
+                onclick="userLogout(); return false">
             <div class="sidebar-item">
                 <i class="fa-solid fa-right-from-bracket"></i>退出登录
             </div>
         </a>
-        <a class="sidebar-link" href="{{ url_for('unregister') }}"
-                onclick="return confirm('确定要注销账户？')">
+        <a class="sidebar-link" href="javascript:void(0)"
+                onclick="userUnregister(); return false">
             <div class="sidebar-item">
                 <i class="fa-solid fa-person-circle-minus"></i>注销账户
             </div>

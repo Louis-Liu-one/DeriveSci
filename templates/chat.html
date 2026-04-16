@@ -12,7 +12,7 @@
 
 {% block title %}私信聊天 - MathProbs{% endblock %}
 
-{% block styles %}
+{% block static_files %}
 {%- if view_comments -%}
     <link rel="stylesheet" href="{{-
         url_for('static', filename='comment.css') -}}">
@@ -25,6 +25,7 @@
 {%- endif -%}
 <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
 <script src="{{ url_for('static', filename='chat-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}私信聊天{% endblock %}
@@ -41,7 +42,8 @@
             <i class="fa-solid fa-user-pen"></i>修改信息
         </div>
     </a>
-    <a class="sidebar-link" href="{{ url_for('logout') }}">
+    <a class="sidebar-link" href="javascript:void(0)"
+            onclick="userLogout(); return false;">
         <div class="sidebar-item">
             <i class="fa-solid fa-right-from-bracket"></i>退出登录
         </div>

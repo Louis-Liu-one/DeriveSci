@@ -28,3 +28,22 @@ async function userEditProfile() {
         else alert(`操作失败：${data.error}`);
     } catch (err) { alert(`操作失败：${err}`); }
 }
+
+async function userLogout() {
+    try {
+        const response = await fetch('/api/user/logout', {method: 'POST'});
+        const data = await response.json();
+        if (data.ok) location.replace(data.url);
+        else alert(`登出失败：${data.error}`);
+    } catch (err) { alert(`登出失败：${err}`); }
+}
+
+async function userUnregister() {
+    if (!confirm('确定要注销账户？')) return;
+    try {
+        const response = await fetch('/api/user/unregister', {method: 'POST'});
+        const data = await response.json();
+        if (data.ok) location.replace(data.url);
+        else alert(`注销失败：${data.error}`);
+    } catch (err) { alert(`注销失败：${err}`); }
+}

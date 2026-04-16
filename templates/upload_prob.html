@@ -6,7 +6,7 @@
 {% if editmode %}编辑{% else %}上传{% endif %}题目 - MathProbs
 {% endblock %}
 
-{% block styles %}
+{% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <link rel="stylesheet" href="{{ url_for(
     'static', filename='md-preview.css') }}">

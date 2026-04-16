@@ -7,7 +7,7 @@
 {% if editmode %}编辑{% else %}上传{% endif %}题解 - MathProbs
 {% endblock %}
 
-{% block styles %}
+{% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
