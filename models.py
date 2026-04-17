@@ -185,8 +185,8 @@ class User(db.Model, UserMixin):
             unread_num += lastvisits[other] < chatmsg.timestamp
         return unread_num
 
-    def url(self):
-        return url_for('users', uid=self.uid)
+    def url(self, anchor=None, **kwargs):
+        return url_for('users', uid=self.uid, _anchor=anchor, **kwargs)
 
     def get_id(self):
         return self.uid
@@ -313,8 +313,8 @@ class Prob(db.Model):
     def as_labelnames(self):
         return {label.labelname for label in self.problabels}
 
-    def url(self):
-        return url_for('probs', probno=self.probno)
+    def url(self, anchor=None, **kwargs):
+        return url_for('probs', probno=self.probno, _anchor=anchor, **kwargs)
 
     def __str__(self):
         return f'问题 {self.probno}'
@@ -346,8 +346,9 @@ class ProbSolution(db.Model):
     title = db.Column(db.String(128), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
-    def url(self):
-        return url_for('solutions', probno=self.probno, solno=self.solno)
+    def url(self, anchor=None, **kwargs):
+        return url_for('solutions', probno=self.probno, solno=self.solno,
+                       _anchor=anchor, **kwargs)
 
     def get_post_ident(self):
         return list2csv([self.probno, self.solno])

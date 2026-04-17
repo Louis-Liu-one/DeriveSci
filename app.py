@@ -5,16 +5,12 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 
 用户操作：
 /login         登录
-/logout        登出*
 /register      注册
-/unregister    注销*
 /edit-profile  编辑信息
 /users/<uid>   查看他人主页
 /helps/        查看帮助列表
 /helps/<howto> 查看帮助
 /chat          私信聊天
-/post-comment/<post_type>/<post_ident>         发表评论*
-/post-comment/<post_type>/<post_ident>/<cmtid> 回复评论*
 
 题目：
 /upload-prob                           上传题目
@@ -38,18 +34,21 @@ API：*
 /api/solution/upload        上传题解
 /api/solution/edit          编辑题解
 /api/solution/delete        删除题解
+/api/comment/post           发表评论
 /api/comment/delete         删除评论
 /api/chat/update-lastvisit  更新上次查看私信的时间
 /api/chat/send              发送私信
 /api/chat/messages          获取新收到的私信
 /api/user/login             登录
 /api/user/register          注册
+/api/user/logout            登出
+/api/user/unregister        注销
 /api/user/edit-profile      编辑个人资料
 /api/user/edit-introduction 编辑个人简介
 
 标*的是使用 POST 方法的路由，所有 API 路由仅限 POST 方法。
 
-已部署至：MathProbsOnline.PythonAnyWhere.com
+已部署至：https://MathProbsOnline.PythonAnyWhere.com
 '''
 
 import os
@@ -58,10 +57,10 @@ import random
 import hashlib
 import datetime
 
-from flask import Flask, request, jsonify, abort, url_for
-from flask import render_template, redirect, make_response
+from flask import Flask, request, jsonify, abort, url_for, redirect
+from flask import render_template, render_template_string, make_response
 from flask_login import current_user, login_required, login_user, logout_user
-from flask_moment import Moment
+from flask_moment import Moment, moment as builtin_moment
 
 from models import *
 from anschecker import TPStatus, latex
@@ -93,32 +92,6 @@ def page_not_found(error):
 # =========================== 讨论区各路由与API ===========================
 
 
-@app.route('/post-comment/<int:post_type>/<post_ident>', methods=['POST'])
-@login_required
-def post_comment(post_type, post_ident):
-    content = request.form.get('commenttext')
-    comment = Comment(
-        user=current_user, content=content,
-        post_type=post_type, post_ident=post_ident)
-    db.session.add(comment)
-    db.session.commit()
-    return redirect(comment.get_post().url())
-
-
-@app.route(
-    '/post-comment/<int:post_type>/<post_ident>/<int:cmtid>',
-    methods=['POST'])
-@login_required
-def post_subcomment(post_type, post_ident, cmtid):
-    content = request.form.get('commenttext')
-    comment = Comment(
-        user=current_user, content=content, replyto_id=cmtid,
-        post_type=post_type, post_ident=post_ident)
-    db.session.add(comment)
-    db.session.commit()
-    return redirect(comment.get_post().url())
-
-
 @app.route('/api/comment/delete', methods=['POST'])
 def api_delete_comment():
     if not current_user.is_authenticated:
@@ -132,6 +105,34 @@ def api_delete_comment():
     db.session.delete(comment)
     db.session.commit()
     return {'ok': True}
+
+
+@app.route('/api/comment/post', methods=['POST'])
+def api_post_comment():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    data = request.json
+    post_type = data.get('post_type')
+    post_ident = data.get('post_ident')
+    content = data.get('content')
+    replyto_id = data.get('replyto_id')
+    if not content:
+        return {'ok': False, 'error': '评论内容不能为空。'}, 400
+    comment = Comment(
+        user=current_user, content=content,
+        post_type=post_type, post_ident=post_ident,
+        replyto_id=replyto_id)
+    db.session.add(comment)
+    db.session.commit()
+    # 渲染评论HTML，直接使用内联模板字符串
+    rendered_html = render_template_string(
+        '{% from "includes/comment.html" import commentdiv with context %}'
+        '{{ commentdiv(comment, toplevel=toplevel, '
+        'secondlevel=secondlevel) }}', comment=comment,
+        toplevel=not bool(replyto_id), secondlevel=bool(replyto_id)
+        and comment.replyto and not comment.replyto.replyto_id,
+        moment=builtin_moment)
+    return {'ok': True, 'html': rendered_html, 'is_reply': bool(replyto_id)}
 
 
 # =========================== 题目各项网页与API ===========================
