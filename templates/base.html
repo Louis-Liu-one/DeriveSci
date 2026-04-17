@@ -22,7 +22,8 @@
         <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
         <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
         <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css" media="(prefers-color-scheme: light)">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-dark.min.css" media="(prefers-color-scheme: dark)">
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
@@ -30,6 +31,16 @@
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     {%- block static_files -%}{%- endblock -%}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dark-mode.css') }}" media="(prefers-color-scheme: dark)">
+    <script>
+        const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+        const applyTheme = (event) => {
+            const useDark = event.matches ?? darkMq.matches;
+            document.documentElement.classList.toggle('theme-dark', useDark);
+        };
+        applyTheme(darkMq);
+        darkMq.addEventListener?.('change', applyTheme);
+    </script>
 </head>
 <body>
     <div class="navbar">
