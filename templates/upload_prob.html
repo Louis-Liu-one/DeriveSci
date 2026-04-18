@@ -8,8 +8,7 @@
 
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
-<link rel="stylesheet" href="{{ url_for(
-    'static', filename='md-preview.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <script src="{{ url_for('static', filename='edit-prob.js') }}"></script>
 {%- if editmode -%}
@@ -81,9 +80,7 @@
             </div>
         </span>
         <span>
-            <label for="imageFiles">
-                {%- if editmode -%}更多{%- endif -%}图片：
-            </label>
+            <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
             <input type="file" id="imageFiles" name="imgfiles"
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
@@ -109,12 +106,10 @@
     <h3>预览区</h3>
     <div class="markdown-body mdpreview" id="mdPreview"></div>
     <p class="helpslink">
-        <a target="_blank"
-            href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
+        <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
             <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
         </a><br>
-        <a target="_blank"
-            href="{{ url_for('helps', howto='write-markdown') }}">
+        <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
             <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
         </a>
     </p>

@@ -44,7 +44,9 @@
         solution.get_toplevel_comments()) -}}
 </div>
 <script>
+    const markdownImageBasePath = "/images/{{ prob.probno }}/";
     renderElements([
-        bodyBlock, ...document.getElementsByClassName('commentcontent')]);
+        bodyBlock, ...document.getElementsByClassName('commentcontent')],
+        markdownImageBasePath);
 </script>
 {% endblock %}

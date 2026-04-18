@@ -79,7 +79,7 @@
                 action="{{ url_for('submit', probno=prob.probno) }}">
                 <span>
                     <textarea name="answertext" class="submittext"
-                    placeholder="按照要求提交答案" spellcheck="false"></textarea>
+                        placeholder="按照要求提交答案" spellcheck="false"></textarea>
                 </span>
                 <p class="helpslink">
                     <a target="_blank" href="{{ url_for(
@@ -87,18 +87,17 @@
                         <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
                     </a>
                 </p>
-                <span>
-                    <button class="submitbutton" type="submit">提交</button>
-                </span>
+                <span><button class="submitbutton" type="submit">提交</button></span>
             </form>
         {%- endif -%}
-        <h3>讨论区</h3>
-        {{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
+        <h3>讨论区</h3>{{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
     {%- endif -%}
 </div>
 <script>
+    const markdownImageBasePath = "/images/{{ prob.probno }}/";
     renderElements([
-        bodyBlock, ...document.getElementsByClassName('commentcontent')]);
+        bodyBlock, ...document.getElementsByClassName('commentcontent')],
+        markdownImageBasePath);
     {%- if current_user.isadmin -%}
         officialSidebarSetter.addEventListener('click', setOfficialProb);
     {%- endif -%}

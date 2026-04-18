@@ -6,10 +6,13 @@ function addAnswer(context, answer) {
         if (!context) context = '{}';
         answerList.push([JSON.parse(context), answer]);
         const li = document.createElement('li');
+        li.dataset.index = answerList.length - 1;
         li.innerHTML = `${escapeHTML(context)}
             <i class="fa-solid fa-arrow-right"></i> ${escapeHTML(answer)}
-            <i onclick="removeAnswer(${answerListElement.children.length})"
-                class="minus fa-solid fa-circle-minus"></i>`;
+            <i class="minus fa-solid fa-circle-minus"></i>`;
+        const minusIcon = li.querySelector('.minus');
+        minusIcon.addEventListener('click',
+            () => removeAnswer(parseInt(li.dataset.index)));
         answerListElement.appendChild(li);
     } catch (err) { alert(err); }
 }
@@ -22,6 +25,9 @@ function addAnswerHTML(context, answer) {
 function removeAnswer(index) {
     answerListElement.removeChild(answerListElement.children[index]);
     answerList.splice(index, 1);
+    // 更新所有li的data-index
+    for (let i = 0; i < answerListElement.children.length; i++)
+        answerListElement.children[i].dataset.index = i;
 }
 
 function addRawAnswers(rawAnswerList) {
@@ -86,3 +92,17 @@ async function editProb() {
         else alert(`操作失败：${data.error}`);
     } catch (err) { alert(`操作失败：${err}`); }
 }
+
+// 绑定回车键事件到输入框
+document.addEventListener('DOMContentLoaded', () => {
+    const contextInput = document.getElementById('contextInputElement');
+    const answerInput = document.getElementById('answerInputElement');
+    if (contextInput && answerInput) {
+        const handleEnter = (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addAnswerHTML(contextInput, answerInput); } };
+        contextInput.addEventListener('keydown', handleEnter);
+        answerInput.addEventListener('keydown', handleEnter);
+    }
+});

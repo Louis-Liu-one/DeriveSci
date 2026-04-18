@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" type="image/svg+xml"
-        href="{{ url_for('static', filename='images/favicon.svg') }}">
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='formstyle.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg', v=2) }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg', v=2) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     {%- block static_files -%}{%- endblock -%}
 </head>
@@ -17,9 +16,7 @@
             <div class="register">{% block form %}{% endblock %}</div>
         </div>
         <div class="register-back">
-            <div class="register-front">
-                {% block right_block %}{% endblock %}
-            </div>
+            <div class="register-front">{% block right_block %}{% endblock %}</div>
         </div>
     </div>
 </body>

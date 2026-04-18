@@ -6,7 +6,7 @@
     --shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 
-@media (prefers-color-scheme: dark), .theme-dark {
+@media (prefers-color-scheme: dark) {
     html, body { background: var(--bg); color: var(--text); }
     body { color-scheme: dark; min-height: 100vh; }
     a, a:visited { color: var(--accent); }
@@ -91,7 +91,7 @@
     div.send-area button:hover { background: #1d4ed8; }
     div.send-area button:disabled { background: #64748b; cursor: not-allowed; }
     a.sidebar-link:hover { text-decoration: none; }
-    div.bodypart img { background: #1f2937; border-radius: 8px; }
+    div.bodypart img { filter: invert(1); }
     div.commentsep { border-bottom-color: #1f2937; }
     div.commentsep::after { background: var(--primary); }
     div.user-list { border-right-color: #1f2937; }
@@ -124,4 +124,22 @@
         color: white; }
     section.intro-section div.links-section a.link-btn.primary:hover {
         background: var(--primary-soft); }
+
+    /* Markdown preview styles */
+    div.mdpreview { border-color: #1f2937; background: var(--surface);
+        box-shadow: var(--shadow); }
+
+    /* Upload page problabel styles */
+    form.mathprobsform div.label-input a { background: #1f2937; color: #e5e7eb;
+        border-color: #1f2937; }
+    form.mathprobsform div.label-input a:hover { background: #2563eb; color: white; }
+
+    /* Answer section styles */
+    form.mathprobsform div.answer ul { background: #111827; border-color: #1f2937; }
+    form.mathprobsform div.answer ul li { border-bottom-color: #1f2937; }
+    form.mathprobsform div.answer ul li:hover { background: rgba(96, 165, 250, 0.12); }
+    form.mathprobsform div.answer ul li i, form.mathprobsform div.answer ul li i.minus {
+        color: var(--primary); }
+    form.mathprobsform div.answer ul li i.minus:hover,
+    form.mathprobsform div.answer-input i:hover { background: rgba(96, 165, 250, 0.12); }
 }

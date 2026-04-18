@@ -188,7 +188,7 @@ def probs(probno):
 def imagefile(probno, imagename):
     image = db.session.get(ProbImage, (probno, imagename))
     if not image:
-        return '', 404  # 未找到
+        abort(404)  # 未找到
     etag = hashlib.md5(image.data).hexdigest()
     if_none_match = request.headers.get('If-None-Match')
     if if_none_match and if_none_match == etag:
