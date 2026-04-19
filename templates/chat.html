@@ -68,9 +68,9 @@
                     onclick="switchUser(this, {{ uid }})">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(user) -}}
-                        {%- if all_chats[uid]['unread'] -%}
+                        {%- if all_chats[uid].unread -%}
                             <div class="unread-badge">
-                                {{- all_chats[uid]['unread']|tojson -}}
+                                {{- all_chats[uid].unread | tojson -}}
                             </div>
                         {%- else -%}
                             <div class="unread-badge" style="display: none">
@@ -95,15 +95,40 @@
             {%- if view_comments -%}
                 <div class="chat-header" id="messageAreaTitle">未读评论</div>
                 <div class="message-area" id="messageArea">
-                    {% set unread_comments = current_user.unread_comments() %}
-                    {% if unread_comments %}
-                        <div class="commentlist">
-                            {% for comment in unread_comments %}
-                                {{ commentdiv(comment, with_post=True) }}
-                                <div class="commentsep"></div>
-                            {% endfor %}
-                        </div>
-                    {% else %}<p>暂无</p>{% endif %}
+                    {%- set unread_sections = current_user.unread_comment_sections() -%}
+                    <div class="comment-section">
+                        <h3>回复我的评论</h3>
+                        {%- if unread_sections.replies -%}
+                            <div class="commentlist">
+                                {%- for comment in unread_sections.replies -%}
+                                    {{- commentdiv(comment, with_post=True) -}}
+                                    <div class="commentsep"></div>
+                                {%- endfor -%}
+                            </div>
+                        {%- else -%}<p>暂无回复我的评论。</p>{%- endif -%}
+                    </div>
+                    <div class="comment-section">
+                        <h3>我上传的题目评论</h3>
+                        {%- if unread_sections.prob_comments -%}
+                            <div class="commentlist">
+                                {%- for comment in unread_sections.prob_comments -%}
+                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                    <div class="commentsep"></div>
+                                {%- endfor -%}
+                            </div>
+                        {%- else -%}<p>暂无题目评论。</p>{%- endif -%}
+                    </div>
+                    <div class="comment-section">
+                        <h3>我上传的题解评论</h3>
+                        {%- if unread_sections.solution_comments -%}
+                            <div class="commentlist">
+                                {%- for comment in unread_sections.solution_comments -%}
+                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                    <div class="commentsep"></div>
+                                {%- endfor -%}
+                            </div>
+                        {%- else -%}<p>暂无题解评论。</p>{%- endif -%}
+                    </div>
                     {% do current_user.update_cmtlastvisit() %}
                 </div>
             {%- else -%}
@@ -122,21 +147,19 @@
                     placeholder="输入消息……" autocomplete="off"
                     {%- if not activeuser -%}disabled{%- endif -%}>
                 <input type="hidden" name="target" id="target"
-                    {%- if activeuser -%}
-                    value="{{ activeuser.uid }}"{%- endif -%}>
-                <button type="button" id="messageSenderButton"
-                    onclick="sendMessage()"
+                    {%- if activeuser -%}value="{{ activeuser.uid }}"{%- endif -%}>
+                <button type="button" id="messageSenderButton" onclick="sendMessage()"
                     {%- if not activeuser -%}disabled{%- endif -%}>发送</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    allChats = {{ all_chats|tojson }};
-    currentUid = {{ current_user.uid|tojson }};
+    allChats = {{ all_chats | tojson }};
+    currentUid = {{ current_user.uid | tojson }};
     {%- if activeuser -%}
         document.addEventListener('DOMContentLoaded', () => {
-            addMessages(allChats[{{ activeuser.uid|tojson }}].messages); });
+            addMessages(allChats[{{ activeuser.uid | tojson }}].messages); });
     {%- endif -%}
     {%- if view_comments -%}
         renderElements([...document.getElementsByClassName('commentcontent')]);

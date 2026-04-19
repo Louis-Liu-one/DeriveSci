@@ -12,6 +12,10 @@ async function deleteComment(commentId) {
                 const nextSep = element.nextElementSibling;
                 if (nextSep && nextSep.classList.contains('commentsep')) nextSep.remove();
                 element.remove();
+                // 检查是否需要显示“暂无讨论”
+                const commentList = document.querySelector('.commentlist');
+                if (commentList && commentList.querySelectorAll('.comment').length === 0)
+                    commentList.insertAdjacentHTML('beforeend', '<p>暂无讨论</p>');
             }
         } else alert(`删除失败：${data.error}`);
     } catch (err) { alert(`删除失败：${err}`); }
@@ -64,6 +68,10 @@ async function postComment(element, content) {
                 newCommentElement = subcomments.lastElementChild;
             } else {
                 const commentList = document.querySelector('.commentlist');
+                // 移除“暂无讨论”字样
+                const noCommentsMsg = commentList.querySelector('p');
+                if (noCommentsMsg && noCommentsMsg.textContent === '暂无讨论')
+                    noCommentsMsg.remove();
                 commentList.insertAdjacentHTML(
                     'afterbegin', html + '<div class="commentsep"></div>');
                 newCommentElement = commentList.firstElementChild;

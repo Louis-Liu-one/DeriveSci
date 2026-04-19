@@ -42,7 +42,8 @@
 
 {%- macro commentform_sub(comment, new_window=False) -%}
 <form id="subCommentForm" class="mathprobsform"
-    data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}" data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>
+    data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}"
+    data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>
     <span><textarea name="commenttext" class="submittext"
         placeholder="发表评论" spellcheck="false"></textarea></span>
     <span><button type="submit">发表</button></span>
@@ -57,8 +58,7 @@
     </span>
 {%- endmacro -%}
 
-{%- macro commentbody(comment,
-    toplevel=False, secondlevel=False, with_post=False) -%}
+{%- macro commentbody(comment, toplevel=False, secondlevel=False, with_post=False) -%}
 <div class="commentbody">
     {{- commentavatar(comment) -}}
     <span class="commentbodytext">
@@ -81,7 +81,7 @@
     {%- endif -%}
     {%- if current_user == comment.user and not with_post -%}
         <i title="删除评论" class="fa-solid fa-trash-can"
-            onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
+            onclick="deleteComment({{ comment.cmtid | tojson }})"></i>
     {%- endif -%}
     {%- if with_post -%} &nbsp;
         {% set post = comment.get_post() %}来自：{{ post }}
@@ -95,15 +95,13 @@
     <div class="subcomments">
         {%- for subcomment in comment.get_all_replies() -%}
             {{- commentdiv(subcomment,
-                secondlevel=subcomment.replyto == comment,
-                with_post=with_post) -}}
+                secondlevel=subcomment.replyto == comment, with_post=with_post) -}}
         {%- endfor -%}
     </div>
 {%- endif -%}
 {%- endmacro -%}
 
-{%- macro commentdiv(comment,
-    toplevel=False, secondlevel=False, with_post=False) -%}
+{%- macro commentdiv(comment, toplevel=False, secondlevel=False, with_post=False) -%}
 <div id="comment-{{ comment.cmtid }}" class="comment" data-commentid="{{ comment.cmtid }}">
     {{- commentbody(comment, toplevel, secondlevel, with_post) -}}
 </div>

@@ -18,8 +18,7 @@
                             data-url="{{ solution.prob.url() }}"
                             onclick="event.stopPropagation();
                                 window.open(this.dataset.url)"{%- endif -%}
-                            style="width: 25%">
-                            {{- solution.probno -}}</td>
+                            style="width: 25%">{{- solution.probno -}}</td>
                     {%- endif -%}
                     <td>{{- solution.title -}}</td>
                     {%- if with_user -%}

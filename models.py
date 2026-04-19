@@ -131,12 +131,69 @@ class User(db.Model, UserMixin):
             prob for prob, score in self.get_probscores().items()
             if score == 100])
 
-    def unread_comments(self):
+    def unread_reply_comments(self):
         is_mine = Comment.replyto.has(Comment.uid == self.uid)
         return Comment.query.filter(
             is_mine if self.cmtlastvisit is None
             else is_mine & (self.cmtlastvisit < Comment.timestamp)).order_by(
             Comment.timestamp.desc()).all()
+
+    def unread_comments_on_my_probs(self):
+        probnos = [prob.probno for prob in self.uploadedprobs]
+        if not probnos:
+            return []
+        query = Comment.query.filter(
+            Comment.post_type == 0, Comment.post_ident.in_(probnos),
+            Comment.replyto_id.is_(None))
+        if self.cmtlastvisit is not None:
+            query = query.filter(Comment.timestamp > self.cmtlastvisit)
+        return query.order_by(Comment.timestamp.desc()).all()
+
+    def unread_comments_on_my_solutions(self):
+        sol_ids = [solution.get_post_ident() for solution in self.solutions]
+        if not sol_ids:
+            return []
+        query = Comment.query.filter(
+            Comment.post_type == 1, Comment.post_ident.in_(sol_ids),
+            Comment.replyto_id.is_(None))
+        if self.cmtlastvisit is not None:
+            query = query.filter(Comment.timestamp > self.cmtlastvisit)
+        return query.order_by(Comment.timestamp.desc()).all()
+
+    def unread_comments_count(self):
+        reply_query = Comment.query.filter(
+            Comment.replyto.has(Comment.uid == self.uid))
+        probnos = [prob.probno for prob in self.uploadedprobs]
+        solution_ids = [
+            solution.get_post_ident() for solution in self.solutions]
+        prob_query = Comment.query.filter(
+            Comment.post_type == 0, Comment.post_ident.in_(probnos),
+            Comment.replyto_id.is_(None)) if probnos else None
+        sol_query = Comment.query.filter(
+            Comment.post_type == 1, Comment.post_ident.in_(solution_ids),
+            Comment.replyto_id.is_(None)) if solution_ids else None
+        if self.cmtlastvisit is not None:
+            reply_query = reply_query.filter(
+                Comment.timestamp > self.cmtlastvisit)
+            if prob_query is not None:
+                prob_query = prob_query.filter(
+                    Comment.timestamp > self.cmtlastvisit)
+            if sol_query is not None:
+                sol_query = sol_query.filter(
+                    Comment.timestamp > self.cmtlastvisit)
+        total = reply_query.count()
+        if prob_query is not None:
+            total += prob_query.count()
+        if sol_query is not None:
+            total += sol_query.count()
+        return total
+
+    def unread_comment_sections(self):
+        return {
+            'replies': self.unread_reply_comments(),
+            'prob_comments': self.unread_comments_on_my_probs(),
+            'solution_comments': self.unread_comments_on_my_solutions(),
+        }
 
     def update_cmtlastvisit(self):
         self.cmtlastvisit = _utcnow()

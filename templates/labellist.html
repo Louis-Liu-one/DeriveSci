@@ -17,10 +17,10 @@
 <div class="mainpart">
     <h3>所有标签</h3>
     <table class="labellist">
-        {%- for i in range(0, labels|length, 5) -%}
+        {%- for i in range(0, labels | length, 5) -%}
             <tr>
                 {%- for dif in range(5) -%}
-                    {%- if i + dif < labels|length -%}
+                    {%- if i + dif < labels | length -%}
                         <td data-url="{{ labels[i + dif].url() }}"
                             onclick="window.open(this.dataset.url)">
                             {{- labels[i + dif].labelname -}}

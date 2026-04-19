@@ -116,10 +116,10 @@
 </div>
 <script>
     {%- if form.get('probtype') -%}
-        probType.value = ({{ form['probtype']|tojson }}).toString();
+        probType.value = ({{ form.probtype | tojson }}).toString();
     {%- endif -%}
     {%- if form.get('review_status') -%}
-        reviewStatus.value = ({{ form['review_status']|tojson }}).toString();
+        reviewStatus.value = ({{ form.review_status | tojson }}).toString();
     {%- endif -%}
 </script>
 {% endblock %}

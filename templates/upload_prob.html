@@ -117,8 +117,8 @@
 <script>
     probLabel.addEventListener('keydown', addLabel);
     {%- if editmode -%}
-        addRawAnswers({{ prob.get_answer()|list|tojson }});
-        addRawLabels({{ prob.as_labelnames()|list|tojson }});
+        addRawAnswers({{ prob.get_answer() | list | tojson }});
+        addRawLabels({{ prob.as_labelnames() | list | tojson }});
     {%- endif -%}
 </script>
 {% endblock %}
