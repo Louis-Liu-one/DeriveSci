@@ -98,15 +98,17 @@
             with_head=True, with_probno=True, with_user=False) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </div>
-<script>
-    editIntroductionButton.addEventListener('click', async (event) => {
-        try {
-            const response = await fetch('/api/user/edit-introduction', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({introduction: introduction.value})});
-            const data = await response.json();
-            if (data.ok) alert('修改成功');
-            else alert(`修改失败：${data.error}`);
-        } catch (err) { alert(`修改失败：${err}`); } });
-</script>
+{%- if user == current_user -%}
+    <script>
+        editIntroductionButton.addEventListener('click', async (event) => {
+            try {
+                const response = await fetch('/api/user/edit-introduction', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({introduction: introduction.value})});
+                const data = await response.json();
+                if (data.ok) alert('修改成功');
+                else alert(`修改失败：${data.error}`);
+            } catch (err) { alert(`修改失败：${err}`); } });
+    </script>
+{% endif %}
 {% endblock %}

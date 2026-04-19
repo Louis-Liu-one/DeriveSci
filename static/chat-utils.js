@@ -9,6 +9,7 @@ async function updateMessages() {
         const newChats = await response.json();
         for (let uid in newChats) {
             if (newChats[uid].messages) {
+                if (!(uid in allChats)) allChats[uid] = {messages: []};
                 messages = newChats[uid].messages;
                 if (uid != target.value) allChats[uid].messages
                     = allChats[uid].messages.concat(messages);
@@ -21,7 +22,7 @@ async function updateMessages() {
             }
             setUnreadCircle(uid, newChats[uid].unread);
         }
-    } catch (err) { }
+    } catch (err) { console.error(err); }
 }
 
 async function sendMessage() {
@@ -79,13 +80,16 @@ function addMessages(messages, noAllChats) {
 
 function addMessage(messageInfo, noAllChats) {
     const divElement = document.createElement('div');
-    divElement.className = messageInfo.othersend ? 'message other-message' : 'message my-message';
+    divElement.className = messageInfo.othersend
+        ? 'message other-message' : 'message my-message';
     divElement.innerText = messageInfo.content;
     messageArea.appendChild(divElement);
     messageArea.scrollTop = messageArea.scrollHeight;
     if (!target.value) allChats[target.value] = {messages: []};
-    if (typeof noAllChats === 'undefined' && !noAllChats)
+    if (typeof noAllChats === 'undefined' && !noAllChats) {
+        if (!(target.value in allChats)) allChats[target.value] = {messages: []};
         allChats[target.value].messages.push(messageInfo);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

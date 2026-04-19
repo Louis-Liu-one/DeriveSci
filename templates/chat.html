@@ -157,7 +157,7 @@
 <script>
     allChats = {{ all_chats | tojson }};
     currentUid = {{ current_user.uid | tojson }};
-    {%- if activeuser -%}
+    {%- if activeuser and activeuser.uid in all_chats -%}
         document.addEventListener('DOMContentLoaded', () => {
             addMessages(allChats[{{ activeuser.uid | tojson }}].messages); });
     {%- endif -%}

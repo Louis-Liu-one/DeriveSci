@@ -544,7 +544,7 @@ def api_chat_messages():
         lastmsgtime = request.json.get('lastmsgtime')
         return jsonify(find_user(receiver_uid).all_chats(
             datetime.datetime.fromisoformat(
-                lastmsgtime)) if lastmsgtime else None)
+                lastmsgtime) if lastmsgtime else None))
     except BaseException as err:
         return {}, 400
 
