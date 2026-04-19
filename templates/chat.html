@@ -159,7 +159,7 @@
     currentUid = {{ current_user.uid | tojson }};
     {%- if activeuser and activeuser.uid in all_chats -%}
         document.addEventListener('DOMContentLoaded', () => {
-            addMessages(allChats[{{ activeuser.uid | tojson }}].messages); });
+            addMessages(allChats[{{ activeuser.uid | tojson }}].messages, true); });
     {%- endif -%}
     {%- if view_comments -%}
         renderElements([...document.getElementsByClassName('commentcontent')]);
