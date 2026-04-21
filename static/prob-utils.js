@@ -50,3 +50,24 @@ async function reviewProb(btn, accept) {
         const data = await response.json(); location.replace(data.url);
     } catch (err) { alert('操作失败'); }
 }
+
+async function saveReviewComment(btn) {
+    try {
+        const probno = btn.dataset.probno;
+        const textarea = document.getElementById('reviewCommentText');
+        const comment = textarea ? textarea.value : '';
+        const response = await fetch('/api/prob/review-comment', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({probno: probno, review_comment: comment})});
+        const data = await response.json();
+        if (data.ok) {
+            alert('保存成功');
+            const view = document.getElementById('reviewCommentView');
+            if (view) {
+                if (typeof renderElement === 'function')
+                    renderElement(view, comment, 'block', markdownImageBasePath || '');
+                else view.innerText = comment;
+            }
+        } else alert('保存失败');
+    } catch (err) { alert('保存失败'); }
+}

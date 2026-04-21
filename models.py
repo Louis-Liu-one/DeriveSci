@@ -320,6 +320,7 @@ class Prob(db.Model):
         'ProbImage', backref='prob', cascade='all, delete')
     review_status = db.Column(db.Integer, default=-1)
     isofficial = db.Column(db.Boolean, default=False)
+    review_comment = db.Column(db.Text)
 
     def get_answer(self):
         if not self.answer:

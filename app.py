@@ -29,6 +29,7 @@ API：*
 /api/prob/upload            上传题目
 /api/prob/set-official      将题目添加到官方题集
 /api/prob/review            通过/拒绝题目的审核
+/api/prob/review-comment    保存审核意见
 /api/prob/edit              编辑题目
 /api/prob/delete            删除题目
 /api/solution/upload        上传题解
@@ -327,10 +328,29 @@ def api_review_prob():
     if not prob:
         return {'ok': False, 'error': '未能找到题目。'}, 404
     prob.review_status = 1 if accept else 0
+    review_comment = request.json.get('review_comment')
+    if review_comment is not None:
+        prob.review_comment = review_comment
     db.session.commit()
     return {
         'ok': True, 'accept': accept,
         'url': prob.url() if accept else url_for('problist')}
+
+
+@app.route('/api/prob/review-comment', methods=['POST'])
+def api_save_review_comment():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    if not current_user.isadmin:
+        abort(403)
+    probno = request.json.get('probno')
+    comment = request.json.get('review_comment')
+    prob = get_prob(probno)
+    if not prob:
+        return {'ok': False, 'error': '未能找到题目。'}, 404
+    prob.review_comment = comment
+    db.session.commit()
+    return {'ok': True}
 
 
 @app.route('/api/prob/set-official', methods=['POST'])

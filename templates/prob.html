@@ -54,18 +54,37 @@
             {%- else -%}
                 <p class="helpslink">你的题目待审核。</p>
             {%- endif -%}
+            {%- if prob.review_comment -%}
+                <h3>审核意见</h3>
+                <div id="reviewCommentView" class="markdown-body">
+                    <textarea style="display: none">{{ prob.review_comment }}</textarea>
+                </div>
+            {%- endif -%}
         {%- else -%}
             <form class="mathprobsform">
                 {%- if prob.review_status == 0 -%}
-                    <p class="helpslink">此题曾被拒绝。</p>
+                    <p class="helpslink">此题已被拒绝。</p>
                 {%- else -%}
                     <p class="helpslink">此题待审核。</p>
                 {%- endif -%}
-                <button data-probno="{{ prob.probno }}"
-                    onclick="reviewProb(this, true)">通过</button>
-                <button data-probno="{{ prob.probno }}"
-                    onclick="reviewProb(this, false)">拒绝</button>
+                <span>
+                    <button data-probno="{{ prob.probno }}"
+                        onclick="reviewProb(this, true)">通过</button>
+                    <button data-probno="{{ prob.probno }}"
+                        onclick="reviewProb(this, false)">拒绝</button>
+                </span>
             </form>
+            <h3>审核意见</h3>
+            {%- if current_user.isadmin -%}
+                <form class="mathprobsform" id="reviewCommentForm"
+                    onsubmit="event.preventDefault(); saveReviewComment(thisSaveBtn);">
+                    <span><textarea class="submittext"
+                        id="reviewCommentText" rows="6">{{ prob.review_comment or '' }}</textarea></span>
+                    <span>
+                        <button id="thisSaveBtn" type="submit" data-probno="{{ prob.probno }}">保存审核意见</button>
+                    </span>
+                </form>
+            {%- endif -%}
         {%- endif -%}
     {%- else -%}
         <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}"
@@ -95,9 +114,10 @@
 </div>
 <script>
     const markdownImageBasePath = "/images/{{ prob.probno }}/";
-    renderElements([
-        bodyBlock, ...document.getElementsByClassName('commentcontent')],
-        markdownImageBasePath);
+    const _toRender = [bodyBlock, ...document.getElementsByClassName('commentcontent')];
+    const _rcv = document.getElementById('reviewCommentView');
+    if (_rcv) _toRender.push(_rcv);
+    renderElements(_toRender, markdownImageBasePath);
     {%- if current_user.isadmin -%}
         officialSidebarSetter.addEventListener('click', setOfficialProb);
     {%- endif -%}
