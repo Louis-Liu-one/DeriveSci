@@ -204,16 +204,32 @@ def imagefile(probno, imagename):
 @app.route('/probs/<probno>/submit', methods=['POST'])
 @login_required
 def submit(probno):
-    answer = request.form.get('answertext')
+    answers = [a.strip() for a in request.form.getlist('answertext')]
     prob = get_prob(probno)
     if not prob or not prob.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题目。'), 404
+    answer_payload = answers if len(answers) > 1 else (answers[0] if answers else '')
     answer_eval, testpoints, submission = prob.add_submission(
-        current_user, answer)
+        current_user, answer_payload)
+    if isinstance(answer_eval, list):
+        answer_latex = [latex(a) if a is not None else None for a in answer_eval]
+    else:
+        answer_latex = latex(answer_eval) if answer_eval is not None else None
+    submission_answer_parsed = None
+    if submission and submission.answer:
+        try:
+            val = json.loads(submission.answer)
+            if isinstance(val, list):
+                submission_answer_parsed = val
+            else:
+                submission_answer_parsed = [str(val)]
+        except Exception:
+            submission_answer_parsed = [submission.answer]
     return render_template(
         'submit.html',
-        answer_latex=latex(answer_eval) if answer_eval else None,
-        prob=prob, submission=submission, testpoints=testpoints)
+        answer_latex=answer_latex,
+        prob=prob, submission=submission, testpoints=testpoints,
+        submission_answer_parsed=submission_answer_parsed)
 
 
 @app.route('/probs/<probno>/solutions/<int:solno>')

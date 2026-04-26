@@ -3,7 +3,7 @@ from textwrap import indent  # 调试用
 
 import re
 import types
-import operator
+import operator as op
 import functools
 import sympy as sp
 from pyparsing import Literal, Suppress, Word, Regex
@@ -434,12 +434,12 @@ _as_conjunction = functools.partial(
     _process_binops, specprocs={'and': sp.And})
 _as_inversion = functools.partial(_process_unops, specprocs={'not': sp.Not})
 _as_sum = functools.partial(
-    _process_binops, specprocs={'+': operator.add, '-': operator.sub})
+    _process_binops, specprocs={'+': op.add, '-': op.sub})
 _as_term = functools.partial(
-    _process_binops, specprocs={'*': operator.mul, '/': operator.truediv})
-_as_factor = functools.partial(_process_unops, specprocs={'-': operator.neg})
+    _process_binops, specprocs={'*': op.mul, '/': op.truediv, '%': op.mod})
+_as_factor = functools.partial(_process_unops, specprocs={'-': op.neg})
 _as_power = functools.partial(
-    _process_binops, specprocs={'^': operator.pow}, right_assoc=True)
+    _process_binops, specprocs={'^': op.pow}, right_assoc=True)
 _as_factorial = functools.partial(
     _process_unops, specprocs={'!': sp.factorial}, right_assoc=True)
 _statements = functools.partial(Statements)
@@ -447,6 +447,10 @@ _statements = functools.partial(Statements)
 
 def _as_array(tokens):
     return sp.Array(tokens)
+
+
+def _as_finiteset(tokens):
+    return sp.FiniteSet(*tokens)
 
 
 def _as_comparison(tokens):
@@ -581,14 +585,14 @@ def _as_stmtsblock(tokens):
     return StatementsBlock(tokens[0])
 
 
-PLUS, MINUS, TIMES, DIVIDE, POWER, ABS = map(Literal, '+-*/^|')
+PLUS, MINUS, TIMES, DIVIDE, MOD, POWER, ABS = map(Literal, '+-*/%^|')
 ASSIGN, DOT, LIT_COMMA, COL, EXCL = map(Literal, '=.,:!')
 COMP_LT, COMP_LE, COMP_EQ, COMP_NE, COMP_GE, COMP_GT = map(
-    Literal, ['<', '<=', '==', '!=', '>=', '>'])
+    Literal, ['<', '<=', '==', '<>', '>=', '>'])
 COMPARISON = COMP_LE | COMP_GE | COMP_NE | COMP_EQ | COMP_LT | COMP_GT
 COMPDICT = {
     '<': sp.Lt, '<=': sp.Le, '==': sp.Eq,
-    '!=': sp.Ne, '>=': sp.Ge, '>': sp.Gt}
+    '<>': sp.Ne, '>=': sp.Ge, '>': sp.Gt}
 LPAREN, RPAREN, LSQBRK, RSQBRK, LBRACE, RBRACE, SEMICOL, COMMA = map(
     Suppress, '()[]{};,')
 KW_NOT, KW_AND, KW_OR, KW_RETURN, KW_IF, KW_ELSE, KW_WHILE = map(
@@ -609,19 +613,19 @@ BNFs:
 <funcargs>    ::= "(" { <expr> "," }
                   [ [ <expr> "," ] <kwargs> | <expr> ] [ "," ] ")"
 <slice>       ::= "[" { <expr> "," } <expr> [ "," ] "]"
-<parencall>    ::= IDENTIFIER ( <funcargs> | <slice> )+
-<array>       ::= "[" [ { ( <array> | <expr> ) "," }
-                  ( <array> | <expr> ) [ "," ] ] "]"
+<parencall>   ::= IDENTIFIER ( <funcargs> | <slice> )+
+<array>       ::= "[" [ { <expr> "," } <expr> [ "," ] ] "]"
+<finiteset>   ::= "{" [ <expr> { "," <expr> } [ "," ] ] "}"
 <parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
-<primary>     ::= ( <array> | <parenexpr> | <parencall> | <atom> )
+<primary>     ::= ( <array> | <finiteset> | <parenexpr> | <parencall> | <atom> )
                   { "." IDENTIFIER { <funcargs> | <slice> } }
 
 <factorial>   ::= <primary> { "!" }
 <power>       ::= <factorial> { "^" <factorial> }
 <factor>      ::= { "+" | "-" } <power>
-<term>        ::= <factor> { "*" <factor> | "/" <factor> }
-<sum>         ::= <term> { "+" <term> | "-" <term> }
-<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "!=" | ">=" | ">" ) <sum> }
+<term>        ::= <factor> { ( "*" | "/" | "%" ) <factor> }
+<sum>         ::= <term> { ( "+" | "-" ) <term> }
+<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "<>" | ">=" | ">" ) <sum> }
 <inversion>   ::= { "not" } <comparison>
 <conjunction> ::= <inversion> { "and" <inversion> }
 <disjunction> ::= <conjunction> { "or" <conjunction> }
@@ -647,7 +651,6 @@ RULE_atom = IDENTIFIER | FLOAT_ATOM | INT_ATOM
 RULE_expr = Forward()
 RULE_statement = Forward()
 RULE_stmtsblock = Forward()
-RULE_array = Forward()
 
 RULE_kwargs = (IDENTIFIER + ASSIGN + RULE_expr + ZeroOrMore(
     COMMA + IDENTIFIER + ASSIGN + RULE_expr)).set_parse_action(_as_kwargs)
@@ -659,13 +662,16 @@ RULE_slice = (
     + RULE_expr + Opt(COMMA) + RSQBRK).set_parse_action(_as_slice)
 RULE_parencall = (IDENTIFIER + OneOrMore(
     RULE_funcargs | RULE_slice)).set_parse_action(_as_parencall)
-RULE_array << (LSQBRK + Opt(ZeroOrMore(
-    (RULE_array | RULE_expr) + COMMA) + (RULE_array | RULE_expr) + Opt(COMMA))
+RULE_array = (LSQBRK + Opt(ZeroOrMore(
+    RULE_expr + COMMA) + RULE_expr + Opt(COMMA))
     + RSQBRK).set_parse_action(_as_array)
+RULE_finiteset = (LBRACE + Opt(ZeroOrMore(
+    RULE_expr + COMMA) + RULE_expr + Opt(COMMA))
+    + RBRACE).set_parse_action(_as_finiteset)
 RULE_parenexpr = (LPAREN + RULE_expr + RPAREN) | (
     ABS + RULE_expr + ABS).set_parse_action(_as_absvalue)
-RULE_primary = (
-    (RULE_array | RULE_parenexpr | RULE_parencall | RULE_atom)
+RULE_primary = ((
+    RULE_array | RULE_finiteset | RULE_parenexpr | RULE_parencall | RULE_atom)
     + ZeroOrMore(DOT + IDENTIFIER + ZeroOrMore(RULE_funcargs | RULE_slice))
     ).set_parse_action(_as_primary)
 
@@ -676,7 +682,7 @@ RULE_power = (RULE_factorial + ZeroOrMore(
 RULE_factor = (
     ZeroOrMore(PLUS | MINUS) + RULE_power).set_parse_action(_as_factor)
 RULE_term = (RULE_factor + ZeroOrMore(
-    (TIMES | DIVIDE) + RULE_factor)).set_parse_action(_as_term)
+    (TIMES | DIVIDE | MOD) + RULE_factor)).set_parse_action(_as_term)
 RULE_sum = (RULE_term + ZeroOrMore(
     (PLUS | MINUS) + RULE_term)).set_parse_action(_as_sum)
 RULE_comparison = (RULE_sum + ZeroOrMore(

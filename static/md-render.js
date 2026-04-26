@@ -20,8 +20,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
             }
         }
     }
-    return self.renderToken(tokens, idx, options);
-};
+    return self.renderToken(tokens, idx, options); };
 
 if (window.hljs) md.options['highlight'] = function (str, lang) {
         if (lang && hljs.getLanguage(lang))

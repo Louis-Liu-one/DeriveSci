@@ -1,38 +1,77 @@
 
-let answerList = []; let labelList = [];
+let subprobs = []; let labelList = [];
 
-function addAnswer(context, answer) {
-    try {
-        if (!context) context = '{}';
-        answerList.push([JSON.parse(context), answer]);
+function renderSubprobs() {
+    answerListElement.innerHTML = '';
+    subprobs.forEach((sub, i) => {
         const li = document.createElement('li');
-        li.dataset.index = answerList.length - 1;
-        li.innerHTML = `${escapeHTML(context)}
-            <i class="fa-solid fa-arrow-right"></i> ${escapeHTML(answer)}
-            <i class="minus fa-solid fa-circle-minus"></i>`;
-        const minusIcon = li.querySelector('.minus');
-        minusIcon.addEventListener('click',
-            () => removeAnswer(parseInt(li.dataset.index)));
+        li.className = 'subprob'; li.dataset.index = i;
+        const header = document.createElement('div');
+        header.className = 'subprob-header';
+        header.innerHTML = `小题 ${i+1} <i class="minus delete-subprob fa-solid fa-circle-minus" data-i="${i}"></i>`;
+        header.onclick = () => selectSubprob(i);
+        li.appendChild(header);
+        const ul = document.createElement('ul');
+        ul.className = 'subprob-tps';
+        sub.forEach((tp, j) => {
+            const tpli = document.createElement('li');
+            tpli.innerHTML = `${escapeHTML(JSON.stringify(tp[0]))}
+                <i class="fa-solid fa-arrow-right"></i> ${escapeHTML(tp[1])}
+                <i class="minus delete-tp fa-solid fa-circle-minus" data-si="${i}" data-ti="${j}"></i>`;
+            ul.appendChild(tpli);
+        });
+        li.appendChild(ul);
         answerListElement.appendChild(li);
-    } catch (err) { alert(err); }
+    });
+    // 绑定删除事件
+    answerListElement.querySelectorAll('i.delete-subprob').forEach(btn => {
+        btn.onclick = (ev) => { ev.stopPropagation(); removeSubprob(+btn.dataset.i); };
+    });
+    answerListElement.querySelectorAll('i.delete-tp').forEach(btn => {
+        btn.onclick = (ev) => { ev.stopPropagation(); removeTestpoint(+btn.dataset.si, +btn.dataset.ti); };
+    });
+    if (window.selectedSub === undefined) window.selectedSub = subprobs.length - 1;
+    Array.from(answerListElement.children).forEach((li, idx) => {
+        li.classList.toggle('selected', window.selectedSub === idx);
+    });
+}
+
+function addSubprob() {
+    subprobs.push([]); window.selectedSub = subprobs.length - 1; renderSubprobs();
+}
+
+function removeSubprob(index) {
+    subprobs.splice(index, 1); renderSubprobs();
+}
+
+function addTestpointToSelected(context, answer) {
+    if (!context) context = '{}';
+    const parsed = JSON.parse(context);
+    if (window.selectedSub === undefined) addSubprob();
+    if (!subprobs[window.selectedSub]) subprobs[window.selectedSub] = [];
+    subprobs[window.selectedSub].push([parsed, answer]);
+    renderSubprobs();
 }
 
 function addAnswerHTML(context, answer) {
-    addAnswer(context.value, answer.value);
+    addTestpointToSelected(context.value, answer.value);
     context.value = ''; answer.value = '';
 }
 
-function removeAnswer(index) {
-    answerListElement.removeChild(answerListElement.children[index]);
-    answerList.splice(index, 1);
-    // 更新所有li的data-index
-    for (let i = 0; i < answerListElement.children.length; i++)
-        answerListElement.children[i].dataset.index = i;
+function selectSubprob(i) {
+    window.selectedSub = i; renderSubprobs();
+}
+
+function removeTestpoint(subIndex, tpIndex) {
+    if (!subprobs[subIndex]) return;
+    subprobs[subIndex].splice(tpIndex, 1);
+    renderSubprobs();
 }
 
 function addRawAnswers(rawAnswerList) {
-    rawAnswerList.forEach(answer => {
-        addAnswer(JSON.stringify(answer[0]), answer[1]); });
+    if (!rawAnswerList) return;
+    subprobs = rawAnswerList.map(sub => sub.map(a => [a[0], a[1]]));
+    renderSubprobs();
 }
 
 function addLabel(event) {
@@ -50,11 +89,14 @@ function renderLabels() {
         labelElement.className = 'problabel';
         labelElement.innerHTML = `${escapeHTML(label)} <i class="delete-button`
             + ` fa-solid fa-circle-minus" data-i="${i}"></i>`;
-        labelArea.appendChild(labelElement); });
+        labelArea.appendChild(labelElement);
+    });
     labelArea.querySelectorAll('i.delete-button').forEach(deleteButton => {
         deleteButton.onclick = () => {
             labelList.splice(+deleteButton.dataset.i, 1);
-            renderLabels(); }; });
+            renderLabels();
+        };
+    });
 }
 
 function addRawLabels(rawLabelList) {
@@ -70,7 +112,7 @@ function addHiddenInputElementForList(form, name, list)
 }
 
 async function uploadProb() {
-    addHiddenInputElementForList(editForm, 'answers', answerList);
+    addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
         const response = await fetch('/api/prob/upload', {
@@ -82,7 +124,7 @@ async function uploadProb() {
 }
 
 async function editProb() {
-    addHiddenInputElementForList(editForm, 'answers', answerList);
+    addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
         const response = await fetch('/api/prob/edit', {

@@ -93,16 +93,18 @@ function addMessage(messageInfo, noAllChats) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.activeUser
-        = document.getElementsByClassName('user-item active')[0];
+    window.activeUser = document.getElementsByClassName('user-item active')[0];
     window.timeOfLastMessage = ''; window.elements = {};
     messageInputElement.addEventListener('keypress', (event) => {
-        if (event.key == 'Enter' && messageInputElement.value) sendMessage(); });
-    setInterval(updateMessages, 2000); });
+        if (event.key == 'Enter' && messageInputElement.value) sendMessage();
+    });
+    setInterval(updateMessages, 2000);
+});
 
 window.addEventListener('beforeunload', (event) => {
     if (!target.value) return;
     navigator.sendBeacon('/api/chat/update-lastvisit', new Blob(
         [JSON.stringify({
             receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
-        {type: 'application/json; charset=UTF-8'})); });
+        {type: 'application/json; charset=UTF-8'}));
+});

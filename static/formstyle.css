@@ -50,6 +50,16 @@ form.mathprobsform div.answer ul li i.minus {
 form.mathprobsform div.answer ul li i.minus:hover {
     transform: rotate(90deg); cursor: pointer; background: #E8F4F8; }
 
+form.mathprobsform div.answer ul li .subprob-header i.minus,
+form.mathprobsform div.answer .subprob-header i.minus {
+    transition: all .25s ease; font-size: 18px;
+    color: #34AAE0; margin-left: auto; padding: 4px; border-radius: 6px; }
+form.mathprobsform div.answer ul li .subprob-header i.minus:hover,
+form.mathprobsform div.answer .subprob-header i.minus:hover {
+    transform: rotate(90deg); cursor: pointer; background: #E8F4F8; }
+form.mathprobsform div.answer ul.subprob-tps { flex-grow: 1; min-width: 0; }
+form.mathprobsform div.answer ul li.selected { background: #EEF9FF; }
+
 form.mathprobsform input, form.mathprobsform textarea,
 form.mathprobsform select {
     flex-grow: 1; min-width: 0; font-family: AndaleMono; font-size: 14px;
@@ -57,7 +67,7 @@ form.mathprobsform select {
     border: 1px solid #E6E8EB; border-radius: 8px;
     transition: border-color .25s ease; }
 form.mathprobsform textarea {
-    min-width: 80%; min-height: 60px; height: 150px; resize: vertical; }
+    min-height: 60px; height: 150px; resize: vertical; }
 form.mathprobsform textarea.tall { height: 250px; }
 form.mathprobsform input:focus, form.mathprobsform textarea:focus,
 form.mathprobsform select:focus {

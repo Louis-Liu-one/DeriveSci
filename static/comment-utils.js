@@ -92,8 +92,10 @@ async function postComment(element, content) {
 document.addEventListener('DOMContentLoaded', () => {
     // 绑定初始的回复按钮
     document.querySelectorAll('#commentSenderButton').forEach(button => {
-        handleCommentSenderButton(button); });
+        handleCommentSenderButton(button);
+    });
     // 添加表单提交监听器
     document.querySelectorAll('#commentForm, #subCommentForm').forEach(form => {
-        handleFormSubmit(form); });
+        handleFormSubmit(form);
+    });
 });

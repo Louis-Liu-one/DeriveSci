@@ -38,7 +38,7 @@
 运算符 | 意义 | 优先级 | 运算符 | 意义 | 优先级 | 运算符 | 意义 | 优先级
 :---: | :-: | :----: | :--: | :--: | :---: | :---: | :-: | :---:
 `>`  | 严格大于   | 3 | `>=` | 大于或等于 | 3 | `==`  | 等于    | 3
-`!=` | 不等于     | 3 | `<=` | 小于或等于 | 3 | `<`   | 严格小于 | 3
+`<>` | 不等于     | 3 | `<=` | 小于或等于 | 3 | `<`   | 严格小于 | 3
 `not` | 非       | 2 | `and` | 且       | 1 | `or`  | 或      | 0
 
 与大部分编程语言不同的是，6 个比较运算符连续结合时将自动解析为且运算的连续结合。例如：`x < y < z` 与 `x < y and y < z` 等价。
@@ -84,23 +84,23 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 以下是常用的 SymPy 属性或方法：
 
 用法 | 意义
-:-: | ---
-`expr.evalf()`           | 求浮点数值
-`expr.args`              | 求算式中的单位
-`f(x).series(x, 0, 6)`   | Taylor 展开前 $6$ 项
-`f(x).series(x, 6)`      | 在 $x = 6$ 处 Taylor 展开
-`M.T`                    | 矩阵转置
-`M^(-1)`                 | 求逆矩阵
-`M.det()`                | 求矩阵行列式
-`M.eigenvals()`          | 求矩阵特征值
-`M.diagonalize()`        | 求对角化矩阵
+:--------------------: | ---
+`expr.evalf()`         | 求浮点数值
+`expr.args`            | 求算式中的单位
+`f(x).series(x, 0, 6)` | Taylor 展开前 $6$ 项
+`f(x).series(x, 6)`    | 在 $x = 6$ 处 Taylor 展开
+`M.T`                  | 矩阵转置
+`M^(-1)`               | 求逆矩阵
+`M.det()`              | 求矩阵行列式
+`M.eigenvals()`        | 求矩阵特征值
+`M.diagonalize()`      | 求对角化矩阵
 
 ### 默认常量
 
 表达式中可以使用一些预定义的默认**常量**。以下是一些常用的预定义常量：
 
 名称 | 意义
---: | :--
+-------------------: | :--
 `Catalan`            | Catalan 常数
 `E`                  | 自然对数
 `EulerGamma`         | Euler–Mascheroni 常数
@@ -123,6 +123,14 @@ A = [8, 3, 5, 1, 2, 0, 7, 6, 4, 9];
 就将数组存储在了变量 `A` 中。
 
 可以使用 `A[i]` 取出数组中的元素。例如，`A[6]` 的结果为 `7`。在表达式中也可以不指定 `i`，从而使 `A[i]` 泛指数组中的某个元素。
+
+### 有限集合
+
+使用 `{表达式1, 表达式2, ...}` 创建**有限集合**。例如
+```
+S = {8, 3, 5, 1, 2, 0, 7, 6, 4, 9};
+```
+就将有限集合存储在了变量 `S` 中。创建集合时，会自动去除其中重复的元素。
 
 ## 语句
 
@@ -199,16 +207,17 @@ return 36;
 <funcargs>    ::= "(" { <expr> "," } [ [ <expr> "," ] <kwargs> | <expr> ] [ "," ] ")"
 <slice>       ::= "[" { <expr> "," } <expr> [ "," ] "]"
 <parencall>   ::= IDENTIFIER ( <funcargs> | <slice> )+
-<array>       ::= "[" [ { ( <array> | <expr> ) "," } ( <array> | <expr> ) [ "," ] ] "]"
+<array>       ::= "[" [ { <expr> "," } <expr> [ "," ] ] "]"
+<finiteset>   ::= "{" [ <expr> { "," <expr> } [ "," ] ] "}"
 <parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
-<primary>     ::= ( <array> | <parenexpr> | <parencall> | <atom> ) { "." IDENTIFIER { <funcargs> | <slice> } }
+<primary>     ::= ( <array> | <finiteset> | <parenexpr> | <parencall> | <atom> ) { "." IDENTIFIER { <funcargs> | <slice> } }
 
 <factorial>   ::= <primary> { "!" }
 <power>       ::= <factorial> { "^" <factorial> }
 <factor>      ::= { "+" | "-" } <power>
-<term>        ::= <factor> { "*" <factor> | "/" <factor> }
-<sum>         ::= <term> { "+" <term> | "-" <term> }
-<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "!=" | ">=" | ">" ) <sum> }
+<term>        ::= <factor> { ( "*" | "/" | "%" ) <factor> }
+<sum>         ::= <term> { ( "+" | "-" ) <term> }
+<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "<>" | ">=" | ">" ) <sum> }
 <inversion>   ::= { "not" } <comparison>
 <conjunction> ::= <inversion> { "and" <inversion> }
 <disjunction> ::= <conjunction> { "or" <conjunction> }

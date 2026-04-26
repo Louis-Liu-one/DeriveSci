@@ -144,6 +144,7 @@
     /* Answer section styles */
     form.mathprobsform div.answer ul { background: #111827; border-color: #1F2937; }
     form.mathprobsform div.answer ul li { border-bottom-color: #1F2937; }
+    form.mathprobsform div.answer ul li.selected { background: #60A5FA1F; }
     form.mathprobsform div.answer ul li:hover { background: #60A5FA1F; }
     form.mathprobsform div.answer ul li i, form.mathprobsform div.answer ul li i.minus {
         color: var(--primary); }

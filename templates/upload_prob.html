@@ -53,8 +53,7 @@
             <label for="probLabel">标签：</label>
             <div class="label-input" id="labelArea"></div>
             <input type="text" id="probLabel" name="problabel"
-                autocomplete="off" spellcheck="false"
-                placeholder="输入题目标签，按回车键添加">
+                autocomplete="off" spellcheck="false" placeholder="输入题目标签，按回车键添加">
         </span>
         <span>
             <label for="statement">描述：</label>
@@ -68,13 +67,12 @@
             <div class="answer">
                 <div class="answer-input">
                     <input type="text" id="contextInputElement" name="context"
-                        autocomplete="off" spellcheck="false"
-                        placeholder="以JSON格式输入各变量，可置空">
+                        autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
                     <input type="text" id="answerInputElement" name="answer"
-                        autocomplete="off" spellcheck="false"
-                        placeholder="输入答案">
+                        autocomplete="off" spellcheck="false" placeholder="输入答案">
                     <i class="fa-solid fa-circle-plus" onclick="addAnswerHTML(
                         contextInputElement, answerInputElement)"></i>
+                        <i class="fa-solid fa-square-plus" title="添加小题" onclick="addSubprob()"></i>
                 </div>
                 <ul id="answerListElement"></ul>
             </div>
@@ -117,8 +115,10 @@
 <script>
     probLabel.addEventListener('keydown', addLabel);
     {%- if editmode -%}
-        addRawAnswers({{ prob.get_answer() | list | tojson }});
-        addRawLabels({{ prob.as_labelnames() | list | tojson }});
+        document.addEventListener('DOMContentLoaded', () => {
+            addRawAnswers({{ prob.get_answer() | list | tojson }});
+            addRawLabels({{ prob.as_labelnames() | list | tojson }});
+        });
     {%- endif -%}
 </script>
 {% endblock %}

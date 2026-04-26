@@ -327,19 +327,38 @@ class Prob(db.Model):
             return []
         answer = json.loads(self.answer)
         if not isinstance(answer, list):
-            answer = [[{}, answer]]
+            return []
         return answer
 
     def check_answers(self, userans):
-        return check_answers(self.get_answer(), userans)
+        answers = self.get_answer()
+        if not answers:
+            return None, []
+        if isinstance(userans, str):
+            userans_list = [userans]
+        elif isinstance(userans, list):
+            userans_list = userans
+        else:
+            userans_list = [str(userans)]
+
+        answer_evals = []
+        testpoints_list = []
+        for i, sub in enumerate(answers):
+            ua = userans_list[i] if i < len(userans_list) else ''
+            ua_eval, tps = check_answers(sub, ua)
+            answer_evals.append(ua_eval)
+            testpoints_list.append(tps)
+        return answer_evals, testpoints_list
 
     def add_submission(self, user, answer):
         answer_eval, testpoints = self.check_answers(answer)
-        passedlist = testpoints_passedlist(testpoints)
+        passedlist = []
+        for sub in testpoints:
+            passedlist.extend(testpoints_passedlist(sub))
         submission = Submission(
-            user=user, answer=answer, ispassed=all(passedlist),
-            score=100 * sum(passedlist) // len(
-                passedlist) if passedlist else 0)
+            user=user, answer=json.dumps(answer) if not isinstance(answer, str) else answer,
+            ispassed=all(passedlist) if passedlist else False,
+            score=100 * sum(passedlist) // len(passedlist) if passedlist else 0)
         db.session.add(submission)
         submission.prob = self
         db.session.commit()

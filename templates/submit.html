@@ -4,23 +4,7 @@
 {% from "includes/users.html" import user_name, user_sidebar %}
 {% from "includes/sidebar.html" import return2post %}
 
-{% block title %}问题{{ prob.probno }}的提交 - MathProbs{% endblock %}
-
-{% block static_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='submit.css') }}">
-<script src="{{ url_for('static', filename='md-render.js') }}"></script>
-{% endblock %}
-
-{% block navbar_title %}问题{{ prob.probno }} —— 我的提交{% endblock %}
-
-{% block body %}
-<div class="sidebar">
-    {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
-    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
-</div>
-<div class="bodypart">
-    <h3>提交状态</h3>
+{%- macro testpoint_status_div(prob, testpoints) -%}
     <div class="tpstatus">
         {%- for status in testpoints -%}
             {%- if status == TPStatus.CORRECT -%}
@@ -45,25 +29,74 @@
             {%- endif -%}
         {%- endfor -%}
     </div>
-    <p><strong>我的答案：</strong><pre>{{ submission.answer }}</pre></p>
-    <p>
-        <strong>我的得分：</strong>
-        {%- if submission.score == 100 -%}
-            <font color="#72C040"><b>100</b></font>
-        {%- elif submission.score >= 80 -%}
-            <font color="#E89F3C"><b>{{ submission.score }}</b></font>
-        {%- elif submission.score >= 40 -%}
-            <font color="#E07B41"><b>{{ submission.score }}</b></font>
-        {%- else -%}
-            <font color="#D75746"><b>{{ submission.score }}</b></font>
-        {%- endif -%}
-    </p>
-    <div id="answerBlock">
-        <textarea id="answerText">**求值结果：**
-            {%- if answer_latex %} ${{ answer_latex }}$
+{%- endmacro -%}
+
+{%- macro colored_score(score) -%}
+    {%- if score == 100 -%}
+        <font color="#72C040"><b>100</b></font>
+    {%- elif score >= 80 -%}
+        <font color="#E89F3C"><b>{{ score }}</b></font>
+    {%- elif score >= 40 -%}
+        <font color="#E07B41"><b>{{ score }}</b></font>
+    {%- else -%}
+        <font color="#D75746"><b>{{ score }}</b></font>
+    {%- endif -%}
+{%- endmacro -%}
+
+{% block title %}问题{{ prob.probno }}的提交 - MathProbs{% endblock %}
+
+{% block static_files %}
+<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='submit.css') }}">
+<script src="{{ url_for('static', filename='md-render.js') }}"></script>
+{% endblock %}
+
+{% block navbar_title %}问题{{ prob.probno }} —— 我的提交{% endblock %}
+
+{% block body %}
+<div class="sidebar">
+    {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
+    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
+</div>
+<div class="bodypart">
+    <h3>提交状态</h3>
+    {%- set anslist = prob.get_answer() -%}
+    {%- if anslist|length > 1 -%}
+    {%- for sub_i in range(testpoints|length) -%}
+    <h4>小题 {{ sub_i + 1 }}</h4>
+    {{- testpoint_status_div(prob, testpoints[sub_i]) -}}
+    <p><strong>我的答案（小题 {{ sub_i + 1 }}）：</strong>
+        <pre>{{ submission_answer_parsed[sub_i] if submission_answer_parsed else '' }}</pre></p>
+    {%- set sub_pts = namespace(value=0) -%}
+    {%- set sub_total = testpoints[sub_i]|length -%}
+    {%- for s in testpoints[sub_i] -%}
+        {%- if s == TPStatus.CORRECT -%}{%- set sub_pts.value = sub_pts.value + 1 -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if sub_total > 0 -%}
+        {%- set sub_score = (100 * sub_pts.value) // sub_total -%}
+    {%- else -%}{%- set sub_score = 0 -%}{%- endif -%}
+    <p><strong>小题得分：</strong>{{- colored_score(sub_score) -}}</p>
+    <div id="answerBlock-{{ sub_i }}">
+        <textarea id="answerText-{{ sub_i }}">**求值结果：**
+            {%- if answer_latex and answer_latex[sub_i] %} ${{ answer_latex[sub_i] }}$
             {%- else %} 无法求值{%- endif -%}
         </textarea>
     </div>
+    {%- endfor -%}
+    <p><strong>总体得分：</strong>{{- colored_score(submission.score) -}}</p>
+    {%- else -%}
+        {{- testpoint_status_div(prob, testpoints[0]) -}}
+        <p><strong>我的答案：</strong>
+            <pre>{{- submission_answer_parsed[0] if submission_answer_parsed else submission.answer -}}</pre>
+        </p>
+        <p><strong>我的得分：</strong>{{- colored_score(submission.score) -}}</p>
+        <div id="answerBlock">
+            <textarea id="answerText">**求值结果：**
+                {%- if answer_latex %} ${{ answer_latex[0] }}$
+                {%- else %} 无法求值{%- endif -%}
+            </textarea>
+        </div>
+    {%- endif -%}
     <p class="helpslink">
         <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
             <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
@@ -73,5 +106,5 @@
 <div class="submitpart">
     <h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}
 </div>
-<script>renderElements([answerBlock]);</script>
+<script>renderElements([...document.querySelectorAll('div[id^="answerBlock"]')]);</script>
 {% endblock %}
