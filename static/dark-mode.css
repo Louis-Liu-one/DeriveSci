@@ -1,8 +1,9 @@
 :root {
-    color-scheme: dark; --bg: #0C1118; --surface: #111827;
-    --surface-strong: #131A24; --surface-soft: #172337; --text: #E5E7EB;
-    --muted: #94A3B8; --border: #273449; --primary: #60A5FA;
-    --primary-soft: #1D4ED8; --accent: #38BDF8; --danger: #FB7185;
+    --bg: #0C1118;
+    --surface: #111827; --surface-strong: #131A24; --surface-soft: #172337;
+    --text: #E5E7EB; --muted: #94A3B8; --border: #273449;
+    --primary: #1B365D; --primary-soft: #1D4ED8;
+    --accent: #60A5FA; --danger: #FB7185;
     --shadow: 0 2px 18px #00000059;
 }
 
@@ -10,144 +11,11 @@
     html, body { background: var(--bg); color: var(--text); }
     body { color-scheme: dark; min-height: 100vh; }
     a, a:visited { color: var(--accent); }
-    a:hover, a:focus { color: #93C5FD; text-decoration: underline; }
     * { scrollbar-color: #475569 transparent; }
     *::-webkit-scrollbar { width: 10px; height: 10px; }
     *::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
     *::-webkit-scrollbar-track { background: transparent; }
     body, button, input, textarea, select, optgroup, option {
         color: var(--text); background: transparent; border-color: var(--border); }
-    div.navbar { background: #1B365D; box-shadow: 0 2px 18px #00000073; }
-    ul.navbar-items li.logo-text, ul.navbar-items li.logo-image,
-    ul.navbar-items li.navbar-item { color: white; }
-    ul.navbar-items li.navbar-item:hover { background: #FFFFFF1F; }
-    div.sidebar { background: #111827; border-right-color: #1F2937;
-        box-shadow: 2px 0 10px #00000061; }
-    h3.sidebar-title { color: var(--primary); }
-    div.sidebar-item { background: #111827; color: var(--text);
-        border-right-color: transparent; }
-    div.sidebar-item i { color: var(--primary); }
-    div.sidebar-item:not(.disabled):hover { background: #60A5FA2E;
-        color: white; border-right-color: #3B82F6; }
-    div.sidebar-item.disabled { background: #111827; color: #64748B; }
-    div.mainpart, div.bodypart, div.submitpart, div.tocblock, div.contentblock,
-    div.commentbody, .markdown-body, .form-block, .mdpreview, .notification,
-    .note-box, form.mathprobsform, table.problist, table.labellist {
-        background: var(--surface); box-shadow: var(--shadow); color: var(--text); }
-    div.bodypart, div.mainpart, div.submitpart, div.tocblock, div.contentblock,
-    form.mathprobsform, table.problist, table.labellist {
-        border: 1px solid #1F2937; }
-    div.commentbody:hover { background: #1C2533; }
-    div.unread-badge { background: var(--danger);
-        box-shadow: 0 2px 8px #00000073; }
-    input, textarea, select, button, form.mathprobsform input,
-    form.mathprobsform textarea, form.mathprobsform select,
-    form.mathprobsform input::file-selector-button,
-    form.mathprobsform button { background: #141B26; color: var(--text);
-        border: 1px solid #1F2937; }
-    form.mathprobsform input:focus, form.mathprobsform textarea:focus,
-    form.mathprobsform select:focus, input:focus, textarea:focus, select:focus {
-        border-color: var(--primary); outline: none;
-        box-shadow: 0 0 0 3px #60A5FA2E; }
-    form.mathprobsform input::file-selector-button, form.mathprobsform button,
-    button, .btn, .button, input[type=submit] { background: #2563EB;
-        color: white; border-color: #2563EB; }
-    button:hover, .btn:hover, .button:hover, input[type=submit]:hover {
-        background: #1D4ED8; }
-    .markdown-body { background: transparent; color: var(--text); }
-    .markdown-body blockquote { border-left-color: #334155; color: #CBD5E1; }
-    .markdown-body table { border-color: #334155; }
-    .markdown-body th, .markdown-body td { border-color: #334155; }
-    .markdown-body code, .markdown-body pre { background: #0F172A; color: #E2E8F0; }
-    .markdown-body table tr:nth-child(even) { background: #111827; }
-    .help-block, .help-item, .notification { background: #111827; }
-    table.problist tr:nth-child(even), table.labellist tr:nth-child(even) {
-        background: #111827; }
-    table.problist th, table.problist td, table.labellist td {
-        border-color: #1F2937; }
-    table.problist a.problabel { background: #1F2937; color: #E5E7EB;
-        border-color: #1F2937; }
-    table.problist a.problabel:hover { background: #2563EB; color: white; }
-    table.labellist td:hover { background: #60A5FA1F; }
-    table.problist th { background: #1F2937; color: #E5E7EB; }
-    table.problist tr:not(.probhead):hover { background: #60A5FA40; }
-    div.commentlist { background: var(--surface); border-color: #1F2937;
-        box-shadow: var(--shadow); }
-    div.commentbody { background: #111827; }
-    div.commentbody:hover { background: #1C2533; }
-    div.commentbody i.avatar { color: var(--primary); }
-    p.commentname { color: var(--primary); }
-    p.commentfoot { color: #94A3B8; }
-    p.commentfoot img:hover { background: var(--primary); }
-    p.commentfoot i:hover { color: var(--primary); }
-    div.commentcontent p { color: var(--text); }
-    div.user-list { background: #111827; border-right-color: #1F2937; }
-    div.user-item:hover, div.user-item.active { background: #60A5FA1F; }
-    div.message-area { background: var(--surface); }
-    div.message-area div.my-message { background: #2563EB; color: white; }
-    div.message-area div.other-message { background: #1F2937; color: var(--text); }
-    div.send-area input#messageInputElement { background: #141B26; }
-    div.send-area button { background: #2563EB; color: white; }
-    div.send-area button:hover { background: #1D4ED8; }
-    div.send-area button:disabled { background: #64748B; cursor: not-allowed; }
-    a.sidebar-link:hover { text-decoration: none; }
-    /* 仅对正文内非头像图片应用取反，头像和列表内的小图片保持不取反 */
-    div.bodypart img:not(.avatar):not(.no-invert) { filter: invert(1); }
-
-    /* 覆盖常见的头像 / 列表图片，确保不被取反 */
-    div.bodypart img.avatar, div.commentbody img.avatar,
-    table.problist td.source div img, table.problist td.soluser div img,
-    form.mathprobsform div.label-input img, div.user-list img {
-        filter: none !important; mix-blend-mode: normal !important; }
-    div.commentsep { border-bottom-color: #1F2937; }
-    div.commentsep::after { background: var(--primary); }
-    div.user-list { border-right-color: #1F2937; }
-    div.chat-header { border-bottom-color: #1F2937; }
-    div.send-area { border-top-color: #1F2937; }
-
-    /* Homepage styles */
-    div.home-container { background: var(--bg); }
-    section.problems-section h2.section-title { color: var(--primary); }
-    section.problems-section h2.section-title i { color: var(--accent); }
-    section.problems-section div.problem-card { background: var(--surface);
-        box-shadow: var(--shadow); }
-    section.problems-section div.problem-card:hover {
-        box-shadow: 0 10px 15px -3px #00000080, 0 4px 6px -2px #0000004C; }
-    section.problems-section div.problem-img { background-color: #1F2937; }
-    section.problems-section div.problem-img i { color: var(--primary); }
-    section.problems-section div.problem-title { color: var(--text); }
-    section.intro-section { background: linear-gradient(135deg, #1F2937 0%, #111827 100%);
-        box-shadow: 0 10px 15px -3px #60A5FA26; }
-    section.intro-section h1.main-title { color: var(--text); }
-    section.intro-section h1.main-title span { color: var(--primary); }
-    section.intro-section p.description { color: var(--muted); }
-    section.intro-section p.description a { color: var(--accent); }
-    section.intro-section p.description a:hover { color: #93C5FD; }
-    section.intro-section div.links-section a.link-btn { background: var(--surface);
-        color: var(--primary); box-shadow: 0 2px 4px #0000004C; }
-    section.intro-section div.links-section a.link-btn:hover { background: var(--primary);
-        color: white; box-shadow: 0 4px 8px #60A5FA4C; }
-    section.intro-section div.links-section a.link-btn.primary { background: var(--primary-soft);
-        color: white; }
-    section.intro-section div.links-section a.link-btn.primary:hover {
-        background: var(--primary-soft); }
-
-    /* Markdown preview styles */
-    div.mdpreview { border-color: #1F2937; background: var(--surface);
-        box-shadow: var(--shadow); }
-
-    /* Upload page problabel styles */
-    form.mathprobsform div.label-input a { background: #1F2937; color: #E5E7EB;
-        border-color: #1F2937; }
-    form.mathprobsform div.label-input a:hover { background: #2563EB; color: white; }
-
-    /* Answer section styles */
-    form.mathprobsform div.answer ul { background: #111827; border-color: #1F2937; }
-    form.mathprobsform div.answer ul li { border-bottom-color: #1F2937; }
-    form.mathprobsform div.answer ul li.selected { background: #60A5FA1F; }
-    form.mathprobsform div.answer ul li:hover { background: #60A5FA1F; }
-    form.mathprobsform div.answer ul li i, form.mathprobsform div.answer ul li i.minus {
-        color: var(--primary); }
-    form.mathprobsform div.answer ul li i.minus:hover,
-    form.mathprobsform div.answer-input i:hover { background: #60A5FA1F; }
+    div.bodypart img:not(.avatar) { filter: invert(1); }
 }

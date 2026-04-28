@@ -7,7 +7,7 @@
 {% set all_chats = current_user.all_chats() %}
 
 {% block load_markdown %}
-    {%- if view_comments -%}{{- super() -}}{%- endif -%}
+{%- if view_comments -%}{{- super() -}}{%- endif -%}
 {% endblock %}
 
 {% block title %}私信聊天 - MathProbs{% endblock %}

@@ -47,15 +47,15 @@ async function updateUserLastVisit(receiverUid, senderUid) {
 }
 
 async function switchUser(element, uid) {
-    messageSenderArea.className = 'send-area';
+    messageSenderArea.classList.toggle('hidden', false);
     if (window.viewCommentsItem) viewCommentsItem.style.display = 'none';
     if (target.value == uid) return;
     elements[uid] = element;
     messageInputElement.disabled = messageSenderButton.disabled = false;
-    if (activeUser) activeUser.className = 'user-item';
+    if (activeUser) activeUser.classList.toggle('active');
     activeUser = element; target.value = uid;
     messageAreaTitle.innerHTML = activeUser.innerHTML;
-    activeUser.className = 'user-item active';
+    activeUser.classList.toggle('active');
     redCircle = activeUser.querySelector('div.unread-badge');
     if (redCircle) redCircle.style.display = 'none';
     messageArea.innerHTML = '';
@@ -80,8 +80,9 @@ function addMessages(messages, noAllChats) {
 
 function addMessage(messageInfo, noAllChats) {
     const divElement = document.createElement('div');
-    divElement.className = messageInfo.othersend
-        ? 'message other-message' : 'message my-message';
+    divElement.classList.add('message');
+    divElement.classList.toggle('other-message', messageInfo.othersend);
+    divElement.classList.toggle('my-message', !messageInfo.othersend);
     divElement.innerText = messageInfo.content;
     messageArea.appendChild(divElement);
     messageArea.scrollTop = messageArea.scrollHeight;

@@ -54,7 +54,7 @@
     <span class="avatar"{%- if comment.user -%}
         data-url="{{ url_for('users', uid=comment.user.uid) }}"
         onclick="window.open(this.dataset.url)"{%- endif -%}>
-        {{- user_avatar_img(comment.user, 'avatar') -}}
+        {{- user_avatar_img(comment.user) -}}
     </span>
 {%- endmacro -%}
 

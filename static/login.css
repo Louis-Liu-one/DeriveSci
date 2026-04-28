@@ -17,7 +17,7 @@ div.login-block {
     margin: auto; width: 720px; height: 475px; font-family: Helvetica;
     box-shadow: -10px 10px 25px #0008; border-radius: 45px; }
 div.login-block h3 {
-    font-size: 1.8em; color: black; margin: 0;
+    font-size: 1.8em; color: var(--text); margin: 0;
     padding-bottom: 10px; text-align: center; }
 
 div.login { width: 50%; margin: auto; }
@@ -29,7 +29,7 @@ div.login form span { padding: 10px 5px; }
 div.register-back {
     display: flex; justify-content: center; align-items: center;
     width: 50%; height: 100%; margin: auto;
-    background: #34AAE0; border-radius: 45px; color: white; }
+    background: var(--primary); border-radius: 45px; color: white; }
 div.register-front { text-align: center; }
 div.register-front h2 { font-weight: 700; }
 div.register-front p { margin: 15px 0 25px 0; }

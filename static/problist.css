@@ -1,14 +1,14 @@
 
 table.problist {
-    width: 100%; border: 1px solid #E6E8EB; border-spacing: 0;
-    border-radius: 12px; overflow: hidden; background: white;
-    box-shadow: 0 2px 8px #0000000F; }
+    width: 100%; border: 1px solid var(--border); border-spacing: 0;
+    border-radius: 12px; overflow: hidden; background: var(--surface);
+    box-shadow: var(--shadow); }
 table.problist tr { height: 38px; transition: all .25s ease; }
-table.problist tr:nth-child(even) { background: #F8FAFC; }
+table.problist tr:nth-child(even) { background: var(--surface-strong); }
 table.problist tr:not(.probhead):hover {
-    background: #E8F4F8; cursor: pointer; }
+    background: var(--surface-soft); cursor: pointer; }
 table.problist th {
-    text-align: left; background: #E8F4F8; color: #2D3748;
+    text-align: left; background: var(--surface-soft); color: var(--text);
     font-weight: 500; padding: 10px 12px; font-family: Helvetica; }
 table.problist td, table.problist th {
     border: none; padding: 8px 12px; font-family: Helvetica; }
@@ -23,19 +23,19 @@ table.problist td.source div img, table.problist td.soluser div img {
     width: 24px; height: 24px; border-radius: 50%; margin-right: 6px;
     object-fit: cover; }
 table.problist td.source div i, table.problist td.soluser div i {
-    font-size: 18px; color: #34AAE0; margin-right: 4px; }
+    font-size: 18px; color: var(--primary); margin-right: 4px; }
 table.problist td.review-status { width: 15%; }
 table.problist a.problabel {
-    text-decoration: none; font-size: 14px; color: #2D3748;
-    background: #E8F4F8; margin: 2px 6px 2px 0; border-radius: 8px;
+    text-decoration: none; font-size: 14px; color: var(--text);
+    background: var(--surface-soft); margin: 2px 6px 2px 0; border-radius: 8px;
     display: inline-block; padding: 4px 8px; transition: all .25s ease; }
 table.problist a.problabel:hover {
-    background: #34AAE0; color: white; transform: translateY(-1px);
-    box-shadow: 0 2px 4px #00000019; }
+    background: var(--primary); color: white; transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
 table.labellist {
-    width: 100%; border: 1px solid #E6E8EB; border-spacing: 0;
-    border-radius: 12px; background: white; box-shadow: 0 2px 8px #0000000F; }
+    width: 100%; border: 1px solid var(--border); border-spacing: 0;
+    border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
 table.labellist tr { height: 36px; transition: all .25s ease; }
 table.labellist td { width: 20%; text-align: center; font-family: Helvetica; }
-table.labellist td:hover { background: #E8F4F8; cursor: pointer; }
+table.labellist td:hover { background: var(--surface-soft); cursor: pointer; }
