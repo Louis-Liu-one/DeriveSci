@@ -1,7 +1,7 @@
 
-const md = markdownit({html: true}).use(texmath, {
-    engine: katex, delimiters: ['dollars', 'brackets'],
-    katexOptions: {strict: false}});
+const md = markdownit({html: true})
+    .use(mdItPluginKatex.katex, {output: 'html', delimiters: 'all', throwOnError: false})
+    .use(mdItPluginFigure.figure);
 
 md.renderer.rules.image = function (tokens, idx, options, env, self) {
     const token = tokens[idx];

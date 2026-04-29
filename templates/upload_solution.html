@@ -19,15 +19,15 @@
 {% endblock %}
 
 {% block body %}
-<div class="sidebar">
+<aside>
     {{- return2post(prob, "返回题目") -}}
     {%- if editmode -%}
         {{- return2post(solution, "返回题解") -}}{{- delete_solution(solution) -}}
     {%- endif -%}
     {{- problabels_sidebar(prob) -}}
-    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
-</div>
-<div class="bodypart">
+    <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
+</aside>
+<article class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
     <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
         <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
@@ -63,8 +63,8 @@
             {%- endif -%}
         </span>
     </form>
-</div>
-<div class="submitpart">
+</article>
+<article class="submitpart">
     <h3>预览区</h3>
     <div class="markdown-body mdpreview" id="mdPreview"></div>
     <p class="helpslink">
@@ -75,5 +75,5 @@
             <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
         </a>
     </p>
-</div>
+</article>
 {% endblock %}

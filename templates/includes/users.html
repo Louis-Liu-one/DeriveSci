@@ -31,7 +31,7 @@
         <option value="8">非二元性别 Non-binary</option>
     </select>
     {%- if default_gender -%}
-        <script>gender.value = ({{ default_gender | tojson }}).toString();</script>
+        <script>gender.value = ({{ default_gender|tojson }}).toString();</script>
     {%- endif -%}
 {%- endmacro -%}
 

@@ -18,16 +18,16 @@
 {% endblock %}
 
 {% block body %}
-<div class="sidebar">
+<aside>
     {%- if oflabel -%}
-        <h3 class="sidebar-title">题目标签</h3>
+        <h3>题目标签</h3>
         <a class="sidebar-link" href="{{ url_for('labellist') }}">
             <div class="sidebar-item">
                 <i class="fa-solid fa-tags"></i>所有标签
             </div>
         </a>
     {%- else -%}
-        <h3 class="sidebar-title">MathProbs题集</h3>
+        <h3>MathProbs题集</h3>
         {%- if current_user.is_authenticated and current_user.isadmin -%}
             {%- if reviewmode -%}
                 <a class="sidebar-link" href="{{ url_for('problist') }}">
@@ -45,15 +45,15 @@
             {%- endif -%}
         {%- endif -%}
     {%- endif -%}
-</div>
-<div class="bodypart">
+</aside>
+<article class="bodypart">
     <h3>{% if query %}满足条件的{% else %}所有{% endif %}题目</h3>
     {%- if not probs.first() -%}<p>暂无</p>
     {%- elif reviewmode -%}
         {{- problist(probs, with_review_status=True) -}}
     {%- else -%}{{- problist(probs) -}}{%- endif -%}
-</div>
-<div class="submitpart">
+</article>
+<article class="submitpart">
     <h3>查询题目</h3>
     <form class="mathprobsform" method="post" action="{% if oflabel %}
                 {{ url_for('problistoflabel', labelname=labelname) }}
@@ -113,13 +113,13 @@
         </span>
         <span><button type="submit">查询</button></span>
     </form>
-</div>
+</article>
 <script>
     {%- if form.get('probtype') -%}
-        probType.value = ({{ form.probtype | tojson }}).toString();
+        probType.value = ({{ form.probtype|tojson }}).toString();
     {%- endif -%}
     {%- if form.get('review_status') -%}
-        reviewStatus.value = ({{ form.review_status | tojson }}).toString();
+        reviewStatus.value = ({{ form.review_status|tojson }}).toString();
     {%- endif -%}
 </script>
 {% endblock %}

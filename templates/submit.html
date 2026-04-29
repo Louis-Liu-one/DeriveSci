@@ -54,11 +54,11 @@
 {% block navbar_title %}问题{{ prob.probno }} —— 我的提交{% endblock %}
 
 {% block body %}
-<div class="sidebar">
+<aside>
     {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
-    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
-</div>
-<div class="bodypart">
+    <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
+</aside>
+<article class="bodypart">
     <h3>提交状态</h3>
     {%- set anslist = prob.get_answer() -%}
     {%- if anslist|length > 1 -%}
@@ -102,9 +102,9 @@
             <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
         </a>
     </p>
-</div>
-<div class="submitpart">
+</article>
+<article class="submitpart">
     <h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}
-</div>
+</article>
 <script>renderElements([...document.querySelectorAll('div[id^="answerBlock"]')]);</script>
 {% endblock %}

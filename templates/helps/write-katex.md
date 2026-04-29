@@ -245,15 +245,15 @@ $$
 
 命令 | 名称 | 字母效果 | 数字效果
 :----------------: | :----: | :-: | :-:
-`\mathnormal{...}` | 默认字体 | $ABCDEFGHIJKLMNOPQRSTUVWXYZ$            | $1234567890$
-`\mathit{...}`     | 意大利体 | $\mathit{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathit{1234567890}$
-`\mathrm{...}`     | 罗马体   | $\mathrm{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathrm{1234567890}$
-`\mathsf{...}`     | 无衬线体 | $\mathsf{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathsf{1234567890}$
-`\mathtt{...}`     | 打字机体 | $\mathtt{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathtt{1234567890}$
-`\mathbb{...}`     | 黑板体   | $\mathbb{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathbb{1234567890}$
-`\mathcal{...}`    | 书法体   | $\mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathcal{1234567890}$
-`\mathscr{...}`    | 花体     | $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathscr{1234567890}$
-`\mathfrak{...}`   | 哥特体   | $\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$ | $\mathfrak{1234567890}$
+`\mathnormal` | 默认字体 | $ABCDEFGHIJKLMNOPQRSTUVWXYZ$            | $1234567890$
+`\mathit`     | 意大利体 | $\mathit{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathit{1234567890}$
+`\mathrm`     | 罗马体   | $\mathrm{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathrm{1234567890}$
+`\mathsf`     | 无衬线体 | $\mathsf{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathsf{1234567890}$
+`\mathtt`     | 打字机体 | $\mathtt{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathtt{1234567890}$
+`\mathbb`     | 黑板体   | $\mathbb{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$   | $\mathbb{1234567890}$
+`\mathcal`    | 书法体   | $\mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathcal{1234567890}$
+`\mathscr`    | 花体     | $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathscr{1234567890}$
+`\mathfrak`   | 哥特体   | $\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$ | $\mathfrak{1234567890}$
 
 例如，可以使用 `\mathrm dx` 渲染 $\mathrm dx$。注意，由于这里没有显式指定参数，命令后的第一个整体，即 `d` 被指定为第一个参数，故只有 `d` 被渲染为罗马体。
 
@@ -274,7 +274,7 @@ $$
 
 公式中可以插入各种符号。前往[这里]({{ url_for('helps', howto='write-katex-symbols') }})查看符号表。
 
-### 正文文字
+### 插入正文文字
 
 使用 `\text` 命令在公式中插入文字，例如：
 ```latex
@@ -282,9 +282,15 @@ $$ E = mc^2 \Rightarrow \text{能量} = \text{质量} \times \text{光速}^2 $$
 ```
 $$ E = mc^2 \Rightarrow \text{能量} = \text{质量} \times \text{光速}^2 $$
 
-若要在 `\text` 的内容中插入行内公式，需要使用 `\(...\)` 将公式包围。
+若要在 `\text` 的内容中插入行内公式，需要使用 `$...$` 将公式包围：
+```latex
+$$ \text{能量 $E$} = \text{质量 $m$} \times \text{光速 $c$}^2 $$
+```
+$$ \text{能量 $E$} = \text{质量 $m$} \times \text{光速 $c$}^2 $$
 
-## 多行公式排版（待编）
+## 多行公式排版
+
+参见[此处]({{ url_for('helps', howto='write-katex-multiline') }})。
 
 ## 参考与引用
 

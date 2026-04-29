@@ -4,7 +4,7 @@
 {% from "includes/solutionlist.html" import solutionlist %}
 
 {%- macro user_name(user) -%}
-{% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
+    {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
 {%- endmacro -%}
 
 {% block load_markdown %}{% endblock %}
@@ -24,8 +24,8 @@
 {% endblock %}
 
 {% block body %}
-<div class="sidebar">
-    <h3 class="sidebar-title">欢迎来到MathProbsOnline</h3>
+<aside>
+    <h3>欢迎来到MathProbsOnline</h3>
     {%- if current_user == user -%}
         <a class="sidebar-link" href="{{ url_for('upload_prob') }}">
             <div class="sidebar-item">
@@ -56,8 +56,8 @@
             </div>
         </a>
     {%- endif -%}
-</div>
-<div class="bodypart">
+</aside>
+<article class="bodypart">
     <h3>{{ user_name(user) }}的贡献</h3>
     <h4>{{ user_name(user) }}通过的题目</h4>
     {%- set passedprobs = user.get_passedprobs() -%}
@@ -71,8 +71,8 @@
         {{- problist(uploadedprobs,
             with_source=False, with_review_status=True) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
-</div>
-<div class="submitpart">
+</article>
+<article class="submitpart">
     {%- if user == current_user -%}
         <h3>{{ user_name(user) }}的简介</h3>
         <form class="mathprobsform">
@@ -97,7 +97,7 @@
         {%- do solutions.sort() -%}{{- solutionlist(solutions,
             with_head=True, with_probno=True, with_user=False) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
-</div>
+</article>
 {%- if user == current_user -%}
     <script>
         editIntroductionButton.addEventListener('click', async (event) => {

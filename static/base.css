@@ -21,13 +21,17 @@ div.unread-badge {
     position: absolute; top: 0; right: 0; min-width: 18px; height: 18px;
     line-height: 18px; border-radius: 50%; background: var(--danger); color: white;
     font-size: 11px; font-weight: bold; text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15); z-index: 10; }
+    box-shadow: 0 2px 5px #00000026; z-index: 10; }
+figure {
+    margin: 15px 0; text-align: center; }
+figcaption {
+    margin-top: 8px; font-size: 13px; font-style: italic; text-align: center; }
 
 /******************************* navbar *******************************/
 
-div.navbar {
+nav.navbar {
     position: fixed; top: 0; left: 0; width: 100%; height: 80px;
-    background: var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: var(--primary); box-shadow: 0 2px 10px #0000001A;
     z-index: 1000; display: flex; align-items: center; }
 ul.navbar-items {
     list-style: none; height: 100%; display: flex; align-items: center;
@@ -60,21 +64,21 @@ ul.navbar-items li.logo-image img {
     font-size: 30px; height: 36px; margin: 3px 0 -5px 0; }
 ul.navbar-items li.logo-image img { height: 48px; margin-bottom: -15px; }
 ul.navbar-items li.navbar-item img { border-radius: 50%; }
-ul.navbar-items li.navbar-item:hover { background: rgba(255,255,255,0.18); }
+ul.navbar-items li.navbar-item:hover { background: #FFFFFF2E; }
 ul.navbar-items a {
     text-decoration: none !important; color: inherit !important; }
 
-div.below-navbar {
+main {
     display: flex; position: fixed;
     top: 80px; left: 0; width: 100%; height: calc(100vh - 80px); }
 
 /******************************* sidebar *******************************/
 
-div.sidebar {
+aside {
     width: 220px; height: 100%; background: var(--surface-strong);
     border-right: 1px solid var(--border); overflow-y: auto; font-family: Helvetica;
-    padding: 15px 0; box-shadow: 2px 0 8px rgba(0,0,0,0.04); margin-right: 18px; }
-h3.sidebar-title {
+    padding: 15px 0; box-shadow: 2px 0 8px #0000000A; margin-right: 18px; }
+aside h3 {
     color: var(--accent); text-align: right; margin: 18px 18px 12px 0;
     font-size: 14px; font-weight: bold; text-transform: uppercase;
     letter-spacing: .5px; }
@@ -97,22 +101,23 @@ a.sidebar-link { text-decoration: none; color: inherit; }
 
 /******************************* blocks *******************************/
 
-div.mainpart, div.bodypart, div.submitpart, div.tocblock, div.contentblock {
+article.mainpart, article.bodypart, article.submitpart,
+article.tocblock, article.contentblock {
     margin: 15px 18px 15px 0; padding: 18px; flex-grow: 1; overflow-y: auto;
     border-radius: 12px; box-shadow: var(--shadow);
     background: var(--surface); font-family: Helvetica; }
-div.mainpart { width: 80%; }
-div.bodypart { width: 45%; }
-div.bodypart img { width: 100%; }
-div.submitpart { width: 30%; }
-div.submitpart textarea.submittext { width: 100%; height: 80px; }
-div.submitpart h3 { clear: both; }
-div.tocblock { width: 25%; margin-left: 10px; }
-div.tocblock h3 { margin-bottom: 0; }
+article.mainpart { width: 80%; }
+article.bodypart { width: 45%; }
+article.bodypart img { width: 100%; }
+article.submitpart { width: 30%; }
+article.submitpart textarea.submittext { width: 100%; height: 80px; }
+article.submitpart h3 { clear: both; }
+article.tocblock { width: 25%; margin-left: 10px; }
+article.tocblock h3 { margin-bottom: 0; }
 nav.table-of-contents ul { padding-left: 16px; }
 nav.table-of-contents li { padding-top: 8px; }
-nav.table-of-contents a, div.contentblock a {
+nav.table-of-contents a, article.contentblock a {
     text-decoration: none; color: var(--accent); }
-nav.table-of-contents a:hover, div.contentblock a:hover { text-decoration: underline; }
-div.contentblock { width: 71%; }
-div#bodyBlock, div.contentblock nav.table-of-contents { display: none; }
+nav.table-of-contents a:hover, article.contentblock a:hover { text-decoration: underline; }
+article.contentblock { width: 71%; }
+article#bodyBlock, article.contentblock nav.table-of-contents { display: none; }

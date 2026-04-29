@@ -22,7 +22,7 @@
 {% block navbar_title %}问题{{ prob.probno }} {{ prob.probtitle }}{% endblock %}
 
 {% block body %}
-<div class="sidebar">
+<aside>
     {%- if current_user == prob.source or current_user.isadmin -%}
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
     {%- endif -%}
@@ -40,12 +40,12 @@
         </a>
     {%- endif -%}
     {{- problabels_sidebar(prob) -}}
-    <h3 class="sidebar-title">题目来源</h3>{{- user_sidebar(prob.source) -}}
-</div>
-<div id="bodyBlock" class="markdown-body bodypart">
+    <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
+</aside>
+<article id="bodyBlock" class="markdown-body bodypart">
     <textarea id="bodyText">{{ prob.statement }}</textarea>
-</div>
-<div id="submitBlock" class="submitpart">
+</article>
+<article id="submitBlock" class="submitpart">
     {%- if prob.review_status != 1 -%}
         <p class="helpslink hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}
@@ -117,7 +117,7 @@
         {%- endif -%}
         <h3>讨论区</h3>{{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
     {%- endif -%}
-</div>
+</article>
 <script>
     const markdownImageBasePath = "/images/{{ prob.probno }}/";
     const _toRender = [bodyBlock, ...document.getElementsByClassName('commentcontent')];

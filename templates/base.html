@@ -3,7 +3,7 @@
 {%- macro navbar_item(url, icon, text, unread=0) -%}
     <a href="{{ url }}" target="_blank">
         <li class="navbar-item">
-            <i class="fa-solid fa-{{ icon }}"></i><br>{{ text }}
+            <i class="fa-solid fa-{{ icon }}"></i><br>{{- text -}}
             {%- if unread %}<div class="unread-badge">{{ unread }}</div>{% endif -%}
         </li>
     </a>
@@ -20,12 +20,14 @@
     {%- block load_markdown -%}
         <script src="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.js"></script>
         <script src="https://fastly.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
-        <script src="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+        <script src="https://fastly.jsdelivr.net/npm/@mdit/plugin-katex@0.25.2/dist/cdn.umd.min.js"></script>
+        <script src="https://fastly.jsdelivr.net/npm/@mdit/plugin-figure@0.23.2/dist/cdn.umd.min.js"></script>
         <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css" media="(prefers-color-scheme: light)">
-        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-dark.min.css" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-light.min.css"
+            media="(prefers-color-scheme: light)">
+        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@5.9.0/github-markdown-dark.min.css"
+            media="(prefers-color-scheme: dark)">
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.33/dist/katex.min.css">
-        <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markdown-it-texmath@1.0.0/css/texmath.min.css">
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
     {%- endblock -%}
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
@@ -35,19 +37,14 @@
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>
-    <div class="navbar">
+    <nav class="navbar">
         <ul class="navbar-items">
-            <li class="logo-image">
-                <img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>MathProbs
-            </li>
-            <li id="navbarTitleElement" class="logo-text">
-                {%- block navbar_title -%}{%- endblock -%}
-            </li>
+            <li class="logo-image"><img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>MathProbs</li>
+            <li id="navbarTitleElement" class="logo-text">{%- block navbar_title -%}{%- endblock -%}</li>
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}
-                    {{- user_avatar_img(current_user) -}}
-                    <br>{{- current_user.name -}}
+                        {{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}
                     {%- else -%}<i class="fa-solid fa-user"></i><br>未登录{%- endif -%}
                 </li>
             </a>
@@ -64,7 +61,7 @@
             {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
         </ul>
-    </div>
-    <div class="below-navbar">{% block body %}{% endblock %}</div>
+    </nav>
+    <main>{% block body %}{% endblock %}</main>
 </body>
 </html>

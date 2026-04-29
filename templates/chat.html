@@ -29,7 +29,7 @@
 {% block navbar_title %}私信聊天{% endblock %}
 
 {% block body %}
-<div class="sidebar">
+<aside>
     <a class="sidebar-link" href="{{ url_for('welcome') }}">
         <div class="sidebar-item">
             <i class="fa-solid fa-circle-left"></i>返回主页
@@ -46,8 +46,8 @@
             <i class="fa-solid fa-right-from-bracket"></i>退出登录
         </div>
     </a>
-</div>
-<div class="mainpart">
+</aside>
+<article class="mainpart">
     <div class="chat-container">
         <div class="user-list">
             {%- if view_comments -%}
@@ -70,7 +70,7 @@
                         {{- user_avatar_img(user) -}}
                         {%- if all_chats[uid].unread -%}
                             <div class="unread-badge">
-                                {{- all_chats[uid].unread | tojson -}}
+                                {{- all_chats[uid].unread|tojson -}}
                             </div>
                         {%- else -%}
                             <div class="unread-badge" style="display: none">
@@ -153,13 +153,13 @@
             </div>
         </div>
     </div>
-</div>
+</article>
 <script>
-    allChats = {{ all_chats | tojson }};
-    currentUid = {{ current_user.uid | tojson }};
+    allChats = {{ all_chats|tojson }};
+    currentUid = {{ current_user.uid|tojson }};
     {%- if activeuser and activeuser.uid in all_chats -%}
         document.addEventListener('DOMContentLoaded', () => {
-            addMessages(allChats[{{ activeuser.uid | tojson }}].messages, true);
+            addMessages(allChats[{{ activeuser.uid|tojson }}].messages, true);
         });
     {%- endif -%}
     {%- if view_comments -%}

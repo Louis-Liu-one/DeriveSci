@@ -21,16 +21,16 @@
 {% endblock %}
 
 {% block body %}
-<div class="sidebar">
-    <h3 class="sidebar-title">
+<aside>
+    <h3>
         {%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目
     </h3>
     {%- if editmode -%}
         {{- return2post(prob, "返回题目") -}}
         {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
     {%- endif -%}
-</div>
-<div class="bodypart">
+</aside>
+<article class="bodypart">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
     <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
         {%- if not editmode -%}
@@ -40,8 +40,7 @@
                     autocomplete="off" spellcheck="false">
             </span>
         {%- else -%}
-            <input type="hidden" id="probNo" name="probno"
-                value="{{ prob.probno }}">
+            <input type="hidden" id="probNo" name="probno" value="{{ prob.probno }}">
         {%- endif -%}
         <span>
             <label for="probTitle">名称：</label>
@@ -99,8 +98,8 @@
             {%- endif -%}
         </span>
     </form>
-</div>
-<div class="submitpart">
+</article>
+<article class="submitpart">
     <h3>预览区</h3>
     <div class="markdown-body mdpreview" id="mdPreview"></div>
     <p class="helpslink">
@@ -111,13 +110,13 @@
             <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
         </a>
     </p>
-</div>
+</article>
 <script>
     probLabel.addEventListener('keydown', addLabel);
     {%- if editmode -%}
         document.addEventListener('DOMContentLoaded', () => {
-            addRawAnswers({{ prob.get_answer() | list | tojson }});
-            addRawLabels({{ prob.as_labelnames() | list | tojson }});
+            addRawAnswers({{ prob.get_answer()|list|tojson }});
+            addRawLabels({{ prob.as_labelnames()|list|tojson }});
         });
     {%- endif -%}
 </script>

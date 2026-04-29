@@ -14,12 +14,12 @@ section.problems-section div.problems-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 section.problems-section div.problem-card {
     background: var(--surface); border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.06);
+    box-shadow: 0 4px 6px -1px #0000001E, 0 2px 4px -1px #0000000F;
     overflow: hidden; transition: all .3s ease; cursor: pointer;
     aspect-ratio: 1; display: flex; flex-direction: column; }
 section.problems-section div.problem-card:hover {
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.12), 0 4px 6px -2px rgba(0,0,0,0.08); }
+    box-shadow: 0 10px 15px -3px #0000001E, 0 4px 6px -2px #00000014; }
 section.problems-section div.problem-img {
     flex: 1; background-color: var(--surface-soft); padding: .5rem;
     display: flex; align-items: center; justify-content: center; }
@@ -35,7 +35,7 @@ section.intro-section {
     flex: 1; display: flex; flex-direction: column; justify-content: center;
     padding: 2rem; border-radius: 16px;
     background: var(--surface-soft);
-    box-shadow: 0 10px 15px -3px rgba(52,170,224,0.12); }
+    box-shadow: 0 10px 15px -3px #0000001F; }
 section.intro-section h1.main-title {
     font-size: 2.5rem; font-weight: 700; color: var(--text);
     margin-bottom: 1.5rem; line-height: 1.2; }

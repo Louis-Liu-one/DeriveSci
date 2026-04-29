@@ -18,17 +18,13 @@
 {% from "includes/users.html" import user_name, user_avatar_img %}
 
 {%- macro comment_timestamp(comment) -%}
-    {% set timediff = utcfromnow(comment.timestamp) %}
-    {% set tsmoment = moment(comment.timestamp) %}
-    {%- if timediff < timedelta(hours=12) -%}
-        {{ tsmoment.fromNow(refresh=True) }}
-    {%- elif timediff < timedelta(days=6) -%}
-        {{ tsmoment.calendar() }}
-    {%- elif timediff < timedelta(days=15) -%}
-        {{ tsmoment.fromNow(refresh=True) }}
-    {%- elif timediff < timedelta(days=365) -%}
-        {{ tsmoment.format('M 月 D 日') }}
-    {%- else -%}{{ tsmoment.format('Y 年 M 月 D 日') }}{%- endif -%}
+    {%- set timediff = utcfromnow(comment.timestamp) -%}
+    {%- set tsmoment = moment(comment.timestamp) -%}
+    {%- if timediff < timedelta(hours=12) -%}{{- tsmoment.fromNow(refresh=True) -}}
+    {%- elif timediff < timedelta(days=6) -%}{{- tsmoment.calendar() -}}
+    {%- elif timediff < timedelta(days=15) -%}{{- tsmoment.fromNow(refresh=True) -}}
+    {%- elif timediff < timedelta(days=365) -%}{{- tsmoment.format('M 月 D 日') -}}
+    {%- else -%}{{- tsmoment.format('Y 年 M 月 D 日') -}}{%- endif -%}
 {%- endmacro -%}
 
 {%- macro commentform_main(post_type, post_ident) -%}
@@ -41,13 +37,13 @@
 {%- endmacro -%}
 
 {%- macro commentform_sub(comment, new_window=False) -%}
-<form id="subCommentForm" class="mathprobsform"
-    data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}"
-    data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>
-    <span><textarea name="commenttext" class="submittext"
-        placeholder="发表评论" spellcheck="false"></textarea></span>
-    <span><button type="submit">发表</button></span>
-</form>
+    <form id="subCommentForm" class="mathprobsform"
+        data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}"
+        data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>
+        <span><textarea name="commenttext" class="submittext"
+            placeholder="发表评论" spellcheck="false"></textarea></span>
+        <span><button type="submit">发表</button></span>
+    </form>
 {%- endmacro -%}
 
 {%- macro commentavatar(comment) -%}
@@ -59,52 +55,51 @@
 {%- endmacro -%}
 
 {%- macro commentbody(comment, toplevel=False, secondlevel=False, with_post=False) -%}
-<div class="commentbody">
-    {{- commentavatar(comment) -}}
-    <span class="commentbodytext">
-        <p class="commentname">
-            {{- user_name(comment.user) -}}
-            {%- if not toplevel and not secondlevel -%}
-                &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
-            {%- endif -%}
-        </p>
-        <div class="commentcontent">
-            <textarea>{{ comment.content }}</textarea>
-        </div>
-    </span>
-</div>
-<p class="commentfoot">
-    {{- comment_timestamp(comment) -}}
-    {%- if not with_post -%}
-        <i id="commentSenderButton" title="发表评论"
-            class="fa-solid fa-comment-dots"></i>
-    {%- endif -%}
-    {%- if current_user == comment.user and not with_post -%}
-        <i title="删除评论" class="fa-solid fa-trash-can"
-            onclick="deleteComment({{ comment.cmtid | tojson }})"></i>
-    {%- endif -%}
-    {%- if with_post -%} &nbsp;
-        {% set post = comment.get_post() %}来自：{{ post }}
-        <i title="前往帖子" class="fa-solid fa-newspaper"
-            data-url="{{ post.url(anchor='comment-' ~ comment.cmtid) }}"
-            onclick="window.open(this.dataset.url)"></i>
-    {%- endif -%}
-</p>
-{{- commentform_sub(comment, new_window=with_post) -}}
-{%- if toplevel -%}
-    <div class="subcomments">
-        {%- for subcomment in comment.get_all_replies() -%}
-            {{- commentdiv(subcomment,
-                secondlevel=subcomment.replyto == comment, with_post=with_post) -}}
-        {%- endfor -%}
+    <div class="commentbody">
+        {{- commentavatar(comment) -}}
+        <span class="commentbodytext">
+            <p class="commentname">
+                {{- user_name(comment.user) -}}
+                {%- if not toplevel and not secondlevel -%}
+                    &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
+                {%- endif -%}
+            </p>
+            <div class="commentcontent">
+                <textarea>{{ comment.content }}</textarea>
+            </div>
+        </span>
     </div>
-{%- endif -%}
+    <p class="commentfoot">
+        {{- comment_timestamp(comment) -}}
+        {%- if not with_post -%}
+            <i id="commentSenderButton" title="发表评论"
+                class="fa-solid fa-comment-dots"></i>
+        {%- endif -%}
+        {%- if current_user == comment.user and not with_post -%}
+            <i title="删除评论" class="fa-solid fa-trash-can"
+                onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
+        {%- endif -%}
+        {%- if with_post -%} &nbsp;
+            {% set post = comment.get_post() %}来自：{{ post }}
+            <i title="前往帖子" class="fa-solid fa-newspaper"
+                data-url="{{ post.url(anchor='comment-' ~ comment.cmtid) }}"
+                onclick="window.open(this.dataset.url)"></i>
+        {%- endif -%}
+    </p>
+    {{- commentform_sub(comment, new_window=with_post) -}}
+    {%- if toplevel -%}
+        <div class="subcomments">
+            {%- for subcomment in comment.get_all_replies() -%}
+                {{- commentdiv(subcomment, secondlevel=subcomment.replyto == comment, with_post=with_post) -}}
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
 {%- endmacro -%}
 
 {%- macro commentdiv(comment, toplevel=False, secondlevel=False, with_post=False) -%}
-<div id="comment-{{ comment.cmtid }}" class="comment" data-commentid="{{ comment.cmtid }}">
-    {{- commentbody(comment, toplevel, secondlevel, with_post) -}}
-</div>
+    <div id="comment-{{ comment.cmtid }}" class="comment" data-commentid="{{ comment.cmtid }}">
+        {{- commentbody(comment, toplevel, secondlevel, with_post) -}}
+    </div>
 {%- endmacro -%}
 
 {%- macro commentarea(post_type, post_ident, comments) -%}
@@ -112,8 +107,7 @@
     <div class="commentlist">
         {%- if comments -%}
             {%- for comment in comments -%}
-                {{- commentdiv(comment, toplevel=True) -}}
-                <div class="commentsep"></div>
+                {{- commentdiv(comment, toplevel=True) -}}<div class="commentsep"></div>
             {%- endfor -%}
         {%- else -%}<p>暂无讨论</p>{%- endif -%}
     </div>

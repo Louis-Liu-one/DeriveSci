@@ -31,7 +31,7 @@ table.problist a.problabel {
     display: inline-block; padding: 4px 8px; transition: all .25s ease; }
 table.problist a.problabel:hover {
     background: var(--primary); color: white; transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    box-shadow: 0 2px 4px #0000001A; }
 
 table.labellist {
     width: 100%; border: 1px solid var(--border); border-spacing: 0;

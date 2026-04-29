@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block body %}
-<div class="tocblock" id="tocBlock"><h3>目录</h3></div>
-<div class="contentblock">
+<article class="tocblock" id="tocBlock"><h3>目录</h3></article>
+<article class="contentblock">
     <div class="markdown-body" id="bodyBlock">
         <textarea id="helpContentTextArea">[toc]
 {% include filename -%}
         </textarea>
     </div>
-</div>
+</article>
 <script>
     renderElement(bodyBlock, helpContentTextArea.value);
     const tocNavElement = bodyBlock.querySelector('nav.table-of-contents');

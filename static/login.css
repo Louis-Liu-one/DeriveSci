@@ -35,7 +35,7 @@ div.register-front h2 { font-weight: 700; }
 div.register-front p { margin: 15px 0 25px 0; }
 div.login-block div.text-center { text-align: center; }
 div.login-block button.register {
-    border: none; border-radius: 10px; background: #00008019; color: white;
+    border: none; border-radius: 10px; background: #0000801A; color: white;
     line-height: 27px; font-size: 15px; width: 120px;
     transition: .5s; margin-bottom: 10px; }
 div.login-block button.register:hover {
