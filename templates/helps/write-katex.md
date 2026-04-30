@@ -64,6 +64,8 @@ $$
 
 ## 数学结构
 
+**数学结构**是公式编写中最重要的部分。
+
 ### 上标与下标
 
 #### 一般上下标
@@ -187,7 +189,6 @@ $\sqrt{\mathstrut x} + \sqrt{\mathstrut y}$
 #### 上下划线与上下括号
 
 使用 `\overline`、`\underline` 等命令创建上下划线：
-
 命令 | 效果 | 命令 | 效果
 :---: | :---: | :---: | :---:
 `\underline{x + y}` | $\underline{x + y}$ | `\overline{x + y}` | $\overline{x + y}$
@@ -209,7 +210,6 @@ $\sqrt{\mathstrut x} + \sqrt{\mathstrut y}$
 \end{矩阵环境名}
 ```
 使用 `\\` 分隔矩阵的每行，使用 `&` 分隔矩阵的每列。以下是一些矩阵环境及效果：
-
 环境 | 效果 | 环境 | 效果 | 环境 | 效果
 :---: | :---: | :---: | :---: | :---: | :---:
 `matrix` | $\begin{matrix} a & b \\ c & d \end{matrix}$ | `bmatrix` | $\begin{bmatrix} a & b \\ c & d \end{bmatrix}$ | `vmatrix` | $\begin{vmatrix} a & b \\ c & d \end{vmatrix}$
@@ -239,10 +239,11 @@ $$
 
 ### 数学字体
 
+公式中可以动态指定不同的数学字体。
+
 #### 字体样式
 
 除了默认字体，还可以使用 `\mathrm` 等命令使用其它数学字体，使用方法是 `\mathrm{...}`。以下是一些数学字体及其渲染效果：
-
 命令 | 名称 | 字母效果 | 数字效果
 :----------------: | :----: | :-: | :-:
 `\mathnormal` | 默认字体 | $ABCDEFGHIJKLMNOPQRSTUVWXYZ$            | $1234567890$
@@ -260,7 +261,6 @@ $$
 #### 字体大小
 
 可以使用如下四个命令调整字体大小：
-
 命令 | 名称 | 效果
 :------------------: | :------: | :----------------------------------------:
 `\displaystyle`      | 行间模式  | $\displaystyle{\frac{x + 1}{x + 2}}$
@@ -269,6 +269,79 @@ $$
 `\scriptscriptstyle` | 小角标模式 | $\scriptscriptstyle{\frac{x + 1}{x + 2}}$
 
 上述命令不接受任何参数。在公式中使用上述命令时，将影响本条公式中其后所有内容。
+
+### 水平间距与盒子
+
+合理利用水平间距与各类盒子，可以自主调整文本样式，更好地控制公式间距。
+
+#### 长度单位
+
+要使用水平间距，需要先了解长度单位。下列是公式中可用的长度单位：
+长度 | 效果 | 备注
+---------------------: | :--------------------- | ---
+对照组                  | $AA$
+$20\,\mathrm{pt}$      | $A\hspace{20pt}A$      | point，点/磅
+$1310720\,\mathrm{sp}$ | $A\hspace{1310720sp}A$ | scaled point，最小单位
+$20\,\mathrm{bp}$      | $A\hspace{20bp}A$      | big point，大点，$72\,\mathrm{bp} = 1\,\mathrm{in}$
+$20\,\mathrm{dd}$      | $A\hspace{20dd}A$      | didot point，$1157\,\mathrm{dd} = 1238\,\mathrm{pt}$
+$2\,\mathrm{pc}$       | $A\hspace{2pc}A$       | pica，四号字大小，$1\,\mathrm{pc} = 12\,\mathrm{pt}$
+$2\,\mathrm{cc}$       | $A\hspace{2cc}A$       | cicero，$1\,\mathrm{cc} = 12\,\mathrm{dd}$
+$10\,\mathrm{mm}$      | $A\hspace{10mm}A$      | mm，毫米，$10\,\mathrm{mm} = 1\,\mathrm{cm}$
+$1\,\mathrm{cm}$       | $A\hspace{1cm}A$       | cm，厘米，$2.54\,\mathrm{cm} = 1\,\mathrm{in}$
+$0.5\,\mathrm{in}$     | $A\hspace{.5in}A$      | inch，英寸，$1\,\mathrm{in} = 72.27\,\mathrm{pt}$
+$10\,\mathrm{ex}$      | $A\hspace{10ex}A$      | 字号相关的长度，本指当前字号下字符 x 的高度
+$5\,\mathrm{em}$       | $A\hspace{5em}A$       | 字号相关的长度，本指当前字号下字符 M 的宽度
+
+#### 水平间距
+
+可以使用 `\hspace` 命令产生**水平间距**：
+```latex
+$$ a, b, \hspace{10pt}, c $$
+```
+$$ a, b, \hspace{10pt}, c $$
+
+可以使用 `\thinspace` 等预定义的水平间距：
+命令 | 宽度 | 效果 | 备注
+:--------------------: | ---------------------: | :---------------- | ---
+对照组                  |       $0\,\mathrm{em}$ | $AA$
+`\thinspace` 或 `\,`   |  $0.1667\,\mathrm{em}$ |$A\,A$             | 不可换行
+`\negthinspace`        | $-0.1667\,\mathrm{em}$ |$A\negthinspace A$ | 不可换行
+`\enspace`             |     $0.5\,\mathrm{em}$ |$A\enspace A$      | 不可换行
+`\nobreakspace` 或 `~` | 空格                    |$A~A$              | 不可换行
+`\quad`                |       $1\,\mathrm{em}$ | $A\quad A$
+`\qquad`               |       $2\,\mathrm{em}$ | $A\qquad A$
+`\enskip`              |     $0.5\,\mathrm{em}$ | $A\enskip A$
+`\ `                   | 空格                    | $A\ A$
+
+#### 盒子
+
+可以使用 `\fbox` 命令产生**带边框的盒子**，盒子中的内容不能换行：
+```latex
+$$ \fbox{\text{无法换行的内容……}} $$
+```
+$$ \fbox{\text{无法换行的内容……}} $$
+
+可以使用 `\llap`、`\rlap` 命令产生左、右边的**重叠效果**：
+```latex
+$$ \text{左边内容\llap{重叠}} \hspace{20pt} \text{\rlap{重叠}右边内容} $$
+```
+$$ \text{左边内容\llap{重叠}} \hspace{20pt} \text{\rlap{重叠}右边内容} $$
+
+可以使用 `\phantom` 命令产生**幻影盒子**，盒子中的内容不显示，但保留其间距：
+```latex
+$$
+\begin{align*}
+    1 \phantom{+ 2} + 3 \phantom{+ 4} + 5 \phantom{+ 6} &= 9 \\
+    \phantom{+ 1} + 2 \phantom{+ 3} + 4 \phantom{+ 5} + 6 &= 12
+\end{align*}
+$$
+```
+$$
+\begin{align*}
+    1 \phantom{+ 2} + 3 \phantom{+ 4} + 5 \phantom{+ 6} &= 9 \\
+    \phantom{+ 1} + 2 \phantom{+ 3} + 4 \phantom{+ 5} + 6 &= 12
+\end{align*}
+$$
 
 ### 数学符号
 

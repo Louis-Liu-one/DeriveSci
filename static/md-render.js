@@ -25,7 +25,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 if (window.hljs) md.options['highlight'] = function (str, lang) {
         if (lang && hljs.getLanguage(lang))
             try { return hljs.highlight(
-                str, {language: lang, ignoreIllegals: true}).value; } catch { } }
+                str, {language: lang, ignoreIllegals: true}).value; } catch { } };
 if (window.markdownItAnchor) md.use(markdownItAnchor);
 if (window.markdownItTocDoneRight) md.use(markdownItTocDoneRight, {listType: 'ul'});
 
@@ -43,7 +43,6 @@ function renderElements(toRender, imageBasePath='') {
     for (let divElement of toRender) {
         let textareaElement = divElement.children[0];
         if (textareaElement.tagName == 'TEXTAREA')
-            renderElement(divElement, textareaElement.value,
-                'inline', basePath);
+            renderElement(divElement, textareaElement.value, 'inline', basePath);
     }
 }
