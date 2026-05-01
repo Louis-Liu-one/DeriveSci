@@ -208,11 +208,13 @@ def submit(probno):
     prob = get_prob(probno)
     if not prob or not prob.viewable_for(current_user):
         return render_template('notfound.html', error='未能找到题目。'), 404
-    answer_payload = answers if len(answers) > 1 else (answers[0] if answers else '')
+    answer_payload = answers if len(answers) > 1 else (
+        answers[0] if answers else '')
     answer_eval, testpoints, submission = prob.add_submission(
         current_user, answer_payload)
     if isinstance(answer_eval, list):
-        answer_latex = [latex(a) if a is not None else None for a in answer_eval]
+        answer_latex = [
+            latex(a) if a is not None else None for a in answer_eval]
     else:
         answer_latex = latex(answer_eval) if answer_eval is not None else None
     submission_answer_parsed = None

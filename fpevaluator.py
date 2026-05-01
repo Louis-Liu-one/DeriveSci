@@ -233,17 +233,31 @@ class ReturnStatement(FPElement):
 class Assignment(FPElement):
     '''赋值语句。'''
 
-    def __init__(self, varsymbol, varexpr):
-        self.varsymbol, self.varexpr = varsymbol, FPExpression(varexpr)
+    def __init__(self, varsymbol, varexpr, operator='='):
+        self.varsymbol, self.varexpr, self.operator \
+            = varsymbol, FPExpression(varexpr), operator
         super().__init__([self.varexpr])
 
     def __repr__(self):
-        return f'Assignment({self.varsymbol} = {self.varexpr})'
+        return f'Assignment({self.varsymbol} {self.operator} {self.varexpr})'
 
     def do(self, context=None, local_scope=False):
         result = self.varexpr.do()
-        self.stack[self.varsymbol] = result
-        return result
+        if self.operator == '=':
+            self.stack[self.varsymbol] = result
+        elif self.operator == '+=':
+            self.stack[self.varsymbol] += result
+        elif self.operator == '-=':
+            self.stack[self.varsymbol] -= result
+        elif self.operator == '*=':
+            self.stack[self.varsymbol] *= result
+        elif self.operator == '/=':
+            self.stack[self.varsymbol] /= result
+        elif self.operator == '%=':
+            self.stack[self.varsymbol] %= result
+        elif self.operator == '^=':
+            self.stack[self.varsymbol] **= result
+        return self.stack[self.varsymbol]
 
 
 class FuncDefine(FPElement):
@@ -453,12 +467,22 @@ def _as_finiteset(tokens):
     return sp.FiniteSet(*tokens)
 
 
+def _as_condset(tokens):
+    identifier, *base_set, condition = tokens
+    _, base_set = base_set if base_set and base_set[0] == 'in' \
+        else (None, sp.UniversalSet)
+    return sp.ConditionSet(sp.Symbol(str(identifier)), condition, base_set)
+
+
 def _as_comparison(tokens):
     prev_operand, *tokens = tokens
     result = []
     for i in range(0, len(tokens), 2):
         operator, operand = tokens[i], tokens[i + 1]
-        result.append(COMPDICT[operator](prev_operand, operand))
+        if operator == 'in':
+            result.append(sp.Contains(prev_operand, operand))
+        else:
+            result.append(COMPDICT[operator](prev_operand, operand))
         prev_operand = operand
     return sp.And(*result) if result else prev_operand
 
@@ -536,7 +560,7 @@ def _as_primary(tokens):
             index += 1
         if str(identifier).startswith('_'):
             raise NameError(
-                'cannot call function or method that starts with underline')
+                'cannot call function or methods starting with "_"')
         function = getattr(result, str(identifier))
         if argslist:
             result = _as_general_parencall(
@@ -551,8 +575,8 @@ def _return_stmt(tokens):
 
 
 def _assignment_stmt(tokens):
-    varsymbol, _, varexpr = tokens
-    return Assignment(varsymbol, varexpr)
+    varsymbol, operator, varexpr = tokens
+    return Assignment(varsymbol, varexpr, operator)
 
 
 def _funcdefine_stmt(tokens):
@@ -587,16 +611,18 @@ def _as_stmtsblock(tokens):
 
 PLUS, MINUS, TIMES, DIVIDE, MOD, POWER, ABS = map(Literal, '+-*/%^|')
 ASSIGN, DOT, LIT_COMMA, COL, EXCL = map(Literal, '=.,:!')
+ADD_TO, SUB_FROM, MUL_BY, DIV_BY, MOD_BY, POW_BY = map(
+    Literal, ['+=', '-=', '*=', '/=', '%=', '^='])
 COMP_LT, COMP_LE, COMP_EQ, COMP_NE, COMP_GE, COMP_GT = map(
     Literal, ['<', '<=', '==', '<>', '>=', '>'])
 COMPARISON = COMP_LE | COMP_GE | COMP_NE | COMP_EQ | COMP_LT | COMP_GT
 COMPDICT = {
     '<': sp.Lt, '<=': sp.Le, '==': sp.Eq,
     '<>': sp.Ne, '>=': sp.Ge, '>': sp.Gt}
-LPAREN, RPAREN, LSQBRK, RSQBRK, LBRACE, RBRACE, SEMICOL, COMMA = map(
-    Suppress, '()[]{};,')
-KW_NOT, KW_AND, KW_OR, KW_RETURN, KW_IF, KW_ELSE, KW_WHILE = map(
-    Literal, ['not', 'and', 'or', 'return', 'if', 'else', 'while'])
+LPAREN, RPAREN, LSQBRK, RSQBRK, LBRACE, RBRACE, SEMICOL, COMMA, VERT = map(
+    Suppress, '()[]{};,|')
+KW_NOT, KW_AND, KW_OR, KW_IN, KW_RETURN, KW_IF, KW_ELSE, KW_WHILE = map(
+    Literal, ['not', 'and', 'or', 'in', 'return', 'if', 'else', 'while'])
 KW_GLOBAL, KW_NONLOCAL = map(Literal, ['global', 'nonlocal'])
 IDENTIFIER = Word(identchars, identbodychars).set_parse_action(_as_spident)
 FLOAT_REGEX = re.compile(
@@ -616,8 +642,10 @@ BNFs:
 <parencall>   ::= IDENTIFIER ( <funcargs> | <slice> )+
 <array>       ::= "[" [ { <expr> "," } <expr> [ "," ] ] "]"
 <finiteset>   ::= "{" [ <expr> { "," <expr> } [ "," ] ] "}"
+<condset>     ::= "{" IDENTIFIER [ "in" <expr> ] "|" <expr> "}"
 <parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
-<primary>     ::= ( <array> | <finiteset> | <parenexpr> | <parencall> | <atom> )
+<primary>     ::= ( <array> | <finiteset> | <condset>
+                  | <parenexpr> | <parencall> | <atom> )
                   { "." IDENTIFIER { <funcargs> | <slice> } }
 
 <factorial>   ::= <primary> { "!" }
@@ -625,13 +653,15 @@ BNFs:
 <factor>      ::= { "+" | "-" } <power>
 <term>        ::= <factor> { ( "*" | "/" | "%" ) <factor> }
 <sum>         ::= <term> { ( "+" | "-" ) <term> }
-<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "<>" | ">=" | ">" ) <sum> }
+<comparison>  ::= <sum>
+                  { ( "<" | "<=" | "==" | "<>" | ">=" | ">" | "in" ) <sum> }
 <inversion>   ::= { "not" } <comparison>
 <conjunction> ::= <inversion> { "and" <inversion> }
 <disjunction> ::= <conjunction> { "or" <conjunction> }
 <expr>        ::= <disjunction>
 
-<assignment>  ::= IDENTIFIER "=" <expr>
+<assignment>  ::= IDENTIFIER
+                  ( "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) <expr>
 <funcdefine>  ::= IDENTIFIER LPAREN [ IDENTIFIER { "," IDENTIFIER } [ "," ] ]
                   RPAREN "=" ( <expr> | <stmtsblock> )
 <return>      ::= "return" <expr>
@@ -668,10 +698,14 @@ RULE_array = (LSQBRK + Opt(ZeroOrMore(
 RULE_finiteset = (LBRACE + Opt(ZeroOrMore(
     RULE_expr + COMMA) + RULE_expr + Opt(COMMA))
     + RBRACE).set_parse_action(_as_finiteset)
+RULE_condset = (
+    LBRACE + IDENTIFIER + Opt(KW_IN + RULE_expr)
+    + VERT + RULE_expr + RBRACE).set_parse_action(_as_condset)
 RULE_parenexpr = (LPAREN + RULE_expr + RPAREN) | (
     ABS + RULE_expr + ABS).set_parse_action(_as_absvalue)
 RULE_primary = ((
-    RULE_array | RULE_finiteset | RULE_parenexpr | RULE_parencall | RULE_atom)
+    RULE_array | RULE_finiteset | RULE_condset
+    | RULE_parenexpr | RULE_parencall | RULE_atom)
     + ZeroOrMore(DOT + IDENTIFIER + ZeroOrMore(RULE_funcargs | RULE_slice))
     ).set_parse_action(_as_primary)
 
@@ -686,7 +720,7 @@ RULE_term = (RULE_factor + ZeroOrMore(
 RULE_sum = (RULE_term + ZeroOrMore(
     (PLUS | MINUS) + RULE_term)).set_parse_action(_as_sum)
 RULE_comparison = (RULE_sum + ZeroOrMore(
-    COMPARISON + RULE_sum)).set_parse_action(_as_comparison)
+    (COMPARISON | KW_IN) + RULE_sum)).set_parse_action(_as_comparison)
 RULE_inversion = (ZeroOrMore(
     KW_NOT) + RULE_comparison).set_parse_action(_as_inversion)
 RULE_conjunction = (RULE_inversion + ZeroOrMore(
@@ -695,8 +729,9 @@ RULE_disjunction = (RULE_conjunction + ZeroOrMore(
     KW_OR + RULE_conjunction)).set_parse_action(_as_disjunction)
 RULE_expr << RULE_disjunction
 
-RULE_assignment = (
-    IDENTIFIER + ASSIGN + RULE_expr).set_parse_action(_assignment_stmt)
+RULE_assignment = (IDENTIFIER + (
+    ASSIGN | ADD_TO | SUB_FROM | MUL_BY | DIV_BY | MOD_BY | POW_BY)
+    + RULE_expr).set_parse_action(_assignment_stmt)
 RULE_funcdefine = (
     IDENTIFIER + LPAREN + Opt(
         IDENTIFIER + ZeroOrMore(COMMA + IDENTIFIER) + Opt(COMMA))

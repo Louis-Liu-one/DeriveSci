@@ -7,14 +7,13 @@
     {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
 {%- endmacro -%}
 
-{% block load_markdown %}{% endblock %}
-
 {% block title %}{{ user_name(user) }}的主页 - MathProbs{% endblock %}
 
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <script src="{{ url_for('static', filename='user-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='md-render.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}
@@ -79,8 +78,9 @@
             <span>
                 <textarea id="introduction" name="introduction"
                     class="submittext" spellcheck="false"
-                    placeholder="输入你的简介">{%- if user.introduction -%}
-                    {{ user.introduction }}{%- endif -%}</textarea>
+                    placeholder="简要介绍你自己，以 Markdown 格式">
+                    {%- if user.introduction -%}{{ user.introduction }}{%- endif -%}
+                </textarea>
             </span>
             <span>
                 <button id="editIntroductionButton"
@@ -88,7 +88,10 @@
             </span>
         </form>
     {%- elif user.introduction -%}
-        <h3>{{ user_name(user) }}的简介</h3><p>{{ user.introduction }}</p>
+        <h3>{{ user_name(user) }}的简介</h3>
+        <div id="userIntroduction" class="markdown-body">
+            <textarea>{{ user.introduction }}</textarea>
+        </div>
     {%- endif -%}
     <h3>{{ user_name(user) }}的文章</h3>
     <h4>{{ user_name(user) }}上传的题解</h4>
@@ -112,4 +115,5 @@
         });
     </script>
 {% endif %}
+<script>renderElements([userIntroduction]);</script>
 {% endblock %}

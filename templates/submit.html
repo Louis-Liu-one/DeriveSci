@@ -32,15 +32,10 @@
 {%- endmacro -%}
 
 {%- macro colored_score(score) -%}
-    {%- if score == 100 -%}
-        <font color="#72C040"><b>100</b></font>
-    {%- elif score >= 80 -%}
-        <font color="#E89F3C"><b>{{ score }}</b></font>
-    {%- elif score >= 40 -%}
-        <font color="#E07B41"><b>{{ score }}</b></font>
-    {%- else -%}
-        <font color="#D75746"><b>{{ score }}</b></font>
-    {%- endif -%}
+    {%- if score == 100 -%}<font color="#72C040"><b>100</b></font>
+    {%- elif score >= 80 -%}<font color="#E89F3C"><b>{{ score }}</b></font>
+    {%- elif score >= 40 -%}<font color="#E07B41"><b>{{ score }}</b></font>
+    {%- else -%}<font color="#D75746"><b>{{ score }}</b></font>{%- endif -%}
 {%- endmacro -%}
 
 {% block title %}问题{{ prob.probno }}的提交 - MathProbs{% endblock %}

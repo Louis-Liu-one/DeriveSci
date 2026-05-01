@@ -356,9 +356,11 @@ class Prob(db.Model):
         for sub in testpoints:
             passedlist.extend(testpoints_passedlist(sub))
         submission = Submission(
-            user=user, answer=json.dumps(answer) if not isinstance(answer, str) else answer,
+            user=user, answer=json.dumps(answer)
+            if not isinstance(answer, str) else answer,
             ispassed=all(passedlist) if passedlist else False,
-            score=100 * sum(passedlist) // len(passedlist) if passedlist else 0)
+            score=100 * sum(passedlist) // len(passedlist)
+            if passedlist else 0)
         db.session.add(submission)
         submission.prob = self
         db.session.commit()

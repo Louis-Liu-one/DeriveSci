@@ -22,10 +22,10 @@ div.unread-badge {
     line-height: 18px; border-radius: 50%; background: var(--danger); color: white;
     font-size: 11px; font-weight: bold; text-align: center;
     box-shadow: 0 2px 5px #00000026; z-index: 10; }
-figure {
-    margin: 15px 0; text-align: center; }
+figure { margin: 15px 0; text-align: center; }
 figcaption {
     margin-top: 8px; font-size: 13px; font-style: italic; text-align: center; }
+.katex { font-size: 1em; }
 
 /******************************* navbar *******************************/
 

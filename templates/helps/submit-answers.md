@@ -17,7 +17,6 @@
 ### 基本运算符
 
 在表达式中，可以使用 `+`、`-` 等**基本运算符**。以下是所有可用的基本运算符。
-
 运算符 | 意义 | 优先级 | 备注
 :---: | :-: | :---: | ---
 `(...)` | 括号 | 9
@@ -34,12 +33,12 @@
 ### 逻辑运算符
 
 在表达式中，还可以使用 `>`、`<` 等**逻辑运算符**。以下是所有可用的逻辑运算符。
-
 运算符 | 意义 | 优先级 | 运算符 | 意义 | 优先级 | 运算符 | 意义 | 优先级
-:---: | :-: | :----: | :--: | :--: | :---: | :---: | :-: | :---:
-`>`  | 严格大于   | 3 | `>=` | 大于或等于 | 3 | `==`  | 等于    | 3
-`<>` | 不等于     | 3 | `<=` | 小于或等于 | 3 | `<`   | 严格小于 | 3
-`not` | 非       | 2 | `and` | 且       | 1 | `or`  | 或      | 0
+:-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
+`in`  | 包含于   | 3
+`>`   | 严格大于 | 3 | `>=` | 大于或等于 | 3 | `==`  | 等于    | 3
+`<>`  | 不等于   | 3 | `<=` | 小于或等于 | 3 | `<`   | 严格小于 | 3
+`not` | 非      | 2 | `and`| 且        | 1 | `or`  | 或      | 0
 
 与大部分编程语言不同的是，6 个比较运算符连续结合时将自动解析为且运算的连续结合。例如：`x < y < z` 与 `x < y and y < z` 等价。
 
@@ -54,7 +53,6 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 则使用 `f(1, 2, 3)`、`f(1, 2, z=3)`、`f(1, z=3, y=2)` 效果相同。
 
 以下是常用的 SymPy 函数：
-
 用法 | 意义
 :-: | ---
 `Pow(x, n)` 或 `x^n`、`sqrt(x)` 或 `x^(1/2)` | 指数或平方根
@@ -82,7 +80,6 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 注：算式中的*单位*是指描述算式的直接参数。事实上，SymPy 的 `sqrt` 函数将 $\sqrt x$ 展开为 $x^{1/2}$，所以单位是 $x, 1/2$，而 $\sqrt{x + y}$ 的单位是 $x + y, 1/2$。
 
 以下是常用的 SymPy 属性或方法：
-
 用法 | 意义
 :--------------------: | ---
 `expr.evalf()`         | 求浮点数值
@@ -98,7 +95,6 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 ### 默认常量
 
 表达式中可以使用一些预定义的默认**常量**。以下是一些常用的预定义常量：
-
 名称 | 意义
 -------------------: | :--
 `Catalan`            | Catalan 常数
@@ -124,13 +120,61 @@ A = [8, 3, 5, 1, 2, 0, 7, 6, 4, 9];
 
 可以使用 `A[i]` 取出数组中的元素。例如，`A[6]` 的结果为 `7`。在表达式中也可以不指定 `i`，从而使 `A[i]` 泛指数组中的某个元素。
 
-### 有限集合
+### 集合
+
+#### 有限集合
 
 使用 `{表达式1, 表达式2, ...}` 创建**有限集合**。例如
 ```
 S = {8, 3, 5, 1, 2, 0, 7, 6, 4, 9};
 ```
 就将有限集合存储在了变量 `S` 中。创建集合时，会自动去除其中重复的元素。
+
+#### 条件集合
+
+使用 `{标识符 | 条件}` 或 `{标识符 in 基集 | 条件}` 创建条件集合，例如
+```
+S = {x | 14 <= x <= 36};
+```
+就创建了一个集合 $\{x \mid 14 \le x \le 36 \}$；如果想要集合元素为整数，可以使用
+```
+S = {x in Naturals | 14 <= x <= 36};
+```
+这相当于 $\{x \in \mathbb N \mid 14 \le x \le 36 \}$；
+
+#### 区间
+
+使用 `Interval()` 创建区间，例如 `Interval(14, 36)` 就创建了一个区间 $[14, 36]$。可以指定 `left_open=true` 和/或 `right_open=true` 控制区间左右的开闭，例如 `Interval(14, 36, left_open=true)` 相当于 $(14, 36]$。
+
+#### 预定义集合
+
+下面的标识符是一些预定义的集合，可以直接使用：
+名称 | 意义
+:------------: | ---
+`UniversalSet` | 全集 $\mathbb U$
+`Reals`        | 实数集 $\mathbb R$
+`Rationals`    | 有理数集 $\mathbb Q$
+`Integers`     | 整数集 $\mathbb Z$
+`Naturals0`    | 自然数集 $\mathbb N$，包含 $0$
+`Naturals`     | 正整数集 $\mathbb N^+$（又作 $\mathbb N^*$），不含 $0$
+`EmptySet`     | 空集 $\emptyset$
+
+#### 集合的常用操作
+
+下面是集合的常用操作，其中的 `S`、`S1`、`S2` 代表集合 $S$、$S_1$、$S_2$，`x` 代表元素：
+用法 | 意义
+:-: | ---
+`S1 + S2` 或 `S1.union(S2)` | $S_1 \cup S_2$
+`S2 - S1` 或 `S1.complement(S2)` | $S_1 \setminus S_2$
+`S1.intersect(S2)` 或 `S1.intersection(S2)` | $S_1 \cap S_2$
+`S.powerset()` | $S$ 的幂集
+`S1 * S2` | $S_1$ 和 $S_2$ 的 Cartesian 积
+`x in S` 或 `S.contains(x)` | $x \in S$
+`S1.is_subset(S2)` | $S_1 \subset S_2$
+`S1.is_proper_subset(S2)` | $S_1 \subsetneq S_2$
+`S1.is_superset(S2)` | $S_1 \supset S_2$
+`S1.is_proper_superset(S2)` | $S_1 \supsetneq S_2$
+`S1.is_disjoint(S2)` | $S_1$ 与 $S_2$ 不相交
 
 ## 语句
 
@@ -149,6 +193,12 @@ S = {8, 3, 5, 1, 2, 0, 7, 6, 4, 9};
 ### 赋值语句
 
 使用 `变量名 = 值` 语句为变量**赋值**。赋值后可以在表达式中使用值。赋值语句的返回值就是被赋的值。
+
+也可以使用**自增**、**自减**等语法，使用方法为
+```
+变量名 ( += | -= | *= | /= | %= | ^= ) 值
+```
+使用方法与大部分编程语言中的相同。其中，`a ^= b` 操作相当于 `a = a ^ b`，即求幂。
 
 ### 条件语句
 
@@ -209,21 +259,22 @@ return 36;
 <parencall>   ::= IDENTIFIER ( <funcargs> | <slice> )+
 <array>       ::= "[" [ { <expr> "," } <expr> [ "," ] ] "]"
 <finiteset>   ::= "{" [ <expr> { "," <expr> } [ "," ] ] "}"
+<condset>     ::= "{" IDENTIFIER [ "in" <expr> ] "|" <expr> "}"
 <parenexpr>   ::= "(" <expr> ")" | "|" <expr> "|"
-<primary>     ::= ( <array> | <finiteset> | <parenexpr> | <parencall> | <atom> ) { "." IDENTIFIER { <funcargs> | <slice> } }
+<primary>     ::= ( <array> | <finiteset> | <condset> | <parenexpr> | <parencall> | <atom> ) { "." IDENTIFIER { <funcargs> | <slice> } }
 
 <factorial>   ::= <primary> { "!" }
 <power>       ::= <factorial> { "^" <factorial> }
 <factor>      ::= { "+" | "-" } <power>
 <term>        ::= <factor> { ( "*" | "/" | "%" ) <factor> }
 <sum>         ::= <term> { ( "+" | "-" ) <term> }
-<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "<>" | ">=" | ">" ) <sum> }
+<comparison>  ::= <sum> { ( "<" | "<=" | "==" | "<>" | ">=" | ">" | "in" ) <sum> }
 <inversion>   ::= { "not" } <comparison>
 <conjunction> ::= <inversion> { "and" <inversion> }
 <disjunction> ::= <conjunction> { "or" <conjunction> }
 <expr>        ::= <disjunction>
 
-<assignment>  ::= IDENTIFIER "=" <expr>
+<assignment>  ::= IDENTIFIER ( "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" ) <expr>
 <funcdefine>  ::= IDENTIFIER LPAREN [ IDENTIFIER { "," IDENTIFIER } [ "," ] ] RPAREN "=" ( <expr> | <stmtsblock> )
 <return>      ::= "return" <expr>
 <judgement>   ::= "if" <primary> [ ( <statement> ";" | <stmtsblock> ) "else" ] ( <statement> | <stmtsblock> )
