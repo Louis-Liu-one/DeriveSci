@@ -28,14 +28,10 @@
     {%- endif -%}
     {{- view_solution(prob) }}{{ upload_solution(prob) -}}
     {%- if current_user.isadmin -%}
-        <a class="sidebar-link" id="officialSidebarSetter"
-            data-probno="{{ prob.probno }}">
+        <a class="sidebar-link" id="officialSidebarSetter" data-probno="{{ prob.probno }}">
             <div class="sidebar-item" id="officialSetterBlock">
-                {%- if prob.isofficial -%}
-                    <i class="fa-solid fa-circle-minus"></i>从官方题目移除
-                {%- else -%}
-                    <i class="fa-solid fa-circle-plus"></i>添加到官方题目
-                {%- endif -%}
+                {%- if prob.isofficial -%}<i class="fa-solid fa-circle-minus"></i>从官方题目移除
+                {%- else -%}<i class="fa-solid fa-circle-plus"></i>添加到官方题目{%- endif -%}
             </div>
         </a>
     {%- endif -%}
@@ -87,28 +83,22 @@
             {%- endif -%}
         {%- endif -%}
     {%- else -%}
-        <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}"
-            id="isOfficialPrompt">本题是官方题目。</p>
+        <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
         {%- set anslist = prob.get_answer() -%}
         {%- if anslist -%}
-            <h3>提交答案</h3>
-            <p class="helpslink">
-                服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。
-            </p>
-            <form class="mathprobsform" method="POST"
-                action="{{ url_for('submit', probno=prob.probno) }}">
+            <h3>提交答案</h3><p class="helpslink">服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。</p>
+            <form class="mathprobsform" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
                 {%- if anslist|length == 1 -%}
                     <span><textarea name="answertext" class="submittext"
                         placeholder="按照要求提交答案" spellcheck="false"></textarea></span>
                 {%- else -%}
                     {%- for i in range(anslist|length) -%}
-                        <span><textarea name="answertext" class="submittext"
+                        <span><textarea name="answertext" class="submittext"{{-''-}}
                             placeholder="小题 {{ i+1 }} 的答案" spellcheck="false"></textarea></span>
                     {%- endfor -%}
                 {%- endif -%}
                 <p class="helpslink">
-                    <a target="_blank" href="{{ url_for(
-                        'helps', howto='submit-answers') }}">
+                    <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
                         <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
                     </a>
                 </p>

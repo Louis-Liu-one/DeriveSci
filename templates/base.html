@@ -1,10 +1,10 @@
 {% from "includes/users.html" import user_avatar_img %}
 
 {%- macro navbar_item(url, icon, text, unread=0) -%}
-    <a href="{{ url }}" target="_blank">
-        <li class="navbar-item">
+    <a href="{{ url }}" target="_blank">{{-''-}}
+        <li class="navbar-item">{{-''-}}
             <i class="fa-solid fa-{{ icon }}"></i><br>{{- text -}}{%- if unread -%}<div class="unread-badge">{{ unread }}</div>{%- endif -%}
-        </li>
+        </li>{{-''-}}
     </a>
 {%- endmacro -%}
 

@@ -7,15 +7,12 @@ div.user-list {
     width: 200px; background: var(--surface-strong);
     border-right: 1px solid var(--border); padding: 15px; }
 div.user-item {
-    display: flex; align-items: center;
-    padding: 12px 10px; margin-bottom: 10px;
+    display: flex; align-items: center; padding: 12px 10px; margin-bottom: 10px;
     border-radius: 15px; cursor: pointer; transition: .2s; }
 div.user-item:hover, div.user-item.active { background: var(--surface-soft); }
 div.avatar-wrap {
-    position: relative; width: 30px; height: 30px; margin-right: 5px;
-    align-content: center; }
-div.avatar-wrap img {
-    height: 100%; max-width: 100%; border-radius: 50%; }
+    position: relative; width: 30px; height: 30px; margin-right: 5px; align-content: center; }
+div.avatar-wrap img { height: 100%; max-width: 100%; border-radius: 50%; }
 div.avatar-wrap i { font-size: 25px; }
 
 div.chat-box { display: flex; flex: 1; flex-direction: column; }
@@ -23,12 +20,10 @@ div.chat-header {
     display: flex; align-items: center;
     padding: 15px; border-bottom: 1px solid var(--border); }
 div.chat-header div.unread-badge { display: none !important; }
-div.message-area {
-    flex: 1; padding: 20px; overflow-y: auto; background: var(--surface); }
+div.message-area { flex: 1; padding: 20px; overflow-y: auto; background: var(--surface); }
 div.message-area div.message {
     display: table; margin-bottom: 15px; max-width: 60%;
-    word-wrap: anywhere; padding: 8px 12px;
-    border-radius: 15px; line-height: 1.5; }
+    word-wrap: anywhere; padding: 8px 12px; border-radius: 15px; line-height: 1.5; }
 div.message-area div.my-message {
     background: var(--primary); color: white;
     margin-left: auto; border-top-right-radius: 0; }
@@ -45,8 +40,7 @@ div.send-area input#messageInputElement:focus { outline-color: lightskyblue; }
 div.send-area input#messageInputElement:disabled { cursor: not-allowed; }
 div.send-area button {
     border: none; border-radius: 18px; background: var(--primary); color: white;
-    line-height: 27px; font-size: 15px; width: 120px;
-    margin-left: 15px; transition: .5s; }
+    line-height: 27px; font-size: 15px; width: 120px; margin-left: 15px; transition: .5s; }
 div.send-area button:hover {
     background: var(--primary-soft); cursor: pointer; transition: .5s; }
 div.send-area button:disabled { background: var(--primary); cursor: not-allowed; }

@@ -2,37 +2,37 @@
 {% from "includes/users.html" import user_avatar_img, user_name %}
 
 {%- macro problist(probs, with_source=True, with_review_status=False) -%}
-    <table class="problist">
-        <tr class="probhead">
-            <th>编号</th><th>名称</th><th>标签</th>
-            {%- if with_source -%}<th>来源</th>{%- endif -%}
-            {%- if with_review_status -%}<th>状态</th>{%- endif -%}
-        </tr>
-        {%- for prob in probs -%}
-            <tr data-url="{{ prob.url() }}"
-                onclick="window.open(this.dataset.url)">
-                <td class="probno">{{ prob.probno }}</td>
-                <td class="probtitle">{{ prob.probtitle }}</td>
-                {{ problabels_problist(prob) }}
-                {%- if with_source -%}
-                    <td class="source"{%- if prob.source -%}
-                        data-url="{{ prob.source.url() }}"
-                        onclick="event.stopPropagation();
-                            window.open(this.dataset.url)"{%- endif -%}>
-                        <div>
-                            {{- user_avatar_img(prob.source) -}}
-                            {{- user_name(prob.source) -}}
-                        </div>
-                    </td>
-                {%- endif -%}
-                {%- if with_review_status -%}
-                    <td class="review-status">
-                        {%- if prob.review_status == -1 -%}待审
-                        {%- elif prob.review_status == 0 -%}拒绝
-                        {%- else -%}通过{%- endif -%}
-                    </td>
-                {%- endif -%}
-            </tr>
-        {%- endfor -%}
-    </table>
+    <div class="problist-wrap">
+        <table class="problist">
+            <thead>
+                <tr class="probhead">
+                    <th>编号</th><th>名称</th><th>标签</th>
+                    {%- if with_source -%}<th>来源</th>{%- endif -%}
+                    {%- if with_review_status -%}<th>状态</th>{%- endif -%}
+                </tr>
+            </thead>
+            <tbody>
+                {%- for prob in probs -%}
+                    <tr data-url="{{ prob.url() }}" onclick="window.open(this.dataset.url)">{{-''-}}
+                        <td class="probno">{{ prob.probno }}</td>{{-''-}}
+                        <td class="probtitle">{{ prob.probtitle }}</td>
+                        {{- problabels_problist(prob) -}}
+                        {%- if with_source -%}
+                            <td class="source"{%- if prob.source -%}data-url="{{ prob.source.url() }}"{{-''-}}
+                                onclick="event.stopPropagation(); window.open(this.dataset.url)"{%- endif -%}>{{-''-}}
+                                <div>{{- user_avatar_img(prob.source) -}}{{- user_name(prob.source) -}}</div>{{-''-}}
+                            </td>
+                        {%- endif -%}
+                        {%- if with_review_status -%}
+                            <td class="review-status">
+                                {%- if prob.review_status == -1 -%}待审
+                                {%- elif prob.review_status == 0 -%}拒绝
+                                {%- else -%}通过{%- endif -%}
+                            </td>
+                        {%- endif -%}
+                    </tr>
+                {%- endfor -%}
+            </tbody>
+        </table>
+    </div>
 {%- endmacro -%}

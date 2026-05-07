@@ -1,12 +1,10 @@
 {#
-    如果要使用`delete_prob`、`delete_solution`宏，则需要导入`prob-utils.js`。
+    如果要使用 `delete_prob`、`delete_solution` 宏，则需要导入 `prob-utils.js`。
 #}
 
 {%- macro return2post(post, text) -%}
     <a class="sidebar-link" href="{{ post.url() }}">
-        <div class="sidebar-item">
-            <i class="fa-solid fa-circle-left"></i>{{ text }}
-        </div>
+        <div class="sidebar-item"><i class="fa-solid fa-circle-left"></i>{{ text }}</div>
     </a>
 {%- endmacro -%}
 

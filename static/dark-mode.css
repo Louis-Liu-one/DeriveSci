@@ -9,7 +9,7 @@
 
 @media (prefers-color-scheme: dark) {
     html, body { background: var(--bg); color: var(--text); }
-    body { color-scheme: dark; min-height: 100vh; }
+    body { color-scheme: dark; }
     a, a:visited { color: var(--accent); }
     * { scrollbar-color: #475569 transparent; }
     *::-webkit-scrollbar { width: 10px; height: 10px; }

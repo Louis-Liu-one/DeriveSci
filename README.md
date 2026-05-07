@@ -1,49 +1,49 @@
 
 # MathProbsOnline
 
-为MathProbs项目建立的网站，已上线，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
+为 [MathProbs 项目](https://github.com/Louis-Liu-one/MathProbs) 建立的网站，已上线，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
 
 ## 构建方法
 
-- 项目使用Markdown-It渲染Markdown，使用Markdown-It-TeXMath插件和KaTeX引擎渲染数学公式，使用Font Awesome渲染图标。初次进入网页时，需要加载CDN，速度较慢，敬请谅解。
+- 项目使用 `markdown-it` 渲染 Markdown，使用 `mdit/plugin-katex` 插件和 $\KaTeX$ 引擎渲染数学公式，使用 Font Awesome 渲染图标。初次进入网页时，需要加载各项 CDN，速度较慢，敬请谅解。
 
-- 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout，具体参见`requirements.txt`，可以直接使用`pip`安装，建议使用虚拟环境。命令如下：
+- 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout 等，具体参见 `requirements.txt`，可以直接使用 `pip` 安装，建议使用虚拟环境。命令如下：
 ```bash
 cd MathProbsOnline
-python -m venv webenv
-source webenv/bin/activate
-pip install -r requirements.txt
+python -m venv webenv            # 创建环境
+source webenv/bin/activate       # 激活环境
+pip install -r requirements.txt  # 安装支持
 # 操作
-deactivate
+deactivate                       # 退出环境
 ```
 
-- 所有构建都完成时，先将你的Flask密钥设置在`FLASK_SECRET_KEY`环境变量中：
+- 所有构建都完成时，先将你的 Flask 密钥设置在 `FLASK_SECRET_KEY` 环境变量中：
 ```bash
 FLASK_SECRET_KEY=密钥...
 export FLASK_SECRET_KEY
 ```
-你也可以将上述命令加入`webenv/bin/activate`中。然后，运行`app.py`，或从他处导入：
+你也可以将上述命令加入 `webenv/bin/activate` 中。然后，运行 `app.py`，或从他处导入：
 ```python
 from app import app
 app.run()
 ```
-此时，网页可在`localhost:5000`访问。
+此时，网页可在 `localhost:5000` 访问。
 
-- 初始化Flask-Migrate时，使用
+- 初始化 Flask-Migrate 时，使用
 ```bash
 flask db init
 ```
 代码进行修改后，更新数据库时，使用
 ```bash
-flask db migrate -m '描述...'
+flask db migrate -m '更新描述...'
 flask db upgrade
 ```
 
 ## 部署域名
 
-已经在PythonAnyWhere上部署，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
+已经在 PythonAnyWhere 上部署，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
 
-PythonAnyWhere上使用的Flask密钥与仓库中的不同，仓库中的密钥仅作测试之用。
+PythonAnyWhere 上使用的 Flask 密钥与仓库中的不同，仓库中的密钥仅作测试之用。
 
 ## 使用说明
 

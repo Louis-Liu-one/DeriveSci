@@ -115,5 +115,7 @@
         });
     </script>
 {% endif %}
-<script>renderElements([userIntroduction]);</script>
+{%- if user != current_user -%}
+    <script>renderElements([userIntroduction]);</script>
+{%- endif -%}
 {% endblock %}
