@@ -40,14 +40,14 @@
         {%- endif -%}
     {%- endif -%}
 </aside>
-<article class="bodypart problist-container">
+<article class="body-article problist-container">
     {%- if not probs.first() -%}<p style="text-align: center;">暂无</p>
     {%- elif reviewmode -%}{{- problist(probs, with_review_status=True) -}}
     {%- else -%}{{- problist(probs) -}}{%- endif -%}
 </article>
-<article class="submitpart">
+<article class="right-side-article">
     <h3>查询题目</h3>
-    <form class="mathprobsform" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
+    <form class="form-container" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
         {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
         <span>
             <label for="probNo">编号：</label>

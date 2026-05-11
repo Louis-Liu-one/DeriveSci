@@ -32,7 +32,7 @@ async function setOfficialProb(event) {
         if (data.isofficial) {
             officialSetterBlock.innerHTML
                 = '<i class="fa-solid fa-circle-minus"></i>从官方题目移除';
-            isOfficialPrompt.className = 'helpslink'; alert('已添加到官方题目');
+            isOfficialPrompt.className = 'tips'; alert('已添加到官方题目');
         } else {
             officialSetterBlock.innerHTML
                 = '<i class="fa-solid fa-circle-plus"></i>添加到官方题目';

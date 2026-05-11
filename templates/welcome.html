@@ -56,7 +56,7 @@
         </a>
     {%- endif -%}
 </aside>
-<article class="bodypart">
+<article class="body-article">
     <h3>{{ user_name(user) }}的贡献</h3>
     <h4>{{ user_name(user) }}通过的题目</h4>
     {%- set passedprobs = user.get_passedprobs() -%}
@@ -71,21 +71,18 @@
             with_source=False, with_review_status=True) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </article>
-<article class="submitpart">
+<article class="right-side-article">
     {%- if user == current_user -%}
         <h3>{{ user_name(user) }}的简介</h3>
-        <form class="mathprobsform">
+        <form class="form-container">
             <span>
                 <textarea id="introduction" name="introduction"
-                    class="submittext" spellcheck="false"
+                    class="submit-input" spellcheck="false"
                     placeholder="简要介绍你自己，以 Markdown 格式">
                     {%- if user.introduction -%}{{ user.introduction }}{%- endif -%}
                 </textarea>
             </span>
-            <span>
-                <button id="editIntroductionButton"
-                    class="submitbutton" type="button">修改</button>
-            </span>
+            <span><button id="editIntroductionButton" type="button">修改</button></span>
         </form>
     {%- elif user.introduction -%}
         <h3>{{ user_name(user) }}的简介</h3>

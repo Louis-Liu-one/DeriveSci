@@ -17,5 +17,5 @@
     *::-webkit-scrollbar-track { background: transparent; }
     body, button, input, textarea, select, optgroup, option {
         color: var(--text); background: transparent; border-color: var(--border); }
-    article.bodypart img:not(.avatar) { filter: invert(1); }
+    article.body-article img:not(.avatar) { filter: invert(1); }
 }

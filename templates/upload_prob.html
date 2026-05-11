@@ -30,9 +30,9 @@
         {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
     {%- endif -%}
 </aside>
-<article class="bodypart">
+<article class="body-article">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
-    <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
+    <form class="form-container" id="editForm" enctype="multipart/form-data">
         {%- if not editmode -%}
             <span>
                 <label for="probNo">编号：</label>
@@ -99,10 +99,10 @@
         </span>
     </form>
 </article>
-<article class="submitpart">
+<article class="right-side-article">
     <h3>预览区</h3>
-    <div class="markdown-body mdpreview" id="mdPreview"></div>
-    <p class="helpslink">
+    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+    <p class="tips">
         <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
             <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
         </a><br>

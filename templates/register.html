@@ -1,16 +1,11 @@
 {% extends "form.html" %}
 {% from "includes/users.html" import select_gender %}
 
-{% block static_files %}
-<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
-{% endblock %}
-
 {% block title %}注册 - MathProbs{% endblock %}
 
-{% block form %}
-<form class="mathprobsform" enctype="multipart/form-data"
-    data-nextpage="{{ next }}" id="registerForm"
-    onsubmit="userRegister(); return false">
+{% block left_content %}
+<form class="form-container" enctype="multipart/form-data"
+    data-nextpage="{{ next }}" id="registerForm" onsubmit="userRegister(); return false">
     <h3>注册</h3>
     <span>
         <label for="userName">用户名：</label>
@@ -40,10 +35,7 @@
 </form>
 {% endblock %}
 
-{% block right_block %}
-<h2>已有账号？</h2>
-<p>直接登录</p>
-<a href="{{ url_for('login', next=next) }}">
-    <button class="register" type="button">登录</button>
-</a>
+{% block right_content %}
+<h2>已有账号？</h2><p>直接登录</p>
+<a href="{{ url_for('login', next=next) }}"><button class="jump" type="button">登录</button></a>
 {% endblock %}

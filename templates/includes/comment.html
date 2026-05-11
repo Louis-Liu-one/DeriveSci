@@ -12,7 +12,7 @@
         加载 Moment 模块并设置中文模式；
     3. 要在头部加载 `static/comment-utils.js` 以保证正常使用；
     4. 如果要渲染评论中的 Markdown，则要先加载 `static/md-render.js`，然后要将
-        `document.getElementsByClassName('commentcontent')` 中所有元素传入
+        `document.getElementsByClassName('comment-content')` 中所有元素传入
         `renderElements()` 中即可实现渲染。
 #}
 {% from "includes/users.html" import user_name, user_avatar_img %}
@@ -28,19 +28,19 @@
 {%- endmacro -%}
 
 {%- macro commentform_main(post_type, post_ident) -%}
-    <form id="commentForm" class="mathprobsform"{{-''-}}
+    <form id="commentForm" class="form-container"{{-''-}}
         data-posttype="{{ post_type }}" data-postident="{{ post_ident }}">{{-''-}}
-        <span><textarea name="commenttext" class="submittext"{{-''-}}
+        <span><textarea name="commenttext" class="submit-input"{{-''-}}
             placeholder="发表见解" spellcheck="false"></textarea></span>{{-''-}}
         <span><button type="submit">发表</button></span>{{-''-}}
     </form>
 {%- endmacro -%}
 
 {%- macro commentform_sub(comment, new_window=False) -%}
-    <form id="subCommentForm" class="mathprobsform"{{-''-}}
+    <form id="subCommentForm" class="form-container"{{-''-}}
         data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}"{{-''-}}
         data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>{{-''-}}
-        <span><textarea name="commenttext" class="submittext"{{-''-}}
+        <span><textarea name="commenttext" class="submit-input"{{-''-}}
             placeholder="发表评论" spellcheck="false"></textarea></span>{{-''-}}
         <span><button type="submit">发表</button></span>{{-''-}}
     </form>
@@ -55,19 +55,19 @@
 {%- endmacro -%}
 
 {%- macro commentbody(comment, toplevel=False, secondlevel=False, with_post=False) -%}
-    <div class="commentbody">
+    <div class="comment-body">
         {{- commentavatar(comment) -}}
-        <span class="commentbodytext">{{-''-}}
-            <p class="commentname">
+        <span class="comment-text">{{-''-}}
+            <p class="comment-title">
                 {{- user_name(comment.user) -}}
                 {%- if not toplevel and not secondlevel -%}
                     &nbsp; &#9654; {{ user_name(comment.replyto.user) }}
                 {%- endif -%}
             </p>{{-''-}}
-            <div class="commentcontent"><textarea>{{ comment.content }}</textarea></div>{{-''-}}
+            <div class="comment-content"><textarea>{{ comment.content }}</textarea></div>{{-''-}}
         </span>{{-''-}}
     </div>{{-''-}}
-    <p class="commentfoot">
+    <p class="comment-foot">
         {{- comment_timestamp(comment) -}}
         {%- if not with_post -%}
             <i id="commentSenderButton" title="发表评论" class="fa-solid fa-comment-dots"></i>
@@ -101,10 +101,10 @@
 
 {%- macro commentarea(post_type, post_ident, comments) -%}
     {{- commentform_main(post_type, post_ident) -}}
-    <div class="commentlist">
+    <div class="comments-container">
         {%- if comments -%}
             {%- for comment in comments -%}
-                {{- commentdiv(comment, toplevel=True) -}}<div class="commentsep"></div>
+                {{- commentdiv(comment, toplevel=True) -}}<div class="comments-sep"></div>
             {%- endfor -%}
         {%- else -%}<p>暂无讨论</p>{%- endif -%}
     </div>

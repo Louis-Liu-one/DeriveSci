@@ -1,37 +1,29 @@
 {% extends "form.html" %}
 {% from "includes/users.html" import select_gender %}
 
-{% block static_files %}
-<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
-{% endblock %}
-
 {% block title %}修改信息 - MathProbs{% endblock %}
 
-{% block form %}
-<form id="editForm" class="mathprobsform" enctype="multipart/form-data"
+{% block left_content %}
+<form id="editForm" class="form-container" enctype="multipart/form-data"
     onsubmit="userEditProfile(); return false">
     <h3>修改信息</h3>
     <span>
         <label for="userName">用户名：</label>
-        <input id="userName" name="username" type="text"
-            spellcheck="false" placeholder="输入用户名"
+        <input id="userName" name="username" type="text" spellcheck="false" placeholder="输入用户名"
             autocomplete="username" value="{{ current_user.name }}" required>
     </span>
     <span>
-        <label for="gender">修改性别：</label>
-        {{ select_gender(current_user.gender) }}
+        <label for="gender">修改性别：</label>{{- select_gender(current_user.gender) -}}
     </span>
     <span>
         <label for="password">修改密码：</label>
         <input id="password" name="password" type="password"
-            spellcheck="false" placeholder="输入新密码"
-            autocomplete="new-password">
+            spellcheck="false" placeholder="输入新密码" autocomplete="new-password">
     </span>
     <span>
         <label for="passwordConfirmation">确认密码：</label>
         <input id="passwordConfirmation" name="password_confirmation"
-            type="password" spellcheck="false" placeholder="再次确认密码"
-            autocomplete="new-password">
+            type="password" spellcheck="false" placeholder="再次确认密码" autocomplete="new-password">
     </span>
     <span>
         <label for="avatar">修改头像：</label><br>
@@ -42,9 +34,7 @@
 </form>
 {% endblock %}
 
-{% block right_block %}
+{% block right_content %}
 <h2>返回主页</h2>
-<a href="{{ url_for('welcome') }}">
-    <button class="register" type="button">返回</button>
-</a>
+<a href="{{ url_for('welcome') }}"><button class="jump" type="button">返回</button></a>
 {% endblock %}

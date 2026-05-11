@@ -1,55 +1,47 @@
 
-div.commentlist {
+div.comments-container {
     clear: both;  font-family: Helvetica;  margin: 15px 0; padding: 18px;
     border: 1px solid var(--border); border-radius: 12px;
     box-shadow: var(--shadow); background: var(--surface); }
 div.comment {  clear: both;  margin-top: 16px; }
-div.commentbody {
+div.comment-body {
     width: 100%; margin-bottom: 8px; display: flex;
     justify-content: space-between; border-radius: 8px; background: var(--surface-strong);
     transition: all .25s ease; }
-div.commentbody:hover {
+div.comment-body:hover {
     box-shadow: 0 2px 10px #00000010; background: var(--surface-soft); }
 
-div.commentbody span.avatar { float: left; flex: 0 0 auto; margin: 8px; }
-div.commentbody img.avatar, div.commentbody i.avatar {
+div.comment-body span.avatar { float: left; flex: 0 0 auto; margin: 8px; }
+div.comment-body img.avatar, div.comment-body i.avatar {
     width: 40px;  height: 40px;  margin-top: 2px;  flex-shrink: 0; }
-div.commentbody img.avatar, div.commentbody i.avatar {
-    border-radius: 50%; transition: all .25s ease;
-    border: 2px solid transparent; }
-div.commentbody i.avatar {
+div.comment-body img.avatar, div.comment-body i.avatar {
+    border-radius: 50%; transition: all .25s ease; border: 2px solid transparent; }
+div.comment-body i.avatar {
     font-size: 32px; text-align: center; color: var(--accent); line-height: 40px; }
-div.commentbody img.avatar:hover,  div.commentbody i.avatar:hover {
-    box-shadow: 0 0 6px #34AAE080; cursor: pointer; border-color: #34AAE0;
-    transform: scale(1.05); }
+div.comment-body img.avatar:hover,  div.comment-body i.avatar:hover {
+    box-shadow: 0 0 6px #34AAE080; cursor: pointer; border-color: #34AAE0; transform: scale(1.05); }
 
-div.commentbody span.commentbodytext {
+div.comment-body span.comment-text {
     flex-grow: 1; word-wrap: anywhere; margin: 0 8px 8px 0; }
-p.commentname, p.commentfoot {
+p.comment-title, p.comment-foot {
     font-size: 13px; color: var(--text); font-family: Helvetica; }
-p.commentname { margin-bottom: 0; font-weight: bold; color: var(--accent); }
-p.commentfoot { margin: 10px 0 0 0; color: var(--muted); }
-p.commentfoot img, p.commentfoot i {
+p.comment-title { margin-bottom: 0; font-weight: bold; color: var(--accent); }
+p.comment-foot { margin: 10px 0 0 0; color: var(--muted); }
+p.comment-foot img, p.comment-foot i {
     float: right; width: 20px; height: 20px; margin-left: 8px;
     transition: all .2s ease; color: var(--muted); }
-p.commentfoot img:hover {
-    background: var(--primary); border-radius: 50%; cursor: pointer;
-    transform: scale(1.1); }
-p.commentfoot i:hover {
-    color: var(--primary); cursor: pointer; transform: scale(1.1); }
-div.commentcontent textarea {
-    margin-top: 0; margin-bottom: 0; display: none; }
-div.commentcontent p {
-    margin-top: 0; margin-bottom: 0; line-height: 1.6;
-    color: var(--text); padding: 4px 0; }
+p.comment-foot img:hover {
+    background: var(--primary); border-radius: 50%; cursor: pointer; transform: scale(1.1); }
+p.comment-foot i:hover { color: var(--primary); cursor: pointer; transform: scale(1.1); }
+div.comment-content textarea { margin-top: 0; margin-bottom: 0; display: none; }
+div.comment-content p {
+    margin-top: 0; margin-bottom: 0; line-height: 1.6; color: var(--text); padding: 4px 0; }
 
 form#subCommentForm {
-    display: none; border: none; box-shadow: none;
-    background: transparent; clear: both; }
+    display: none; border: none; box-shadow: none; background: transparent; clear: both; }
 div.subcomments { padding-left: 30px; }
-div.commentsep {
-    clear: both; border-bottom: 1px solid var(--border);
-    margin: 20px 0 16px 0; position: relative; }
-div.commentsep::after {
+div.comments-sep {
+    clear: both; border-bottom: 1px solid var(--border); margin: 20px 0 16px 0; position: relative; }
+div.comments-sep::after {
     content: ""; position: absolute; bottom: -1px; left: 0;
     width: 40px; height: 1px; background: var(--primary); }

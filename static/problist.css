@@ -37,9 +37,9 @@ table.labellist tr { height: 36px; transition: all .25s ease; }
 table.labellist td { width: 20%; text-align: center; font-family: Helvetica; }
 table.labellist td:hover { background: var(--surface-soft); cursor: pointer; }
 
-article.bodypart.problist-container { width: calc(45% + 36px); padding: 0 !important; }
-article.bodypart.problist-container div.problist-wrap { width: 100%; height: 100%; overflow-y: auto; }
-article.bodypart.problist-container div.problist-wrap table.problist { margin: 0; width: 100%; }
-article.bodypart.problist-container div.problist-wrap table.problist thead tr.probhead th {
+article.body-article.problist-container { width: calc(45% + 36px); padding: 0 !important; }
+article.body-article.problist-container div.problist-wrap { width: 100%; height: 100%; overflow-y: auto; }
+article.body-article.problist-container div.problist-wrap table.problist { margin: 0; width: 100%; }
+article.body-article.problist-container div.problist-wrap table.problist thead tr.probhead th {
     position: sticky; top: 0; z-index: 3; background: var(--surface-soft); }
-article.bodypart.problist-container div.problist-wrap table.problist tr.filler td { pointer-events: none; }
+article.body-article.problist-container div.problist-wrap table.problist tr.filler td { pointer-events: none; }

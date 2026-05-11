@@ -1,88 +1,88 @@
 
-form.mathprobsform {
+form.form-container {
     border: 1px solid var(--border); border-radius: 12px; border-collapse: collapse;
     padding: 18px; background: var(--surface); box-shadow: var(--shadow);
     font-family: Helvetica; }
-form.mathprobsform span {
+form.form-container span {
     display: flex; justify-content: flex-end; width: 100%; max-width: 100%;
     padding: 8px 3px; white-space: nowrap; }
-form.mathprobsform label {
+form.form-container label {
     vertical-align: top; color: var(--text); font-weight: 500;
     margin-right: 8px; line-height: 30px; }
 
-form.mathprobsform div.label-input a {
+form.form-container div.label-input a {
     text-decoration: none; font-size: 14px; color: var(--text);
     background: var(--surface-soft); margin: 2px 6px 2px 0; border: 1px solid var(--surface-soft);
     border-radius: 8px; display: inline-block; padding: 4px 8px;
     transition: all .25s ease; font-family: Helvetica; }
-form.mathprobsform div.label-input a:hover {
+form.form-container div.label-input a:hover {
     transform: translateY(-.6px) scale(1.01); box-shadow: var(--shadow);
     background: var(--primary); color: white; border-color: var(--primary); }
-form.mathprobsform div.label-input a i.delete-button {
+form.form-container div.label-input a i.delete-button {
     transition: all .25s ease; color: var(--primary); }
-form.mathprobsform div.label-input a:hover i.delete-button { color: white; }
-form.mathprobsform div.label-input a i.delete-button:hover {
+form.form-container div.label-input a:hover i.delete-button { color: white; }
+form.form-container div.label-input a i.delete-button:hover {
     transform: rotate(90deg); cursor: pointer; }
 
-form.mathprobsform div.answer { flex-grow: 1; min-width: 0; }
-form.mathprobsform div.answer-input {
+form.form-container div.answer { flex-grow: 1; min-width: 0; }
+form.form-container div.answer-input {
     display: flex; align-items: center; gap: 8px; }
-form.mathprobsform div.answer-input input { margin-right: 8px; }
-form.mathprobsform div.answer-input i {
+form.form-container div.answer-input input { margin-right: 8px; }
+form.form-container div.answer-input i {
     transition: all .25s ease; transform: rotate(-90deg); font-size: 22px;
     color: var(--primary); margin: 0; padding: 4px; border-radius: 6px; }
-form.mathprobsform div.answer-input i:hover {
+form.form-container div.answer-input i:hover {
     transform: rotate(0deg); cursor: pointer; background: var(--bg); }
-form.mathprobsform div.answer ul {
+form.form-container div.answer ul {
     list-style-type: none; padding: 0; border: 1px solid var(--border);
     border-radius: 12px; margin: 8px 0; background: var(--surface-strong); }
-form.mathprobsform div.answer ul li {
+form.form-container div.answer ul li {
     display: flex; align-items: center; padding: 10px 16px;
     border-radius: inherit; font-family: AndaleMono;
     transition: all .25s ease; border-bottom: 1px solid var(--bg); }
-form.mathprobsform div.answer ul li:last-child { border-bottom: none; }
-form.mathprobsform div.answer ul li:hover { background: var(--surface-soft); }
-form.mathprobsform div.answer ul li i {
+form.form-container div.answer ul li:last-child { border-bottom: none; }
+form.form-container div.answer ul li:hover { background: var(--surface-soft); }
+form.form-container div.answer ul li i {
     font-size: 15px; margin: 0 5px; color: var(--primary); }
-form.mathprobsform div.answer ul li i.minus {
+form.form-container div.answer ul li i.minus {
     transition: all .25s ease; font-size: 18px;
     color: var(--primary); margin-left: auto; padding: 4px; border-radius: 6px; }
-form.mathprobsform div.answer ul li i.minus:hover {
+form.form-container div.answer ul li i.minus:hover {
     transform: rotate(90deg); cursor: pointer; background: var(--bg); }
 
-form.mathprobsform div.answer ul li .subprob-header i.minus,
-form.mathprobsform div.answer .subprob-header i.minus {
+form.form-container div.answer ul li .subprob-header i.minus,
+form.form-container div.answer .subprob-header i.minus {
     transition: all .25s ease; font-size: 18px;
     color: var(--primary); margin-left: auto; padding: 4px; border-radius: 6px; }
-form.mathprobsform div.answer ul li .subprob-header i.minus:hover,
-form.mathprobsform div.answer .subprob-header i.minus:hover {
+form.form-container div.answer ul li .subprob-header i.minus:hover,
+form.form-container div.answer .subprob-header i.minus:hover {
     transform: rotate(90deg); cursor: pointer; background: var(--bg); }
-form.mathprobsform div.answer ul.subprob-tps { flex-grow: 1; min-width: 0; }
-form.mathprobsform div.answer ul li.selected { background: var(--surface-soft); }
+form.form-container div.answer ul.subprob-tps { flex-grow: 1; min-width: 0; }
+form.form-container div.answer ul li.selected { background: var(--surface-soft); }
 
-form.mathprobsform input, form.mathprobsform textarea,
-form.mathprobsform select {
+form.form-container input, form.form-container textarea,
+form.form-container select {
     flex-grow: 1; min-width: 0; font-family: AndaleMono; font-size: 14px;
     padding: 8px 12px; line-height: 22px; background: var(--surface-strong);
     border: 1px solid var(--border); border-radius: 8px;
     transition: border-color .25s ease; }
-form.mathprobsform textarea {
+form.form-container textarea {
     min-height: 60px; height: 150px; resize: vertical; }
-form.mathprobsform textarea.tall { height: 250px; }
-form.mathprobsform input:focus, form.mathprobsform textarea:focus,
-form.mathprobsform select:focus {
+form.form-container textarea.tall { height: 250px; }
+form.form-container input:focus, form.form-container textarea:focus,
+form.form-container select:focus {
     outline: none; border-color: var(--primary);
     box-shadow: 0 0 0 .1px var(--primary); }
-form.mathprobsform input::file-selector-button,
-form.mathprobsform button {
+form.form-container input::file-selector-button,
+form.form-container button {
     border: none; border-radius: 8px; background: var(--primary); color: white;
     line-height: 30px; font-size: 14px; width: 120px;
     transition: all .25s ease; cursor: pointer;
     font-family: Helvetica; font-weight: 500; }
-form.mathprobsform input::file-selector-button:hover,
-form.mathprobsform button:hover {
+form.form-container input::file-selector-button:hover,
+form.form-container button:hover {
     background: var(--primary-soft); box-shadow: 0 2px 6px #0000001F; }
-form.mathprobsform button { margin-left: 10px; padding: 0 12px; }
-form.mathprobsform button:disabled,
-form.mathprobsform input::file-selector-button:disabled {
+form.form-container button { margin-left: 10px; padding: 0 12px; }
+form.form-container button:disabled,
+form.form-container input::file-selector-button:disabled {
     background: #999; cursor: not-allowed; opacity: .6; box-shadow: none; }

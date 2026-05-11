@@ -12,31 +12,32 @@
         url(/static/fonts/Helvetica-Bold.woff2) format('woff2'),
         url(/static/fonts/Helvetica-Bold.woff) format('woff'); }
 
-div.login-block {
+p.tips { color: var(--muted); font-size: 10px; line-height: 20px; }
+
+main {
     display: flex; position: absolute; top: 0; bottom: 0; left: 0; right: 0;
     margin: auto; width: 720px; height: 475px; font-family: Helvetica;
     box-shadow: -10px 10px 25px #0008; border-radius: 45px; }
-div.login-block h3 {
+main h3 {
     font-size: 1.8em; color: var(--text); margin: 0;
     padding-bottom: 10px; text-align: center; }
 
-div.login { width: 50%; margin: auto; }
-div.login form {
+article.left-content-wrap { width: 50%; margin: auto; }
+article.left-content-wrap form {
     border: none; box-shadow: none;
     background: transparent; margin-right: 10px; }
-div.login form span { padding: 10px 5px; }
+article.left-content-wrap form span { padding: 10px 5px; }
 
-div.register-back {
+article.right-content-wrap {
     display: flex; justify-content: center; align-items: center;
     width: 50%; height: 100%; margin: auto;
     background: var(--primary); border-radius: 45px; color: white; }
-div.register-front { text-align: center; }
-div.register-front h2 { font-weight: 700; }
-div.register-front p { margin: 15px 0 25px 0; }
-div.login-block div.text-center { text-align: center; }
-div.login-block button.register {
-    border: none; border-radius: 10px; background: #0000801A; color: white;
+article.right-content-wrap > div { text-align: center; }
+article.right-content-wrap > div h2 { font-weight: 700; }
+article.right-content-wrap > div p { margin: 15px 0 25px 0; }
+article.right-content-wrap > div button.jump {
+    border: none; border-radius: 10px; background: var(--primary); color: white;
     line-height: 27px; font-size: 15px; width: 120px;
     transition: .5s; margin-bottom: 10px; }
-div.login-block button.register:hover {
-    background: #0000C033; cursor: pointer; transition: .5s; }
+article.right-content-wrap > div button.jump:hover {
+    background: var(--primary-soft); cursor: pointer; transition: .5s; }

@@ -8,12 +8,12 @@ async function deleteComment(commentId) {
         if (data.ok) {
             const element = document.querySelector(`div[data-commentid='${commentId}']`);
             if (element) {
-                // 删除紧跟的div.commentsep元素（如果存在）
+                // 删除紧跟的div.comments-sep元素（如果存在）
                 const nextSep = element.nextElementSibling;
-                if (nextSep && nextSep.classList.contains('commentsep')) nextSep.remove();
+                if (nextSep && nextSep.classList.contains('comments-sep')) nextSep.remove();
                 element.remove();
                 // 检查是否需要显示“暂无讨论”
-                const commentList = document.querySelector('.commentlist');
+                const commentList = document.querySelector('div.comments-container');
                 if (commentList && commentList.querySelectorAll('.comment').length === 0)
                     commentList.insertAdjacentHTML('beforeend', '<p>暂无讨论</p>');
             }
@@ -61,24 +61,24 @@ async function postComment(element, content) {
                     `div[data-commentid='${replyToId}']`);
                 let topLevelComment = repliedComment;
                 while (topLevelComment.parentElement
-                    && !topLevelComment.parentElement.classList.contains('commentlist'))
+                    && !topLevelComment.parentElement.classList.contains('comments-container'))
                     topLevelComment = topLevelComment.parentElement.closest('.comment');
                 const subcomments = topLevelComment.querySelector('.subcomments');
                 subcomments.insertAdjacentHTML('beforeend', html);
                 newCommentElement = subcomments.lastElementChild;
             } else {
-                const commentList = document.querySelector('.commentlist');
+                const commentList = document.querySelector('div.comments-container');
                 // 移除“暂无讨论”字样
                 const noCommentsMsg = commentList.querySelector('p');
                 if (noCommentsMsg && noCommentsMsg.textContent === '暂无讨论')
                     noCommentsMsg.remove();
                 commentList.insertAdjacentHTML(
-                    'afterbegin', html + '<div class="commentsep"></div>');
+                    'afterbegin', html + '<div class="comments-sep"></div>');
                 newCommentElement = commentList.firstElementChild;
             }
             // 渲染新评论的Markdown
             if (window.renderElements) renderElements(
-                newCommentElement.querySelectorAll('div.commentcontent'));
+                newCommentElement.querySelectorAll('div.comment-content'));
             // 绑定新评论的回复按钮和表单提交事件
             const button = newCommentElement.querySelector('#commentSenderButton');
             if (button) handleCommentSenderButton(button);

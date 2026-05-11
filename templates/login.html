@@ -1,41 +1,28 @@
 {% extends "form.html" %}
 
-{% block static_files %}
-<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
-{% endblock %}
-
 {% block title %}登录 - MathProbs{% endblock %}
 
-{% block form %}
-<form class="mathprobsform" id="loginForm" data-nextpage="{{ next }}"
-    onsubmit="userLogin(); return false">
+{% block left_content %}
+<form class="form-container" id="loginForm" data-nextpage="{{ next }}" onsubmit="userLogin(); return false">
     <h3>登录</h3>
     <span>
         <label for="userName">用户名：</label>
-        <input id="userName" name="username" type="text"
-            spellcheck="false" placeholder="请输入用户名"
-            autocomplete="username" required>
+        <input id="userName" name="username" type="text" spellcheck="false"
+            placeholder="请输入用户名" autocomplete="username" required>
     </span>
     <span>
         <label for="password">密码：</label>
-        <input id="password" name="password" type="password"
-            spellcheck="false" placeholder="请输入密码"
-            autocomplete="current-password" required>
+        <input id="password" name="password" type="password" spellcheck="false"
+            placeholder="请输入密码" autocomplete="current-password" required>
     </span>
     <span><button type="submit">登录</button></span>
-    <p style="font-size: 11px; color: gray">
-        初次进入或清空缓存后需要加载 CDN，速度可能较慢，请耐心等待。
-    </p>
+    <p class="tips">初次进入或清空缓存后需要加载 CDN，速度可能较慢，请耐心等待。</p>
 </form>
 {% endblock %}
 
-{% block right_block %}
+{% block right_content %}
 <h2>没有账号？</h2><p>立即注册</p>
-<a href="{{ url_for('register', next=next) }}">
-    <button class="register" type="button">注册</button>
-</a>
+<a href="{{ url_for('register', next=next) }}"><button class="jump" type="button">注册</button></a>
 <h2>不想登录或注册？</h2><p>直接看题</p>
-<a href="{{ url_for('problist') }}">
-    <button class="register" type="button">题集</button>
-</a>
+<a href="{{ url_for('problist') }}"><button class="jump" type="button">题集</button></a>
 {% endblock %}

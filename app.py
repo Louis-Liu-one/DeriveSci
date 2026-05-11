@@ -481,6 +481,8 @@ def helplist():
 
 @app.route('/')
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('welcome'))
     return render_template('homepage.html')
 
 

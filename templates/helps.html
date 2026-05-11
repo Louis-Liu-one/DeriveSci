@@ -11,19 +11,19 @@
 {% endblock %}
 
 {% block body %}
-<article class="tocblock" id="tocBlock"><h3>目录</h3></article>
-<article class="contentblock">
-    <div class="markdown-body" id="bodyBlock">
+<article class="toc-container" id="tocBlock"><h3>目录</h3></article>
+<article class="content-container">
+    <div class="markdown-body" id="contentContainer">
         <textarea id="helpContentTextArea">[toc]
 {% include filename -%}
         </textarea>
     </div>
 </article>
 <script>
-    renderElement(bodyBlock, helpContentTextArea.value);
-    const tocNavElement = bodyBlock.querySelector('nav.table-of-contents');
+    renderElement(contentContainer, helpContentTextArea.value);
+    const tocNavElement = contentContainer.querySelector('nav.table-of-contents');
     if (tocNavElement) tocBlock.appendChild(tocNavElement);
-    const firstH1 = bodyBlock.querySelector('h1');
+    const firstH1 = contentContainer.querySelector('h1');
     navbarTitleElement.innerHTML = `帮助 —— ${firstH1.innerHTML}`;
     firstH1.style.display = 'none';
 </script>

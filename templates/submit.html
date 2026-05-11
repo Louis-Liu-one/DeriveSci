@@ -53,7 +53,7 @@
     {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
-<article class="bodypart">
+<article class="body-article">
     <h3>提交状态</h3>
     {%- set anslist = prob.get_answer() -%}
     {%- if anslist|length > 1 -%}
@@ -92,13 +92,13 @@
             </textarea>
         </div>
     {%- endif -%}
-    <p class="helpslink">
+    <p class="tips">
         <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
             <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
         </a>
     </p>
 </article>
-<article class="submitpart">
+<article class="right-side-article">
     <h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}
 </article>
 <script>renderElements([...document.querySelectorAll('div[id^="answerBlock"]')]);</script>

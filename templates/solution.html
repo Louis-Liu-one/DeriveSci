@@ -34,10 +34,10 @@
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
     <h3>题解来源</h3>{{- user_sidebar(solution.user) -}}
 </aside>
-<article id="bodyBlock" class="markdown-body bodypart">
+<article id="contentContainer" class="markdown-body body-article">
     <textarea id="bodyText">{{ solution.content }}</textarea>
 </article>
-<article id="submitBlock" class="submitpart">
+<article class="right-side-article">
     <h3>更多题解</h3>{{- solutionlist(suggested) -}}
     <h3>讨论区</h3>
     {{- commentarea(1, solution.get_post_ident(),
@@ -46,7 +46,7 @@
 <script>
     const markdownImageBasePath = "/images/{{ prob.probno }}/";
     renderElements([
-        bodyBlock, ...document.getElementsByClassName('commentcontent')],
+        contentContainer, ...document.getElementsByClassName('comment-content')],
         markdownImageBasePath);
 </script>
 {% endblock %}

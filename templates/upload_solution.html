@@ -21,25 +21,21 @@
 {% block body %}
 <aside>
     {{- return2post(prob, "返回题目") -}}
-    {%- if editmode -%}
-        {{- return2post(solution, "返回题解") -}}{{- delete_solution(solution) -}}
-    {%- endif -%}
+    {%- if editmode -%}{{- return2post(solution, "返回题解") -}}{{- delete_solution(solution) -}}{%- endif -%}
     {{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
-<article class="bodypart">
+<article class="body-article">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
-    <form class="mathprobsform" id="editForm" enctype="multipart/form-data">
+    <form class="form-container" id="editForm" enctype="multipart/form-data">
         <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
         {%- if editmode -%}
-            <input type="hidden" name="solno" id="solNo"
-                value="{{ solution.solno }}">
+            <input type="hidden" name="solno" id="solNo" value="{{ solution.solno }}">
         {%- endif -%}
         <span>
             <label for="solTitle">标题：</label>
             <input required type="text" id="solTitle" name="soltitle"
-                autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
+                autocomplete="off" spellcheck="false" {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
         </span>
         <span>
             <label for="solution">内容：</label>
@@ -54,8 +50,7 @@
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
         <span>
-            <button type="button" onclick="renderElement(
-                mdPreview, solution.value, 'block')">预览</button>
+            <button type="button" onclick="renderElement(mdPreview, solution.value, 'block')">预览</button>
             {%- if editmode -%}
                 <button type="button" onclick="editSolution()">上传</button>
             {%- else -%}
@@ -64,10 +59,10 @@
         </span>
     </form>
 </article>
-<article class="submitpart">
+<article class="right-side-article">
     <h3>预览区</h3>
-    <div class="markdown-body mdpreview" id="mdPreview"></div>
-    <p class="helpslink">
+    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+    <p class="tips">
         <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
             <i class="fa-solid fa-circle-info"></i> 有关上传题解的帮助……
         </a><br>

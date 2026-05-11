@@ -47,7 +47,7 @@
         </div>
     </a>
 </aside>
-<article class="mainpart">
+<article class="main-article">
     <div class="chat-container">
         <div class="user-list">
             {%- if view_comments -%}
@@ -88,7 +88,7 @@
                     </div>{{- user_name(activeuser) -}}
                 </div>
             {%- elif not all_chats -%}
-                <p class="helpslink">暂无私信对象，前往其他用户的主页添加私信。</p>
+                <p class="tips">暂无私信对象，前往其他用户的主页添加私信。</p>
             {%- endif -%}
         </div>
         <div class="chat-box">
@@ -99,10 +99,10 @@
                     <div class="comment-section">
                         <h3>回复我的评论</h3>
                         {%- if unread_sections.replies -%}
-                            <div class="commentlist">
+                            <div class="comments-container">
                                 {%- for comment in unread_sections.replies -%}
                                     {{- commentdiv(comment, with_post=True) -}}
-                                    <div class="commentsep"></div>
+                                    <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
                         {%- else -%}<p>暂无回复我的评论。</p>{%- endif -%}
@@ -110,10 +110,10 @@
                     <div class="comment-section">
                         <h3>我上传的题目评论</h3>
                         {%- if unread_sections.prob_comments -%}
-                            <div class="commentlist">
+                            <div class="comments-container">
                                 {%- for comment in unread_sections.prob_comments -%}
                                     {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
-                                    <div class="commentsep"></div>
+                                    <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
                         {%- else -%}<p>暂无题目评论。</p>{%- endif -%}
@@ -121,10 +121,10 @@
                     <div class="comment-section">
                         <h3>我上传的题解评论</h3>
                         {%- if unread_sections.solution_comments -%}
-                            <div class="commentlist">
+                            <div class="comments-container">
                                 {%- for comment in unread_sections.solution_comments -%}
                                     {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
-                                    <div class="commentsep"></div>
+                                    <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
                         {%- else -%}<p>暂无题解评论。</p>{%- endif -%}
@@ -163,7 +163,7 @@
         });
     {%- endif -%}
     {%- if view_comments -%}
-        renderElements([...document.getElementsByClassName('commentcontent')]);
+        renderElements([...document.getElementsByClassName('comment-content')]);
     {%- endif -%}
 </script>
 {% endblock %}

@@ -19,7 +19,7 @@
 <script src="{{ url_for('static', filename='prob-utils.js') }}"></script>
 {% endblock %}
 
-{% block navbar_title %}问题{{ prob.probno }} {{ prob.probtitle }}{% endblock %}
+{% block navbar_title %}{{ prob.probno }} {{ prob.probtitle }}{% endblock %}
 
 {% block body %}
 <aside>
@@ -38,17 +38,17 @@
     {{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
-<article id="bodyBlock" class="markdown-body bodypart">
+<article id="contentContainer" class="markdown-body body-article">
     <textarea id="bodyText">{{ prob.statement }}</textarea>
 </article>
-<article id="submitBlock" class="submitpart">
+<article class="right-side-article">
     {%- if prob.review_status != 1 -%}
-        <p class="helpslink hidden" id="isOfficialPrompt">本题是官方题目。</p>
+        <p class="tips hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}
             {%- if prob.review_status == 0 -%}
-                <p class="helpslink">你的题目未通过审核。</p>
+                <p class="tips">你的题目未通过审核。</p>
             {%- else -%}
-                <p class="helpslink">你的题目待审核。</p>
+                <p class="tips">你的题目待审核。</p>
             {%- endif -%}
             {%- if prob.review_comment -%}
                 <h3>审核意见</h3>
@@ -57,24 +57,22 @@
                 </div>
             {%- endif -%}
         {%- else -%}
-            <form class="mathprobsform">
+            <form class="form-container">
                 {%- if prob.review_status == 0 -%}
-                    <p class="helpslink">此题已被拒绝。</p>
+                    <p class="tips">此题已被拒绝。</p>
                 {%- else -%}
-                    <p class="helpslink">此题待审核。</p>
+                    <p class="tips">此题待审核。</p>
                 {%- endif -%}
                 <span>
-                    <button data-probno="{{ prob.probno }}"
-                        onclick="reviewProb(this, true)">通过</button>
-                    <button data-probno="{{ prob.probno }}"
-                        onclick="reviewProb(this, false)">拒绝</button>
+                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true)">通过</button>
+                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false)">拒绝</button>
                 </span>
             </form>
             <h3>审核意见</h3>
             {%- if current_user.isadmin -%}
-                <form class="mathprobsform" id="reviewCommentForm"
+                <form class="form-container" id="reviewCommentForm"
                     onsubmit="event.preventDefault(); saveReviewComment(thisSaveBtn);">
-                    <span><textarea class="submittext"
+                    <span><textarea class="submit-input"
                         id="reviewCommentText" rows="6">{{ prob.review_comment or '' }}</textarea></span>
                     <span>
                         <button id="thisSaveBtn" type="submit" data-probno="{{ prob.probno }}">保存审核意见</button>
@@ -83,26 +81,26 @@
             {%- endif -%}
         {%- endif -%}
     {%- else -%}
-        <p class="helpslink{% if not prob.isofficial %} hidden{% endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
+        <p class="tips{% if not prob.isofficial %} hidden{% endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
         {%- set anslist = prob.get_answer() -%}
         {%- if anslist -%}
-            <h3>提交答案</h3><p class="helpslink">服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。</p>
-            <form class="mathprobsform" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
+            <h3>提交答案</h3><p class="tips">服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。</p>
+            <form class="form-container" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
                 {%- if anslist|length == 1 -%}
-                    <span><textarea name="answertext" class="submittext"
+                    <span><textarea name="answertext" class="submit-input"
                         placeholder="按照要求提交答案" spellcheck="false"></textarea></span>
                 {%- else -%}
                     {%- for i in range(anslist|length) -%}
-                        <span><textarea name="answertext" class="submittext"{{-''-}}
+                        <span><textarea name="answertext" class="submit-input"{{-''-}}
                             placeholder="小题 {{ i+1 }} 的答案" spellcheck="false"></textarea></span>
                     {%- endfor -%}
                 {%- endif -%}
-                <p class="helpslink">
+                <p class="tips">
                     <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
                         <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
                     </a>
                 </p>
-                <span><button class="submitbutton" type="submit">提交</button></span>
+                <span><button type="submit">提交</button></span>
             </form>
         {%- endif -%}
         <h3>讨论区</h3>{{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
@@ -110,7 +108,7 @@
 </article>
 <script>
     const markdownImageBasePath = "/images/{{ prob.probno }}/";
-    const _toRender = [bodyBlock, ...document.getElementsByClassName('commentcontent')];
+    const _toRender = [contentContainer, ...document.getElementsByClassName('comment-content')];
     const _rcv = document.getElementById('reviewCommentView');
     if (_rcv) _toRender.push(_rcv);
     renderElements(_toRender, markdownImageBasePath);
