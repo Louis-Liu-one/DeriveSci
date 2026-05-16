@@ -4,10 +4,9 @@
 {%- endmacro -%}
 
 {%- macro user_sidebar(user) -%}
-    <a class="sidebar-link"
-        {%- if user %} href="{{ user.url() }}" target="_blank"{%- endif -%}>
+    <a class="sidebar-link" target="_blank" href="{{ user.url() if user else 'javascript:void(0)' }}">
         <div class="sidebar-item{% if not user %} disabled{% endif %}">
-            {{ user_avatar_img(user) }}{{ user_name(user) }}
+            {{- user_avatar_img(user) -}}{{- user_name(user) -}}
         </div>
     </a>
 {%- endmacro -%}
@@ -30,9 +29,7 @@
         <option value="7">变性 Transgender</option>
         <option value="8">非二元性别 Non-binary</option>
     </select>
-    {%- if default_gender -%}
-        <script>gender.value = ({{ default_gender|tojson }}).toString();</script>
-    {%- endif -%}
+    {%- if default_gender -%}<script>gender.value = ({{ default_gender|tojson }}).toString();</script>{%- endif -%}
 {%- endmacro -%}
 
 {%- macro user_gender(user) -%}

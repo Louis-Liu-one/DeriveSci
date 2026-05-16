@@ -40,9 +40,8 @@ function renderElement(element, string, display='inline', imageBasePath='') {
 function renderElements(toRender, imageBasePath='') {
     const basePath = imageBasePath ||
         (typeof window !== 'undefined' && window.__markdownImageBasePath) || '';
-    for (let divElement of toRender) {
-        let textareaElement = divElement.children[0];
-        if (textareaElement.tagName == 'TEXTAREA')
-            renderElement(divElement, textareaElement.value, 'inline', basePath);
-    }
+    Array.from(toRender).forEach((divElement) => {
+        let textareaElement = divElement.getElementsByTagName('textarea')[0];
+        if (textareaElement) renderElement(divElement, textareaElement.value, 'inline', basePath);
+    });
 }

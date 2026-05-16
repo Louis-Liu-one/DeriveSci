@@ -36,13 +36,8 @@ function renderSubprobs() {
     });
 }
 
-function addSubprob() {
-    subprobs.push([]); window.selectedSub = subprobs.length - 1; renderSubprobs();
-}
-
-function removeSubprob(index) {
-    subprobs.splice(index, 1); renderSubprobs();
-}
+function addSubprob() { subprobs.push([]); window.selectedSub = subprobs.length - 1; renderSubprobs(); }
+function removeSubprob(index) { subprobs.splice(index, 1); renderSubprobs(); }
 
 function addTestpointToSelected(context, answer) {
     if (!context) context = '{}';
@@ -58,9 +53,7 @@ function addAnswerHTML(context, answer) {
     context.value = ''; answer.value = '';
 }
 
-function selectSubprob(i) {
-    window.selectedSub = i; renderSubprobs();
-}
+function selectSubprob(i) { window.selectedSub = i; renderSubprobs(); }
 
 function removeTestpoint(subIndex, tpIndex) {
     if (!subprobs[subIndex]) return;
@@ -99,9 +92,7 @@ function renderLabels() {
     });
 }
 
-function addRawLabels(rawLabelList) {
-    labelList = [...rawLabelList]; renderLabels();
-}
+function addRawLabels(rawLabelList) { labelList = [...rawLabelList]; renderLabels(); }
 
 function addHiddenInputElementForList(form, name, list)
 {
@@ -115,8 +106,7 @@ async function uploadProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
-        const response = await fetch('/api/prob/upload', {
-            method: 'POST', body: new FormData(editForm)});
+        const response = await fetch('/api/prob/upload', {method: 'POST', body: new FormData(editForm)});
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -127,8 +117,7 @@ async function editProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
-        const response = await fetch('/api/prob/edit', {
-            method: 'POST', body: new FormData(editForm)});
+        const response = await fetch('/api/prob/edit', {method: 'POST', body: new FormData(editForm)});
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -140,10 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextInput = document.getElementById('contextInputElement');
     const answerInput = document.getElementById('answerInputElement');
     if (contextInput && answerInput) {
-        const handleEnter = (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addAnswerHTML(contextInput, answerInput); } };
+        const handleEnter = (event) => { if (event.key === 'Enter') {
+                event.preventDefault(); addAnswerHTML(contextInput, answerInput); } };
         contextInput.addEventListener('keydown', handleEnter);
         answerInput.addEventListener('keydown', handleEnter);
     }

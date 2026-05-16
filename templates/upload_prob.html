@@ -22,9 +22,7 @@
 
 {% block body %}
 <aside>
-    <h3>
-        {%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目
-    </h3>
+    <h3>{%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目</h3>
     {%- if editmode -%}
         {{- return2post(prob, "返回题目") -}}
         {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
@@ -33,26 +31,24 @@
 <article class="body-article">
     <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
     <form class="form-container" id="editForm" enctype="multipart/form-data">
-        {%- if not editmode -%}
-            <span>
-                <label for="probNo">编号：</label>
-                <input required type="text" id="probNo" name="probno"
-                    autocomplete="off" spellcheck="false">
-            </span>
-        {%- else -%}
-            <input type="hidden" id="probNo" name="probno" value="{{ prob.probno }}">
-        {%- endif -%}
+        <span>
+            <label for="probNo">编号：</label>
+            {%- if not editmode -%}
+                <input type="text" id="probNo" name="probno" autocomplete="off" spellcheck="false" required>
+            {%- else -%}
+                <input type="text" class="disabled" id="probNo" name="probno" value="{{ prob.probno }}" readonly>
+            {%- endif -%}
+        </span>
         <span>
             <label for="probTitle">名称：</label>
-            <input required type="text" id="probTitle" name="probtitle"
-                autocomplete="off" spellcheck="false"
+            <input required type="text" id="probTitle" name="probtitle" autocomplete="off" spellcheck="false"
                 {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
         </span>
         <span>
             <label for="probLabel">标签：</label>
             <div class="label-input" id="labelArea"></div>
-            <input type="text" id="probLabel" name="problabel"
-                autocomplete="off" spellcheck="false" placeholder="输入题目标签，按回车键添加">
+            <input type="text" id="probLabel" name="problabel" autocomplete="off"
+                spellcheck="false" placeholder="输入题目标签，按回车键添加">
         </span>
         <span>
             <label for="statement">描述：</label>
@@ -69,9 +65,8 @@
                         autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
                     <input type="text" id="answerInputElement" name="answer"
                         autocomplete="off" spellcheck="false" placeholder="输入答案">
-                    <i class="fa-solid fa-circle-plus" onclick="addAnswerHTML(
-                        contextInputElement, answerInputElement)"></i>
-                        <i class="fa-solid fa-square-plus" title="添加小题" onclick="addSubprob()"></i>
+                    <i class="fa-solid fa-circle-plus" onclick="addAnswerHTML(contextInputElement, answerInputElement)"></i>
+                    <i class="fa-solid fa-square-plus" title="添加小题" onclick="addSubprob()"></i>
                 </div>
                 <ul id="answerListElement"></ul>
             </div>
@@ -84,18 +79,13 @@
         <span>
             {%- if not editmode and current_user.isadmin -%}
                 <label for="addToOfficial">加入到官方题目？</label>
-                <input type="checkbox" name="isofficial" id="addToOfficial"
-                {%- if isofficial %}checked{% endif %}>
+                <input type="checkbox" name="isofficial" id="addToOfficial" {%- if isofficial -%}checked{%- endif -%}>
             {%- endif -%}
         </span>
         <span>
-            <button type="button" onclick="renderElement(
-                mdPreview, statement.value, 'block')">预览</button>
-            {%- if editmode -%}
-                <button type="button" onclick="editProb()">上传</button>
-            {%- else -%}
-                <button type="button" onclick="uploadProb()">上传</button>
-            {%- endif -%}
+            <button type="button" onclick="renderElement(mdPreview, statement.value, 'block')">预览</button>
+            {%- if editmode -%}<button type="button" onclick="editProb()">上传</button>
+            {%- else -%}<button type="button" onclick="uploadProb()">上传</button>{%- endif -%}
         </span>
     </form>
 </article>

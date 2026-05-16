@@ -26,9 +26,9 @@
     {%- if current_user == prob.source or current_user.isadmin -%}
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
     {%- endif -%}
-    {{- view_solution(prob) }}{{ upload_solution(prob) -}}
+    {{- view_solution(prob) -}}{{- upload_solution(prob) -}}
     {%- if current_user.isadmin -%}
-        <a class="sidebar-link" id="officialSidebarSetter" data-probno="{{ prob.probno }}">
+        <a class="sidebar-link" href="javascript:void(0)" id="officialSidebarSetter" data-probno="{{ prob.probno }}">
             <div class="sidebar-item" id="officialSetterBlock">
                 {%- if prob.isofficial -%}<i class="fa-solid fa-circle-minus"></i>从官方题目移除
                 {%- else -%}<i class="fa-solid fa-circle-plus"></i>添加到官方题目{%- endif -%}
@@ -45,11 +45,8 @@
     {%- if prob.review_status != 1 -%}
         <p class="tips hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}
-            {%- if prob.review_status == 0 -%}
-                <p class="tips">你的题目未通过审核。</p>
-            {%- else -%}
-                <p class="tips">你的题目待审核。</p>
-            {%- endif -%}
+            {%- if prob.review_status == 0 -%}<p class="tips">你的题目未通过审核。</p>
+            {%- else -%}<p class="tips">你的题目待审核。</p>{%- endif -%}
             {%- if prob.review_comment -%}
                 <h3>审核意见</h3>
                 <div id="reviewCommentView" class="markdown-body">
@@ -58,11 +55,8 @@
             {%- endif -%}
         {%- else -%}
             <form class="form-container">
-                {%- if prob.review_status == 0 -%}
-                    <p class="tips">此题已被拒绝。</p>
-                {%- else -%}
-                    <p class="tips">此题待审核。</p>
-                {%- endif -%}
+                {%- if prob.review_status == 0 -%}<p class="tips">此题已被拒绝。</p>
+                {%- else -%}<p class="tips">此题待审核。</p>{%- endif -%}
                 <span>
                     <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true)">通过</button>
                     <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false)">拒绝</button>

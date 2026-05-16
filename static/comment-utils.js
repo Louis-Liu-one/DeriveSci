@@ -50,8 +50,8 @@ async function postComment(element, content) {
         const response = await fetch('/api/comment/post', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                post_type: parseInt(postType), post_ident: postIdent, content,
-                replyto_id: replyToId ? parseInt(replyToId) : null})});
+                post_type: +postType, post_ident: postIdent, content,
+                replyto_id: replyToId ? +replyToId : null})});
         const data = await response.json();
         if (data.ok) {
             const html = data.html;
@@ -91,11 +91,9 @@ async function postComment(element, content) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // 绑定初始的回复按钮
-    document.querySelectorAll('#commentSenderButton').forEach(button => {
-        handleCommentSenderButton(button);
-    });
+    document.querySelectorAll('#commentSenderButton').forEach(
+        button => { handleCommentSenderButton(button); });
     // 添加表单提交监听器
-    document.querySelectorAll('#commentForm, #subCommentForm').forEach(form => {
-        handleFormSubmit(form);
-    });
+    document.querySelectorAll('#commentForm, #subCommentForm').forEach(
+        form => { handleFormSubmit(form); });
 });

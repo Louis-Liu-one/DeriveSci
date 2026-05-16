@@ -14,8 +14,7 @@ async function updateMessages() {
                 if (uid != target.value) allChats[uid].messages
                     = allChats[uid].messages.concat(messages);
                 else addMessages(messages);
-                updatedTimeOfLastMessage
-                    = messages[messages.length - 1].timestamp;
+                updatedTimeOfLastMessage = messages[messages.length - 1].timestamp;
                 if (!timeOfLastMessage || timeOfLastMessage
                     && timeOfLastMessage < updatedTimeOfLastMessage)
                     timeOfLastMessage = updatedTimeOfLastMessage;
@@ -40,8 +39,7 @@ async function updateUserLastVisit(receiverUid, senderUid) {
     try {
         const response = await fetch('/api/chat/update-lastvisit', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                receiver_uid: receiverUid, sender_uid: senderUid})});
+            body: JSON.stringify({receiver_uid: receiverUid, sender_uid: senderUid})});
         const result = await response.json();
     } catch (err) { console.error(err); }
 }
@@ -71,7 +69,7 @@ function setUnreadCircle(uid, num) {
 }
 
 function addMessages(messages, noAllChats) {
-    for (let i in messages) addMessage(messages[i], noAllChats);
+    messages.forEach((m) => addMessage(m, noAllChats));
     updatedTimeOfLastMessage = messages[messages.length - 1].timestamp;
     if (messages.length && (!timeOfLastMessage
         || timeOfLastMessage && timeOfLastMessage < updatedTimeOfLastMessage))
@@ -105,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('beforeunload', (event) => {
     if (!target.value) return;
     navigator.sendBeacon('/api/chat/update-lastvisit', new Blob(
-        [JSON.stringify({
-            receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
+        [JSON.stringify({receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
         {type: 'application/json; charset=UTF-8'}));
 });

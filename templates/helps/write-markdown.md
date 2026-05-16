@@ -242,13 +242,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---------------
 
-Morbi sed bibendum metus, a maximus est.
+生活就像海洋，只有意志坚强的人才能到达彼岸。
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ---------------
 
-Morbi sed bibendum metus, a maximus est.
+生活就像海洋，只有意志坚强的人才能到达彼岸。
 
 ## 链接
 

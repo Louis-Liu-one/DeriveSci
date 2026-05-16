@@ -3,7 +3,7 @@ async function deleteProb(probno) {
     try {
         const response = await fetch('/api/prob/delete', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno: probno})});
+            body: JSON.stringify({probno})});
         const data = await response.json();
         if (data.ok) { alert('操作成功'); location.replace(data.url); }
         else alert('操作失败');
@@ -14,7 +14,7 @@ async function deleteSolution(probno, solno) {
     try {
         const response = await fetch('/api/solution/delete', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno: probno, solno: solno})});
+            body: JSON.stringify({probno, solno})});
         const data = await response.json();
         if (data.ok) { alert('操作成功'); location.replace(data.url); }
         else alert('操作失败');
@@ -27,7 +27,7 @@ async function setOfficialProb(event) {
     try {
         const response = await fetch('/api/prob/set-official', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno: probno})});
+            body: JSON.stringify({probno})});
         const data = await response.json();
         if (data.isofficial) {
             officialSetterBlock.innerHTML
@@ -45,8 +45,7 @@ async function reviewProb(btn, accept) {
     try {
         const response = await fetch('/api/prob/review', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                probno: btn.dataset.probno, accept: accept})});
+            body: JSON.stringify({probno: btn.dataset.probno, accept})});
         const data = await response.json(); location.replace(data.url);
     } catch (err) { alert('操作失败'); }
 }
@@ -58,7 +57,7 @@ async function saveReviewComment(btn) {
         const comment = textarea ? textarea.value : '';
         const response = await fetch('/api/prob/review-comment', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno: probno, review_comment: comment})});
+            body: JSON.stringify({probno, review_comment: comment})});
         const data = await response.json();
         if (data.ok) {
             alert('保存成功');
