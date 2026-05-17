@@ -345,7 +345,8 @@ class Prob(db.Model):
         testpoints_list = []
         for i, sub in enumerate(answers):
             ua = userans_list[i] if i < len(userans_list) else ''
-            ua_eval, tps = check_answers(sub, ua)
+            tps_def = sub['tps']
+            ua_eval, tps = check_answers(tps_def, ua)
             answer_evals.append(ua_eval)
             testpoints_list.append(tps)
         return answer_evals, testpoints_list
@@ -355,9 +356,10 @@ class Prob(db.Model):
         passedlist = []
         for sub in testpoints:
             passedlist.extend(testpoints_passedlist(sub))
+        stored_answer = json.dumps(
+            answer) if not isinstance(answer, str) else answer
         submission = Submission(
-            user=user, answer=json.dumps(answer)
-            if not isinstance(answer, str) else answer,
+            user=user, answer=stored_answer,
             ispassed=all(passedlist) if passedlist else False,
             score=100 * sum(passedlist) // len(passedlist)
             if passedlist else 0)

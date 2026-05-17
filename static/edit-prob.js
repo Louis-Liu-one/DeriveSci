@@ -8,15 +8,43 @@ function renderSubprobs() {
         li.className = 'subprob'; li.dataset.index = i;
         const header = document.createElement('div');
         header.className = 'subprob-header';
-        header.innerHTML = `小题 ${i+1} <i class="minus delete-subprob fa-solid fa-circle-minus" data-i="${i}"></i>`;
+        // header contains rendered label area and delete button
+        header.innerHTML = `<i class="minus delete-subprob fa-solid fa-circle-minus" data-i="${i}"></i>`;
+        const labelDisplay = document.createElement('div');
+        labelDisplay.className = 'subprob-label-display';
+        const labelEditor = document.createElement('input');
+        labelEditor.id = `label-editor-${i}`;
+        labelEditor.className = 'subprob-label-editor';
+        labelEditor.style.display = 'none';
+        labelEditor.rows = 3;
+        const defaultLabel = `小题 ${i+1} 的答案`;
+        labelEditor.value = sub.label || defaultLabel;
+        // render initial label (use default if none provided)
+        renderElement(labelDisplay, sub.label || defaultLabel, 'block');
+        header.prepend(labelDisplay);
+        header.prepend(labelEditor);
+        // clicking labelDisplay switches to editor
+        labelDisplay.onclick = (ev) => {
+            ev.stopPropagation();
+            labelDisplay.style.display = 'none'; labelEditor.style.display = 'block'; labelEditor.focus(); };
+        labelEditor.addEventListener('blur', () => {
+            sub.label = labelEditor.value || '';
+            labelEditor.style.display = 'none';
+            labelDisplay.style.display = 'block';
+            if (sub.label) renderElement(labelDisplay, sub.label, 'block');
+            else renderElement(labelDisplay, defaultLabel, 'block');
+        });
+        // clicking header selects
         header.onclick = () => selectSubprob(i);
         li.appendChild(header);
         const ul = document.createElement('ul');
         ul.className = 'subprob-tps';
-        sub.forEach((tp, j) => {
+        sub.tps.forEach((tp, j) => {
             const tpli = document.createElement('li');
-            tpli.innerHTML = `${escapeHTML(JSON.stringify(tp[0]))}
-                <i class="fa-solid fa-arrow-right"></i> ${escapeHTML(tp[1])}
+            const ctxHtml = escapeHTML(JSON.stringify(tp[0]));
+            const ansHtml = escapeHTML(tp[1]);
+            tpli.innerHTML = `${ctxHtml}
+                <i class="fa-solid fa-arrow-right"></i> <span class="tp-answer">${ansHtml}</span>
                 <i class="minus delete-tp fa-solid fa-circle-minus" data-si="${i}" data-ti="${j}"></i>`;
             ul.appendChild(tpli);
         });
@@ -36,15 +64,23 @@ function renderSubprobs() {
     });
 }
 
-function addSubprob() { subprobs.push([]); window.selectedSub = subprobs.length - 1; renderSubprobs(); }
-function removeSubprob(index) { subprobs.splice(index, 1); renderSubprobs(); }
+function addSubprob() {
+    subprobs.push({label: '', tps: []});
+    window.selectedSub = subprobs.length - 1;
+    renderSubprobs();
+}
+function removeSubprob(index) {
+    subprobs.splice(index, 1);
+    if (window.selectedSub >= subprobs.length) window.selectedSub = subprobs.length - 1;
+    renderSubprobs();
+}
 
 function addTestpointToSelected(context, answer) {
     if (!context) context = '{}';
     const parsed = JSON.parse(context);
     if (window.selectedSub === undefined) addSubprob();
-    if (!subprobs[window.selectedSub]) subprobs[window.selectedSub] = [];
-    subprobs[window.selectedSub].push([parsed, answer]);
+    if (!subprobs[window.selectedSub]) subprobs[window.selectedSub] = {label: '', tps: []};
+    subprobs[window.selectedSub].tps.push([parsed, answer]);
     renderSubprobs();
 }
 
@@ -57,13 +93,18 @@ function selectSubprob(i) { window.selectedSub = i; renderSubprobs(); }
 
 function removeTestpoint(subIndex, tpIndex) {
     if (!subprobs[subIndex]) return;
-    subprobs[subIndex].splice(tpIndex, 1);
+    if (!subprobs[subIndex].tps) return;
+    subprobs[subIndex].tps.splice(tpIndex, 1);
     renderSubprobs();
 }
 
 function addRawAnswers(rawAnswerList) {
     if (!rawAnswerList) return;
-    subprobs = rawAnswerList.map(sub => sub.map(a => [a[0], a[1]]));
+    // accept two shapes: list of dicts {label, tps} or list of tps (legacy)
+    subprobs = rawAnswerList.map(sub => {
+        if (Array.isArray(sub)) return {label: '', tps: sub.map(a => [a[0], a[1]])};
+        return {label: sub.label || '', tps: (sub.tps || []).map(a => [a[0], a[1]])};
+    });
     renderSubprobs();
 }
 

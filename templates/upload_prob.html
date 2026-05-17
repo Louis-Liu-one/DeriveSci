@@ -34,15 +34,17 @@
         <span>
             <label for="probNo">编号：</label>
             {%- if not editmode -%}
-                <input type="text" id="probNo" name="probno" autocomplete="off" spellcheck="false" required>
+                <input type="text" id="probNo" name="probno"
+                    autocomplete="off" spellcheck="false" required>
             {%- else -%}
-                <input type="text" class="disabled" id="probNo" name="probno" value="{{ prob.probno }}" readonly>
+                <input type="text" class="disabled" id="probNo" name="probno"
+                    value="{{ prob.probno }}" readonly>
             {%- endif -%}
         </span>
         <span>
             <label for="probTitle">名称：</label>
-            <input required type="text" id="probTitle" name="probtitle" autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
+            <input required type="text" id="probTitle" name="probtitle" autocomplete="off"
+                spellcheck="false" {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
         </span>
         <span>
             <label for="probLabel">标签：</label>
@@ -65,7 +67,8 @@
                         autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
                     <input type="text" id="answerInputElement" name="answer"
                         autocomplete="off" spellcheck="false" placeholder="输入答案">
-                    <i class="fa-solid fa-circle-plus" onclick="addAnswerHTML(contextInputElement, answerInputElement)"></i>
+                    <i class="fa-solid fa-circle-plus"
+                        onclick="addAnswerHTML(contextInputElement, answerInputElement)"></i>
                     <i class="fa-solid fa-square-plus" title="添加小题" onclick="addSubprob()"></i>
                 </div>
                 <ul id="answerListElement"></ul>
@@ -79,11 +82,13 @@
         <span>
             {%- if not editmode and current_user.isadmin -%}
                 <label for="addToOfficial">加入到官方题目？</label>
-                <input type="checkbox" name="isofficial" id="addToOfficial" {%- if isofficial -%}checked{%- endif -%}>
+                <input type="checkbox" name="isofficial"
+                    id="addToOfficial" {%- if isofficial -%}checked{%- endif -%}>
             {%- endif -%}
         </span>
         <span>
-            <button type="button" onclick="renderElement(mdPreview, statement.value, 'block')">预览</button>
+            <button type="button" onclick="renderElement(
+                mdPreview, statement.value, 'block', markdownImageBasePath)">预览</button>
             {%- if editmode -%}<button type="button" onclick="editProb()">上传</button>
             {%- else -%}<button type="button" onclick="uploadProb()">上传</button>{%- endif -%}
         </span>
@@ -104,6 +109,7 @@
 <script>
     probLabel.addEventListener('keydown', addLabel);
     {%- if editmode -%}
+        const markdownImageBasePath = "/images/{{ prob.probno|urlencode }}/";
         document.addEventListener('DOMContentLoaded', () => {
             addRawAnswers({{ prob.get_answer()|list|tojson }});
             addRawLabels({{ prob.as_labelnames()|list|tojson }});

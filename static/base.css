@@ -106,7 +106,7 @@ article.main-article { width: 80%; }
 article.body-article { width: 45%; }
 article.body-article img { width: 100%; }
 article.right-side-article { width: 30%; }
-article.right-side-article textarea.submit-input { width: 100%; height: 80px; }
+article.right-side-article textarea.submit-input { height: 80px; }
 article.right-side-article h3 { clear: both; }
 article.toc-container { width: 25%; margin-left: 10px; }
 article.toc-container h3 { margin-bottom: 0; }

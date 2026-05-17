@@ -81,12 +81,22 @@
             <h3>提交答案</h3><p class="tips">服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。</p>
             <form class="form-container" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
                 {%- if anslist|length == 1 -%}
-                    <span><textarea name="answertext" class="submit-input"
-                        placeholder="按照要求提交答案" spellcheck="false"></textarea></span>
+                    <span class="answers-input">
+                        <div class="label-render">
+                            <textarea class="label-text" style="display: none">{{ anslist[0].label or '提交答案' }}：</textarea>
+                        </div>
+                        <textarea name="answertext" class="submit-input" spellcheck="false"></textarea>
+                    </span>
                 {%- else -%}
                     {%- for i in range(anslist|length) -%}
-                        <span><textarea name="answertext" class="submit-input"{{-''-}}
-                            placeholder="小题 {{ i+1 }} 的答案" spellcheck="false"></textarea></span>
+                        <span class="answers-input">
+                            <div class="label-render">
+                                <textarea class="label-text" style="display: none">
+                                    {{- anslist[i].label or ('小题 ' ~ (i + 1) ~ ' 的答案') -}}：
+                                </textarea>
+                            </div>
+                            <textarea name="answertext" class="submit-input" spellcheck="false"></textarea>
+                        </span>
                     {%- endfor -%}
                 {%- endif -%}
                 <p class="tips">
@@ -101,8 +111,10 @@
     {%- endif -%}
 </article>
 <script>
-    const markdownImageBasePath = "/images/{{ prob.probno }}/";
-    const _toRender = [contentContainer, ...document.getElementsByClassName('comment-content')];
+    const markdownImageBasePath = "/images/{{ prob.probno|urlencode }}/";
+    const _toRender = [
+        contentContainer, ...document.getElementsByClassName('comment-content'),
+        ...document.querySelectorAll('.label-render')];
     const _rcv = document.getElementById('reviewCommentView');
     if (_rcv) _toRender.push(_rcv);
     renderElements(_toRender, markdownImageBasePath);

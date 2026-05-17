@@ -5,3 +5,4 @@ webenv
 instance
 migrations
 .vscode
+.copilot-commit-message-instructions.md

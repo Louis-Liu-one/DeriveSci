@@ -3,16 +3,21 @@ form.form-container {
     border: 1px solid var(--border); border-radius: 12px; border-collapse: collapse;
     padding: 18px; background: var(--surface); box-shadow: var(--shadow);
     font-family: Helvetica; }
-form.form-container span {
+form.form-container > span {
     display: flex; justify-content: flex-end; width: 100%; max-width: 100%;
     padding: 8px 3px; white-space: nowrap; }
+form.form-container > span.answers-input { flex-direction: column; }
+form.form-container > span.answers-input p { margin: 0 0 10px 0; }
 form.form-container label {
     vertical-align: top; color: var(--text); font-weight: 500;
     margin-right: 8px; line-height: 30px; }
 
+form.form-container div.label-input {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+
 form.form-container div.label-input a {
     text-decoration: none; font-size: 14px; color: var(--text);
-    background: var(--surface-soft); margin: 2px 6px 2px 0; border: 1px solid var(--surface-soft);
+    background: var(--surface-soft); margin: 2px 0; border: 1px solid var(--surface-soft);
     border-radius: 8px; display: inline-block; padding: 4px 8px;
     transition: all .25s ease; font-family: Helvetica; }
 form.form-container div.label-input a:hover {
@@ -23,6 +28,7 @@ form.form-container div.label-input a i.delete-button {
 form.form-container div.label-input a:hover i.delete-button { color: white; }
 form.form-container div.label-input a i.delete-button:hover {
     transform: rotate(90deg); cursor: pointer; }
+form.form-container input#probLabel { min-width: 140px; margin-left: 6px; }
 
 form.form-container div.answer { flex-grow: 1; min-width: 0; }
 form.form-container div.answer-input {
@@ -36,29 +42,39 @@ form.form-container div.answer-input i:hover {
 form.form-container div.answer ul {
     list-style-type: none; padding: 0; border: 1px solid var(--border);
     border-radius: 12px; margin: 8px 0; background: var(--surface-strong); }
-form.form-container div.answer ul li {
-    display: flex; align-items: center; padding: 10px 16px;
-    border-radius: inherit; font-family: AndaleMono;
+form.form-container div.answer ul > li {
+    display: flex; padding: 10px 16px; border-radius: inherit; font-family: AndaleMono;
     transition: all .25s ease; border-bottom: 1px solid var(--bg); }
-form.form-container div.answer ul li:last-child { border-bottom: none; }
-form.form-container div.answer ul li:hover { background: var(--surface-soft); }
-form.form-container div.answer ul li i {
+form.form-container div.answer ul.subprob-tps > li { align-items: center; }
+form.form-container div.answer ul > li.subprob { display: block; flex-direction: column; }
+form.form-container div.answer ul > li:last-child { border-bottom: none; }
+form.form-container div.answer ul > li:hover { background: var(--surface-soft); }
+form.form-container div.answer ul > li i {
     font-size: 15px; margin: 0 5px; color: var(--primary); }
-form.form-container div.answer ul li i.minus {
+form.form-container div.answer ul > li i.minus {
     transition: all .25s ease; font-size: 18px;
     color: var(--primary); margin-left: auto; padding: 4px; border-radius: 6px; }
-form.form-container div.answer ul li i.minus:hover {
+form.form-container div.answer ul > li i.minus:hover {
     transform: rotate(90deg); cursor: pointer; background: var(--bg); }
 
-form.form-container div.answer ul li .subprob-header i.minus,
-form.form-container div.answer .subprob-header i.minus {
+form.form-container div.answer ul > li .subprob-header {
+    display: flex; align-items: center; margin-bottom: 6px; }
+form.form-container div.answer ul > li .subprob-header > .subprob-label-display { display: block; }
+form.form-container div.answer ul > li .subprob-header > .subprob-label-display p {
+    flex-grow: 1; min-width: 0; margin: 0; }
+form.form-container div.answer ul > li .subprob-header > .subprob-label-editor {
+    width: 100%; box-sizing: border-box; margin-right: 6px; }
+form.form-container div.answer ul > li .subprob-header i.minus {
     transition: all .25s ease; font-size: 18px;
     color: var(--primary); margin-left: auto; padding: 4px; border-radius: 6px; }
-form.form-container div.answer ul li .subprob-header i.minus:hover,
-form.form-container div.answer .subprob-header i.minus:hover {
+form.form-container div.answer ul > li .subprob-header i.minus:hover {
     transform: rotate(90deg); cursor: pointer; background: var(--bg); }
-form.form-container div.answer ul.subprob-tps { flex-grow: 1; min-width: 0; }
-form.form-container div.answer ul li.selected { background: var(--surface-soft); }
+form.form-container div.answer ul > li ul.subprob-tps { flex-grow: 1; min-width: 0; width: 100%; }
+
+form.form-container div.answer ul > li.selected { background: var(--surface-soft); }
+form.form-container div.answer ul > li span.tp-answer {
+    overflow-wrap: anywhere; word-break: break-all; white-space: normal;
+    display: inline-block; max-width: 72%; }
 
 form.form-container input, form.form-container textarea,
 form.form-container select {
@@ -66,19 +82,16 @@ form.form-container select {
     padding: 8px 12px; line-height: 22px; background: var(--surface-strong);
     border: 1px solid var(--border); border-radius: 8px;
     transition: border-color .25s ease; }
-form.form-container textarea {
-    min-height: 60px; height: 150px; resize: vertical; }
+form.form-container textarea { min-height: 60px; height: 150px; resize: vertical; }
 form.form-container textarea.tall { height: 250px; }
 form.form-container input:focus, form.form-container textarea:focus,
 form.form-container select:focus {
-    outline: none; border-color: var(--primary);
-    box-shadow: 0 0 0 .1px var(--primary); }
+    outline: none; border-color: var(--primary); box-shadow: 0 0 0 .1px var(--primary); }
 form.form-container input::file-selector-button,
 form.form-container button {
     border: none; border-radius: 8px; background: var(--primary); color: white;
-    line-height: 30px; font-size: 14px; width: 120px;
-    transition: all .25s ease; cursor: pointer;
-    font-family: Helvetica; font-weight: 500; }
+    line-height: 30px; font-size: 14px; width: 120px; transition: all .25s ease;
+    cursor: pointer; font-family: Helvetica; font-weight: 500; }
 form.form-container input::file-selector-button:hover,
 form.form-container button:hover {
     background: var(--primary-soft); box-shadow: 0 2px 6px #0000001F; }

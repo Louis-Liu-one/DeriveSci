@@ -1,7 +1,8 @@
 
 table.problist {
     width: 100%; border: 1px solid var(--border); border-spacing: 0;
-    border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+    border-collapse: separate; border-radius: 12px; overflow: hidden;
+    background: var(--surface); box-shadow: var(--shadow); }
 table.problist tr { height: 38px; transition: all .25s ease; }
 table.problist tr:nth-child(even) { background: var(--surface-strong); }
 table.problist tr:not(.probhead):hover { background: var(--surface-soft); cursor: pointer; }
@@ -15,8 +16,7 @@ table.problist td.probtitle { width: 20%; }
 table.problist td.problabels { width: 30%; }
 table.problist td.source { width: 24%; }
 table.problist td.soluser { width: 40%; }
-table.problist td.source div, table.problist td.soluser div {
-    display: flex; align-items: center; }
+table.problist td.source div, table.problist td.soluser div { display: flex; align-items: center; }
 table.problist td.source div img, table.problist td.soluser div img {
     width: 24px; height: 24px; border-radius: 50%; margin-right: 6px; object-fit: cover; }
 table.problist td.source div i, table.problist td.soluser div i {
@@ -31,8 +31,9 @@ table.problist a.problabel:hover {
     box-shadow: 0 2px 4px #0000001A; }
 
 table.labellist {
-    width: 100%; border: 1px solid var(--border); border-spacing: 0;
-    border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+    width: 100%; overflow: hidden;
+    border: 1px solid var(--border); border-spacing: 0; border-radius: 12px;
+    background: var(--surface); box-shadow: var(--shadow); }
 table.labellist tr { height: 36px; transition: all .25s ease; }
 table.labellist td { width: 20%; text-align: center; font-family: Helvetica; }
 table.labellist td:hover { background: var(--surface-soft); cursor: pointer; }

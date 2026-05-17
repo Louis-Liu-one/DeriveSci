@@ -1,3 +1,27 @@
 
-div.tpstatus i { font-size: 72px; }
-div#answerBlock { display: none; }
+div.tpstatus i { font-size: 36px; }
+div.subprob-block {
+	background: var(--surface-strong); border: 1px solid var(--border); border-radius: 10px;
+	padding: 12px; margin-bottom: 14px; box-shadow: var(--shadow); }
+
+div.subprob-title {
+	display: flex; align-items: center; justify-content: space-between;
+	margin-bottom: 8px; gap: 12px; }
+div.subprob-title h4 { margin: 0; color: var(--accent); }
+
+table.subprob-table { width: 100%; border-collapse: collapse; font-family: Helvetica; }
+table.subprob-table th {
+	text-align: left; vertical-align: center; padding: 8px 12px; width: 160px;
+	color: var(--muted); font-weight: 600; font-size: 13px; }
+table.subprob-table td { padding: 8px 12px; }
+table.subprob-table td pre { margin: 0; font-family: AndaleMono; font-size: 15px; }
+
+p.overall-score {
+	padding: 10px 14px; margin-bottom: 12px; border-radius: 8px;
+	background: linear-gradient(90deg, #00000005, #00000003);
+	border: 1px solid var(--border); display: inline-block; font-size: 18px; }
+
+div.label-render p, div.answer-block p { margin: 0; }
+div.label-render textarea.label-text { display: none; }
+div.answer-block { margin-top: 6px; }
+div.answer-block textarea { width: 100%; min-height: 60px; padding: 8px; }
