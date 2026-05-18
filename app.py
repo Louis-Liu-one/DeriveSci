@@ -74,15 +74,19 @@ moment = Moment(app)
 
 
 def get_helplist():
-    helppath = os.path.join(app.root_path, app.template_folder, 'helps')
-    helplist = []
-    for filename in os.listdir(helppath):
-        if filename.endswith('.md'):
-            with open(os.path.join(helppath, filename)) as file:
-                title = file.readline().strip()
-                if title.startswith('# '):
-                    helplist.append((filename[:-3], title[2:]))
-    return sorted(helplist)
+    helpdir = os.path.join(app.root_path, app.template_folder, 'helps')
+    jsonpath = os.path.join(helpdir, 'helplist.json')
+    if os.path.exists(jsonpath):
+        with open(jsonpath, 'r', encoding='utf-8') as fh:
+            data = json.load(fh)
+            out = []
+            for entry in data:
+                ident = entry.get('identifier') or entry.get('id')
+                title = entry.get('title')
+                if ident and title:
+                    out.append(entry)
+            return out
+    return []
 
 
 @app.errorhandler(404)

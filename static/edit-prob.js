@@ -9,7 +9,8 @@ function renderSubprobs() {
         const header = document.createElement('div');
         header.className = 'subprob-header';
         // header contains rendered label area and delete button
-        header.innerHTML = `<i class="minus delete-subprob fa-solid fa-circle-minus" data-i="${i}"></i>`;
+        header.innerHTML = `<i class="minus delete-subprob `
+            + `fa-solid fa-square-minus" data-i="${i}"></i>`;
         const labelDisplay = document.createElement('div');
         labelDisplay.className = 'subprob-label-display';
         const labelEditor = document.createElement('input');
@@ -26,7 +27,9 @@ function renderSubprobs() {
         // clicking labelDisplay switches to editor
         labelDisplay.onclick = (ev) => {
             ev.stopPropagation();
-            labelDisplay.style.display = 'none'; labelEditor.style.display = 'block'; labelEditor.focus(); };
+            labelDisplay.style.display = 'none';
+            labelEditor.style.display = 'block'; labelEditor.focus();
+        };
         labelEditor.addEventListener('blur', () => {
             sub.label = labelEditor.value || '';
             labelEditor.style.display = 'none';
@@ -43,9 +46,10 @@ function renderSubprobs() {
             const tpli = document.createElement('li');
             const ctxHtml = escapeHTML(JSON.stringify(tp[0]));
             const ansHtml = escapeHTML(tp[1]);
-            tpli.innerHTML = `${ctxHtml}
-                <i class="fa-solid fa-arrow-right"></i> <span class="tp-answer">${ansHtml}</span>
-                <i class="minus delete-tp fa-solid fa-circle-minus" data-si="${i}" data-ti="${j}"></i>`;
+            tpli.innerHTML = `${ctxHtml}<i class="fa-solid fa-arrow-right"></i>`
+                + `<span class="tp-answer">${ansHtml}</span>`
+                + `<i class="minus delete-tp fa-solid fa-circle-minus"`
+                + ` data-si="${i}" data-ti="${j}"></i>`;
             ul.appendChild(tpli);
         });
         li.appendChild(ul);
@@ -53,10 +57,12 @@ function renderSubprobs() {
     });
     // 绑定删除事件
     answerListElement.querySelectorAll('i.delete-subprob').forEach(btn => {
-        btn.onclick = (ev) => { ev.stopPropagation(); removeSubprob(+btn.dataset.i); };
+        btn.onclick = (ev) => {
+            ev.stopPropagation(); removeSubprob(+btn.dataset.i); };
     });
     answerListElement.querySelectorAll('i.delete-tp').forEach(btn => {
-        btn.onclick = (ev) => { ev.stopPropagation(); removeTestpoint(+btn.dataset.si, +btn.dataset.ti); };
+        btn.onclick = (ev) => {
+            ev.stopPropagation(); removeTestpoint(+btn.dataset.si, +btn.dataset.ti); };
     });
     if (window.selectedSub === undefined) window.selectedSub = subprobs.length - 1;
     Array.from(answerListElement.children).forEach((li, idx) => {
@@ -71,7 +77,8 @@ function addSubprob() {
 }
 function removeSubprob(index) {
     subprobs.splice(index, 1);
-    if (window.selectedSub >= subprobs.length) window.selectedSub = subprobs.length - 1;
+    if (window.selectedSub >= subprobs.length)
+        window.selectedSub = subprobs.length - 1;
     renderSubprobs();
 }
 
@@ -79,7 +86,8 @@ function addTestpointToSelected(context, answer) {
     if (!context) context = '{}';
     const parsed = JSON.parse(context);
     if (window.selectedSub === undefined) addSubprob();
-    if (!subprobs[window.selectedSub]) subprobs[window.selectedSub] = {label: '', tps: []};
+    if (!subprobs[window.selectedSub])
+        subprobs[window.selectedSub] = {label: '', tps: []};
     subprobs[window.selectedSub].tps.push([parsed, answer]);
     renderSubprobs();
 }
@@ -147,7 +155,8 @@ async function uploadProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
-        const response = await fetch('/api/prob/upload', {method: 'POST', body: new FormData(editForm)});
+        const response = await fetch(
+            '/api/prob/upload', {method: 'POST', body: new FormData(editForm)});
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -158,7 +167,8 @@ async function editProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
-        const response = await fetch('/api/prob/edit', {method: 'POST', body: new FormData(editForm)});
+        const response = await fetch(
+            '/api/prob/edit', {method: 'POST', body: new FormData(editForm)});
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -171,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const answerInput = document.getElementById('answerInputElement');
     if (contextInput && answerInput) {
         const handleEnter = (event) => { if (event.key === 'Enter') {
-                event.preventDefault(); addAnswerHTML(contextInput, answerInput); } };
+            event.preventDefault(); addAnswerHTML(contextInput, answerInput); } };
         contextInput.addEventListener('keydown', handleEnter);
         answerInput.addEventListener('keydown', handleEnter);
     }

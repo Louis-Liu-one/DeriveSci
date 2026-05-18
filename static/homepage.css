@@ -14,12 +14,12 @@ section.problems-section div.problems-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 section.problems-section div.problem-card {
     background: var(--surface); border-radius: 12px;
-    box-shadow: 0 4px 6px -1px #0000001E, 0 2px 4px -1px #0000000F;
+    box-shadow: 0 4px 6px -1px #0000001e, 0 2px 4px -1px #0000000f;
     overflow: hidden; transition: all .3s ease; cursor: pointer;
     aspect-ratio: 1; display: flex; flex-direction: column; }
 section.problems-section div.problem-card:hover {
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 10px 15px -3px #0000001E, 0 4px 6px -2px #00000014; }
+    box-shadow: 0 10px 15px -3px #0000001e, 0 4px 6px -2px #00000014; }
 section.problems-section div.problem-img {
     flex: 1; background-color: var(--surface-soft); padding: .5rem;
     display: flex; align-items: center; justify-content: center; }
@@ -35,7 +35,7 @@ section.intro-section {
     flex: 1; display: flex; flex-direction: column; justify-content: center;
     padding: 2rem; border-radius: 16px;
     background: var(--surface-soft);
-    box-shadow: 0 10px 15px -3px #0000001F; }
+    box-shadow: 0 10px 15px -3px #0000001f; }
 section.intro-section h1.main-title {
     font-size: 2.5rem; font-weight: 700; color: var(--text);
     margin-bottom: 1.5rem; line-height: 1.2; }
@@ -53,9 +53,9 @@ section.intro-section div.links-section a.link-btn {
     display: inline-flex; align-items: center;
     gap: .5rem; padding: .75rem 1.25rem; background: var(--bg); color: var(--accent);
     border-radius: 8px; text-decoration: none; font-weight: 500;
-    transition: all .3s ease; box-shadow: 0 2px 4px #0000000C; }
+    transition: all .3s ease; box-shadow: 0 2px 4px #0000000c; }
 section.intro-section div.links-section a.link-btn:hover {
     background: var(--primary); color: white; transform: translateY(-2px);
-    box-shadow: 0 4px 8px #34AAE033; }
+    box-shadow: 0 4px 8px #34aae033; }
 section.intro-section div.links-section a.link-btn.primary {
     background: var(--primary); color: white; }

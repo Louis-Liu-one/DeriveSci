@@ -28,7 +28,7 @@ table.problist a.problabel {
     display: inline-block; padding: 4px 8px; transition: all .25s ease; }
 table.problist a.problabel:hover {
     background: var(--primary); color: white; transform: translateY(-1px);
-    box-shadow: 0 2px 4px #0000001A; }
+    box-shadow: 0 2px 4px #0000001a; }
 
 table.labellist {
     width: 100%; overflow: hidden;
@@ -40,7 +40,7 @@ table.labellist td:hover { background: var(--surface-soft); cursor: pointer; }
 
 article.body-article.problist-container { width: calc(45% + 36px); padding: 0 !important; }
 article.body-article.problist-container div.problist-wrap { width: 100%; height: 100%; overflow-y: auto; }
-article.body-article.problist-container div.problist-wrap table.problist { margin: 0; width: 100%; }
+article.body-article.problist-container div.problist-wrap table.problist { margin: 0; width: 100%; border: none; }
 article.body-article.problist-container div.problist-wrap table.problist thead tr.probhead th {
     position: sticky; top: 0; z-index: 3; background: var(--surface-soft); }
 article.body-article.problist-container div.problist-wrap table.problist tr.filler td { pointer-events: none; }

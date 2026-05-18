@@ -25,9 +25,8 @@
     {{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
-<article class="body-article">
-    <h3>{% if editmode %}编辑{% else %}上传{% endif %}题解</h3>
-    <form class="form-container" id="editForm" enctype="multipart/form-data">
+<article class="body-article form-container">
+    <form class="form-base" id="editForm" enctype="multipart/form-data">
         <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
         {%- if editmode -%}
             <input type="hidden" name="solno" id="solNo" value="{{ solution.solno }}">

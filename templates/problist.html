@@ -47,7 +47,7 @@
 </article>
 <article class="right-side-article">
     <h3>查询题目</h3>
-    <form class="form-container" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
+    <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
         {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
         <span>
             <label for="probNo">编号：</label>

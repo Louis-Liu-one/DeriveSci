@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block load_markdown %}{% endblock %}
+{% block static_files %}
+<link rel="stylesheet" href="{{ url_for('static', filename='helplist.css') }}">
+{% endblock %}
 
 {% block title %}帮助列表 - MathProbs{% endblock %}
 
@@ -16,13 +18,38 @@
     </a>
 </aside>
 <article class="main-article">
-    <p><b>以下是可用的帮助页面：</b></p>
-    <nav class="table-of-contents"><ul>
-        {%- for howto, title in helplist -%}
-            <li><a target="_blank" href="{{ url_for('helps', howto=howto) }}">
-                {{- title -}}
-            </a></li>
+    <div class="helplist-header">
+        <h2>帮助主题</h2>
+        <div class="helplist-search">
+            <input id="helpSearch" type="search" placeholder="搜索帮助（输入关键字）...">
+        </div>
+    </div>
+    <div id="helpGrid" class="help-grid">
+        {%- for item in helplist -%}
+            <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}" target="_blank"
+                data-title="{{ item.title }}" data-desc="{{ item.description }}">
+                <div class="card-icon">
+                    <i class="{{ item.icon if item.icon else 'fa-solid fa-circle-info' }}"></i>
+                </div>
+                <div class="card-body">
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description or '点击查看详细说明' }}</p>
+                </div>
+            </a>
         {%- endfor -%}
-    </ul></nav>
+    </div>
+    <script>
+        const input = document.getElementById('helpSearch');
+        const grid = document.getElementById('helpGrid');
+        input.addEventListener('input', function () {
+            const q = this.value.trim().toLowerCase();
+            const cards = grid.querySelectorAll('.help-card');
+            cards.forEach(c => {
+                const title = (c.dataset.title || '').toLowerCase();
+                const desc = (c.dataset.desc || '').toLowerCase();
+                c.style.display = (title.indexOf(q) !== -1 || desc.indexOf(q) !== -1) ? 'flex' : 'none';
+            });
+        });
+    </script>
 </article>
 {% endblock %}

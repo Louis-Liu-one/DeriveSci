@@ -1,0 +1,50 @@
+[
+    {
+        "identifier": "our-story",
+        "title": "我们的故事",
+        "description": "项目与题集发展史",
+        "icon": "fa-solid fa-book"
+    },
+    {
+        "identifier": "statement",
+        "title": "本站声明",
+        "description": "网站使用与声明",
+        "icon": "fa-solid fa-file-lines"
+    },
+    {
+        "identifier": "write-katex",
+        "title": "KaTeX 公式指南",
+        "description": "公式与 KaTeX 用法",
+        "icon": "fa-solid fa-code"
+    },
+    {
+        "identifier": "write-katex-multiline",
+        "title": "KaTeX 公式多行排版",
+        "description": "多行公式排版方法",
+        "icon": "fa-solid fa-layer-group"
+    },
+    {
+        "identifier": "write-katex-symbols",
+        "title": "KaTeX 公式符号表",
+        "description": "常用数学符号速查",
+        "icon": "fa-solid fa-table"
+    },
+    {
+        "identifier": "write-markdown",
+        "title": "Markdown 指南",
+        "description": "Markdown 写作入门",
+        "icon": "fa-brands fa-markdown"
+    },
+    {
+        "identifier": "upload-probs-and-solutions",
+        "title": "上传题目与题解相关事宜",
+        "description": "上传题目与题解注意事项",
+        "icon": "fa-solid fa-upload"
+    },
+    {
+        "identifier": "submit-answers",
+        "title": "答案提交指南",
+        "description": "答案输入与格式要求",
+        "icon": "fa-solid fa-paper-plane"
+    }
+]

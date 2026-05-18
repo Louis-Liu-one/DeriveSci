@@ -1,8 +1,8 @@
 :root {
     --bg: white;
-    --surface: white; --surface-strong: #F8FAFC; --surface-soft: #E8F4F8;
-    --text: #2D3748; --muted: #6C757D; --border: #E6E8EB;
-    --primary: #34AAE0; --primary-soft: #1D7DAC;
-    --accent: #34AAE0; --danger: #FF4D4F;
-    --shadow: 0 2px 8px #0000000F;
+    --surface: white; --surface-strong: #f8fafc; --surface-soft: #e8f4f8;
+    --text: #2d3748; --muted: #6c757d; --border: #e6e8eb;
+    --primary: #34aae0; --primary-soft: #1d7dac;
+    --accent: #34aae0; --danger: #ff4d4f;
+    --shadow: 0 2px 8px #0000000f;
 }

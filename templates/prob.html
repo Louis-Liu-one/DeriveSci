@@ -54,7 +54,7 @@
                 </div>
             {%- endif -%}
         {%- else -%}
-            <form class="form-container">
+            <form class="form-base">
                 {%- if prob.review_status == 0 -%}<p class="tips">此题已被拒绝。</p>
                 {%- else -%}<p class="tips">此题待审核。</p>{%- endif -%}
                 <span>
@@ -64,7 +64,7 @@
             </form>
             <h3>审核意见</h3>
             {%- if current_user.isadmin -%}
-                <form class="form-container" id="reviewCommentForm"
+                <form class="form-base" id="reviewCommentForm"
                     onsubmit="event.preventDefault(); saveReviewComment(thisSaveBtn);">
                     <span><textarea class="submit-input"
                         id="reviewCommentText" rows="6">{{ prob.review_comment or '' }}</textarea></span>
@@ -75,11 +75,11 @@
             {%- endif -%}
         {%- endif -%}
     {%- else -%}
-        <p class="tips{% if not prob.isofficial %} hidden{% endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
+        <p class="tips{% if not prob.isofficial %} hidden{%- endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
         {%- set anslist = prob.get_answer() -%}
         {%- if anslist -%}
             <h3>提交答案</h3><p class="tips">服务器网络不稳定，如遇超时、答案无法解析等问题，尝试多提交几次。</p>
-            <form class="form-container" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
+            <form class="form-base" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
                 {%- if anslist|length == 1 -%}
                     <span class="answers-input">
                         <div class="label-render">

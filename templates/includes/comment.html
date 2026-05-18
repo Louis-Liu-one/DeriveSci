@@ -28,7 +28,7 @@
 {%- endmacro -%}
 
 {%- macro commentform_main(post_type, post_ident) -%}
-    <form id="commentForm" class="form-container"{{-''-}}
+    <form id="commentForm" class="form-base"{{-''-}}
         data-posttype="{{ post_type }}" data-postident="{{ post_ident }}">{{-''-}}
         <span><textarea name="commenttext" class="submit-input"{{-''-}}
             placeholder="发表见解" spellcheck="false"></textarea></span>{{-''-}}
@@ -37,7 +37,7 @@
 {%- endmacro -%}
 
 {%- macro commentform_sub(comment, new_window=False) -%}
-    <form id="subCommentForm" class="form-container"{{-''-}}
+    <form id="subCommentForm" class="form-base"{{-''-}}
         data-cmtid="{{ comment.cmtid }}" data-posttype="{{ comment.post_type }}"{{-''-}}
         data-postident="{{ comment.post_ident }}" {% if new_window %}target="_blank"{% endif %}>{{-''-}}
         <span><textarea name="commenttext" class="submit-input"{{-''-}}

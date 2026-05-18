@@ -28,9 +28,8 @@
         {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
     {%- endif -%}
 </aside>
-<article class="body-article">
-    <h3>{% if editmode %}编辑{% else %}上传{% endif %}题目</h3>
-    <form class="form-container" id="editForm" enctype="multipart/form-data">
+<article class="body-article form-container">
+    <form class="form-base" id="editForm" enctype="multipart/form-data">
         <span>
             <label for="probNo">编号：</label>
             {%- if not editmode -%}
