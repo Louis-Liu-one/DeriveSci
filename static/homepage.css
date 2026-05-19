@@ -56,6 +56,6 @@ section.intro-section div.links-section a.link-btn {
     transition: all .3s ease; box-shadow: 0 2px 4px #0000000c; }
 section.intro-section div.links-section a.link-btn:hover {
     background: var(--primary); color: white; transform: translateY(-2px);
-    box-shadow: 0 4px 8px #34aae033; }
+    box-shadow: 0 4px 8px color-mix(in srgb, var(--primary) 20%, transparent); }
 section.intro-section div.links-section a.link-btn.primary {
     background: var(--primary); color: white; }

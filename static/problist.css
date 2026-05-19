@@ -5,20 +5,26 @@ table.problist {
     background: var(--surface); box-shadow: var(--shadow); }
 table.problist tr { height: 38px; transition: all .25s ease; }
 table.problist tr:nth-child(even) { background: var(--surface-strong); }
-table.problist tr:not(.probhead):hover { background: var(--surface-soft); cursor: pointer; }
+table.problist tr:not(.probhead):hover {
+    background: var(--surface-soft); cursor: pointer; }
 table.problist th {
     text-align: left; background: var(--surface-soft); color: var(--text);
-    font-weight: 500; padding: 10px 12px; font-family: Helvetica; white-space: nowrap; }
+    font-weight: 500; padding: 10px 12px;
+    font-family: Helvetica; white-space: nowrap; }
 table.problist td, table.problist th {
-    box-sizing: border-box; border: none; padding: 8px 12px; font-family: Helvetica; }
-table.problist td.probno { width: 13%; font-family: AndaleMono; word-break: break-all; }
+    box-sizing: border-box; border: none;
+    padding: 8px 12px; font-family: Helvetica; }
+table.problist td.probno {
+    width: 13%; font-family: AndaleMono; word-break: break-all; }
 table.problist td.probtitle { width: 20%; }
 table.problist td.problabels { width: 30%; }
 table.problist td.source { width: 24%; }
 table.problist td.soluser { width: 40%; }
-table.problist td.source div, table.problist td.soluser div { display: flex; align-items: center; }
+table.problist td.source div, table.problist td.soluser div {
+    display: flex; align-items: center; }
 table.problist td.source div img, table.problist td.soluser div img {
-    width: 24px; height: 24px; border-radius: 50%; margin-right: 6px; object-fit: cover; }
+    width: 24px; height: 24px; border-radius: 50%;
+    margin-right: 6px; object-fit: cover; }
 table.problist td.source div i, table.problist td.soluser div i {
     font-size: 18px; color: var(--primary); margin-right: 4px; }
 table.problist td.review-status { width: 12%; }
@@ -39,8 +45,11 @@ table.labellist td { width: 20%; text-align: center; font-family: Helvetica; }
 table.labellist td:hover { background: var(--surface-soft); cursor: pointer; }
 
 article.body-article.problist-container { width: calc(45% + 36px); padding: 0 !important; }
-article.body-article.problist-container div.problist-wrap { width: 100%; height: 100%; overflow-y: auto; }
-article.body-article.problist-container div.problist-wrap table.problist { margin: 0; width: 100%; border: none; }
+article.body-article.problist-container div.problist-wrap {
+    width: 100%; height: 100%; overflow-y: auto; }
+article.body-article.problist-container div.problist-wrap table.problist {
+    margin: 0; width: 100%; border: none; overflow: auto; }
 article.body-article.problist-container div.problist-wrap table.problist thead tr.probhead th {
     position: sticky; top: 0; z-index: 3; background: var(--surface-soft); }
-article.body-article.problist-container div.problist-wrap table.problist tr.filler td { pointer-events: none; }
+article.body-article.problist-container div.problist-wrap table.problist tr.filler td {
+    pointer-events: none; }

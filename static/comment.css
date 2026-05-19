@@ -19,7 +19,7 @@ div.comment-body img.avatar, div.comment-body i.avatar {
 div.comment-body i.avatar {
     font-size: 32px; text-align: center; color: var(--accent); line-height: 40px; }
 div.comment-body img.avatar:hover,  div.comment-body i.avatar:hover {
-    box-shadow: 0 0 6px #34aae080; cursor: pointer; border-color: #34aae0; transform: scale(1.05); }
+    box-shadow: 0 0 6px color-mix(in srgb, var(--primary) 50%, transparent); cursor: pointer; border-color: var(--primary); transform: scale(1.05); }
 
 div.comment-body span.comment-text {
     flex-grow: 1; word-wrap: anywhere; margin: 0 8px 8px 0; }

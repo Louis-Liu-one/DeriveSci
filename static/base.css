@@ -38,29 +38,42 @@ ul.navbar-items {
 ul.navbar-items li {
     display: flex; flex-direction: column;
     align-items: center; justify-content: center; }
-ul.navbar-items li.logo-image {
-    width: 80px; color: white; font-size: 15px; font-family: Helvetica-Bold;
-    text-align: center; overflow: hidden; margin: 0 8px; }
-ul.navbar-items li.logo-text {
+ul.navbar-items li.logo {
+    width: 80px; height: 100%; color: white; font-size: 13px;
+    font-family: Helvetica-Bold; text-align: center; overflow: hidden; margin: 0 8px 0 0; }
+ul.navbar-items li.logo img { height: 45px; margin-bottom: -10px; }
+ul.navbar-items li.logo a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: inherit; width: 100%; height: 100%; padding: 6px;
+    border-radius: 8px; transition: transform .6s ease, box-shadow .6s ease;
+    position: relative; z-index: 1; overflow: hidden; }
+ul.navbar-items li.logo a::before {
+    content: ""; position: absolute; inset: 0; background: #ffffff0f;
+    transform: translateY(100%); transition: transform .6s cubic-bezier(.2, .9, .2, 1);
+    z-index: 0; pointer-events: none; }
+ul.navbar-items li.logo a:hover::before,
+ul.navbar-items li.logo:focus-within a::before { transform: translateY(0); }
+ul.navbar-items li.logo:hover, ul.navbar-items li.logo:focus-within {
+    cursor: pointer; box-shadow: 0 6px 14px #00000020; transition: box-shadow .6s ease; }
+ul.navbar-items li.logo:active { box-shadow: none; }
+ul.navbar-items li.navbar-title {
     font-family: AndaleMono; font-size: 28px; font-weight: bold; color: white;
     flex-direction: row; align-items: center; height: 100%; line-height: 100%;
     margin-right: auto; white-space: nowrap; }
-ul.navbar-items li.logo-text img {
+ul.navbar-items li.navbar-title img {
     width: 45px; height: 45px; border-radius: 50%; margin-right: 10px; object-fit: cover; }
-ul.navbar-items li.logo-text i { font-size: 32px; color: white; }
-ul.navbar-items li.logo-text i.gender {
+ul.navbar-items li.navbar-title i { font-size: 32px; color: white; }
+ul.navbar-items li.navbar-title i.gender {
     font-size: 20px; margin: 30px 10px 0 -20px;
     -webkit-text-stroke: 1px white; }
-ul.navbar-items li.logo-text i.admin { font-size: 24px; margin-right: 4px; }
+ul.navbar-items li.navbar-title i.admin { font-size: 24px; margin-right: 4px; }
 ul.navbar-items li.navbar-item {
     position: relative; width: 64px; color: white; line-height: 15px;
     font-family: Helvetica-Bold; font-size: 15px; font-weight: bold;
     text-align: center; border-radius: 8px; transition: all .2s ease;
     padding: 4px 1px; margin: 0 1px; overflow: hidden; }
-ul.navbar-items li.navbar-item i, ul.navbar-items li.navbar-item img,
-ul.navbar-items li.logo-image img {
+ul.navbar-items li.navbar-item i, ul.navbar-items li.navbar-item img {
     font-size: 30px; height: 36px; margin: 3px 0 -5px 0; }
-ul.navbar-items li.logo-image img { height: 48px; margin-bottom: -15px; }
 ul.navbar-items li.navbar-item img { border-radius: 50%; }
 ul.navbar-items li.navbar-item:hover { background: #ffffff2e; }
 ul.navbar-items a { text-decoration: none !important; color: inherit !important; }
@@ -116,5 +129,5 @@ nav.table-of-contents li { padding-top: 8px; }
 nav.table-of-contents a, article.content-container a {
     text-decoration: none; color: var(--accent); }
 nav.table-of-contents a:hover, article.content-container a:hover { text-decoration: underline; }
-article.content-container { width: 71%; }
+article.content-container { width: 72%; }
 article#contentContainer, article.content-container nav.table-of-contents { display: none; }

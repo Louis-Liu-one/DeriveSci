@@ -3,7 +3,9 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 
 我们的网站支持如下的路由。
 
-用户操作：
+常规页面：
+/              首页（未登录）/欢迎页（已登录）
+/home          首页
 /login         登录
 /register      注册
 /edit-profile  编辑信息
@@ -487,6 +489,11 @@ def helplist():
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('welcome'))
+    return render_template('homepage.html')
+
+
+@app.route('/home')
+def homepage():
     return render_template('homepage.html')
 
 

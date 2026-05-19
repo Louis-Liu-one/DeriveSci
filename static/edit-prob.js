@@ -16,6 +16,7 @@ function renderSubprobs() {
         const labelEditor = document.createElement('input');
         labelEditor.id = `label-editor-${i}`;
         labelEditor.className = 'subprob-label-editor';
+        labelEditor.autocomplete = 'off';
         labelEditor.style.display = 'none';
         labelEditor.rows = 3;
         const defaultLabel = `小题 ${i+1} 的答案`;

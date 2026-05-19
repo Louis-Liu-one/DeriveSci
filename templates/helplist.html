@@ -39,17 +39,19 @@
         {%- endfor -%}
     </div>
     <script>
-        const input = document.getElementById('helpSearch');
-        const grid = document.getElementById('helpGrid');
-        input.addEventListener('input', function () {
-            const q = this.value.trim().toLowerCase();
-            const cards = grid.querySelectorAll('.help-card');
-            cards.forEach(c => {
-                const title = (c.dataset.title || '').toLowerCase();
-                const desc = (c.dataset.desc || '').toLowerCase();
-                c.style.display = (title.indexOf(q) !== -1 || desc.indexOf(q) !== -1) ? 'flex' : 'none';
+        (function() {
+            const input = document.getElementById('helpSearch');
+            const grid = document.getElementById('helpGrid');
+            input.addEventListener('input', function() {
+                const q = this.value.trim().toLowerCase();
+                const cards = grid.querySelectorAll('.help-card');
+                cards.forEach(c => {
+                    const title = (c.dataset.title || '').toLowerCase();
+                    const desc = (c.dataset.desc || '').toLowerCase();
+                    c.style.display = (title.indexOf(q) !== -1 || desc.indexOf(q) !== -1) ? 'flex' : 'none';
+                });
             });
-        });
+        })();
     </script>
 </article>
 {% endblock %}

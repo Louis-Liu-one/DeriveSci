@@ -61,16 +61,15 @@
 <article class="right-side-article">
     <div id="userIntroductionContainer">
         <h3>{{ user_name(user) }}的简介</h3>
-        <form class="form-base hidden" id="editIntroductionForm">
+        <form class="form-base no-edge hidden" id="introductionEditForm">
             <span>
-                <textarea id="introduction" name="introduction" class="submit-input"
+                <textarea id="introductionTextarea" name="introduction" class="submit-input"
                     spellcheck="false" placeholder="简要介绍你自己，以 Markdown 格式">
-                    {%- if user.introduction -%}{{ user.introduction }}{%- endif -%}
+                    {{- user.introduction or '' -}}
                 </textarea>
             </span>
-            <span><button id="editIntroductionButton" type="button">修改</button></span>
         </form>
-        <div id="userIntroduction" class="markdown-body">
+        <div id="userIntroductionDisplay" class="markdown-body">
             <textarea>{{ user.introduction }}</textarea>
         </div>
     </div>
@@ -84,28 +83,53 @@
 </article>
 {%- if user == current_user -%}
     <script>
-        userIntroduction.addEventListener('click', () => {
-            userIntroduction.classList.add('hidden');
-            editIntroductionForm.classList.remove('hidden');
-        });
-        editIntroductionButton.addEventListener('click', async (event) => {
-            try {
-                const response = await fetch('/api/user/edit-introduction', {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({introduction: introduction.value})});
-                const data = await response.json();
-                if (data.ok) {
-                    if (introduction.value) {
-                        userIntroduction.classList.remove('hidden');
-                        editIntroductionForm.classList.add('hidden');
-                        renderElement(userIntroduction, introduction.value);
-                    } else alert('修改成功，但简介内容为空，已隐藏简介展示区');
-                } else alert(`修改失败：${data.error}`);
-            } catch (err) { alert(`修改失败：${err}`); }
-        });
+        let originalIntroduction = {{ (user.introduction or '')|tojson }};
+        (function() {
+            const editForm = document.getElementById('introductionEditForm');
+            const userIntroDiv = document.getElementById('userIntroductionDisplay');
+            const textarea = document.getElementById('introductionTextarea');
+            userIntroDiv.addEventListener('click', () => {
+                userIntroDiv.classList.add('hidden');
+                editForm.classList.remove('hidden');
+                textarea.focus();
+            });
+            textarea.addEventListener('blur', async () => {
+                if (editForm.classList.contains('hidden')) return;
+                const newVal = (textarea.value || '').trim();
+                const oldVal = (originalIntroduction || '').trim();
+                if (newVal === oldVal) {
+                    if (newVal) {
+                        editForm.classList.add('hidden');
+                        userIntroDiv.classList.remove('hidden');
+                    }
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/user/edit-introduction', {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({introduction: textarea.value})
+                    });
+                    const data = await response.json();
+                    if (data.ok) {
+                        if (newVal) {
+                            userIntroDiv.classList.remove('hidden');
+                            renderElement(userIntroDiv, textarea.value);
+                            editForm.classList.add('hidden');
+                            originalIntroduction = textarea.value;
+                        } else alert('修改成功，但简介内容为空，已隐藏简介展示区');
+                    } else alert(`修改失败：${data.error}`);
+                } catch (err) {
+                    alert(`修改失败：${err}`);
+                }
+            });
+        })();
     </script>
 {%- endif -%}
-{%- if user.introduction -%}<script>renderElements([userIntroduction]);</script>
-{%- elif user != current_user -%}<script>userIntroductionContainer.classList.add('hidden');</script>
-{%- else -%}<script>userIntroduction.click();</script>{%- endif -%}
+{%- if user.introduction -%}
+    <script>renderElements([document.getElementById('userIntroductionDisplay')]);</script>
+{%- elif user != current_user -%}
+    <script>document.getElementById('userIntroductionContainer').classList.add('hidden');</script>
+{%- else -%}
+    <script>document.getElementById('userIntroductionDisplay').click();</script>
+{%- endif -%}
 {% endblock %}

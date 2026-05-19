@@ -40,8 +40,12 @@
 <body>
     <nav class="navbar">
         <ul class="navbar-items">
-            <li class="logo-image"><img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>MathProbs</li>
-            <li id="navbarTitleElement" class="logo-text">{%- block navbar_title -%}{%- endblock -%}</li>
+            <li class="logo">
+                <a href="{{ url_for('homepage') }}"> 
+                    <img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>MathProbs
+                </a>
+            </li>
+            <li id="navbarTitleElement" class="navbar-title">{%- block navbar_title -%}{%- endblock -%}</li>
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}{{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}

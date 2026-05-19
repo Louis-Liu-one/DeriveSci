@@ -15,7 +15,7 @@
 p.tips { color: var(--muted); font-size: 10px; line-height: 20px; }
 
 main {
-    display: flex; position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+    display: flex; position: absolute; inset: 0;
     margin: auto; width: 720px; height: 475px; font-family: Helvetica;
     box-shadow: -10px 10px 25px #0008; border-radius: 45px; }
 main h3 {
