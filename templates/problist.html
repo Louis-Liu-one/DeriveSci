@@ -23,18 +23,18 @@
     {%- if oflabel -%}
         <h3>题目标签</h3>
         <a class="sidebar-link" href="{{ url_for('labellist') }}">
-            <div class="sidebar-item"><i class="fa-solid fa-tags"></i>所有标签</div>
+            <div class="sidebar-item"><i class="fas fa-tags"></i>所有标签</div>
         </a>
     {%- else -%}
         <h3>MathProbs题集</h3>
         {%- if current_user.is_authenticated and current_user.isadmin -%}
             {%- if reviewmode -%}
                 <a class="sidebar-link" href="{{ url_for('problist') }}">
-                    <div class="sidebar-item"><i class="fa-solid fa-book"></i>访客模式</div>
+                    <div class="sidebar-item"><i class="fas fa-book"></i>访客模式</div>
                 </a>
             {%- else -%}
                 <a class="sidebar-link" href="{{ url_for('problist', reviewmode=True) }}">
-                    <div class="sidebar-item"><i class="fa-solid fa-book-open-reader"></i>审核模式</div>
+                    <div class="sidebar-item"><i class="fas fa-book-open-reader"></i>审核模式</div>
                 </a>
             {%- endif -%}
         {%- endif -%}

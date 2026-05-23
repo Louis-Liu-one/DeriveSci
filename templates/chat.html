@@ -32,18 +32,18 @@
 <aside>
     <a class="sidebar-link" href="{{ url_for('welcome') }}">
         <div class="sidebar-item">
-            <i class="fa-solid fa-circle-left"></i>返回主页
+            <i class="fas fa-circle-left"></i>返回主页
         </div>
     </a>
     <a class="sidebar-link" target="_blank" href="{{ url_for('edit_profile') }}">
         <div class="sidebar-item">
-            <i class="fa-solid fa-user-pen"></i>修改信息
+            <i class="fas fa-user-pen"></i>修改信息
         </div>
     </a>
     <a class="sidebar-link" href="javascript:void(0)"
             onclick="userLogout(); return false;">
         <div class="sidebar-item">
-            <i class="fa-solid fa-right-from-bracket"></i>退出登录
+            <i class="fas fa-right-from-bracket"></i>退出登录
         </div>
     </a>
 </aside>
@@ -53,7 +53,7 @@
             {%- if view_comments -%}
                 <div class="user-item active" id="viewCommentsItem">
                     <div class="avatar-wrap">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fas fa-envelope"></i>
                     </div>未读评论
                 </div>
             {%- endif -%}
@@ -65,7 +65,7 @@
                 {%- endif -%}
                 <div class="user-item {% if
                     activeuser and uid == activeuser.uid -%}active{% endif %}"
-                    onclick="switchUser(this, {{ uid }})">
+                    onclick="switchUser(this, {{ uid }});">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(user) -}}
                         {%- if all_chats[uid].unread -%}
@@ -82,7 +82,7 @@
             {%- endfor -%}
             {%- if activeuser and not ns.active -%}
                 <div class="user-item active"
-                    onclick="switchUser(this, {{ activeuser.uid }})">
+                    onclick="switchUser(this, {{ activeuser.uid }});">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(activeuser) -}}
                     </div>{{- user_name(activeuser) -}}
@@ -148,7 +148,7 @@
                     {%- if not activeuser -%}disabled{%- endif -%}>
                 <input type="hidden" name="target" id="target"
                     {%- if activeuser -%}value="{{ activeuser.uid }}"{%- endif -%}>
-                <button type="button" id="messageSenderButton" onclick="sendMessage()"
+                <button type="button" id="messageSenderButton" onclick="sendMessage();"
                     {%- if not activeuser -%}disabled{%- endif -%}>发送</button>
             </div>
         </div>

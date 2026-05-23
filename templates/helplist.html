@@ -13,7 +13,7 @@
     <h3>帮助列表</h3>
     <a class="sidebar-link" href="{{ url_for('welcome') }}">
         <div class="sidebar-item">
-            <i class="fa-solid fa-circle-left"></i>返回主页
+            <i class="fas fa-circle-left"></i>返回主页
         </div>
     </a>
 </aside>
@@ -29,7 +29,7 @@
             <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}" target="_blank"
                 data-title="{{ item.title }}" data-desc="{{ item.description }}">
                 <div class="card-icon">
-                    <i class="{{ item.icon if item.icon else 'fa-solid fa-circle-info' }}"></i>
+                    <i class="{{ item.icon if item.icon else 'fas fa-circle-info' }}"></i>
                 </div>
                 <div class="card-body">
                     <h3>{{ item.title }}</h3>

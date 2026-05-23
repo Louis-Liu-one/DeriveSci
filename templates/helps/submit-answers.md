@@ -301,11 +301,11 @@ return 36;
 
 图标 | 意义
 :-: | ---
-<i class="fa-solid fa-circle-check" style="color: #72C040"></i> | 答案正确
-<i class="fa-solid fa-circle-xmark" style="color: #D75746"></i> | 答案错误，答案与题目作者提供的答案不符
-<i class="fa-solid fa-circle-exclamation" style="color: #D75746"></i> | 解析错误，答案存在语法错误等
-<i class="fa-solid fa-circle-question" style="color: #D75746"></i> | 求值错误，答案存在运行时错误等
-<i class="fa-solid fa-clock" style="color: #E89F3C"></i> | 超时错误，答案的解析与求值时间超过指定时间
-<i class="fa-solid fa-circle-minus" style="color: #636D88"></i> | 作者提供的答案存在语法错误、运行时错误、超时等问题，此时请联系题目作者
+<i class="fas fa-circle-check" style="color: #72C040"></i> | 答案正确
+<i class="fas fa-circle-xmark" style="color: #D75746"></i> | 答案错误，答案与题目作者提供的答案不符
+<i class="fas fa-circle-exclamation" style="color: #D75746"></i> | 解析错误，答案存在语法错误等
+<i class="fas fa-circle-question" style="color: #D75746"></i> | 求值错误，答案存在运行时错误等
+<i class="fas fa-clock" style="color: #E89F3C"></i> | 超时错误，答案的解析与求值时间超过指定时间
+<i class="fas fa-circle-minus" style="color: #636D88"></i> | 作者提供的答案存在语法错误、运行时错误、超时等问题，此时请联系题目作者
 
 你也可以将鼠标在测试点图标上悬停一段时间，然后就能看到测试点的状态。

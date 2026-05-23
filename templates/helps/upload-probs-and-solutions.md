@@ -30,11 +30,11 @@
 * *变量*，指用户输入表达式中一些未知数应该代入的值。例如，用户提交表达式 $x + \sqrt y$，测试点变量为 `{"y": 4}`，则代入后结果为 $x + 2$。变量需要按照 JSON 字典的格式输入，没有变量时置空或填`{}`。
 * *正确结果*，是指将用户输入表达式代入给定变量值后应该得出的值，例如上例中用户计算得的结果为 $x + 2$。若题目提供的正确结果与计算得的结果相同，则此测试点判为正确。正确结果中可以有未知数。
 
-输入一条测试点的数据后，应该点击<i class="fa-solid fa-circle-plus" style="color: var(--primary)"></i>将测试点添加到当前小题的测试点列表。若要删除测试点，则应该点击<i class="fa-solid fa-circle-minus" style="color: var(--primary)"></i>将测试点从答案删除。
+输入一条测试点的数据后，应该点击<i class="fas fa-circle-plus" style="color: var(--primary)"></i>将测试点添加到当前小题的测试点列表。若要删除测试点，则应该点击<i class="fas fa-circle-minus" style="color: var(--primary)"></i>将测试点从答案删除。
 
 #### 小题
 
-当题目有多个小问时，可以使用**小题**。点击<i class="fa-solid fa-square-plus" style="color: var(--primary)"></i>添加小题，点击测试点列表中小题列的“小题”字样选中小题，点击<i class="fa-solid fa-circle-minus" style="color: var(--primary)"></i>删除小题。
+当题目有多个小问时，可以使用**小题**。点击<i class="fas fa-square-plus" style="color: var(--primary)"></i>添加小题，点击测试点列表中小题列的“小题”字样选中小题，点击<i class="fas fa-circle-minus" style="color: var(--primary)"></i>删除小题。
 
 ### 图片上传
 
@@ -89,7 +89,7 @@ brew install ghostscript
 
 ### 为什么我输入了答案，但上传后没有显示提交框？
 
-可能是因为你在输入测试点时没有点击<i class="fa-solid fa-circle-plus" style="color: var(--primary)"></i>号。点击<i class="fa-solid fa-circle-plus" style="color: var(--primary)"></i>号后测试点才会被添加到列表中。
+可能是因为你在输入测试点时没有点击<i class="fas fa-circle-plus" style="color: var(--primary)"></i>号。点击<i class="fas fa-circle-plus" style="color: var(--primary)"></i>号后测试点才会被添加到列表中。
 
 ### 如果我的题目的答案是多个值，如何表示？
 

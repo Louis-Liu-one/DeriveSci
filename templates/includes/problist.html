@@ -13,13 +13,13 @@
             </thead>
             <tbody>
                 {%- for prob in probs -%}
-                    <tr data-url="{{ prob.url() }}" onclick="window.open(this.dataset.url)">{{-''-}}
+                    <tr data-url="{{ prob.url() }}" onclick="window.open(this.dataset.url);">{{-''-}}
                         <td class="probno">{{ prob.probno }}</td>{{-''-}}
                         <td class="probtitle">{{ prob.probtitle }}</td>
                         {{- problabels_problist(prob) -}}
                         {%- if with_source -%}
                             <td class="source"{%- if prob.source -%}data-url="{{ prob.source.url() }}"{{-''-}}
-                                onclick="event.stopPropagation(); window.open(this.dataset.url)"{%- endif -%}>{{-''-}}
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>{{-''-}}
                                 <div>{{- user_avatar_img(prob.source) -}}{{- user_name(prob.source) -}}</div>{{-''-}}
                             </td>
                         {%- endif -%}

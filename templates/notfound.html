@@ -2,6 +2,10 @@
 
 {% block load_markdown %}{% endblock %}
 
+{% block static_files %}
+<link rel="stylesheet" href="{{ url_for('static', filename='notfound.css') }}">
+{% endblock %}
+
 {% block title %}未找到页面 - MathProbs{% endblock %}
 
 {% block navbar_title %}未找到页面{% endblock %}
@@ -10,10 +14,19 @@
 <aside>
     <h3>欢迎来到MathProbsOnline</h3>
 </aside>
-<article class="main-article">
-    <h3>未找到页面</h3>
-    <i class="fa-solid fa-circle-xmark"
-        style="color: #D75746; font-size: 72px"></i>
-    <p><strong>发生错误：</strong>{{ error }}</p>
+<article class="main-article notfound-hero">
+    <div class="notfound-card">
+        <div class="notfound-illustration" aria-hidden="true">
+            <i class="fas fa-link-slash"></i>
+        </div>
+        <div class="notfound-body">
+            <h1>404</h1><h2>页面未找到</h2>
+            <p><strong>发生错误：</strong>{{ error }}</p>
+            <div class="actions">
+                <a class="btn" href="{{ url_for('home') }}">返回首页</a>
+                <a class="btn btn-outline" href="javascript:history.back()">返回上一页</a>
+            </div>
+        </div>
+    </div>
 </article>
 {% endblock %}

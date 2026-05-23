@@ -66,9 +66,9 @@
                         autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
                     <input type="text" id="answerInputElement" name="answer"
                         autocomplete="off" spellcheck="false" placeholder="输入答案">
-                    <i class="fa-solid fa-circle-plus"
-                        onclick="addAnswerHTML(contextInputElement, answerInputElement)"></i>
-                    <i class="fa-solid fa-square-plus" title="添加小题" onclick="addSubprob()"></i>
+                    <i class="fas fa-circle-plus"
+                        onclick="addAnswerHTML(contextInputElement, answerInputElement);"></i>
+                    <i class="fas fa-square-plus" title="添加小题" onclick="addSubprob();"></i>
                 </div>
                 <ul id="answerListElement"></ul>
             </div>
@@ -87,9 +87,9 @@
         </span>
         <span>
             <button type="button" onclick="renderElement(
-                mdPreview, statement.value, 'block', markdownImageBasePath)">预览</button>
-            {%- if editmode -%}<button type="button" onclick="editProb()">上传</button>
-            {%- else -%}<button type="button" onclick="uploadProb()">上传</button>{%- endif -%}
+                mdPreview, statement.value, 'block', markdownImageBasePath);">预览</button>
+            {%- if editmode -%}<button type="button" onclick="editProb();">上传</button>
+            {%- else -%}<button type="button" onclick="uploadProb();">上传</button>{%- endif -%}
         </span>
     </form>
 </article>
@@ -98,10 +98,10 @@
     <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
     <p class="tips">
         <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
-            <i class="fa-solid fa-circle-info"></i> 有关上传题目的帮助……
+            <i class="fas fa-circle-info"></i> 有关上传题目的帮助……
         </a><br>
         <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
-            <i class="fa-solid fa-circle-info"></i> 有关编写 Markdown 的帮助……
+            <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
         </a>
     </p>
 </article>

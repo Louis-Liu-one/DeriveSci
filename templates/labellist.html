@@ -22,7 +22,7 @@
                 {%- for dif in range(5) -%}
                     {%- if i + dif < labels|length -%}
                         <td data-url="{{ labels[i + dif].url() }}"{{-''-}}
-                            onclick="window.open(this.dataset.url)">
+                            onclick="window.open(this.dataset.url);">
                             {{- labels[i + dif].labelname -}}
                         </td>
                     {%- endif -%}

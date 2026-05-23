@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
 {%- macro problem_card(icon, labelname) -%}
-    <div class="problem-card"
-        data-url="{{ url_for('problistoflabel', labelname=labelname) }}"
-        onclick="window.open(this.dataset.url)">
-        <div class="problem-img"><i class="fa-solid fa-{{ icon }}"></i></div>
+    <div class="problem-card" role="button" onclick="window.open(this.dataset.url);"
+        data-url="{{ url_for('problistoflabel', labelname=labelname) }}">
+        <div class="problem-img"><i class="fas fa-{{ icon }}"></i></div>
         <div class="problem-info">
             <div class="problem-title">{{ labelname }}</div>
         </div>
@@ -43,22 +42,22 @@
         </p>
         <div class="links-section">
             <a href="{{ url_for('problist') }}" class="link-btn primary">
-                <i class="fa-solid fa-compass"></i>开始探索
+                <i class="fas fa-compass"></i>开始探索
             </a>
-            <a href="https://github.com/Louis-Liu-one/MathProbsOnline"
-                target="_blank" class="link-btn">
-                <i class="fa-brands fa-github"></i>GitHub 仓库
+            <a href="https://github.com/Louis-Liu-one/MathProbsOnline" target="_blank" class="link-btn">
+                <i class="fab fa-github"></i>GitHub 仓库
             </a>
-            <a href="https://gitee.com/Louis-Liu-one/MathProbsOnline"
-                target="_blank" class="link-btn">
-                <i class="fa-brands fa-gitee"></i>Gitee 仓库
+            <a href="https://gitee.com/Louis-Liu-one/MathProbsOnline" target="_blank" class="link-btn">
+                <i class="fab fa-gitee"></i>Gitee 仓库
             </a>
-            <a href="{{ url_for('helps', howto='our-story') }}"
-                target="_blank" class="link-btn">
-                <i class="fa-solid fa-book-open"></i>我们的故事
+            <a href="{{ url_for('upload_prob') }}" target="_blank" class="link-btn">
+                <i class="fas fa-cloud-arrow-up"></i>上传题目
+            </a>
+            <a href="{{ url_for('helps', howto='our-story') }}" target="_blank" class="link-btn">
+                <i class="fas fa-book-open"></i>我们的故事
             </a>
             <a href="{{ url_for('helplist') }}" target="_blank" class="link-btn">
-                <i class="fa-solid fa-question-circle"></i>常见问题
+                <i class="fas fa-question-circle"></i>常见问题
             </a>
         </div>
     </section>

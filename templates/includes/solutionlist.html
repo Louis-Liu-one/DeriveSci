@@ -13,16 +13,16 @@
             {%- endif -%}
             <tbody>
                 {%- for solution in solutions -%}
-                    <tr data-url="{{ solution.url() }}" onclick="window.open(this.dataset.url)">
+                    <tr data-url="{{ solution.url() }}" onclick="window.open(this.dataset.url);">
                         {%- if with_probno -%}
                             <td class="probno"{%- if solution.prob -%}data-url="{{ solution.prob.url() }}"
-                                onclick="event.stopPropagation(); window.open(this.dataset.url)"{%- endif -%}
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}
                                 style="width: 25%">{{- solution.probno -}}</td>
                         {%- endif -%}
                         <td>{{- solution.title -}}</td>
                         {%- if with_user -%}
                             <td class="soluser"{%- if solution.user -%}data-url="{{ solution.user.url() }}"
-                                onclick="event.stopPropagation(); window.open(this.dataset.url)"{%- endif -%}>
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>
                                 <div>
                                     {{- user_avatar_img(solution.user) -}}
                                     {{- user_name(solution.user) -}}

@@ -49,7 +49,7 @@
 {%- macro commentavatar(comment) -%}
     <span class="avatar"{%- if comment.user -%}
         data-url="{{ url_for('users', uid=comment.user.uid) }}"{{-''-}}
-        onclick="window.open(this.dataset.url)"{%- endif -%}>
+        onclick="window.open(this.dataset.url);"{%- endif -%}>
         {{- user_avatar_img(comment.user) -}}
     </span>
 {%- endmacro -%}
@@ -70,17 +70,17 @@
     <p class="comment-foot">
         {{- comment_timestamp(comment) -}}
         {%- if not with_post -%}
-            <i id="commentSenderButton" title="发表评论" class="fa-solid fa-comment-dots"></i>
+            <i id="commentSenderButton" title="发表评论" class="fas fa-comment-dots"></i>
         {%- endif -%}
         {%- if current_user == comment.user and not with_post -%}
-            <i title="删除评论" class="fa-solid fa-trash-can"{{-''-}}
-                onclick="deleteComment({{ comment.cmtid|tojson }})"></i>
+            <i title="删除评论" class="fas fa-trash-can"{{-''-}}
+                onclick="deleteComment({{ comment.cmtid|tojson }});"></i>
         {%- endif -%}
         {%- if with_post -%} &nbsp;
             {%- set post = comment.get_post() -%}来自：{{- post -}}
-            <i title="前往帖子" class="fa-solid fa-newspaper"{{-''-}}
+            <i title="前往帖子" class="fas fa-newspaper"{{-''-}}
                 data-url="{{ post.url(anchor='comment-' ~ comment.cmtid) }}"{{-''-}}
-                onclick="window.open(this.dataset.url)"></i>
+                onclick="window.open(this.dataset.url);"></i>
         {%- endif -%}
     </p>
     {{- commentform_sub(comment, new_window=with_post) -}}

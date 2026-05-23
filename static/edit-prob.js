@@ -10,7 +10,7 @@ function renderSubprobs() {
         header.className = 'subprob-header';
         // header contains rendered label area and delete button
         header.innerHTML = `<i class="minus delete-subprob `
-            + `fa-solid fa-square-minus" data-i="${i}"></i>`;
+            + `fas fa-square-minus" data-i="${i}"></i>`;
         const labelDisplay = document.createElement('div');
         labelDisplay.className = 'subprob-label-display';
         const labelEditor = document.createElement('input');
@@ -47,9 +47,9 @@ function renderSubprobs() {
             const tpli = document.createElement('li');
             const ctxHtml = escapeHTML(JSON.stringify(tp[0]));
             const ansHtml = escapeHTML(tp[1]);
-            tpli.innerHTML = `${ctxHtml}<i class="fa-solid fa-arrow-right"></i>`
+            tpli.innerHTML = `${ctxHtml}<i class="fas fa-arrow-right"></i>`
                 + `<span class="tp-answer">${ansHtml}</span>`
-                + `<i class="minus delete-tp fa-solid fa-circle-minus"`
+                + `<i class="minus delete-tp fas fa-circle-minus"`
                 + ` data-si="${i}" data-ti="${j}"></i>`;
             ul.appendChild(tpli);
         });
@@ -131,7 +131,7 @@ function renderLabels() {
         const labelElement = document.createElement('a');
         labelElement.className = 'problabel';
         labelElement.innerHTML = `${escapeHTML(label)} <i class="delete-button`
-            + ` fa-solid fa-circle-minus" data-i="${i}"></i>`;
+            + ` fas fa-circle-minus" data-i="${i}"></i>`;
         labelArea.appendChild(labelElement);
     });
     labelArea.querySelectorAll('i.delete-button').forEach(deleteButton => {

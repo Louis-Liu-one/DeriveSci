@@ -3,7 +3,7 @@
 {%- macro navbar_item(url, icon, text, unread=0) -%}
     <a href="{{ url }}" target="_blank">{{-''-}}
         <li class="navbar-item">{{-''-}}
-            <i class="fa-solid fa-{{ icon }}"></i><br>{{- text -}}{%- if unread -%}<div class="unread-badge">{{ unread }}</div>{%- endif -%}
+            <i class="fas fa-{{ icon }}"></i><br>{{- text -}}{%- if unread -%}<div class="unread-badge">{{ unread }}</div>{%- endif -%}
         </li>{{-''-}}
     </a>
 {%- endmacro -%}
@@ -49,7 +49,7 @@
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}{{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}
-                    {%- else -%}<i class="fa-solid fa-user"></i><br>未登录{%- endif -%}
+                    {%- else -%}<i class="fas fa-user"></i><br>未登录{%- endif -%}
                 </li>
             </a>
             {%- if current_user.is_authenticated -%}

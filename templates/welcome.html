@@ -18,7 +18,7 @@
 
 {% block navbar_title %}
 {{- user_avatar_img(user) -}}{{- user_gender(user) -}}
-{%- if user.isadmin -%}<i class="admin fa-solid fa-user-tie"></i>{%- endif -%}
+{%- if user.isadmin -%}<i class="admin fas fa-user-tie"></i>{%- endif -%}
 {{- user_name(user) }}的主页
 {% endblock %}
 
@@ -27,20 +27,20 @@
     <h3>欢迎来到MathProbsOnline</h3>
     {%- if current_user == user -%}
         <a class="sidebar-link" href="{{ url_for('upload_prob') }}">
-            <div class="sidebar-item"><i class="fa-solid fa-cloud-arrow-up"></i>上传题目</div>
+            <div class="sidebar-item"><i class="fas fa-cloud-arrow-up"></i>上传题目</div>
         </a>
         <a class="sidebar-link" target="_blank" href="{{ url_for('edit_profile') }}">
-            <div class="sidebar-item"><i class="fa-solid fa-user-pen"></i>修改信息</div>
+            <div class="sidebar-item"><i class="fas fa-user-pen"></i>修改信息</div>
         </a>
         <a class="sidebar-link" href="javascript:void(0)" onclick="userLogout(); return false;">
-            <div class="sidebar-item"><i class="fa-solid fa-right-from-bracket"></i>退出登录</div>
+            <div class="sidebar-item"><i class="fas fa-right-from-bracket"></i>退出登录</div>
         </a>
         <a class="sidebar-link" href="javascript:void(0)" onclick="userUnregister(); return false;">
-            <div class="sidebar-item"><i class="fa-solid fa-person-circle-minus"></i>注销账户</div>
+            <div class="sidebar-item"><i class="fas fa-person-circle-minus"></i>注销账户</div>
         </a>
     {%- else -%}
         <a class="sidebar-link" href="{{ url_for('chat', activeuid=user.uid) }}">
-            <div class="sidebar-item"><i class="fa-solid fa-comments"></i>私信聊天</div>
+            <div class="sidebar-item"><i class="fas fa-comments"></i>私信聊天</div>
         </a>
     {%- endif -%}
 </aside>

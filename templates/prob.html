@@ -30,8 +30,8 @@
     {%- if current_user.isadmin -%}
         <a class="sidebar-link" href="javascript:void(0)" id="officialSidebarSetter" data-probno="{{ prob.probno }}">
             <div class="sidebar-item" id="officialSetterBlock">
-                {%- if prob.isofficial -%}<i class="fa-solid fa-circle-minus"></i>从官方题目移除
-                {%- else -%}<i class="fa-solid fa-circle-plus"></i>添加到官方题目{%- endif -%}
+                {%- if prob.isofficial -%}<i class="fas fa-circle-minus"></i>从官方题目移除
+                {%- else -%}<i class="fas fa-circle-plus"></i>添加到官方题目{%- endif -%}
             </div>
         </a>
     {%- endif -%}
@@ -58,8 +58,8 @@
                 {%- if prob.review_status == 0 -%}<p class="tips">此题已被拒绝。</p>
                 {%- else -%}<p class="tips">此题待审核。</p>{%- endif -%}
                 <span>
-                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true)">通过</button>
-                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false)">拒绝</button>
+                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true);">通过</button>
+                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false);">拒绝</button>
                 </span>
             </form>
             <h3>审核意见</h3>
@@ -101,7 +101,7 @@
                 {%- endif -%}
                 <p class="tips">
                     <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
-                        <i class="fa-solid fa-circle-info"></i> 有关提交答案的帮助……
+                        <i class="fas fa-circle-info"></i> 有关提交答案的帮助……
                     </a>
                 </p>
                 <span><button type="submit">提交</button></span>
