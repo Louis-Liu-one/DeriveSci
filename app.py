@@ -230,8 +230,10 @@ def image_preview(probno, imagename):
     if not image:
         return render_template('notfound.html', error='未能找到图片。'), 404
     editable = current_user.is_authenticated and (
-        (hasattr(image, 'uid') and current_user.uid == image.uid) or current_user.isadmin)
-    return render_template('image.html', prob=prob, image=image, editable=editable)
+        hasattr(image, 'uid') and current_user.uid == image.uid
+        or current_user.isadmin)
+    return render_template(
+        'image.html', prob=prob, image=image, editable=editable)
 
 
 @app.route('/api/image/reupload', methods=['POST'])
@@ -271,20 +273,19 @@ def api_image_rename():
     image = db.session.get(ProbImage, (probno, oldname))
     if not image:
         return {'ok': False, 'error': '未能找到图片。'}, 404
-    if not (current_user == image.uploader and not current_user.isadmin):
+    if not current_user == image.uploader and not current_user.isadmin:
         abort(403)
-    # check duplicate
     exists = db.session.get(ProbImage, (probno, newname))
     if exists:
         return {'ok': False, 'error': '目标文件名已存在。'}, 400
-    # create new row and delete old one
     newimg = ProbImage(
         probno=image.probno, name=newname, uid=image.uid,
         size=image.size, mimetype=image.mimetype, data=image.data)
     db.session.add(newimg)
     db.session.delete(image)
     db.session.commit()
-    return {'ok': True, 'newurl': url_for('image_preview', probno=probno, imagename=newname)}
+    return {'ok': True, 'newurl': url_for(
+        'image_preview', probno=probno, imagename=newname)}
 
 
 @app.route('/api/image/delete', methods=['POST'])
