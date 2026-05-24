@@ -34,7 +34,8 @@
         <span>
             <label for="solTitle">标题：</label>
             <input required type="text" id="solTitle" name="soltitle"
-                autocomplete="off" spellcheck="false" {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
+                autocomplete="off" spellcheck="false"
+                {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
         </span>
         <span>
             <label for="solution">内容：</label>

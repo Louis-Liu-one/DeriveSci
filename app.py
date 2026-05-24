@@ -25,6 +25,8 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /probs/<probno>/upload-solution        上传题解
 /probs/<probno>/solutions/<solno>      查看题解
 /probs/<probno>/solutions/<solno>/edit 编辑题解
+/probs/<probno>/images/                题目图片列表
+/probs/<probno>/images/<filename>      题目图片预览
 /images/<probno>/<filename>            题目/题解图片
 
 API：*
@@ -37,6 +39,9 @@ API：*
 /api/solution/upload        上传题解
 /api/solution/edit          编辑题解
 /api/solution/delete        删除题解
+/api/image/reupload         重新上传图片
+/api/image/rename           重命名图片
+/api/image/delete           删除图片
 /api/comment/post           发表评论
 /api/comment/delete         删除评论
 /api/chat/update-lastvisit  更新上次查看私信的时间
@@ -205,6 +210,99 @@ def imagefile(probno, imagename):
     response.headers['ETag'] = etag
     response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存10min
     return response
+
+
+@app.route('/probs/<probno>/images/')
+def images_list(probno):
+    prob = get_prob(probno)
+    if not prob or not prob.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到题目。'), 404
+    images = prob.images.copy()
+    return render_template('images.html', prob=prob, images=images)
+
+
+@app.route('/probs/<probno>/images/<imagename>')
+def image_preview(probno, imagename):
+    prob = get_prob(probno)
+    if not prob or not prob.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到题目。'), 404
+    image = db.session.get(ProbImage, (probno, imagename))
+    if not image:
+        return render_template('notfound.html', error='未能找到图片。'), 404
+    editable = current_user.is_authenticated and (
+        (hasattr(image, 'uid') and current_user.uid == image.uid) or current_user.isadmin)
+    return render_template('image.html', prob=prob, image=image, editable=editable)
+
+
+@app.route('/api/image/reupload', methods=['POST'])
+def api_image_reupload():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    probno = request.form.get('probno')
+    name = request.form.get('name')
+    imgfile = request.files.get('imgfile')
+    if not probno or not name or not imgfile:
+        return {'ok': False, 'error': '参数不足。'}, 400
+    image = db.session.get(ProbImage, (probno, name))
+    if not image:
+        return {'ok': False, 'error': '未能找到图片。'}, 404
+    if not current_user == image.uploader and not current_user.isadmin:
+        abort(403)
+    data = imgfile.read()
+    if not data:
+        return {'ok': False, 'error': '上传文件为空。'}, 400
+    image.data = data
+    image.size = len(data)
+    image.mimetype = imgfile.mimetype or image.mimetype
+    image.uid = current_user.uid
+    db.session.commit()
+    return {'ok': True}
+
+
+@app.route('/api/image/rename', methods=['POST'])
+def api_image_rename():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    probno = request.json.get('probno')
+    oldname = request.json.get('oldname')
+    newname = request.json.get('newname')
+    if not probno or not oldname or not newname:
+        return {'ok': False, 'error': '参数不足。'}, 400
+    image = db.session.get(ProbImage, (probno, oldname))
+    if not image:
+        return {'ok': False, 'error': '未能找到图片。'}, 404
+    if not (current_user == image.uploader and not current_user.isadmin):
+        abort(403)
+    # check duplicate
+    exists = db.session.get(ProbImage, (probno, newname))
+    if exists:
+        return {'ok': False, 'error': '目标文件名已存在。'}, 400
+    # create new row and delete old one
+    newimg = ProbImage(
+        probno=image.probno, name=newname, uid=image.uid,
+        size=image.size, mimetype=image.mimetype, data=image.data)
+    db.session.add(newimg)
+    db.session.delete(image)
+    db.session.commit()
+    return {'ok': True, 'newurl': url_for('image_preview', probno=probno, imagename=newname)}
+
+
+@app.route('/api/image/delete', methods=['POST'])
+def api_image_delete():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    probno = request.json.get('probno')
+    name = request.json.get('name')
+    if not probno or not name:
+        return {'ok': False, 'error': '参数不足。'}, 400
+    image = db.session.get(ProbImage, (probno, name))
+    if not image:
+        return {'ok': False, 'error': '未能找到图片。'}, 404
+    if not current_user == image.uploader and not current_user.isadmin:
+        abort(403)
+    db.session.delete(image)
+    db.session.commit()
+    return {'ok': True, 'url': url_for('images_list', probno=probno)}
 
 
 @app.route('/probs/<probno>/submit', methods=['POST'])

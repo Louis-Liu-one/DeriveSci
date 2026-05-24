@@ -41,14 +41,14 @@
 
 {%- macro delete_prob(prob) -%}
     <a class="sidebar-link" data-probno="{{ prob.probno }}" href="javascript:void(0)"
-        onclick="if (confirm('确定要删除题目？')) deleteProb(this.dataset.probno);">
+        onclick="if (confirm('确定要删除题目？此操作不可撤销。')) deleteProb(this.dataset.probno);">
         <div class="sidebar-item"><i class="fas fa-trash-can"></i>删除题目</div>
     </a>
 {%- endmacro -%}
 
 {%- macro delete_solution(solution) -%}
     <a class="sidebar-link" data-probno="{{ solution.probno }}" href="javascript:void(0)"
-        data-solno="{{ solution.solno }}" onclick="if (confirm('确定要删除题解？'))
+        data-solno="{{ solution.solno }}" onclick="if (confirm('确定要删除题解？此操作不可撤销。'))
             deleteSolution(this.dataset.probno, this.dataset.solno);">
         <div class="sidebar-item"><i class="fas fa-trash-can"></i>删除题解</div>
     </a>

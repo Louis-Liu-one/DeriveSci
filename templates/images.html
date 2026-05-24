@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "includes/users.html" import user_avatar_img, user_name %}
+
+{% block title %}问题{{ prob.probno }}的图片列表 - MathProbs{% endblock %}
+
+{% block static_files -%}
+<link rel="stylesheet" href="{{- url_for('static', filename='problist.css') -}}">
+<link rel="stylesheet" href="{{- url_for('static', filename='images.css') -}}">
+<script src="{{- url_for('static', filename='problist-utils.js') -}}"></script>
+<script src="{{- url_for('static', filename='images-utils.js') -}}"></script>
+{%- endblock %}
+
+{% block navbar_title %}问题{{ prob.probno }} —— 图片列表{% endblock %}
+
+{% block body %}
+<aside>
+    <h3>图片管理</h3>
+    <a class="sidebar-link" href="{{ prob.url() }}">
+        <div class="sidebar-item"><i class="fas fa-book"></i>返回题目</div>
+    </a>
+</aside>
+{%- if images -%}
+    <article class="main-article problist-container"
+        id="imagesMain" data-probno="{{- prob.probno -}}">
+        <div class="problist-wrap">
+            <table class="problist">
+                <thead>
+                    <tr class="probhead">
+                        <th>文件名</th><th>大小</th><th>上传者</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%- for img in images -%}
+                        <tr class="image-row" data-name="{{- img.name -}}"
+                            onclick="location.href = '{{- url_for('image_preview',
+                                probno=prob.probno, imagename=img.name) -}}'">
+                            <td class="probno filename">{{- img.name -}}</td>
+                            <td>{{ (img.size or 0)|filesizeformat }}</td>
+                            <td class="source">
+                                {%- if img.uploader -%}
+                                    <div>
+                                        {{- user_avatar_img(img.uploader) -}}
+                                        {{- user_name(img.uploader) -}}
+                                    </div>
+                                {%- else -%}系统{%- endif -%}
+                            </td>
+                        </tr>
+                    {%- endfor -%}
+                </tbody>
+            </table>
+        </div>
+    </article>
+{%- else -%}
+    <article class="main-article" id="imagesMain"
+        data-probno="{{- prob.probno -}}">
+        <p>暂无图片</p>
+    </article>
+{%- endif -%}
+{% endblock %}

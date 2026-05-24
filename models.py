@@ -466,10 +466,11 @@ class ProbImage(db.Model):
     probno = db.Column(
         db.String(16), db.ForeignKey('probs.probno'), primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
-    uid = db.Column(db.Integer)
+    uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
     size = db.Column(db.Integer)
     mimetype = db.Column(db.String(64))
     data = db.Column(db.LargeBinary)
+    uploader = db.relationship('User', backref='uploaded_images')
 
 
 class ProbLabel(db.Model):

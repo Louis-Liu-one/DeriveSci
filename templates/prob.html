@@ -27,6 +27,9 @@
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
     {%- endif -%}
     {{- view_solution(prob) -}}{{- upload_solution(prob) -}}
+    <a class="sidebar-link" href="{{ url_for('images_list', probno=prob.probno) }}" target="_blank">
+        <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
+    </a>
     {%- if current_user.isadmin -%}
         <a class="sidebar-link" href="javascript:void(0)" id="officialSidebarSetter" data-probno="{{ prob.probno }}">
             <div class="sidebar-item" id="officialSetterBlock">

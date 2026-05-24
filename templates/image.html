@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}问题{{ prob.probno }}的图片 - MathProbs{% endblock %}
+
+{% block static_files -%}
+<link rel="stylesheet" href="{{- url_for('static', filename='formstyle.css') -}}">
+<link rel="stylesheet" href="{{- url_for('static', filename='images.css') -}}">
+<script src="{{- url_for('static', filename='images-utils.js') -}}"></script>
+{%- endblock %}
+
+{% block navbar_title %}问题{{ prob.probno }} —— 图片预览{% endblock %}
+
+{% block body %}
+<aside>
+    <h3>图片操作</h3>
+    <a class="sidebar-link" href="{{ url_for('images_list', probno=prob.probno) }}">
+        <div class="sidebar-item"><i class="fas fa-list"></i>图片列表</div>
+    </a>
+    {% if editable %}
+        <div class="sidebar-item" onclick="showReuploadModal();">
+            <i class="fas fa-cloud-arrow-up"></i>重新上传
+        </div>
+        <div class="sidebar-item" onclick="deleteImage();">
+            <i class="fas fa-trash-can"></i>删除
+        </div>
+    {% endif %}
+</aside>
+<article class="main-article" id="imageMain"
+    data-probno="{{ prob.probno }}" data-imagename="{{ image.name }}">
+    <h3 id="imageTitleDisplay">{{ image.name }}</h3>
+    <form id="imageTitleForm" class="form-base no-edge hidden">
+        <span>
+            <input id="imageTitleInput" name="newname" value="{{ image.name }}">
+            <button id="saveTitleBtn">保存</button>
+        </span>
+    </form>
+    <div class="image-preview">
+        <img id="previewImage" src="{{- url_for(
+            'imagefile', probno=prob.probno, imagename=image.name) -}}">
+    </div>
+</article>
+<dialog id="reuploadModal">
+    <form id="reuploadForm" class="form-base"
+        method="dialog" enctype="multipart/form-data">
+        <h3>重新上传 {{ image.name }}</h3>
+        <span>
+            <label for="reuploadFile">选择文件：</label>
+            <input type="file" id="reuploadFile" name="imgfile" accept="image/*">
+        </span>
+        <span>
+            <button type="button" id="reuploadCancel">取消</button>
+            <button type="submit">上传</button>
+        </span>
+    </form>
+</dialog>
+{% endblock %}
