@@ -241,9 +241,9 @@ $$
 
 公式中可以动态指定不同的数学字体。
 
-#### 字体样式
+#### 字体族
 
-除了默认字体，还可以使用 `\mathrm` 等命令使用其它数学字体，使用方法是 `\mathrm{...}`。以下是一些数学字体及其渲染效果：
+除了默认字体，还可以使用 `\mathrm` 等命令使用其它数学字体族，使用方法是 `\mathrm{ABC}`。以下是一些数学字体及其渲染效果：
 命令 | 名称 | 字母效果 | 数字效果
 :----------------: | :----: | :-: | :-:
 `\mathnormal` | 默认字体 | $ABCDEFGHIJKLMNOPQRSTUVWXYZ$            | $1234567890$
@@ -255,6 +255,8 @@ $$
 `\mathcal`    | 书法体   | $\mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathcal{1234567890}$
 `\mathscr`    | 花体     | $\mathscr{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$  | $\mathscr{1234567890}$
 `\mathfrak`   | 哥特体   | $\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$ | $\mathfrak{1234567890}$
+
+其中 `\mathbb` 又作 `\Bbb`，其支持所有大写字母和 `k`。`\mathbb{k}` 又作 `\Bbbk`。
 
 例如，可以使用 `\mathrm dx` 渲染 $\mathrm dx$。注意，由于这里没有显式指定参数，命令后的第一个整体，即 `d` 被指定为第一个参数，故只有 `d` 被渲染为罗马体。
 

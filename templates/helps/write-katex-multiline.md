@@ -146,14 +146,14 @@ $$
 $$
 D(x) = \begin{cases}
     1, & x \in \mathbb Q \\
-    0, & x \in \mathbb R \setminus \mathbb Q
+    0, & x \in \R \setminus \mathbb Q
 \end{cases}
 $$
 ```
 $$
 D(x) = \begin{cases}
     1, & x \in \mathbb Q \\
-    0, & x \in \mathbb R \setminus \mathbb Q
+    0, & x \in \R \setminus \mathbb Q
 \end{cases}
 $$
 `cases` 环境中使用行内公式渲染模式。如果需要使用行间公式模式，可以使用 `dcases` 环境。
@@ -191,3 +191,5 @@ $$
     \exp(x) &= \sum_{k = 0}^\infty \frac1{k!}x^k \tag{$\gamma$}
 \end{align}
 $$
+
+使用 `\tag*` 命令可以得到没有圆括号的编号。

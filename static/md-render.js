@@ -1,6 +1,8 @@
 
 const md = markdownit({html: true})
-    .use(mdItPluginKatex.katex, {output: 'html', delimiters: 'all', throwOnError: false})
+    .use(mdItPluginKatex.katex, {
+        output: 'html', delimiters: 'all', throwOnError: false,
+        macros: {'\\dif': '\\mathrm{d}'}})
     .use(mdItPluginFigure.figure);
 
 md.renderer.rules.image = function (tokens, idx, options, env, self) {

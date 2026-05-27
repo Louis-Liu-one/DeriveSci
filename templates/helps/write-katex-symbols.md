@@ -251,6 +251,16 @@ $$ a \heartsuit b \quad a \mathbin\heartsuit b $$
 `\twoheadrightarrow`   | $\twoheadrightarrow$   |`\uparrow`             | $\uparrow$             |`\updownarrow`         | $\updownarrow$
 `\upharpoonleft` | $\upharpoonleft$ |`\upharpoonright` 或 `\restriction` | $\upharpoonright$ |`\upuparrows` | $\upuparrows$
 
+其中有如下的简写：
+
+全称 | 简写 | 效果 | 全称 | 简写 | 效果
+:---------------: | :-------------------: | :------: | :---------------: | :------: | :-----:
+`\Leftarrow`      | `\Larr` 或 `\lArr`    | $\Larr$  | `\leftarrow`      | `\larr`  | $\larr$
+`\Rightarrow`     | `\Rarr` 或 `\rArr`    | $\Rarr$  | `\rightarrow`     | `\rarr`  | $\rarr$
+`\Uparrow`        | `\Uarr` 或 `\uArr`    | $\Uarr$  | `\uparrow`        | `\uarr`  | $\uarr$
+`\Downarrow`      | `\Darr` 或 `\dArr`    | $\Darr$  | `\downarrow`      | `\darr`  | $\darr$
+`\Leftrightarrow` | `\Lrarr` 或 `\lrArr`  | $\Lrarr$ | `\leftrightarrow` | `\lrarr` | $\lrarr$
+
 #### 添加关系描述
 
 可以使用 `\stackrel` 命令在关系符上方添加描述。其接受两个参数，第一个表示要添加的描述，第二个表示下方的关系符。例如：
@@ -282,15 +292,20 @@ $$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2 \uparrow} $$
 
 公式中可以使用**括号**。一对括号左侧的称为开符号，右侧的称为闭符号。如下是常用的括号：
 开符号 | 闭符号 | 效果 | 备注
-:---------------: | :--------------: | :----------------: | :------:
-`(`               | `)`              | $(x)$              | 圆括号
-`[`               | `]`              | $[x]$              | 方括号
-`\{` 或 `\lbrace` | `\}` 或 `\rbrace` | $\{x\}$            | 花括号
-`\langle`         | `\rangle`        | $\langle x\rangle$ | 尖括号
-`\lfloor`         | `\rfloor`        | $\lfloor x\rfloor$ | 向下取整
-`\lceil`          | `\rceil`         | $\lceil x\rceil$   | 向上取整
-`\lvert`          | `\rvert`         | $\lvert x\rvert$   | 绝对值
-`\lVert`          | `\rVert`         | $\lVert x\rVert$   | 范数
+:-----------------: | :-----------------: | :----------------------: | :------:
+`(` 或 `\lparen`    | `)` 或 `\rparen`     | $(x)$                    | 圆括号
+`[` 或 `\lbrack`    | `]` 或 `\rbrack`     | $[x]$                    | 方括号
+`\lgroup`           | `\rgroup`           | $\lgroup x\rgroup$       | 分组
+`\llbracket`        | `\rrbracket`        | $\llbracket x\rrbracket$ | 双层方括号
+`\{` 或 `\lbrace`   | `\}` 或 `\rbrace`    | $\{x\}$                  | 花括号
+`\lBrace`           | `\rBrace`           | $\lBrace x\rBrace$       | 花方括号
+`\langle` 或 `lang` | `\rangle` 或 `\rang` | $\lang x\rang$           | 尖括号
+`\lfloor`           | `\rfloor`           | $\lfloor x\rfloor$       | 向下取整
+`\lceil`            | `\rceil`            | $\lceil x\rceil$         | 向上取整
+`\lvert`            | `\rvert`            | $\lvert x\rvert$         | 绝对值
+`\lVert`            | `\rVert`            | $\lVert x\rVert$         | 范数
+`\ulcorner`         | `\urcorner`         | $\ulcorner x\urcorner$   | 方框上角
+`\llcorner`         | `\lrcorner`         | $\llcorner x\lrcorner$   | 方框下角
 
 使用上表中的 `\lvert`、`\rvert`、`\lVert`、`\rVert` 比直接使用 `\vert`、`\Vert` 或 `|`、`\|` 更好，因为它们提供了良好的间距。
 

@@ -140,7 +140,7 @@ S = {x | 14 <= x <= 36};
 ```
 S = {x in Naturals | 14 <= x <= 36};
 ```
-这相当于 $\{x \in \mathbb N \mid 14 \le x \le 36 \}$；
+这相当于 $\{x \in \N \mid 14 \le x \le 36 \}$；
 
 #### 区间
 
@@ -152,11 +152,11 @@ S = {x in Naturals | 14 <= x <= 36};
 名称 | 意义
 :------------: | ---
 `UniversalSet` | 全集 $\mathbb U$
-`Reals`        | 实数集 $\mathbb R$
+`Reals`        | 实数集 $\R$
 `Rationals`    | 有理数集 $\mathbb Q$
-`Integers`     | 整数集 $\mathbb Z$
-`Naturals0`    | 自然数集 $\mathbb N$，包含 $0$
-`Naturals`     | 正整数集 $\mathbb N^+$（又作 $\mathbb N^*$），不含 $0$
+`Integers`     | 整数集 $\Z$
+`Naturals0`    | 自然数集 $\N$，包含 $0$
+`Naturals`     | 正整数集 $\N^+$（又作 $\N^*$、$\N_+$），不含 $0$
 `EmptySet`     | 空集 $\emptyset$
 
 #### 集合的常用操作
