@@ -26,8 +26,8 @@
     </div>
     <div id="helpGrid" class="help-grid">
         {%- for item in helplist -%}
-            <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}" target="_blank"
-                data-title="{{ item.title }}" data-desc="{{ item.description }}">
+            <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}"
+                target="_blank" data-title="{{ item.title }}" data-desc="{{ item.description }}">
                 <div class="card-icon">
                     <i class="{{ item.icon if item.icon else 'fas fa-circle-info' }}"></i>
                 </div>
@@ -48,7 +48,8 @@
                 cards.forEach(c => {
                     const title = (c.dataset.title || '').toLowerCase();
                     const desc = (c.dataset.desc || '').toLowerCase();
-                    c.style.display = (title.indexOf(q) !== -1 || desc.indexOf(q) !== -1) ? 'flex' : 'none';
+                    c.style.display = (title.indexOf(q) !== -1
+                        || desc.indexOf(q) !== -1) ? 'flex' : 'none';
                 });
             });
         })();

@@ -3,7 +3,8 @@
 {% block title %}登录 - MathProbs{% endblock %}
 
 {% block left_content %}
-<form class="form-base" id="loginForm" data-nextpage="{{ next }}" onsubmit="userLogin(); return false">
+<form class="form-base" id="loginForm" data-nextpage="{{ next }}"
+    onsubmit="userLogin(); return false;">
     <h3>登录</h3>
     <span>
         <label for="userName">用户名：</label>
@@ -22,7 +23,11 @@
 
 {% block right_content %}
 <h2>没有账号？</h2><p>立即注册</p>
-<a href="{{ url_for('register', next=next) }}"><button class="jump" type="button">注册</button></a>
+<a href="{{ url_for('register', next=next) }}">
+    <button class="jump" type="button">注册</button>
+</a>
 <h2>不想登录或注册？</h2><p>直接看题</p>
-<a href="{{ url_for('problist') }}"><button class="jump" type="button">题集</button></a>
+<a href="{{ url_for('problist') }}">
+    <button class="jump" type="button">题集</button>
+</a>
 {% endblock %}

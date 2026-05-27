@@ -73,8 +73,7 @@
                                 {{- all_chats[uid].unread|tojson -}}
                             </div>
                         {%- else -%}
-                            <div class="unread-badge" style="display: none">
-                            </div>
+                            <div class="unread-badge" style="display: none"></div>
                         {%- endif -%}
                     </div>
                     {{- user_name(user) -}}
@@ -112,7 +111,8 @@
                         {%- if unread_sections.prob_comments -%}
                             <div class="comments-container">
                                 {%- for comment in unread_sections.prob_comments -%}
-                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                    {{- commentdiv(
+                                        comment, with_post=True, secondlevel=True) -}}
                                     <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
@@ -123,7 +123,8 @@
                         {%- if unread_sections.solution_comments -%}
                             <div class="comments-container">
                                 {%- for comment in unread_sections.solution_comments -%}
-                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                    {{- commentdiv(
+                                        comment, with_post=True, secondlevel=True) -}}
                                     <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
