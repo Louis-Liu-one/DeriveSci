@@ -60,7 +60,7 @@ function bindImagePreview() {
             if (reuploadModal.close) reuploadModal.close();
             else reuploadModal.classList.add('hidden');
         });
-        reuploadForm.addEventListener('submit', async function (ev) {
+        reuploadForm.addEventListener('submit', async function(ev) {
             ev.preventDefault();
             const fileInput = document.getElementById('reuploadFile');
             if (!fileInput || !fileInput.files.length) { alert('请选择文件'); return; }
@@ -78,7 +78,7 @@ function bindImagePreview() {
     }
 
     // Delete
-    window.deleteImage = async function () {
+    window.deleteImage = async function() {
         if (!confirm('确定删除此图片吗？此操作不可撤销。')) return;
         try {
             const resp = await fetch('/api/image/delete', {
@@ -91,7 +91,7 @@ function bindImagePreview() {
     };
 
     // helper to show modal/dialog
-    window.showReuploadModal = function () {
+    window.showReuploadModal = function() {
         if (reuploadModal) {
             if (reuploadModal.showModal) reuploadModal.showModal();
             else reuploadModal.classList.remove('hidden');

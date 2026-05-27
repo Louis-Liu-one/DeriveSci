@@ -2,10 +2,17 @@
 const md = markdownit({html: true})
     .use(mdItPluginKatex.katex, {
         output: 'html', delimiters: 'all', throwOnError: false,
-        macros: {'\\dif': '\\mathrm{d}'}})
+        macros: {
+            '\\dif': '\\mathrm{d}',
+            '\\dx': '\\dif{x}', '\\dy': '\\dif{y}', '\\dz': '\\dif{z}',
+            '\\dt': '\\dif{t}', '\\du': '\\dif{u}', '\\dv': '\\dif{v}',
+            '\\E': '\\mathrm{e}', '\\e': '\\mathrm{e}',
+            '\\I': '\\mathrm{i}', '\\i': '\\mathrm{i}',
+            '\\paren': '\\left(#1\\right)',
+        }})
     .use(mdItPluginFigure.figure);
 
-md.renderer.rules.image = function (tokens, idx, options, env, self) {
+md.renderer.rules.image = function(tokens, idx, options, env, self) {
     const token = tokens[idx];
     const srcIndex = token.attrIndex('src');
     if (srcIndex >= 0) {
@@ -24,7 +31,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
     }
     return self.renderToken(tokens, idx, options); };
 
-if (window.hljs) md.options['highlight'] = function (str, lang) {
+if (window.hljs) md.options['highlight'] = function(str, lang) {
         if (lang && hljs.getLanguage(lang))
             try { return hljs.highlight(
                 str, {language: lang, ignoreIllegals: true}).value; } catch { } };

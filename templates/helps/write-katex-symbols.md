@@ -374,6 +374,22 @@ $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 
 省略号可以用于排版矩阵，参见[矩阵]({{ url_for('helps', howto='write-markdown-equations', _anchor='矩阵') }})一节。
 
+## 预定义的新符号
+
+为了方便使用，我们在 $\KaTeX$ 支持的基础上预定义了如下一些符号：
+
+命令 | 效果 | 命令 | 效果 | 命令 | 效果
+:----: | :----: | :----: | :----: | :----: | :----: |
+`\dif` | $\dif$ | `\e` 或 `\E` | $\e$ | `\i` 或 `\I` | $\i$
+`\dx` | $\dx$ | `\dy` | $\dy$ | `\dz` | $\dz$
+`\dt` | $\dt$ | `\du` | $\du$ | `\dv` | $\dv$
+
+同时，我们预定义了 `\paren` 命令用于定界符圆括号：
+```latex
+$$ \left(\frac12\right) \Lrarr \paren{\frac12} $$
+```
+$$ \left(\frac12\right) \Lrarr \paren{\frac12} $$
+
 ## 参考与引用
 
 我们在编写这一文档时，参考了《$\LaTeX$ 入门》一书中的第四章有关公式的内容。如有侵权，请联系删除。
