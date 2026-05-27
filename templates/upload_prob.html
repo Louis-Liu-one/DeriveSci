@@ -88,8 +88,11 @@
         <span>
             <button type="button" onclick="renderElement(
                 mdPreview, statement.value, 'block', markdownImageBasePath);">预览</button>
-            {%- if editmode -%}<button type="button" onclick="editProb();">上传</button>
-            {%- else -%}<button type="button" onclick="uploadProb();">上传</button>{%- endif -%}
+            {%- if editmode -%}
+                <button type="button" onclick="editProb();">上传</button>
+            {%- else -%}
+                <button type="button" onclick="uploadProb();">上传</button>
+            {%- endif -%}
         </span>
     </form>
 </article>
@@ -108,11 +111,13 @@
 <script>
     probLabel.addEventListener('keydown', addLabel);
     {%- if editmode -%}
-        const markdownImageBasePath = "/images/{{ prob.probno|urlencode }}/";
+        const markdownImageBasePath = '/images/{{ prob.probno|urlencode }}/';
         document.addEventListener('DOMContentLoaded', () => {
             addRawAnswers({{ prob.get_answer()|list|tojson }});
             addRawLabels({{ prob.as_labelnames()|list|tojson }});
         });
+    {%- else -%}
+        const markdownImageBasePath = '';
     {%- endif -%}
 </script>
 {% endblock %}
