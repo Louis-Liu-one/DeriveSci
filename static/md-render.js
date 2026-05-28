@@ -3,12 +3,13 @@ const md = markdownit({html: true})
     .use(mdItPluginKatex.katex, {
         output: 'html', delimiters: 'all', throwOnError: false,
         macros: {
-            '\\dif': '\\mathrm{d}',
+            '\\dif': '\\mathop{}\\!\\mathrm{d}',
             '\\dx': '\\dif{x}', '\\dy': '\\dif{y}', '\\dz': '\\dif{z}',
             '\\dt': '\\dif{t}', '\\du': '\\dif{u}', '\\dv': '\\dif{v}',
             '\\E': '\\mathrm{e}', '\\e': '\\mathrm{e}',
             '\\I': '\\mathrm{i}', '\\i': '\\mathrm{i}',
             '\\paren': '\\left(#1\\right)',
+            '\\abs': '\\left\\lvert#1\\right\\rvert',
         }})
     .use(mdItPluginFigure.figure);
 
