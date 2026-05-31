@@ -158,6 +158,12 @@ class FPSliceList:
         self.slices = tuple(slices)
 
 
+class ReturnValue:
+
+    def __init__(self, value):
+        self.value = value
+
+
 class FPElement:
     '''一切语法树结点的基类。
 
@@ -227,7 +233,7 @@ class ReturnStatement(FPElement):
         return f'Return({self.expr})'
 
     def do(self, context=None, local_scope=False):
-        return self.expr.do()
+        return ReturnValue(self.expr.do())
 
 
 class Assignment(FPElement):
@@ -275,9 +281,10 @@ class FuncDefine(FPElement):
             args = list(args)
             kwargs = args.pop() if args and isinstance(
                 args[-1], dict | sp.Dict) else {}
-            return self.funcbody.do({**{
+            result = self.funcbody.do({**{
                 sp.Symbol(key): val for key, val in zip(
                     self.funcargs, args)}, **kwargs}, local_scope=True)
+            return result.value if isinstance(result, ReturnValue) else result
 
         self.function = types.new_class(
             str(funcident), (sp.Function,), {},
@@ -379,7 +386,7 @@ class Statements(FPElement):
         result = None
         for statement in self.statements:
             result = statement.do()
-            if isinstance(statement, ReturnStatement):
+            if isinstance(result, ReturnValue):
                 return result
         return result
 
@@ -773,5 +780,9 @@ def fpeval(parsed_string, context=None):
     '''计算语句的返回值。'''
     if context is not None:
         parsed_string.setup_stack(ProgramStack({
-            _ident2symbol(key): val for key, val in context.items()}))
-    return sp.simplify(_as_sympy(parsed_string.do()))
+            _ident2symbol(key): val if isinstance(
+                val, int | float | complex | sp.Basic)
+            else fpeval(fpparse(val)) for key, val in context.items()}))
+    result = parsed_string.do()
+    return sp.simplify(_as_sympy(
+        result.value if isinstance(result, ReturnValue) else result))

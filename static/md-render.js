@@ -8,6 +8,7 @@ const md = markdownit({html: true})
             '\\dt': '\\dif{t}', '\\du': '\\dif{u}', '\\dv': '\\dif{v}',
             '\\E': '\\mathrm{e}', '\\e': '\\mathrm{e}',
             '\\I': '\\mathrm{i}', '\\i': '\\mathrm{i}',
+            '\\qed': '\\blacksquare', '\\qedsymbol': '\\blacksquare',
             '\\paren': '\\left(#1\\right)',
             '\\abs': '\\left\\lvert#1\\right\\rvert',
         }})

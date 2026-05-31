@@ -25,7 +25,7 @@ def _judge_equal(expr1, expr2):
             _judge_equal(expr1[i], expr2[i]) for i in range(expr1.shape[0]))
     elif isinstance(expr1, Expr) and isinstance(expr2, Expr):
         return expr1.equals(expr2)
-    return False
+    return expr1 == expr2
 
 
 def fpparse_with_timeout(answer):
@@ -33,17 +33,19 @@ def fpparse_with_timeout(answer):
 
 
 def fpeval_with_timeout(parsed_answer, context=None):
-    return func_timeout(.2, fpeval, args=(parsed_answer, context))
+    return func_timeout(.3, fpeval, args=(parsed_answer, context))
 
 
 def check_answer(answer, userans_parsed, context=None):
     try:
+        context_processed = {
+            key: fpeval(fpparse(val)) for key, val in context.items()}
         answer_parsed = fpparse_with_timeout(answer)
-        answer_eval = fpeval_with_timeout(answer_parsed, context)
+        answer_eval = fpeval_with_timeout(answer_parsed, context_processed)
     except BaseException:
         return TPStatus.ANSERR
     try:
-        userans_eval = fpeval_with_timeout(userans_parsed, context)
+        userans_eval = fpeval_with_timeout(userans_parsed, context_processed)
         return TPStatus.CORRECT if _judge_equal(
             answer_eval, userans_eval) else TPStatus.INCORRECT
     except FunctionTimedOut:
