@@ -36,6 +36,7 @@ API：*
 /api/prob/review-comment    保存审核意见
 /api/prob/edit              编辑题目
 /api/prob/delete            删除题目
+/api/prob/search-content    搜索题目内容
 /api/solution/upload        上传题解
 /api/solution/edit          编辑题解
 /api/solution/delete        删除题解
@@ -150,22 +151,21 @@ def api_post_comment():
 # =========================== 题目各项网页与API ===========================
 
 
-@app.route('/probs/', methods=['GET', 'POST'])
+@app.route('/probs/')
 def problist():
     reviewmode = request.args.get('reviewmode') == 'True'
     if reviewmode and not (
             current_user.is_authenticated and current_user.isadmin):
         return redirect(url_for('problist'))
-    form = {}
-    keys = 'probno', 'probtitle', 'statement', 'problabels', 'source', \
-        'probtype', 'review_status' if reviewmode else ''
-    if request.method == 'POST':
-        for key in keys:
-            form[key] = request.form.get(key)
-    probs, query = search_probs(form, reviewmode=reviewmode)
+    if reviewmode:
+        all_query = Prob.query.order_by(Prob.probno.asc())
+    else:
+        all_query = Prob.query.filter(Prob.review_status == 1).order_by(Prob.probno.asc())
+    probs_data = [p.to_dict() for p in all_query]
+    probs = list(all_query)
     return render_template(
         'problist.html', reviewmode=reviewmode,
-        probs=probs, query=query, form=form)
+        probs=probs, probs_data=probs_data, form={})
 
 
 @app.route('/labels/')
@@ -173,19 +173,19 @@ def labellist():
     return render_template('labellist.html', labels=ProbLabel.query.all())
 
 
-@app.route('/labels/<labelname>', methods=['GET', 'POST'])
+@app.route('/labels/<labelname>')
 def problistoflabel(labelname):
-    form = {}
-    keys = 'probno', 'probtitle', 'statement', \
-        'problabels', 'source', 'probtype'
-    if request.method == 'POST':
-        for key in keys:
-            form[key] = request.form.get(key)
-    probs, query = search_probs(form, Prob.problabels.any(
+    # Label page: server renders problems that have the given label
+    base_query = Prob.query.filter(Prob.problabels.any(
         ProbLabel.labelname == labelname))
+    if not (current_user.is_authenticated and current_user.isadmin):
+        base_query = base_query.filter(Prob.review_status == 1)
+    all_query = base_query.order_by(Prob.probno.asc())
+    probs_data = [p.to_dict() for p in all_query]
+    probs = list(all_query)
     return render_template(
-        'problist.html', labelname=labelname, oflabel=True, form=form,
-        probs=probs, query=query)
+        'problist.html', labelname=labelname, oflabel=True, form={},
+        probs=probs, probs_data=probs_data, query=None)
 
 
 @app.route('/probs/<probno>')
@@ -194,6 +194,27 @@ def probs(probno):
     if prob and prob.viewable_for(current_user):
         return render_template('prob.html', prob=prob)
     return render_template('notfound.html', error='未能找到题目。'), 404
+
+
+@app.route('/api/prob/search-content', methods=['POST'])
+def api_search_probs_content():
+    data = request.get_json() or {}
+    statement = data.get('statement', '')
+    reviewmode = data.get('reviewmode') or request.args.get('reviewmode') == 'True'
+    oflabel = data.get('oflabel') or False
+    labelname = data.get('labelname') or None
+    if not statement:
+        return jsonify({'results': []})
+    # build query inline: optionally restrict to label, respect visibility
+    q = Prob.query
+    if oflabel and labelname:
+        q = q.filter(Prob.problabels.any(ProbLabel.labelname == labelname))
+    if not reviewmode:
+        q = q.filter(Prob.review_status == 1)
+    q = q.filter(Prob.statement.like(f"%{statement}%"))
+    q = q.order_by(Prob.probno.asc())
+    probs_list = list(q)
+    return jsonify({'results': [p.to_dict() for p in probs_list]})
 
 
 @app.route('/images/<probno>/<imagename>')
@@ -208,7 +229,7 @@ def imagefile(probno, imagename):
     response = make_response(image.data)
     response.headers['Content-Type'] = image.mimetype
     response.headers['ETag'] = etag
-    response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存10min
+    response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存 10 min
     return response
 
 

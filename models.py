@@ -24,7 +24,7 @@ from anschecker import check_answers, testpoints_passedlist
 __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow',
     'find_user', 'register_user', 'unregister_user',
-    'Prob', 'ProbImage', 'ProbLabel', 'get_prob', 'search_probs', 'add_prob',
+    'Prob', 'ProbImage', 'ProbLabel', 'get_prob', 'add_prob',
     'get_solution', 'add_solution', 'add_images', 'add2labels',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
 ]
@@ -397,6 +397,22 @@ class Prob(db.Model):
     def url(self, anchor=None, **kwargs):
         return url_for('probs', probno=self.probno, _anchor=anchor, **kwargs)
 
+    def to_dict(self):
+        """Return a lightweight dict for frontend filtering (exclude statement).
+
+        Fields: probno, probtitle, labels (list), source_name, source_url,
+        isofficial (bool), review_status (int), url
+        """
+        return {
+            'probno': self.probno, 'probtitle': self.probtitle or '',
+            'labels': sorted(list(self.as_labelnames())) if self.problabels else [],
+            'source_name': self.source.name if getattr(self, 'source', None) else '',
+            'source_url': self.source.url() if getattr(self, 'source', None) else '',
+            'isofficial': bool(self.isofficial),
+            'review_status': int(self.review_status) if self.review_status is not None else -1,
+            'url': self.url(),
+        }
+
     def __str__(self):
         return f'问题 {self.probno}'
 
@@ -487,45 +503,6 @@ class ProbLabel(db.Model):
 def get_prob(probno):
     return db.session.get(Prob, str(probno))
 
-
-def search_probs(form, extra_req=None, reviewmode=False):
-    requirements = []
-    if form.get('probno'):
-        requirements.append(Prob.probno == form['probno'])
-    if form.get('probtitle'):
-        requirements.append(Prob.probtitle.like(f'%{form['probtitle']}%'))
-    if form.get('statement'):
-        requirements.append(Prob.statement.like(f'%{form['statement']}%'))
-    if form.get('problabels'):
-        requirements.append(db.or_(Prob.problabels.any(
-            ProbLabel.labelname == problabel) for problabel
-            in csv2list(form['problabels'])))
-    if form.get('source'):
-        source = []
-        for name in csv2list(form['source']):
-            user = find_user(name, 'name')
-            if user:
-                source.append(user)
-        if source:
-            requirements.append(db.or_(
-                Prob.source == user for user in source))
-    if form.get('probtype') in ('officialprobs', 'noofficialprobs'):
-        requirements.append(Prob.isofficial == (
-            form['probtype'] == 'officialprobs'))
-    if reviewmode and form.get('review_status') in (
-            'toreview', 'accepted', 'rejected'):
-        requirements.append(Prob.review_status == {
-            'toreview': -1, 'rejected': 0, 'accepted': 1}
-            [form['review_status']])
-    flag = bool(requirements)
-    if extra_req is not None:
-        requirements.append(extra_req)
-    if not reviewmode:
-        requirements.append(Prob.review_status == 1)
-    if not requirements:
-        return Prob.query.order_by(Prob.probno.asc()), flag
-    return Prob.query.filter(*requirements).order_by(
-        Prob.probno.asc()), flag
 
 
 def add_prob(**kwargs):

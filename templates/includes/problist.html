@@ -13,7 +13,13 @@
             </thead>
             <tbody>
                 {%- for prob in probs -%}
-                    <tr data-url="{{ prob.url() }}" onclick="window.open(this.dataset.url);">{{-''-}}
+                    <tr data-url="{{ prob.url() }}" data-probno="{{ prob.probno }}"{{-''-}}
+                        data-title="{{ (prob.probtitle or '')|lower }}"{{-''-}}
+                        data-labels="{{ prob.as_labelnames()|join(',') }}"{{-''-}}
+                        data-source="{{ (prob.source.name if prob.source else '') }}"{{-''-}}
+                        data-isofficial="{{ 1 if prob.isofficial else 0 }}"{{-''-}}
+                        data-review="{{ prob.review_status }}"{{-''-}}
+                        onclick="window.open(this.dataset.url);">{{-''-}}
                         <td class="probno">{{ prob.probno }}</td>{{-''-}}
                         <td class="probtitle">{{ prob.probtitle }}</td>
                         {{- problabels_problist(prob) -}}

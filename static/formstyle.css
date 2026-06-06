@@ -100,5 +100,7 @@ form.form-base button:disabled,
 form.form-base input::file-selector-button:disabled {
     background: #999999; cursor: not-allowed; opacity: .6; box-shadow: none; }
 
-article.body-article.form-container { width: calc(45% + 36px); padding: 0 !important; }
-article.body-article.form-container form.form-base { border: none; min-height: 100%; }
+.form-container { padding: 0 !important; }
+article.body-article.form-container { width: calc(45% + 36px); }
+article.right-side-article.form-container { width: calc(30% + 36px); }
+.form-container form.form-base { border: none; min-height: calc(100% - 36px); }

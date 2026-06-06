@@ -11,6 +11,12 @@
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<script>
+    window.PROBS_DATA = {{ probs_data|tojson }};
+    window.REVIEWMODE = {{ 'true' if reviewmode else 'false' }};
+    window.OF_LABEL = {{ 'true' if oflabel else 'false' }};
+    window.LABEL_NAME = {{ labelname|tojson if oflabel else 'null' }};
+</script>
 <script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
 {% endblock %}
 
@@ -41,14 +47,14 @@
     {%- endif -%}
 </aside>
 <article class="body-article problist-container">
-    {%- if not probs.first() -%}<p style="text-align: center;">暂无</p>
-    {%- elif reviewmode -%}{{- problist(probs, with_review_status=True) -}}
+    <p id="noResults" style="display: none; text-align: center;">暂无</p>
+    {%- if reviewmode -%}{{- problist(probs, with_review_status=True) -}}
     {%- else -%}{{- problist(probs) -}}{%- endif -%}
 </article>
-<article class="right-side-article">
-    <h3>查询题目</h3>
+<article class="right-side-article form-container">
     <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
         {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
+        <h3>查询题目</h3>
         <span>
             <label for="probNo">编号：</label>
             <input type="text" id="probNo" name="probno" autocomplete="off"
