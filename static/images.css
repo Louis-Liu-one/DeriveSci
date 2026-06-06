@@ -1,7 +1,27 @@
+table.problist td.probno.filename {
+    width: 30%;
+}
 
-table.problist td.probno.filename { width: 30%; }
-h3#imageTitleDisplay { cursor: text; font-family: AndaleMono; }
-div.image-preview { text-align: center; margin-top: 12px; }
-dialog#reuploadModal { border: none; border-radius: 12px; padding: 0; }
-dialog::backdrop { background: #00000066; }
-img#previewImage { width: 100%; }
+h3#imageTitleDisplay {
+    cursor: text;
+    font-family: AndaleMono;
+}
+
+div.image-preview {
+    text-align: center;
+    margin-top: 12px;
+}
+
+dialog#reuploadModal {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+}
+
+dialog::backdrop {
+    background: #00000066;
+}
+
+img#previewImage {
+    width: 100%;
+}

@@ -3,13 +3,15 @@ async function updateMessages() {
     if (!activeUser) return;
     try {
         const response = await fetch('/api/chat/messages', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                receiver_uid: currentUid, lastmsgtime: timeOfLastMessage})});
+                receiver_uid: currentUid, lastmsgtime: timeOfLastMessage
+            })
+        });
         const newChats = await response.json();
         for (let uid in newChats) {
             if (newChats[uid].messages) {
-                if (!(uid in allChats)) allChats[uid] = {messages: []};
+                if (!(uid in allChats)) allChats[uid] = { messages: [] };
                 messages = newChats[uid].messages;
                 if (uid != target.value) allChats[uid].messages
                     = allChats[uid].messages.concat(messages);
@@ -27,10 +29,12 @@ async function updateMessages() {
 async function sendMessage() {
     try {
         await fetch('/api/chat/send', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 receiver_uid: parseInt(target.value), sender_uid: currentUid,
-                message: messageInputElement.value})});
+                message: messageInputElement.value
+            })
+        });
         messageInputElement.value = '';
     } catch (err) { alert('发送失败'); }
 }
@@ -38,8 +42,9 @@ async function sendMessage() {
 async function updateUserLastVisit(receiverUid, senderUid) {
     try {
         const response = await fetch('/api/chat/update-lastvisit', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({receiver_uid: receiverUid, sender_uid: senderUid})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ receiver_uid: receiverUid, sender_uid: senderUid })
+        });
         const result = await response.json();
     } catch (err) { console.error(err); }
 }
@@ -58,7 +63,7 @@ async function switchUser(element, uid) {
     if (redCircle) redCircle.style.display = 'none';
     messageArea.innerHTML = '';
     if (uid in allChats) addMessages(allChats[uid].messages, true);
-    else allChats[uid] = {messages: []};
+    else allChats[uid] = { messages: [] };
     await updateUserLastVisit(currentUid, uid);
 }
 
@@ -84,9 +89,9 @@ function addMessage(messageInfo, noAllChats) {
     divElement.innerText = messageInfo.content;
     messageArea.appendChild(divElement);
     messageArea.scrollTop = messageArea.scrollHeight;
-    if (!target.value) allChats[target.value] = {messages: []};
+    if (!target.value) allChats[target.value] = { messages: [] };
     if (typeof noAllChats === 'undefined' && !noAllChats) {
-        if (!(target.value in allChats)) allChats[target.value] = {messages: []};
+        if (!(target.value in allChats)) allChats[target.value] = { messages: [] };
         allChats[target.value].messages.push(messageInfo);
     }
 }
@@ -103,6 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('beforeunload', (event) => {
     if (!target.value) return;
     navigator.sendBeacon('/api/chat/update-lastvisit', new Blob(
-        [JSON.stringify({receiver_uid: currentUid, sender_uid: parseInt(target.value)})],
-        {type: 'application/json; charset=UTF-8'}));
+        [JSON.stringify({ receiver_uid: currentUid, sender_uid: parseInt(target.value) })],
+        { type: 'application/json; charset=UTF-8' }));
 });

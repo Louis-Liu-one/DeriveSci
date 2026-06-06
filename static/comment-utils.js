@@ -2,8 +2,9 @@
 async function deleteComment(commentId) {
     try {
         const response = await fetch('/api/comment/delete', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({commentid: commentId})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ commentid: commentId })
+        });
         const data = await response.json();
         if (data.ok) {
             const element = document.querySelector(`div[data-commentid='${commentId}']`);
@@ -48,10 +49,12 @@ async function postComment(element, content) {
     const replyToId = element.dataset.cmtid || null;
     try {
         const response = await fetch('/api/comment/post', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 post_type: +postType, post_ident: postIdent, content,
-                replyto_id: replyToId ? +replyToId : null})});
+                replyto_id: replyToId ? +replyToId : null
+            })
+        });
         const data = await response.json();
         if (data.ok) {
             const html = data.html;

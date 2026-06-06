@@ -160,7 +160,8 @@ def problist():
     if reviewmode:
         all_query = Prob.query.order_by(Prob.probno.asc())
     else:
-        all_query = Prob.query.filter(Prob.review_status == 1).order_by(Prob.probno.asc())
+        all_query = Prob.query.filter(
+            Prob.review_status == 1).order_by(Prob.probno.asc())
     probs_data = [p.to_dict() for p in all_query]
     probs = list(all_query)
     return render_template(
@@ -200,7 +201,8 @@ def probs(probno):
 def api_search_probs_content():
     data = request.get_json() or {}
     statement = data.get('statement', '')
-    reviewmode = data.get('reviewmode') or request.args.get('reviewmode') == 'True'
+    reviewmode = data.get('reviewmode') \
+        or request.args.get('reviewmode') == 'True'
     oflabel = data.get('oflabel') or False
     labelname = data.get('labelname') or None
     if not statement:

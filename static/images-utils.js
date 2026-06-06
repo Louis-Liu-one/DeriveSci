@@ -40,8 +40,9 @@ function bindImagePreview() {
             }
             try {
                 const resp = await fetch('/api/image/rename', {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({probno, oldname: imagename, newname: newVal})});
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ probno, oldname: imagename, newname: newVal })
+                });
                 const data = await resp.json();
                 if (data.ok) {
                     window.location.href = data.newurl;
@@ -60,7 +61,7 @@ function bindImagePreview() {
             if (reuploadModal.close) reuploadModal.close();
             else reuploadModal.classList.add('hidden');
         });
-        reuploadForm.addEventListener('submit', async function(ev) {
+        reuploadForm.addEventListener('submit', async function (ev) {
             ev.preventDefault();
             const fileInput = document.getElementById('reuploadFile');
             if (!fileInput || !fileInput.files.length) { alert('请选择文件'); return; }
@@ -69,7 +70,7 @@ function bindImagePreview() {
             fd.append('name', imagename);
             fd.append('imgfile', fileInput.files[0]);
             try {
-                const resp = await fetch('/api/image/reupload', {method: 'POST', body: fd});
+                const resp = await fetch('/api/image/reupload', { method: 'POST', body: fd });
                 const data = await resp.json();
                 if (data.ok) alert('上传成功，但是图片缓存需要更新，请清空浏览器缓存或者等待稍后查看效果。');
                 else alert('上传失败：' + (data.error || '未知错误'));
@@ -78,12 +79,13 @@ function bindImagePreview() {
     }
 
     // Delete
-    window.deleteImage = async function() {
+    window.deleteImage = async function () {
         if (!confirm('确定删除此图片吗？此操作不可撤销。')) return;
         try {
             const resp = await fetch('/api/image/delete', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({probno, name: imagename})});
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ probno, name: imagename })
+            });
             const data = await resp.json();
             if (data.ok) window.location.href = data.url;
             else alert('删除失败：' + (data.error || '未知错误'));
@@ -91,7 +93,7 @@ function bindImagePreview() {
     };
 
     // helper to show modal/dialog
-    window.showReuploadModal = function() {
+    window.showReuploadModal = function () {
         if (reuploadModal) {
             if (reuploadModal.showModal) reuploadModal.showModal();
             else reuploadModal.classList.remove('hidden');

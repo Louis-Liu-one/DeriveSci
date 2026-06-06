@@ -2,8 +2,9 @@
 async function deleteProb(probno) {
     try {
         const response = await fetch('/api/prob/delete', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ probno })
+        });
         const data = await response.json();
         if (data.ok) { alert('操作成功'); location.replace(data.url); }
         else alert('操作失败');
@@ -13,8 +14,9 @@ async function deleteProb(probno) {
 async function deleteSolution(probno, solno) {
     try {
         const response = await fetch('/api/solution/delete', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno, solno})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ probno, solno })
+        });
         const data = await response.json();
         if (data.ok) { alert('操作成功'); location.replace(data.url); }
         else alert('操作失败');
@@ -26,8 +28,9 @@ async function setOfficialProb(event) {
     const probno = this.dataset.probno;
     try {
         const response = await fetch('/api/prob/set-official', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ probno })
+        });
         const data = await response.json();
         if (data.isofficial) {
             officialSetterBlock.innerHTML
@@ -44,8 +47,9 @@ async function setOfficialProb(event) {
 async function reviewProb(btn, accept) {
     try {
         const response = await fetch('/api/prob/review', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno: btn.dataset.probno, accept})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ probno: btn.dataset.probno, accept })
+        });
         const data = await response.json(); location.replace(data.url);
     } catch (err) { alert('操作失败'); }
 }
@@ -56,8 +60,9 @@ async function saveReviewComment(btn) {
         const textarea = document.getElementById('reviewCommentText');
         const comment = textarea ? textarea.value : '';
         const response = await fetch('/api/prob/review-comment', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({probno, review_comment: comment})});
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ probno, review_comment: comment })
+        });
         const data = await response.json();
         if (data.ok) {
             alert('保存成功');

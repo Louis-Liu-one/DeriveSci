@@ -398,18 +398,18 @@ class Prob(db.Model):
         return url_for('probs', probno=self.probno, _anchor=anchor, **kwargs)
 
     def to_dict(self):
-        """Return a lightweight dict for frontend filtering (exclude statement).
-
-        Fields: probno, probtitle, labels (list), source_name, source_url,
-        isofficial (bool), review_status (int), url
-        """
         return {
             'probno': self.probno, 'probtitle': self.probtitle or '',
-            'labels': sorted(list(self.as_labelnames())) if self.problabels else [],
-            'source_name': self.source.name if getattr(self, 'source', None) else '',
-            'source_url': self.source.url() if getattr(self, 'source', None) else '',
+            'labels':
+                sorted(list(self.as_labelnames())) if self.problabels else [],
+            'source_name':
+                self.source.name if getattr(self, 'source', None) else '',
+            'source_url':
+                self.source.url() if getattr(self, 'source', None) else '',
             'isofficial': bool(self.isofficial),
-            'review_status': int(self.review_status) if self.review_status is not None else -1,
+            'review_status':
+                int(self.review_status)
+                if self.review_status is not None else -1,
             'url': self.url(),
         }
 
@@ -502,7 +502,6 @@ class ProbLabel(db.Model):
 
 def get_prob(probno):
     return db.session.get(Prob, str(probno))
-
 
 
 def add_prob(**kwargs):

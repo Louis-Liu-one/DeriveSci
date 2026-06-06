@@ -39,10 +39,10 @@
         {%- endfor -%}
     </div>
     <script>
-        (function() {
+        (function () {
             const input = document.getElementById('helpSearch');
             const grid = document.getElementById('helpGrid');
-            input.addEventListener('input', function() {
+            input.addEventListener('input', function () {
                 const q = this.value.trim().toLowerCase();
                 const cards = grid.querySelectorAll('.help-card');
                 cards.forEach(c => {

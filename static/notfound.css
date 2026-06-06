@@ -1,25 +1,81 @@
-
 article.main-article.notfound-hero {
-  display: flex; min-height: 60vh; align-items: center;
-  justify-content: center; padding: 40px 20px; }
+  display: flex;
+  min-height: 60vh;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
 div.notfound-card {
-  width: 100%; gap: 30px; padding: 36px; border-radius: 16px;
+  width: 100%;
+  gap: 30px;
+  padding: 36px;
+  border-radius: 16px;
   background: linear-gradient(135deg, var(--surface-strong), var(--surface));
-  box-shadow: var(--shadow); display: flex; align-items: center; }
-div.notfound-illustration { flex: 0 0 220px; text-align: center; }
-div.notfound-illustration i { font-size: 140px; color: var(--danger); }
-div.notfound-body { flex: 1; }
-div.notfound-body h1 { font-size: 64px; margin: 0; color: var(--danger); }
-div.notfound-body h2 { font-size: 22px; margin: 8px 0 16px; color: var(--text); }
-div.notfound-body p { color: var(--muted); margin-bottom: 18px; }
-div.actions { display: flex; margin-top: 14px; gap: 12px; align-items: center; }
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+}
+
+div.notfound-illustration {
+  flex: 0 0 220px;
+  text-align: center;
+}
+
+div.notfound-illustration i {
+  font-size: 140px;
+  color: var(--danger);
+}
+
+div.notfound-body {
+  flex: 1;
+}
+
+div.notfound-body h1 {
+  font-size: 64px;
+  margin: 0;
+  color: var(--danger);
+}
+
+div.notfound-body h2 {
+  font-size: 22px;
+  margin: 8px 0 16px;
+  color: var(--text);
+}
+
+div.notfound-body p {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+div.actions {
+  display: flex;
+  margin-top: 14px;
+  gap: 12px;
+  align-items: center;
+}
+
 a.btn {
-    display: inline-block; padding: 10px 16px; border-radius: 8px;
-    background: var(--primary); color: white; text-decoration: none;
-    transition: transform .14s ease, filter .14s ease, box-shadow .14s ease; }
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
+}
+
 a.btn:hover {
-    filter: brightness(1.06); transform: translateY(-2px);
-    box-shadow: 1px 3px 10px #00000073; }
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+  box-shadow: 1px 3px 10px #00000073;
+}
+
 a.btn-outline {
-    background: transparent; border: 1px solid var(--border); color: var(--text);
-    padding: 10px 16px; border-radius: 8px; text-decoration: none; }
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}

@@ -19,7 +19,7 @@ function renderSubprobs() {
         labelEditor.autocomplete = 'off';
         labelEditor.style.display = 'none';
         labelEditor.rows = 3;
-        const defaultLabel = `小题 ${i+1} 的答案`;
+        const defaultLabel = `小题 ${i + 1} 的答案`;
         labelEditor.value = sub.label || defaultLabel;
         // render initial label (use default if none provided)
         renderElement(labelDisplay, sub.label || defaultLabel, 'block');
@@ -59,11 +59,13 @@ function renderSubprobs() {
     // 绑定删除事件
     answerListElement.querySelectorAll('i.delete-subprob').forEach(btn => {
         btn.onclick = (ev) => {
-            ev.stopPropagation(); removeSubprob(+btn.dataset.i); };
+            ev.stopPropagation(); removeSubprob(+btn.dataset.i);
+        };
     });
     answerListElement.querySelectorAll('i.delete-tp').forEach(btn => {
         btn.onclick = (ev) => {
-            ev.stopPropagation(); removeTestpoint(+btn.dataset.si, +btn.dataset.ti); };
+            ev.stopPropagation(); removeTestpoint(+btn.dataset.si, +btn.dataset.ti);
+        };
     });
     if (window.selectedSub === undefined) window.selectedSub = subprobs.length - 1;
     Array.from(answerListElement.children).forEach((li, idx) => {
@@ -72,7 +74,7 @@ function renderSubprobs() {
 }
 
 function addSubprob() {
-    subprobs.push({label: '', tps: []});
+    subprobs.push({ label: '', tps: [] });
     window.selectedSub = subprobs.length - 1;
     renderSubprobs();
 }
@@ -88,7 +90,7 @@ function addTestpointToSelected(context, answer) {
     const parsed = JSON.parse(context);
     if (window.selectedSub === undefined) addSubprob();
     if (!subprobs[window.selectedSub])
-        subprobs[window.selectedSub] = {label: '', tps: []};
+        subprobs[window.selectedSub] = { label: '', tps: [] };
     subprobs[window.selectedSub].tps.push([parsed, answer]);
     renderSubprobs();
 }
@@ -111,8 +113,8 @@ function addRawAnswers(rawAnswerList) {
     if (!rawAnswerList) return;
     // accept two shapes: list of dicts {label, tps} or list of tps (legacy)
     subprobs = rawAnswerList.map(sub => {
-        if (Array.isArray(sub)) return {label: '', tps: sub.map(a => [a[0], a[1]])};
-        return {label: sub.label || '', tps: (sub.tps || []).map(a => [a[0], a[1]])};
+        if (Array.isArray(sub)) return { label: '', tps: sub.map(a => [a[0], a[1]]) };
+        return { label: sub.label || '', tps: (sub.tps || []).map(a => [a[0], a[1]]) };
     });
     renderSubprobs();
 }
@@ -144,8 +146,7 @@ function renderLabels() {
 
 function addRawLabels(rawLabelList) { labelList = [...rawLabelList]; renderLabels(); }
 
-function addHiddenInputElementForList(form, name, list)
-{
+function addHiddenInputElementForList(form, name, list) {
     let element = form.querySelector(`input[name='${name}']`);
     if (!element) element = document.createElement('input');
     element.type = 'hidden'; element.name = name;
@@ -157,7 +158,7 @@ async function uploadProb() {
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
         const response = await fetch(
-            '/api/prob/upload', {method: 'POST', body: new FormData(editForm)});
+            '/api/prob/upload', { method: 'POST', body: new FormData(editForm) });
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -169,7 +170,7 @@ async function editProb() {
     addHiddenInputElementForList(editForm, 'problabels', labelList);
     try {
         const response = await fetch(
-            '/api/prob/edit', {method: 'POST', body: new FormData(editForm)});
+            '/api/prob/edit', { method: 'POST', body: new FormData(editForm) });
         const data = await response.json();
         if (data.ok) location.replace(data.url);
         else alert(`操作失败：${data.error}`);
@@ -181,8 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const contextInput = document.getElementById('contextInputElement');
     const answerInput = document.getElementById('answerInputElement');
     if (contextInput && answerInput) {
-        const handleEnter = (event) => { if (event.key === 'Enter') {
-            event.preventDefault(); addAnswerHTML(contextInput, answerInput); } };
+        const handleEnter = (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); addAnswerHTML(contextInput, answerInput);
+            }
+        };
         contextInput.addEventListener('keydown', handleEnter);
         answerInput.addEventListener('keydown', handleEnter);
     }

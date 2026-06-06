@@ -1,21 +1,66 @@
 :root {
     --bg: #0c1118;
-    --surface: #111827; --surface-strong: #131a24; --surface-soft: #172337;
-    --text: #e5e7eb; --muted: #94a3b8; --border: #273449;
-    --primary: #1b365d; --primary-soft: #1d4ed8;
-    --accent: #60a5fa; --danger: #ff6b6b;
+    --surface: #111827;
+    --surface-strong: #131a24;
+    --surface-soft: #172337;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #273449;
+    --primary: #1b365d;
+    --primary-soft: #1d4ed8;
+    --accent: #60a5fa;
+    --danger: #ff6b6b;
     --shadow: 0 2px 18px #00000059;
 }
 
 @media (prefers-color-scheme: dark) {
-    html, body { background: var(--bg); color: var(--text); }
-    body { color-scheme: dark; }
-    a, a:visited { color: var(--accent); }
-    * { scrollbar-color: #475569 transparent; }
-    *::-webkit-scrollbar { width: 10px; height: 10px; }
-    *::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
-    *::-webkit-scrollbar-track { background: transparent; }
-    body, button, input, textarea, select, optgroup, option {
-        color: var(--text); background: transparent; border-color: var(--border); }
-    article.body-article img:not(.avatar) { filter: invert(1); }
+
+    html,
+    body {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    body {
+        color-scheme: dark;
+    }
+
+    a,
+    a:visited {
+        color: var(--accent);
+    }
+
+    * {
+        scrollbar-color: #475569 transparent;
+    }
+
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    body,
+    button,
+    input,
+    textarea,
+    select,
+    optgroup,
+    option {
+        color: var(--text);
+        background: transparent;
+        border-color: var(--border);
+    }
+
+    article.body-article img:not(.avatar) {
+        filter: invert(1);
+    }
 }

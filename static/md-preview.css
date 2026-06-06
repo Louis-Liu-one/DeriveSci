@@ -1,6 +1,15 @@
-
 div.markdown-preview-block {
-    border: 1px solid var(--border); border-spacing: 0;
-    border-radius: 12px; border-collapse: collapse;
-    box-shadow: var(--shadow); padding: 10px; margin-top: 15px; }
-div.markdown-preview-block img { display: block; margin: 0 auto; width: 100%; }
+    border: 1px solid var(--border);
+    border-spacing: 0;
+    border-radius: 12px;
+    border-collapse: collapse;
+    box-shadow: var(--shadow);
+    padding: 10px;
+    margin-top: 15px;
+}
+
+div.markdown-preview-block img {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
