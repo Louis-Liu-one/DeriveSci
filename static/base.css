@@ -224,6 +224,7 @@ ul.navbar-items li.navbar-item {
 ul.navbar-items li.navbar-item i,
 ul.navbar-items li.navbar-item img {
     font-size: 30px;
+    width: 36px;
     height: 36px;
     margin: 3px 0 -5px 0;
 }

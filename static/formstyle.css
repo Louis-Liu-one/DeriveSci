@@ -84,7 +84,7 @@ form.form-base div.label-input a i.delete-button:hover {
     cursor: pointer;
 }
 
-form.form-base input#probLabel {
+form.form-base input.label-input {
     min-width: 140px;
     margin-left: 6px;
 }

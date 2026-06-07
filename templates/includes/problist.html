@@ -15,7 +15,7 @@
                 {%- for prob in probs -%}
                     <tr data-url="{{ prob.url() }}" data-probno="{{ prob.probno }}"{{-''-}}
                         data-title="{{ (prob.probtitle or '')|lower }}"{{-''-}}
-                        data-labels="{{ prob.as_labelnames()|join(',') }}"{{-''-}}
+                        data-labels="{{ prob.as_labelnames()|list|tojson|forceescape }}"{{-''-}}
                         data-source="{{ (prob.source.name if prob.source else '') }}"{{-''-}}
                         data-isofficial="{{ 1 if prob.isofficial else 0 }}"{{-''-}}
                         data-review="{{ prob.review_status }}"{{-''-}}

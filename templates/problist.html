@@ -18,6 +18,7 @@
     window.LABEL_NAME = {{ labelname|tojson if oflabel else 'null' }};
 </script>
 <script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='tag-input.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}
@@ -72,13 +73,15 @@
         </span>
         <span>
             <label for="probLabels">标签：</label>
-            <input type="text" id="probLabels" name="problabels" autocomplete="off" spellcheck="false"
-                placeholder="输入题目标签，以CSV格式" value="{{ form.get('problabels', '') }}">
+            <div class="label-input" id="probLabelsArea"></div>
+            <input type="text" class="label-input" id="probLabels" name="problabels" autocomplete="off"
+                spellcheck="false" placeholder="输入题目标签，回车添加" value="{{ form.get('problabels', '') }}">
         </span>
         <span>
             <label for="source">来源：</label>
-            <input type="text" id="source" name="source" autocomplete="off"
-                placeholder="输入用户名称，以CSV格式" spellcheck="false" value="{{ form.get('source', '') }}">
+            <div class="label-input" id="sourceArea"></div>
+            <input type="text" class="label-input" id="source" name="source" autocomplete="off"
+                placeholder="输入来源用户名，回车添加" spellcheck="false" value="{{ form.get('source', '') }}">
         </span>
         {%- if reviewmode -%}
             <span>
@@ -109,5 +112,16 @@
     {%- if form.get('review_status') -%}
         reviewStatus.value = ({{ form.review_status|tojson }}).toString();
     {%- endif -%}
+    document.addEventListener('DOMContentLoaded', function () {
+        const handler = (tags) => window.applyProblistFilter();
+        createTagInput({
+            inputId: 'probLabels', areaId: 'probLabelsArea',
+            onTagAdd: handler, onTagRemove: handler,
+        });
+        createTagInput({
+            inputId: 'source', areaId: 'sourceArea',
+            onTagAdd: handler, onTagRemove: handler,
+        });
+    });
 </script>
 {% endblock %}

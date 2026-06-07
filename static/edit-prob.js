@@ -1,5 +1,5 @@
 
-let subprobs = []; let labelList = [];
+let subprobs = [];
 
 function renderSubprobs() {
     answerListElement.innerHTML = '';
@@ -119,33 +119,6 @@ function addRawAnswers(rawAnswerList) {
     renderSubprobs();
 }
 
-function addLabel(event) {
-    if (event.key == 'Enter') {
-        event.preventDefault(); const label = probLabel.value.trim();
-        if (!label || labelList.includes(label)) return;
-        labelList.push(label); renderLabels(); probLabel.value = '';
-    }
-}
-
-function renderLabels() {
-    labelArea.innerHTML = '';
-    labelList.forEach((label, i) => {
-        const labelElement = document.createElement('a');
-        labelElement.className = 'problabel';
-        labelElement.innerHTML = `${escapeHTML(label)} <i class="delete-button`
-            + ` fas fa-circle-minus" data-i="${i}"></i>`;
-        labelArea.appendChild(labelElement);
-    });
-    labelArea.querySelectorAll('i.delete-button').forEach(deleteButton => {
-        deleteButton.onclick = () => {
-            labelList.splice(+deleteButton.dataset.i, 1);
-            renderLabels();
-        };
-    });
-}
-
-function addRawLabels(rawLabelList) { labelList = [...rawLabelList]; renderLabels(); }
-
 function addHiddenInputElementForList(form, name, list) {
     let element = form.querySelector(`input[name='${name}']`);
     if (!element) element = document.createElement('input');
@@ -155,7 +128,8 @@ function addHiddenInputElementForList(form, name, list) {
 
 async function uploadProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
-    addHiddenInputElementForList(editForm, 'problabels', labelList);
+    const labels = window.labelTagInput ? window.labelTagInput.getTags() : [];
+    addHiddenInputElementForList(editForm, 'problabels', labels);
     try {
         const response = await fetch(
             '/api/prob/upload', { method: 'POST', body: new FormData(editForm) });
@@ -167,7 +141,8 @@ async function uploadProb() {
 
 async function editProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
-    addHiddenInputElementForList(editForm, 'problabels', labelList);
+    const labels = window.labelTagInput ? window.labelTagInput.getTags() : [];
+    addHiddenInputElementForList(editForm, 'problabels', labels);
     try {
         const response = await fetch(
             '/api/prob/edit', { method: 'POST', body: new FormData(editForm) });

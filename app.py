@@ -162,7 +162,7 @@ def problist():
     else:
         all_query = Prob.query.filter(
             Prob.review_status == 1).order_by(Prob.probno.asc())
-    probs_data = [p.to_dict() for p in all_query]
+    probs_data = [str(p.probno) for p in all_query]
     probs = list(all_query)
     return render_template(
         'problist.html', reviewmode=reviewmode,
@@ -179,10 +179,10 @@ def problistoflabel(labelname):
     # Label page: server renders problems that have the given label
     base_query = Prob.query.filter(Prob.problabels.any(
         ProbLabel.labelname == labelname))
-    if not (current_user.is_authenticated and current_user.isadmin):
+    if not current_user.is_authenticated or not current_user.isadmin:
         base_query = base_query.filter(Prob.review_status == 1)
     all_query = base_query.order_by(Prob.probno.asc())
-    probs_data = [p.to_dict() for p in all_query]
+    probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
         'problist.html', labelname=labelname, oflabel=True, form={},
@@ -216,7 +216,7 @@ def api_search_probs_content():
     q = q.filter(Prob.statement.like(f"%{statement}%"))
     q = q.order_by(Prob.probno.asc())
     probs_list = list(q)
-    return jsonify({'results': [p.to_dict() for p in probs_list]})
+    return jsonify({'results': [p.probno for p in probs_list]})
 
 
 @app.route('/images/<probno>/<imagename>')

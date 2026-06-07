@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const reviewStatus = document.getElementById('reviewStatus');
     const form = document.querySelector('.form-base');
 
-    // SERVER_RESULTS holds backend-returned results (initially same as PROBS_DATA)
+    // SERVER_RESULTS holds backend-returned results as a list of probno strings
     window.SERVER_RESULTS = Array.isArray(window.PROBS_DATA) ? window.PROBS_DATA.slice() : [];
 
     function normalize(s) { return (s || '').toString().toLowerCase().trim(); }
@@ -66,20 +66,26 @@ window.addEventListener('DOMContentLoaded', () => {
         // title
         const qtitle = normalize(probTitle && probTitle.value);
         if (qtitle && !normalize(d.title).includes(qtitle)) return false;
-        // labels: require all labels in input to be present
-        const qlabels = normalize(probLabels && probLabels.value);
-        if (qlabels) {
-            const want = qlabels.split(',').map(s => s.trim()).filter(Boolean);
-            const have = normalize(d.labels).split(',').map(s => s.trim()).filter(Boolean);
-            for (const w of want) { if (!have.includes(w)) return false; }
+        let wantLabels = [];
+        const probLabelsJson = document.getElementById('probLabels_json');
+        if (probLabelsJson && probLabelsJson.value)
+            wantLabels = JSON.parse(probLabelsJson.value || '[]');
+        else wantLabels = [];
+        if (wantLabels.length) {
+            const have = JSON.parse(d.labels || '[]').map(s => s.toString().toLowerCase());
+            for (const w of wantLabels)
+                if (!have.includes(w.toLowerCase ? w.toLowerCase() : w)) return false;
         }
-        // source: any of CSV matches source name
-        const qsrc = normalize(source && source.value);
-        if (qsrc) {
-            const want = qsrc.split(',').map(s => s.trim()).filter(Boolean);
+        let wantSrc = [];
+        const sourceJson = document.getElementById('source_json');
+        if (sourceJson && sourceJson.value)
+            wantSrc = JSON.parse(sourceJson.value || '[]');
+        else wantSrc = [];
+        if (wantSrc.length) {
             const have = normalize(d.source);
             let ok = false;
-            for (const w of want) { if (have.includes(w)) { ok = true; break; } }
+            for (const w of wantSrc)
+                if (have.includes((w || '').toString().toLowerCase())) { ok = true; break; }
             if (!ok) return false;
         }
         // prob type
@@ -103,10 +109,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const wrap = document.querySelector('div.problist-wrap');
         const tbody = wrap ? wrap.querySelector('table.problist tbody') : null;
         if (!tbody) return;
-        // Build set of allowed probnos from SERVER_RESULTS; fallback to PROBS_DATA
+        // Build set of allowed probnos from SERVER_RESULTS (array of probno strings)
         const base = Array.isArray(window.SERVER_RESULTS) ? window.SERVER_RESULTS : (
             Array.isArray(window.PROBS_DATA) ? window.PROBS_DATA : []);
-        const allowed = new Set(base.map(p => String(p.probno)));
+        const allowed = new Set(base);
         const rows = Array.from(tbody.querySelectorAll('tr'))
             .filter(r => !r.classList.contains('probhead'));
         let anyVisible = false;
@@ -120,13 +126,14 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         const noEl = document.getElementById('noResults');
         if (noEl) {
-            if (!anyVisible) {
-                noEl.style.display = 'block'; if (wrap) wrap.style.display = 'none';
-            }
+            if (!anyVisible) { noEl.style.display = 'block'; if (wrap) wrap.style.display = 'none'; }
             else { noEl.style.display = 'none'; if (wrap) wrap.style.display = ''; }
         }
         adjustProblist();
     }
+
+    // expose filter function globally so tag-input.js can call it
+    window.applyProblistFilter = applyFilter;
 
     const inputs = [probNo, probTitle, probLabels, source];
     inputs.forEach(inp => {
@@ -137,7 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (statement) {
         statement.addEventListener('input', debounce(function () {
             if (!this.value || this.value.trim().length === 0) {
-                // restore server-results to full PROBS_DATA
+                // restore server-results to full PROBS_DATA (as probno list)
                 window.SERVER_RESULTS = Array.isArray(window.PROBS_DATA)
                     ? window.PROBS_DATA.slice() : [];
                 applyFilter();
@@ -170,9 +177,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
                 if (resp.ok) {
                     const data = await resp.json();
+                    // accept backend results as list of probno
                     window.SERVER_RESULTS = Array.isArray(data.results) ? data.results : [];
                     applyFilter();
-                } else console.error('search-content failed: ', resp.status);
+                } else console.error('Fail to fetch backend results: ', resp.status);
             } catch (err) { console.error(err); }
         });
     }
