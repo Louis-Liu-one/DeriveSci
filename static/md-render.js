@@ -9,6 +9,7 @@ const md = markdownit({ html: true })
             '\\E': '\\mathrm{e}', '\\e': '\\mathrm{e}',
             '\\I': '\\mathrm{i}', '\\i': '\\mathrm{i}',
             '\\qed': '\\blacksquare', '\\qedsymbol': '\\blacksquare',
+            '\\T': '\\mathrm{T}', '\\trans': '\\mathrm{T}',
             '\\paren': '\\left(#1\\right)',
             '\\abs': '\\left\\lvert#1\\right\\rvert',
         }

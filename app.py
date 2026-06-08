@@ -162,7 +162,7 @@ def problist():
     else:
         all_query = Prob.query.filter(
             Prob.review_status == 1).order_by(Prob.probno.asc())
-    probs_data = [str(p.probno) for p in all_query]
+    probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
         'problist.html', reviewmode=reviewmode,
@@ -780,7 +780,7 @@ def avatarfile(uid):
     response.headers['ETag'] = etag
     response.headers['Last-Modified'] = user.avlastmodified.strftime(
         '%a, %d %b %Y %H:%M:%S GMT')
-    response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存10min
+    response.headers['Cache-Control'] = 'public, max-age=600'  # 缓存 10 min
     return response
 
 

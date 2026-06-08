@@ -5,7 +5,7 @@
 
 ## 构建方法
 
-- 项目使用 `markdown-it` 渲染 Markdown，使用 `mdit/plugin-katex` 插件和 $\KaTeX$ 引擎渲染数学公式，使用 Font Awesome 渲染图标。初次进入网页时，需要加载各项 CDN，速度较慢，敬请谅解。
+- 项目使用 `markdown-it` 渲染 Markdown，使用 `mdit/plugin-katex` 插件和 KaTeX 引擎渲染数学公式，使用 Font Awesome 渲染图标。初次进入网页时，需要加载各项 CDN，速度较慢，敬请谅解。
 
 - 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout 等，具体参见 `requirements.txt`，可以直接使用 `pip` 安装，建议使用虚拟环境。命令如下：
 ```bash
