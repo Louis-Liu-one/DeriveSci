@@ -151,7 +151,6 @@
     {%- if activeuser and activeuser.uid in all_chats -%}
         document.addEventListener('DOMContentLoaded', () => {
             addMessages(window.allChats[{{ activeuser.uid|tojson }}].messages, true);
-            setTimeOfLastMessageByAllChats();
         });
     {%- endif -%}
     {%- if view_comments -%}

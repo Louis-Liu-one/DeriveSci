@@ -115,6 +115,7 @@ function addMessage(messageInfo, noAllChats) {
 
 document.addEventListener('DOMContentLoaded', () => {
     window.activeUser = document.getElementsByClassName('user-item active')[0];
+    setTimeOfLastMessageByAllChats();
     if (!window.timeOfLastMessage) window.timeOfLastMessage = '';
     window.elements = {};
     messageInputElement.addEventListener('keypress', (event) => {
