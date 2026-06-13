@@ -52,9 +52,7 @@
         <div class="user-list">
             {%- if view_comments -%}
                 <div class="user-item active" id="viewCommentsItem">
-                    <div class="avatar-wrap">
-                        <i class="fas fa-envelope"></i>
-                    </div>未读评论
+                    <div class="avatar-wrap"><i class="fas fa-envelope"></i></div>未读评论
                 </div>
             {%- endif -%}
             {%- set ns = namespace(active=False) -%}
@@ -63,28 +61,22 @@
                 {%- if activeuser and uid == activeuser.uid -%}
                     {%- set ns.active = True -%}
                 {%- endif -%}
-                <div class="user-item {% if
-                    activeuser and uid == activeuser.uid -%}active{% endif %}"
+                <div class="user-item {% if activeuser and uid == activeuser.uid -%}active{% endif %}"
                     onclick="switchUser(this, {{ uid }});">
                     <div class="avatar-wrap">
                         {{- user_avatar_img(user) -}}
                         {%- if all_chats[uid].unread -%}
-                            <div class="unread-badge">
-                                {{- all_chats[uid].unread|tojson -}}
-                            </div>
+                            <div class="unread-badge">{{- all_chats[uid].unread|tojson -}}</div>
                         {%- else -%}
-                            <div class="unread-badge" style="display: none"></div>
+                            <div class="unread-badge" style="display: none;"></div>
                         {%- endif -%}
                     </div>
                     {{- user_name(user) -}}
                 </div>
             {%- endfor -%}
             {%- if activeuser and not ns.active -%}
-                <div class="user-item active"
-                    onclick="switchUser(this, {{ activeuser.uid }});">
-                    <div class="avatar-wrap">
-                        {{- user_avatar_img(activeuser) -}}
-                    </div>{{- user_name(activeuser) -}}
+                <div class="user-item active" onclick="switchUser(this, {{ activeuser.uid }});">
+                    <div class="avatar-wrap">{{- user_avatar_img(activeuser) -}}</div>{{- user_name(activeuser) -}}
                 </div>
             {%- elif not all_chats -%}
                 <p class="tips">暂无私信对象，前往其他用户的主页添加私信。</p>
@@ -111,8 +103,7 @@
                         {%- if unread_sections.prob_comments -%}
                             <div class="comments-container">
                                 {%- for comment in unread_sections.prob_comments -%}
-                                    {{- commentdiv(
-                                        comment, with_post=True, secondlevel=True) -}}
+                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
                                     <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
@@ -123,8 +114,7 @@
                         {%- if unread_sections.solution_comments -%}
                             <div class="comments-container">
                                 {%- for comment in unread_sections.solution_comments -%}
-                                    {{- commentdiv(
-                                        comment, with_post=True, secondlevel=True) -}}
+                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
                                     <div class="comments-sep"></div>
                                 {%- endfor -%}
                             </div>
@@ -156,11 +146,12 @@
     </div>
 </article>
 <script>
-    allChats = {{ all_chats|tojson }};
-    currentUid = {{ current_user.uid|tojson }};
+    window.allChats = {{ all_chats|tojson }};
+    window.currentUid = {{ current_user.uid|tojson }};
     {%- if activeuser and activeuser.uid in all_chats -%}
         document.addEventListener('DOMContentLoaded', () => {
-            addMessages(allChats[{{ activeuser.uid|tojson }}].messages, true);
+            addMessages(window.allChats[{{ activeuser.uid|tojson }}].messages, true);
+            setTimeOfLastMessageByAllChats();
         });
     {%- endif -%}
     {%- if view_comments -%}

@@ -110,7 +110,7 @@
     </p>
 </article>
 <script>
-    if(typeof createTagInput === 'function')
+    if (typeof createTagInput === 'function')
         window.labelTagInput = createTagInput({
             inputId: 'probLabel', areaId: 'labelArea',
             initial: {{ (prob.as_labelnames()|list if editmode else [])|tojson }},
