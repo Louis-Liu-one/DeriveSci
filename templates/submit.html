@@ -46,7 +46,7 @@
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 {% endblock %}
 
-{% block navbar_title %}问题{{ prob.probno }} —— 我的提交{% endblock %}
+{% block navbar_title %}我的提交{% endblock %}
 
 {% block body %}
 <aside>
@@ -91,8 +91,8 @@
                     </tr>
                     <tr>
                         <th>我的答案</th>
-                        <td><pre>{{ submission_answer_parsed[sub_i]
-                            if submission_answer_parsed else '' }}</pre></td>
+                        <td><pre><code>{{ submission_answer_parsed[sub_i]
+                            if submission_answer_parsed else '' }}</code></pre></td>
                     </tr>
                     <tr>
                         <th>求值结果</th>
@@ -139,15 +139,15 @@
                 </tr>
                 <tr>
                     <th>我的答案</th>
-                    <td><pre>{{- submission_answer_parsed[0]
-                        if submission_answer_parsed else submission.answer -}}</pre></td>
+                    <td><pre><code>{{- submission_answer_parsed[0]
+                        if submission_answer_parsed else submission.answer -}}</code></pre></td>
                 </tr>
                 <tr>
                     <th>求值结果</th>
                     <td>
                         <div class="answer-block" id="answerBlock">
                             <textarea id="answerText">
-                                {%- if answer_latex -%}${{ answer_latex[0] }}$
+                                {%- if answer_latex and answer_latex[0] -%}${{ answer_latex[0] }}$
                                 {%- else -%}无法求值{%- endif -%}
                             </textarea>
                         </div>

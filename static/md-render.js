@@ -39,8 +39,7 @@ md.renderer.rules.image = function (tokens, idx, options, env, self) {
 if (window.hljs) md.options['highlight'] = function (str, lang) {
     if (lang && hljs.getLanguage(lang))
         try {
-            return hljs.highlight(
-                str, { language: lang, ignoreIllegals: true }).value;
+            return hljs.highlight(str, { language: lang, ignoreIllegals: true }).value;
         } catch { }
 };
 if (window.markdownItAnchor) md.use(markdownItAnchor);

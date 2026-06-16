@@ -10,6 +10,7 @@
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='comment.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='submit.css') }}">
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 {%- if prob.review_status == 1 -%}
     {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}

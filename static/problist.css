@@ -169,3 +169,17 @@ article.main-article.problist-container {
 .problist-container div.problist-wrap table.problist tr.filler td {
     pointer-events: none;
 }
+
+
+@media (max-width: 768px) {
+
+    article.main-article.problist-container,
+    article.body-article.problist-container,
+    article.right-side-article.problist-container {
+        width: calc(100% - 24px);
+    }
+
+    .problist-container div.problist-wrap table.problist {
+        overflow: hidden;
+    }
+}

@@ -48,6 +48,7 @@ table.subprob-table td pre {
 	margin: 0;
 	font-family: AndaleMono;
 	font-size: 15px;
+	white-space: pre-wrap;
 }
 
 p.overall-score {
@@ -62,6 +63,7 @@ p.overall-score {
 
 div.label-render p,
 div.answer-block p {
+	white-space: pre-wrap;
 	margin: 0;
 }
 

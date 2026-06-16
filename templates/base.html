@@ -38,14 +38,22 @@
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>
+    <input id="sidebar-toggle" type="checkbox" class="hidden">
+    <input id="nav-more-toggle" type="checkbox" clas="hidden">
     <nav class="navbar">
         <ul class="navbar-items">
+            <li class="navbar-item sidebar-toggle-btn" title="显示侧边栏">
+                <label for="sidebar-toggle"><i class="fas fa-bars"></i></label>
+            </li>
             <li class="logo">
                 <a href="{{ url_for('homepage') }}"> 
                     <img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>MathProbs
                 </a>
             </li>
             <li id="navbarTitleElement" class="navbar-title">{%- block navbar_title -%}{%- endblock -%}</li>
+            <li class="navbar-item nav-more-toggle" title="更多">
+                <label for="nav-more-toggle"><i class="fas fa-ellipsis-h"></i></label>
+            </li>
             <a href="{{ url_for('welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}{{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}
@@ -62,7 +70,19 @@
             {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
         </ul>
+        <div class="nav-more-panel" aria-hidden="true">
+            {%- if current_user.is_authenticated -%}
+                <a class="nav-more-link" href="{{ url_for('chat') }}"><i class="fas fa-comments"></i><span>私信</span></a>
+                <a class="nav-more-link" href="{{ url_for('chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
+            {%- endif -%}
+            <a class="nav-more-link" href="{{ url_for('problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
+            <a class="nav-more-link" href="{{ url_for('labellist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
+            <a class="nav-more-link" href="{{ url_for('helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
+        </div>
     </nav>
-    <main>{% block body %}{% endblock %}</main>
+    <main>
+        <label for="sidebar-toggle" class="sidebar-overlay"></label>
+        {% block body %}{% endblock %}
+    </main>
 </body>
 </html>

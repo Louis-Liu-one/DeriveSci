@@ -1,4 +1,8 @@
 
+function isMobile() {
+    return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+}
+
 function debounce(fn, wait) {
     let t; return function () {
         clearTimeout(t); t = setTimeout(() => fn.apply(this, arguments), wait);
@@ -6,6 +10,7 @@ function debounce(fn, wait) {
 }
 
 function adjustProblist() {
+    if (isMobile()) return; // skip on mobile to avoid excessive DOM manipulation during resizing
     const wrap = document.querySelector('div.problist-wrap');
     const table = wrap ? wrap.querySelector('table.problist') : null;
     if (!wrap || !table) return;

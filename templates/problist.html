@@ -19,6 +19,12 @@
 </script>
 <script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
 <script src="{{ url_for('static', filename='tag-input.js') }}"></script>
+<style>
+    @media (max-width: 768px) {
+        article.body-article { order: 2; }
+        article.right-side-article { order: 1; }
+    }
+</style>
 {% endblock %}
 
 {% block navbar_title %}

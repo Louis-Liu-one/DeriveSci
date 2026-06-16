@@ -302,6 +302,11 @@ form.form-base input::file-selector-button:disabled {
     padding: 0 !important;
 }
 
+.form-container form.form-base {
+    border: none;
+    min-height: calc(100% - 36px);
+}
+
 article.body-article.form-container {
     width: calc(45% + 36px);
 }
@@ -310,7 +315,10 @@ article.right-side-article.form-container {
     width: calc(30% + 36px);
 }
 
-.form-container form.form-base {
-    border: none;
-    min-height: calc(100% - 36px);
+@media (max-width: 768px) {
+
+    article.body-article.form-container,
+    article.right-side-article.form-container {
+        width: calc(100% - 24px);
+    }
 }

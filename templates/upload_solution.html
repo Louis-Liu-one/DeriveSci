@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block navbar_title %}
-问题{{ prob.probno }} —— {% if editmode %}编辑{% else %}上传{% endif %}题解
+{{ prob.probno }} — {% if editmode %}编辑{% else %}上传{% endif %}题解
 {% endblock %}
 
 {% block body %}
