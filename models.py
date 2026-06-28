@@ -26,6 +26,7 @@ __all__ = [
     'find_user', 'register_user', 'unregister_user',
     'Prob', 'ProbImage', 'ProbLabel', 'get_prob', 'add_prob',
     'get_solution', 'add_solution', 'add_images', 'add2labels',
+    'Article', 'get_article', 'add_article',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
 ]
 
@@ -86,6 +87,7 @@ class User(db.Model, UserMixin):
         'Submission', backref='user', cascade='all, delete')
     uploadedprobs = db.relationship('Prob', backref='source')
     solutions = db.relationship('ProbSolution', backref='user')
+    articles = db.relationship('Article', backref='user')
     comments = db.relationship('Comment', backref='user')
     cmtlastvisit = db.Column(db.DateTime, default=_utcnow)
     isadmin = db.Column(db.Boolean, default=False)
@@ -555,6 +557,65 @@ def add2labels(labelnames, prob):
     db.session.commit()
 
 
+# =========================== 专栏数据库 ===========================
+
+
+class Article(db.Model):
+    __tablename__ = 'articles'
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    title = db.Column(db.String(128), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    def url(self, anchor=None, **kwargs):
+        return url_for('article', article_id=self.id, _anchor=anchor, **kwargs)
+
+    def get_post_ident(self):
+        return str(self.id)
+
+    def get_toplevel_comments(self):
+        post_ident = self.get_post_ident()
+        return Comment.query.filter(
+            Comment.post_type == 3, Comment.post_ident == post_ident,
+            Comment.replyto_id.is_(None)).order_by(
+            Comment.timestamp.desc()).all()
+
+    def edit(self, title, content):
+        if title:
+            self.title = title
+        if content:
+            self.content = content
+        db.session.commit()
+
+    def viewable_for(self, user):
+        return True
+
+    def editable_for(self, user):
+        return user.is_authenticated and (user == self.user or user.isadmin)
+
+    def __str__(self):
+        return f'专栏：{self.title}'
+
+    def __lt__(self, article):
+        return self.id < article.id
+
+
+def get_article(article_id):
+    return db.session.get(Article, int(article_id))
+
+
+def add_article(title, content):
+    if not title:
+        return False, '专栏标题不能为空。'
+    elif not content:
+        return False, '专栏内容不能为空。'
+    article = Article(
+        user=current_user, title=title, content=content)
+    db.session.add(article)
+    db.session.commit()
+    return True, article
+
+
 # =========================== 讨论区与私信数据库支持 ===========================
 
 
@@ -607,6 +668,7 @@ class Comment(db.Model):
     # 帖子类型为0，帖子为题目，标识符为题目编号
     # 帖子类型为1，帖子为题解，标识符为CSV格式的题目编号与题解编号的组合
     # 帖子类型为2，帖子为私信，标识符为信息接收用户ID，不使用replyto、replies字段
+    # 帖子类型为3，帖子为专栏，标识符为专栏ID
     post_type = db.Column(db.Integer, nullable=False)  # 帖子类型
     post_ident = db.Column(db.Text, nullable=False)    # 帖子标识符
     replyto = db.relationship(
@@ -627,6 +689,8 @@ class Comment(db.Model):
             return get_solution(probno, int(solno))
         elif self.post_type == 2:
             return None  # 私信信息，无实际对象
+        elif self.post_type == 3:
+            return get_article(int(self.post_ident))
         return None  # 未知帖子类型
 
     def editable_for(self, user):

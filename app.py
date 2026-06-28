@@ -3,51 +3,14 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 
 我们的网站支持如下的路由。
 
-常规页面：
-/              首页（未登录）/欢迎页（已登录）
-/home          首页
-/login         登录
-/register      注册
-/edit-profile  编辑信息
-/users/<uid>   查看他人主页
-/helps/        查看帮助列表
-/helps/<howto> 查看帮助
-/chat          私信聊天
-
-题目：
-/upload-prob                           上传题目
-/labels/                               所有标签
-/labels/<labelname>                    单个标签
-/probs/                                题集
-/probs/<probno>                        题目<probno>
-/probs/<probno>/submit                 提交题目<probno>的答案*
-/probs/<probno>/edit                   编辑题目
-/probs/<probno>/upload-solution        上传题解
-/probs/<probno>/solutions/<solno>      查看题解
-/probs/<probno>/solutions/<solno>/edit 编辑题解
-/probs/<probno>/images/                题目图片列表
-/probs/<probno>/images/<filename>      题目图片预览
-/images/<probno>/<filename>            题目/题解图片
-
-API：*
-/api/prob/upload            上传题目
-/api/prob/set-official      将题目添加到官方题集
-/api/prob/review            通过/拒绝题目的审核
-/api/prob/review-comment    保存审核意见
-/api/prob/edit              编辑题目
-/api/prob/delete            删除题目
-/api/prob/search-content    搜索题目内容
-/api/solution/upload        上传题解
-/api/solution/edit          编辑题解
-/api/solution/delete        删除题解
-/api/image/reupload         重新上传图片
-/api/image/rename           重命名图片
-/api/image/delete           删除图片
-/api/comment/post           发表评论
-/api/comment/delete         删除评论
-/api/chat/update-lastvisit  更新上次查看私信的时间
-/api/chat/send              发送私信
-/api/chat/messages          获取新收到的私信
+用户操作页面：
+/                           首页（未登录）/欢迎页（已登录）
+/home                       首页
+/welcome                    欢迎页
+/login                      登录
+/register                   注册
+/edit-profile               编辑信息
+/users/<uid>                查看他人主页
 /api/user/login             登录
 /api/user/register          注册
 /api/user/logout            登出
@@ -55,7 +18,60 @@ API：*
 /api/user/edit-profile      编辑个人资料
 /api/user/edit-introduction 编辑个人简介
 
-标*的是使用 POST 方法的路由，所有 API 路由仅限 POST 方法。
+私信与评论页面：
+/chat                      私信聊天
+/api/comment/post          发表评论
+/api/comment/delete        删除评论
+/api/chat/update-lastvisit 更新上次查看私信的时间
+/api/chat/send             发送私信
+/api/chat/messages         获取新收到的私信
+
+帮助页面：
+/helps/        查看帮助列表
+/helps/<howto> 查看帮助
+
+标签、题集与题目页面：
+/labels/                          所有标签
+/labels/<labelname>               单个标签
+/upload-prob                      上传题目
+/probs/                           题集
+/probs/<probno>                   题目
+/probs/<probno>/submit            提交答案
+/probs/<probno>/edit              编辑题目
+/api/prob/upload                  上传题目
+/api/prob/set-official            将题目添加到官方题集
+/api/prob/review                  通过/拒绝题目的审核
+/api/prob/review-comment          保存审核意见
+/api/prob/edit                    编辑题目
+/api/prob/delete                  删除题目
+/api/prob/search-content          搜索题目内容
+
+题解页面：
+/probs/<probno>/upload-solution        上传题解
+/probs/<probno>/solutions/<solno>      查看题解
+/probs/<probno>/solutions/<solno>/edit 编辑题解
+/api/solution/upload                   上传题解
+/api/solution/edit                     编辑题解
+/api/solution/delete                   删除题解
+
+专栏页面：
+/upload-article             撰写专栏
+/articles/<article_id>      阅读专栏
+/articles/<article_id>/edit 编辑专栏
+/api/article/upload         上传专栏
+/api/article/edit           编辑专栏
+/api/article/delete         删除专栏
+
+图片页面：
+/probs/<probno>/images/           题目图片列表
+/probs/<probno>/images/<filename> 题目图片预览
+/images/<probno>/<filename>       题目/题解图片
+/api/image/reupload               重新上传图片
+/api/image/rename                 重命名图片
+/api/image/delete                 删除图片
+
+
+以/api/开头的路由是 API 路由。
 
 已部署至：https://MathProbsOnline.PythonAnyWhere.com
 '''
@@ -74,6 +90,7 @@ from flask_moment import Moment, moment as builtin_moment
 from models import db, init_app, utcfromnow
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
+from models import get_article, add_article
 from models import ProbLabel, ProbImage, add2labels, add_images
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
@@ -606,6 +623,79 @@ def helps(howto):
 @app.route('/helps/')
 def helplist():
     return render_template('helplist.html')
+
+
+# =========================== 专栏各项网页与API ===========================
+
+
+@app.route('/upload-article')
+@login_required
+def upload_article():
+    return render_template('upload_article.html', editmode=False)
+
+
+@app.route('/articles/<int:article_id>')
+def article(article_id):
+    article = get_article(article_id)
+    if not article or not article.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到专栏。'), 404
+    return render_template('article.html', article=article)
+
+
+@app.route('/articles/<int:article_id>/edit')
+@login_required
+def edit_article(article_id):
+    article = get_article(article_id)
+    if not article or not article.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到专栏。'), 404
+    if current_user != article.user and not current_user.isadmin:
+        return redirect(article.url())
+    return render_template(
+        'upload_article.html', editmode=True, article=article)
+
+
+@app.route('/api/article/upload', methods=['POST'])
+def api_upload_article():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    title = request.form.get('articletitle')
+    content = request.form.get('article')
+    status, article = add_article(title, content)
+    if not status:
+        return {'ok': False, 'error': str(article)}, 400
+    return {'ok': True, 'url': article.url()}
+
+
+@app.route('/api/article/edit', methods=['POST'])
+def api_edit_article():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    article_id = int(request.form.get('article_id'))
+    article = get_article(article_id)
+    if not article or not article.viewable_for(current_user):
+        return {'ok': False, 'error': '未能找到专栏。'}, 404
+    if not article.editable_for(current_user):
+        abort(403)
+    title = request.form.get('articletitle')
+    content = request.form.get('article')
+    article.edit(title, content)
+    return {'ok': True, 'url': article.url()}
+
+
+@app.route('/api/article/delete', methods=['POST'])
+def api_delete_article():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    article_id = int(request.json.get('article_id'))
+    article = get_article(article_id)
+    if not article or not article.viewable_for(current_user):
+        return {'ok': False, 'error': '未能找到专栏。'}, 404
+    if not article.editable_for(current_user):
+        abort(403)
+    clear_comments(article)
+    db.session.delete(article)
+    db.session.commit()
+    return {'ok': True, 'url': url_for('homepage')}
 
 
 # =========================== 用户操作网页与API ===========================

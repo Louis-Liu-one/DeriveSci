@@ -1,0 +1,110 @@
+{% from "includes/problabels.html" import problabels_problist %}
+{% from "includes/users.html" import user_avatar_img, user_name %}
+
+{%- macro problist(probs, with_source=True, with_review_status=False) -%}
+    <div class="problist-wrap">
+        <table class="problist">
+            <thead>
+                <tr class="probhead">
+                    <th>编号</th><th>名称</th><th>标签</th>
+                    {%- if with_source -%}<th>来源</th>{%- endif -%}
+                    {%- if with_review_status -%}<th>状态</th>{%- endif -%}
+                </tr>
+            </thead>
+            <tbody>
+                {%- for prob in probs -%}
+                    <tr data-url="{{ prob.url() }}" data-probno="{{ prob.probno }}"{{-''-}}
+                        data-title="{{ (prob.probtitle or '')|lower }}"{{-''-}}
+                        data-labels="{{ prob.as_labelnames()|list|tojson|forceescape }}"{{-''-}}
+                        data-source="{{ (prob.source.name if prob.source else '') }}"{{-''-}}
+                        data-isofficial="{{ 1 if prob.isofficial else 0 }}"{{-''-}}
+                        data-review="{{ prob.review_status }}"{{-''-}}
+                        onclick="window.open(this.dataset.url);">{{-''-}}
+                        <td class="probno">{{ prob.probno }}</td>{{-''-}}
+                        <td class="probtitle">{{ prob.probtitle }}</td>
+                        {{- problabels_problist(prob) -}}
+                        {%- if with_source -%}
+                            <td class="source"{%- if prob.source -%}data-url="{{ prob.source.url() }}"{{-''-}}
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>{{-''-}}
+                                <div>{{- user_avatar_img(prob.source) -}}{{- user_name(prob.source) -}}</div>{{-''-}}
+                            </td>
+                        {%- endif -%}
+                        {%- if with_review_status -%}
+                            <td class="review-status">
+                                {%- if prob.review_status == -1 -%}待审
+                                {%- elif prob.review_status == 0 -%}拒绝
+                                {%- else -%}通过{%- endif -%}
+                            </td>
+                        {%- endif -%}
+                    </tr>
+                {%- endfor -%}
+            </tbody>
+        </table>
+    </div>
+{%- endmacro -%}
+
+{%- macro solutionlist(solutions, with_head=False, with_probno=False, with_user=True) -%}
+    {%- if solutions -%}
+        <table class="problist">
+            {%- if with_head %}
+                <thead>
+                    <tr class="probhead">
+                        {%- if with_probno -%}<th>题目</th>{%- endif -%}
+                        <th>标题</th>{%- if with_user -%}<th>来源</th>{%- endif -%}
+                    </tr>
+                </thead>
+            {%- endif -%}
+            <tbody>
+                {%- for solution in solutions -%}
+                    <tr data-url="{{ solution.url() }}" onclick="window.open(this.dataset.url);">
+                        {%- if with_probno -%}
+                            <td class="probno"{%- if solution.prob -%}data-url="{{ solution.prob.url() }}"
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}
+                                style="width: 25%">{{- solution.probno -}}</td>
+                        {%- endif -%}
+                        <td>{{- solution.title -}}</td>
+                        {%- if with_user -%}
+                            <td class="soluser"{%- if solution.user -%}data-url="{{ solution.user.url() }}"
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>
+                                <div>
+                                    {{- user_avatar_img(solution.user) -}}
+                                    {{- user_name(solution.user) -}}
+                                </div>
+                            </td>
+                        {%- endif -%}
+                    </tr>
+                {%- endfor -%}
+            </tbody>
+        </table>
+    {%- else -%}<p>暂无</p>{%- endif -%}
+{%- endmacro -%}
+
+{%- macro articlelist(articles, with_head=False, with_user=True) -%}
+    {%- if articles -%}
+        <table class="problist">
+            {%- if with_head %}
+                <thead>
+                    <tr class="probhead">
+                        <th>标题</th>{%- if with_user -%}<th>来源</th>{%- endif -%}
+                    </tr>
+                </thead>
+            {%- endif -%}
+            <tbody>
+                {%- for article in articles -%}
+                    <tr data-url="{{ article.url() }}" onclick="window.open(this.dataset.url);">
+                        <td>{{- article.title -}}</td>
+                        {%- if with_user -%}
+                            <td class="soluser"{%- if article.user -%}data-url="{{ article.user.url() }}"
+                                onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>
+                                <div>
+                                    {{- user_avatar_img(article.user) -}}
+                                    {{- user_name(article.user) -}}
+                                </div>
+                            </td>
+                        {%- endif -%}
+                    </tr>
+                {%- endfor -%}
+            </tbody>
+        </table>
+    {%- else -%}<p>暂无</p>{%- endif -%}
+{%- endmacro -%}

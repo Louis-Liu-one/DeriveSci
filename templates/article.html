@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% from "includes/users.html" import user_sidebar %}
+{% from "includes/sidebar.html" import return2post, edit_article, delete_article %}
+{% from "includes/comment.html" import commentarea with context %}
+
+{% block title %}专栏{{ article.id }} - MathProbs{% endblock %}
+
+{% block static_files %}
+<script src="https://fastly.jsdelivr.net/npm/markdown-it-anchor@9.2.0/dist/markdownItAnchor.umd.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/markdown-it-toc-done-right@4.2.0/dist/markdownItTocDoneRight.umd.min.js"></script>
+{{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
+{{- moment.locale('zh-cn') -}}
+<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='comment.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='article.css') }}">
+<script src="{{ url_for('static', filename='md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='comment-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='article-utils.js') }}"></script>
+{% endblock %}
+
+{% block navbar_title %}
+专栏：{{ article.title }}
+{% endblock %}
+
+{% block body %}
+<aside>
+    {%- if current_user == article.user or current_user.isadmin -%}
+        {{- edit_article(article) -}}{{- delete_article(article) -}}
+    {%- endif -%}
+    <a class="sidebar-link" href="javascript:void(0)" onclick="toggleArticleToc();">
+        <div class="sidebar-item" id="tocToggleButton"><i class="fas fa-list"></i>目录导航</div>
+    </a>
+    <h3>专栏作者</h3>{{- user_sidebar(article.user) -}}
+</aside>
+<article id="contentContainer" class="markdown-body body-article">
+    <textarea id="bodyText">[toc]
+{{ article.content -}}
+    </textarea>
+</article>
+<article class="toc-container" id="tocBlock"><h3>目录</h3></article>
+<article class="right-side-article">
+    <h3>讨论区</h3>
+    {{- commentarea(3, article.get_post_ident(), article.get_toplevel_comments()) -}}
+</article>
+<script>
+    {
+        renderElement(contentContainer, bodyText.value, 'block');
+        renderElements([...document.getElementsByClassName('comment-content')]);
+        const tocNavElement = contentContainer.querySelector('nav.table-of-contents');
+        const tocToggleButton = document.getElementById('tocToggleButton');
+        if (tocNavElement) tocBlock.appendChild(tocNavElement);
+        else tocBlock.style.display = 'none';
+        if (!tocNavElement.innerHTML) tocToggleButton.classList.add('disabled');
+    }
+</script>
+{% endblock %}

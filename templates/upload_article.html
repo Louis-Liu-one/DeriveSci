@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% from "includes/users.html" import user_sidebar %}
+{% from "includes/sidebar.html" import return2post %}
+
+{% block title %}
+{% if editmode %}编辑{% else %}撰写{% endif %}专栏 - MathProbs
+{% endblock %}
+
+{% block static_files %}
+<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
+<script src="{{ url_for('static', filename='md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='article-utils.js') }}"></script>
+{% endblock %}
+
+{% block navbar_title %}
+{% if editmode %}编辑{% else %}上传{% endif %}专栏
+{% endblock %}
+
+{% block body %}
+<aside>
+    {%- if editmode -%}
+        {{- return2post(article, "返回专栏") -}}
+        <h3>专栏作者</h3>
+        {%- if editmode -%}{{- user_sidebar(article.user) -}}
+        {%- else -%}{{- user_sidebar(current_user) -}}{%- endif -%}
+    {%- else -%}
+        <a class="sidebar-link" href="{{ url_for('welcome') }}">
+            <div class="sidebar-item"><i class="fas fa-circle-left"></i>返回主页</div>
+        </a>
+    {%- endif -%}
+</aside>
+<article class="body-article form-container">
+    <form class="form-base" id="editForm">
+        {%- if editmode -%}
+            <input type="hidden" name="article_id" id="articleId" value="{{ article.id }}">
+        {%- endif -%}
+        <span>
+            <label for="articleTitle">标题：</label>
+            <input required type="text" id="articleTitle" name="articletitle"
+                autocomplete="off" spellcheck="false"
+                {%- if editmode -%}value="{{ article.title }}"{%- endif -%}>
+        </span>
+        <span>
+            <label for="article">内容：</label>
+            <textarea id="article" name="article" class="tall"
+                placeholder="以Markdown格式输入内容" spellcheck="false" required>
+                {%- if editmode -%}{{ article.content }}{%- endif -%}
+            </textarea>
+        </span>
+        <span>
+            <button type="button" id="mdPreviewButton" onclick="renderElement(
+                mdPreview, article.value, 'block');">预览</button>
+            {%- if editmode -%}
+                <button type="button" onclick="editArticle();">修改</button>
+            {%- else -%}
+                <button type="button" onclick="uploadArticle();">上传</button>
+            {%- endif -%}
+        </span>
+    </form>
+</article>
+<article class="right-side-article">
+    <h3>预览区</h3>
+    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+    <p class="tips">
+        <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
+            <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
+        </a>
+    </p>
+</article>
+<script>
+    {
+        const mdPreviewButton = document.getElementById('mdPreviewButton');
+        mdPreviewButton.click();
+    }
+</script>
+{% endblock %}

@@ -53,3 +53,16 @@
         <div class="sidebar-item"><i class="fas fa-trash-can"></i>删除题解</div>
     </a>
 {%- endmacro -%}
+
+{%- macro edit_article(article) -%}
+    <a class="sidebar-link" target="_blank" href="{{ url_for('edit_article', article_id=article.id) }}">
+        <div class="sidebar-item"><i class="fas fa-pen-to-square"></i>编辑专栏</div>
+    </a>
+{%- endmacro -%}
+
+{%- macro delete_article(article) -%}
+    <a class="sidebar-link" data-article-id="{{ article.id }}" href="javascript:void(0)"
+        onclick="if (confirm('确定要删除专栏？此操作不可撤销。')) deleteArticle(this.dataset.articleId);">
+        <div class="sidebar-item"><i class="fas fa-trash-can"></i>删除专栏</div>
+    </a>
+{%- endmacro -%}

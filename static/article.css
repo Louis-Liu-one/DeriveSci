@@ -1,0 +1,45 @@
+article.toc-container {
+    position: fixed;
+    top: 80px;
+    right: 15px;
+    width: 320px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    z-index: 1500;
+    background: var(--surface);
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform .25s cubic-bezier(.2, .9, .2, 1),
+        opacity .18s ease, visibility .18s ease;
+}
+
+article.toc-container.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+article.toc-container h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+    article.toc-container {
+        right: 0;
+        left: auto;
+        z-index: 1200;
+        width: calc(40%);
+        height: calc(100vh - 140px);
+        padding-top: 12px;
+        transform: translateX(-100%);
+    }
+
+    article.toc-container.open {
+        transform: translateX(0);
+    }
+}
