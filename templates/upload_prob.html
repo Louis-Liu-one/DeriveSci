@@ -87,7 +87,7 @@
             {%- endif -%}
         </span>
         <span>
-            <button type="button" onclick="renderElement(
+            <button type="button" id="mdPreviewButton" onclick="renderElement(
                 mdPreview, statement.value, 'block', markdownImageBasePath);">预览</button>
             {%- if editmode -%}
                 <button type="button" onclick="editProb();">上传</button>
@@ -123,5 +123,9 @@
     {%- else -%}
         const markdownImageBasePath = '';
     {%- endif -%}
+    {
+        const mdPreviewButton = document.getElementById('mdPreviewButton');
+        mdPreviewButton.click();
+    }
 </script>
 {% endblock %}

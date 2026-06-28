@@ -6,6 +6,7 @@ div.markdown-preview-block {
     box-shadow: var(--shadow);
     padding: 10px;
     margin-top: 15px;
+    overflow-x: auto;
 }
 
 div.markdown-preview-block img {

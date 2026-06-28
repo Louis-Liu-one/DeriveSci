@@ -50,7 +50,8 @@
                 formenctype="multipart/form-data" accept="image/*" multiple>
         </span>
         <span>
-            <button type="button" onclick="renderElement(mdPreview, solution.value, 'block');">预览</button>
+            <button type="button" id="mdPreviewButton" onclick="renderElement(
+                mdPreview, solution.value, 'block', markdownImageBasePath);">预览</button>
             {%- if editmode -%}
                 <button type="button" onclick="editSolution();">上传</button>
             {%- else -%}
@@ -71,4 +72,15 @@
         </a>
     </p>
 </article>
+<script>
+    {%- if editmode -%}
+        const markdownImageBasePath = '/images/{{ prob.probno|urlencode }}/';
+    {%- else -%}
+        const markdownImageBasePath = '';
+    {%- endif -%}
+    {
+        const mdPreviewButton = document.getElementById('mdPreviewButton');
+        mdPreviewButton.click();
+    }
+</script>
 {% endblock %}

@@ -76,6 +76,10 @@ figcaption {
     font-size: 1em;
 }
 
+p.katex-block {
+    overflow-x: auto;
+}
+
 /******************************* navbar *******************************/
 
 nav.navbar {

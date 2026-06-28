@@ -1,4 +1,4 @@
-(function () {
+{
     function createTagInput(opts) {
         const input = document.getElementById(opts.inputId);
         const area = document.getElementById(opts.areaId);
@@ -61,4 +61,4 @@
     }
 
     window.createTagInput = createTagInput;
-})();
+}

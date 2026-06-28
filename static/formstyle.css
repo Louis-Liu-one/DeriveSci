@@ -187,7 +187,6 @@ form.form-base div.answer ul>li .subprob-header>.subprob-label-display {
 }
 
 form.form-base div.answer ul>li .subprob-header>.subprob-label-display p {
-    flex-grow: 1;
     min-width: 0;
     margin: 0;
 }

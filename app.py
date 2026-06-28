@@ -71,7 +71,11 @@ from flask import render_template, render_template_string, make_response
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_moment import Moment, moment as builtin_moment
 
-from models import *
+from models import db, init_app, utcfromnow
+from models import find_user, register_user, unregister_user
+from models import Prob, get_prob, add_prob, get_solution, add_solution
+from models import ProbLabel, ProbImage, add2labels, add_images
+from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
 
 
@@ -718,7 +722,7 @@ def api_chat_messages():
         return jsonify(find_user(receiver_uid).all_chats(
             datetime.datetime.fromisoformat(
                 lastmsgtime) if lastmsgtime else None))
-    except BaseException as err:
+    except BaseException:
         return {}, 400
 
 

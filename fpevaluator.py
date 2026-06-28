@@ -378,7 +378,7 @@ class Statements(FPElement):
         self.statements = [] if statements is None else statements
 
     def __repr__(self):
-        return f'Statements(\n' \
+        return 'Statements(\n' \
             + ',\n'.join([indent(str(
                 statement)) for statement in self.statements]) + '\n)'
 

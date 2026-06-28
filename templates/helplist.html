@@ -39,7 +39,7 @@
         {%- endfor -%}
     </div>
     <script>
-        (function () {
+        {
             const input = document.getElementById('helpSearch');
             const grid = document.getElementById('helpGrid');
             input.addEventListener('input', function () {
@@ -52,7 +52,7 @@
                         || desc.indexOf(q) !== -1) ? 'flex' : 'none';
                 });
             });
-        })();
+        }
     </script>
 </article>
 {% endblock %}
