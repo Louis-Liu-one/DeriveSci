@@ -51,10 +51,9 @@ function bindImagePreview() {
                     })
                 });
                 const data = await resp.json();
-                if (data.ok) {
-                    window.location.href = data.newurl;
-                } else alert('重命名失败：' + (data.error || '未知错误'));
-            } catch (err) { alert('重命名失败：' + err); }
+                if (data.ok) window.location.href = data.newurl;
+                else alert(`重命名失败：${data.error || '未知错误'}`);
+            } catch (err) { alert(`重命名失败：${err}`); }
         });
         saveBtn.addEventListener('click', (ev) => { ev.preventDefault(); input.blur(); });
     }
@@ -81,8 +80,8 @@ function bindImagePreview() {
                 const resp = await fetch('/api/image/reupload', { method: 'POST', body: fd });
                 const data = await resp.json();
                 if (data.ok) alert('上传成功，但是图片缓存需要更新，请清空浏览器缓存或者等待稍后查看效果。');
-                else alert('上传失败：' + (data.error || '未知错误'));
-            } catch (err) { alert('上传失败：' + err); }
+                else alert(`上传失败：${data.error || '未知错误'}`);
+            } catch (err) { alert(`上传失败：${err}`); }
         });
     }
 
@@ -98,8 +97,8 @@ function bindImagePreview() {
             });
             const data = await resp.json();
             if (data.ok) window.location.href = data.url;
-            else alert('删除失败：' + (data.error || '未知错误'));
-        } catch (err) { alert('删除失败：' + err); }
+            else alert(`删除失败：${data.error || '未知错误'}`);
+        } catch (err) { alert(`删除失败：${err}`); }
     };
 
     // helper to show modal/dialog

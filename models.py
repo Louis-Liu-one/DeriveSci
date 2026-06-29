@@ -22,11 +22,11 @@ from anschecker import check_answers, testpoints_passedlist
 
 
 __all__ = [
-    'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow',
+    'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow', 'get_post',
     'find_user', 'register_user', 'unregister_user',
-    'Prob', 'Image', 'ProbLabel', 'get_prob', 'add_prob',
-    'get_solution', 'add_solution', 'add_images', 'add2labels',
-    'get_post', 'get_images_for_post', 'get_image',
+    'Prob', 'ProbLabel', 'get_prob', 'add_prob',
+    'get_solution', 'add_solution', 'add2labels',
+    'Image', 'add_images', 'get_images_for_post', 'get_image',
     'Article', 'get_article', 'add_article',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
 ]
@@ -293,7 +293,48 @@ def unregister_user(user):
         db.session.commit()
 
 
-# =========================== 题目与图片数据库 ===========================
+# =========================== 图片数据库 ===========================
+
+
+class Image(db.Model):
+    __tablename__ = 'images'
+    post_type = db.Column(db.Integer, primary_key=True)
+    post_ident = db.Column(db.Text, primary_key=True)
+    name = db.Column(db.String(64), primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    size = db.Column(db.Integer)
+    mimetype = db.Column(db.String(64))
+    data = db.Column(db.LargeBinary)
+    uploader = db.relationship('User', backref='uploaded_images')
+
+
+def add_images(post_type, post_ident, imgfiles):
+    for imgfile in imgfiles:
+        if get_image(post_type, post_ident, imgfile.filename) is not None:
+            return '文件名与已有文件重复。'
+    for imgfile in imgfiles:
+        imgdata = imgfile.read()
+        if len(imgdata):
+            img = Image(
+                post_type=int(post_type), post_ident=str(post_ident),
+                name=imgfile.filename, uid=current_user.uid,
+                size=len(imgdata), data=imgdata,
+                mimetype=mimetypes.guess_type(imgfile.filename)[0])
+            db.session.add(img)
+    db.session.commit()
+
+
+def get_images_for_post(post_type, post_ident):
+    return Image.query.filter_by(
+        post_type=int(post_type), post_ident=str(post_ident)
+    ).order_by(Image.name.asc()).all()
+
+
+def get_image(post_type, post_ident, name):
+    return db.session.get(Image, (int(post_type), str(post_ident), str(name)))
+
+
+# =========================== 题目数据库 ===========================
 
 
 prob_label = db.Table(
@@ -462,18 +503,6 @@ class ProbSolution(db.Model):
         return self.probno < solution.probno
 
 
-class Image(db.Model):
-    __tablename__ = 'images'
-    post_type = db.Column(db.Integer, primary_key=True)
-    post_ident = db.Column(db.Text, primary_key=True)
-    name = db.Column(db.String(64), primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
-    size = db.Column(db.Integer)
-    mimetype = db.Column(db.String(64))
-    data = db.Column(db.LargeBinary)
-    uploader = db.relationship('User', backref='uploaded_images')
-
-
 class ProbLabel(db.Model):
     __tablename__ = 'labels'
     labelname = db.Column(db.String(16), primary_key=True)
@@ -501,16 +530,6 @@ def get_post(post_type, post_ident):
     if post_type == 3:
         return get_article(int(post_ident))
     return None
-
-
-def get_images_for_post(post_type, post_ident):
-    return Image.query.filter_by(
-        post_type=int(post_type), post_ident=str(post_ident)
-    ).order_by(Image.name.asc()).all()
-
-
-def get_image(post_type, post_ident, name):
-    return db.session.get(Image, (int(post_type), str(post_ident), str(name)))
 
 
 def add_prob(**kwargs):
@@ -547,22 +566,6 @@ def add_solution(probno, title, content):
     db.session.add(solution)
     db.session.commit()
     return True, solution
-
-
-def add_images(post_type, post_ident, imgfiles):
-    for imgfile in imgfiles:
-        if get_image(post_type, post_ident, imgfile.filename) is not None:
-            return '文件名与已有文件重复。'
-    for imgfile in imgfiles:
-        imgdata = imgfile.read()
-        if len(imgdata):
-            img = Image(
-                post_type=int(post_type), post_ident=str(post_ident),
-                name=imgfile.filename, uid=current_user.uid,
-                size=len(imgdata), data=imgdata,
-                mimetype=mimetypes.guess_type(imgfile.filename)[0])
-            db.session.add(img)
-    db.session.commit()
 
 
 def get_label(labelname, create=False):

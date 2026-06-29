@@ -50,7 +50,9 @@ async function reviewProb(btn, accept) {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ probno: btn.dataset.probno, accept })
         });
-        const data = await response.json(); location.replace(data.url);
+        const data = await response.json();
+        if (data.ok) location.replace(data.url);
+        else alert(`操作失败：${data.error}`);
     } catch (err) { alert('操作失败'); }
 }
 

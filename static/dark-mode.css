@@ -60,7 +60,9 @@
         border-color: var(--border);
     }
 
-    article.body-article img:not(.avatar) {
+    article.body-article img:not(.avatar),
+    div.markdown-preview-block img:not(.avatar),
+    div.image-preview img {
         filter: invert(1);
     }
 }

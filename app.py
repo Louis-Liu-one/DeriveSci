@@ -63,12 +63,12 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /api/article/delete         删除专栏
 
 图片页面：
-/probs/<probno>/images/           题目图片列表
-/probs/<probno>/images/<filename> 题目图片预览
-/images/<probno>/<filename>       题目/题解图片
-/api/image/reupload               重新上传图片
-/api/image/rename                 重命名图片
-/api/image/delete                 删除图片
+/images/<post_type>/<post_ident>                 图片列表
+/images/<post_type>/<post_ident>/<filename>      图片
+/images/<post_type>/<post_ident>/<filename>/view 图片预览
+/api/image/reupload                              重新上传图片
+/api/image/rename                                重命名图片
+/api/image/delete                                删除图片
 
 
 以/api/开头的路由是 API 路由。
@@ -87,12 +87,11 @@ from flask import render_template, render_template_string, make_response
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_moment import Moment, moment as builtin_moment
 
-from models import db, init_app, utcfromnow
+from models import db, init_app, utcfromnow, get_post
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
-from models import get_article, add_article
-from models import ProbLabel, Image, add2labels, add_images
-from models import get_post, get_images_for_post, get_image
+from models import ProbLabel, add2labels, get_article, add_article
+from models import Image, add_images, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
 
@@ -164,75 +163,7 @@ def api_post_comment():
     return {'ok': True, 'html': rendered_html, 'is_reply': bool(replyto_id)}
 
 
-# =========================== 题目各项网页与API ===========================
-
-
-@app.route('/probs/')
-def problist():
-    reviewmode = request.args.get('reviewmode') == 'True'
-    if reviewmode and not (
-            current_user.is_authenticated and current_user.isadmin):
-        return redirect(url_for('problist'))
-    if reviewmode:
-        all_query = Prob.query.order_by(Prob.probno.asc())
-    else:
-        all_query = Prob.query.filter(
-            Prob.review_status == 1).order_by(Prob.probno.asc())
-    probs_data = [p.probno for p in all_query]
-    probs = list(all_query)
-    return render_template(
-        'problist.html', reviewmode=reviewmode,
-        probs=probs, probs_data=probs_data, form={})
-
-
-@app.route('/labels/')
-def labellist():
-    return render_template('labellist.html', labels=ProbLabel.query.all())
-
-
-@app.route('/labels/<labelname>')
-def problistoflabel(labelname):
-    # Label page: server renders problems that have the given label
-    base_query = Prob.query.filter(Prob.problabels.any(
-        ProbLabel.labelname == labelname))
-    if not current_user.is_authenticated or not current_user.isadmin:
-        base_query = base_query.filter(Prob.review_status == 1)
-    all_query = base_query.order_by(Prob.probno.asc())
-    probs_data = [p.probno for p in all_query]
-    probs = list(all_query)
-    return render_template(
-        'problist.html', labelname=labelname, oflabel=True, form={},
-        probs=probs, probs_data=probs_data, query=None)
-
-
-@app.route('/probs/<probno>')
-def probs(probno):
-    prob = get_prob(probno)
-    if prob and prob.viewable_for(current_user):
-        return render_template('prob.html', prob=prob)
-    return render_template('notfound.html', error='未能找到题目。'), 404
-
-
-@app.route('/api/prob/search-content', methods=['POST'])
-def api_search_probs_content():
-    data = request.get_json() or {}
-    statement = data.get('statement', '')
-    reviewmode = data.get('reviewmode') \
-        or request.args.get('reviewmode') == 'True'
-    oflabel = data.get('oflabel') or False
-    labelname = data.get('labelname') or None
-    if not statement:
-        return jsonify({'results': []})
-    # build query inline: optionally restrict to label, respect visibility
-    q = Prob.query
-    if oflabel and labelname:
-        q = q.filter(Prob.problabels.any(ProbLabel.labelname == labelname))
-    if not reviewmode:
-        q = q.filter(Prob.review_status == 1)
-    q = q.filter(Prob.statement.like(f"%{statement}%"))
-    q = q.order_by(Prob.probno.asc())
-    probs_list = list(q)
-    return jsonify({'results': [p.probno for p in probs_list]})
+# =========================== 图片各项网页与API ===========================
 
 
 @app.route('/images/<int:post_type>/<post_ident>/')
@@ -353,6 +284,55 @@ def api_image_delete():
         'images_list', post_type=post_type, post_ident=post_ident)}
 
 
+# =========================== 题目各项网页与API ===========================
+
+
+@app.route('/probs/')
+def problist():
+    reviewmode = request.args.get('reviewmode') == 'True'
+    if reviewmode and not (
+            current_user.is_authenticated and current_user.isadmin):
+        return redirect(url_for('problist'))
+    if reviewmode:
+        all_query = Prob.query.order_by(Prob.probno.asc())
+    else:
+        all_query = Prob.query.filter(
+            Prob.review_status == 1).order_by(Prob.probno.asc())
+    probs_data = [p.probno for p in all_query]
+    probs = list(all_query)
+    return render_template(
+        'problist.html', reviewmode=reviewmode,
+        probs=probs, probs_data=probs_data, form={})
+
+
+@app.route('/labels/')
+def labellist():
+    return render_template('labellist.html', labels=ProbLabel.query.all())
+
+
+@app.route('/labels/<labelname>')
+def problistoflabel(labelname):
+    # Label page: server renders problems that have the given label
+    base_query = Prob.query.filter(Prob.problabels.any(
+        ProbLabel.labelname == labelname))
+    if not current_user.is_authenticated or not current_user.isadmin:
+        base_query = base_query.filter(Prob.review_status == 1)
+    all_query = base_query.order_by(Prob.probno.asc())
+    probs_data = [p.probno for p in all_query]
+    probs = list(all_query)
+    return render_template(
+        'problist.html', labelname=labelname, oflabel=True, form={},
+        probs=probs, probs_data=probs_data, query=None)
+
+
+@app.route('/probs/<probno>')
+def probs(probno):
+    prob = get_prob(probno)
+    if prob and prob.viewable_for(current_user):
+        return render_template('prob.html', prob=prob)
+    return render_template('notfound.html', error='未能找到题目。'), 404
+
+
 @app.route('/probs/<probno>/submit', methods=['POST'])
 @login_required
 def submit(probno):
@@ -436,6 +416,28 @@ def upload_solution(probno):
     if not prob:
         return render_template('notfound.html', error='未能找到题目。'), 404
     return render_template('upload_solution.html', prob=prob)
+
+
+@app.route('/api/prob/search-content', methods=['POST'])
+def api_search_probs_content():
+    data = request.get_json() or {}
+    statement = data.get('statement', '')
+    reviewmode = data.get('reviewmode') \
+        or request.args.get('reviewmode') == 'True'
+    oflabel = data.get('oflabel') or False
+    labelname = data.get('labelname') or None
+    if not statement:
+        return jsonify({'results': []})
+    # build query inline: optionally restrict to label, respect visibility
+    q = Prob.query
+    if oflabel and labelname:
+        q = q.filter(Prob.problabels.any(ProbLabel.labelname == labelname))
+    if not reviewmode:
+        q = q.filter(Prob.review_status == 1)
+    q = q.filter(Prob.statement.like(f"%{statement}%"))
+    q = q.order_by(Prob.probno.asc())
+    probs_list = list(q)
+    return jsonify({'results': [p.probno for p in probs_list]})
 
 
 @app.route('/api/prob/upload', methods=['POST'])
