@@ -91,7 +91,8 @@ from models import db, init_app, utcfromnow
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
 from models import get_article, add_article
-from models import ProbLabel, ProbImage, add2labels, add_images
+from models import ProbLabel, Image, add2labels, add_images
+from models import get_post, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
 
@@ -107,14 +108,8 @@ def get_helplist():
     jsonpath = os.path.join(helpdir, 'helplist.json')
     if os.path.exists(jsonpath):
         with open(jsonpath, 'r', encoding='utf-8') as fh:
-            data = json.load(fh)
-            out = []
-            for entry in data:
-                ident = entry.get('identifier') or entry.get('id')
-                title = entry.get('title')
-                if ident and title:
-                    out.append(entry)
-            return out
+            return [entry for entry in json.load(fh) if (
+                'identifier' in entry or 'id' in entry) and 'title' in entry]
     return []
 
 
@@ -240,9 +235,36 @@ def api_search_probs_content():
     return jsonify({'results': [p.probno for p in probs_list]})
 
 
-@app.route('/images/<probno>/<imagename>')
-def imagefile(probno, imagename):
-    image = db.session.get(ProbImage, (probno, imagename))
+@app.route('/images/<int:post_type>/<post_ident>/')
+def images_list(post_type, post_ident):
+    post = get_post(post_type, post_ident)
+    if not post or not post.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到内容。'), 404
+    images = get_images_for_post(post_type, post_ident)
+    return render_template(
+        'images.html', target=post, post_type=post_type,
+        post_ident=post_ident, images=images)
+
+
+@app.route('/images/<int:post_type>/<post_ident>/<imagename>/view')
+def image_preview(post_type, post_ident, imagename):
+    post = get_post(post_type, post_ident)
+    if not post or not post.viewable_for(current_user):
+        return render_template('notfound.html', error='未能找到内容。'), 404
+    image = get_image(post_type, post_ident, imagename)
+    if not image:
+        return render_template('notfound.html', error='未能找到图片。'), 404
+    editable = current_user.is_authenticated and (
+        hasattr(image, 'uid') and current_user.uid == image.uid
+        or current_user.isadmin)
+    return render_template(
+        'image.html', target=post, post_type=post_type,
+        post_ident=post_ident, image=image, editable=editable)
+
+
+@app.route('/images/<int:post_type>/<post_ident>/<imagename>')
+def imagefile(post_type, post_ident, imagename):
+    image = get_image(post_type, post_ident, imagename)
     if not image:
         abort(404)  # 未找到
     etag = hashlib.md5(image.data).hexdigest()
@@ -256,40 +278,17 @@ def imagefile(probno, imagename):
     return response
 
 
-@app.route('/probs/<probno>/images/')
-def images_list(probno):
-    prob = get_prob(probno)
-    if not prob or not prob.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题目。'), 404
-    images = prob.images.copy()
-    return render_template('images.html', prob=prob, images=images)
-
-
-@app.route('/probs/<probno>/images/<imagename>')
-def image_preview(probno, imagename):
-    prob = get_prob(probno)
-    if not prob or not prob.viewable_for(current_user):
-        return render_template('notfound.html', error='未能找到题目。'), 404
-    image = db.session.get(ProbImage, (probno, imagename))
-    if not image:
-        return render_template('notfound.html', error='未能找到图片。'), 404
-    editable = current_user.is_authenticated and (
-        hasattr(image, 'uid') and current_user.uid == image.uid
-        or current_user.isadmin)
-    return render_template(
-        'image.html', prob=prob, image=image, editable=editable)
-
-
 @app.route('/api/image/reupload', methods=['POST'])
 def api_image_reupload():
     if not current_user.is_authenticated:
         return {'ok': False, 'error': '用户未登录。'}, 401
-    probno = request.form.get('probno')
+    post_type = request.form.get('post_type')
+    post_ident = request.form.get('post_ident')
     name = request.form.get('name')
     imgfile = request.files.get('imgfile')
-    if not probno or not name or not imgfile:
+    if not post_type or not post_ident or not name or not imgfile:
         return {'ok': False, 'error': '参数不足。'}, 400
-    image = db.session.get(ProbImage, (probno, name))
+    image = get_image(post_type, post_ident, name)
     if not image:
         return {'ok': False, 'error': '未能找到图片。'}, 404
     if not current_user == image.uploader and not current_user.isadmin:
@@ -300,7 +299,6 @@ def api_image_reupload():
     image.data = data
     image.size = len(data)
     image.mimetype = imgfile.mimetype or image.mimetype
-    image.uid = current_user.uid
     db.session.commit()
     return {'ok': True}
 
@@ -309,45 +307,50 @@ def api_image_reupload():
 def api_image_rename():
     if not current_user.is_authenticated:
         return {'ok': False, 'error': '用户未登录。'}, 401
-    probno = request.json.get('probno')
+    post_type = request.json.get('post_type')
+    post_ident = request.json.get('post_ident')
     oldname = request.json.get('oldname')
     newname = request.json.get('newname')
-    if not probno or not oldname or not newname:
+    if not post_type or not post_ident or not oldname or not newname:
         return {'ok': False, 'error': '参数不足。'}, 400
-    image = db.session.get(ProbImage, (probno, oldname))
+    image = get_image(post_type, post_ident, oldname)
     if not image:
         return {'ok': False, 'error': '未能找到图片。'}, 404
     if not current_user == image.uploader and not current_user.isadmin:
         abort(403)
-    exists = db.session.get(ProbImage, (probno, newname))
+    exists = get_image(post_type, post_ident, newname)
     if exists:
         return {'ok': False, 'error': '目标文件名已存在。'}, 400
-    newimg = ProbImage(
-        probno=image.probno, name=newname, uid=image.uid,
-        size=image.size, mimetype=image.mimetype, data=image.data)
+    newimg = Image(
+        post_type=image.post_type, post_ident=image.post_ident, name=newname,
+        uid=image.uid, size=image.size, mimetype=image.mimetype,
+        data=image.data)
     db.session.add(newimg)
     db.session.delete(image)
     db.session.commit()
     return {'ok': True, 'newurl': url_for(
-        'image_preview', probno=probno, imagename=newname)}
+        'image_preview', post_type=post_type, post_ident=post_ident,
+        imagename=newname)}
 
 
 @app.route('/api/image/delete', methods=['POST'])
 def api_image_delete():
     if not current_user.is_authenticated:
         return {'ok': False, 'error': '用户未登录。'}, 401
-    probno = request.json.get('probno')
+    post_type = request.json.get('post_type')
+    post_ident = request.json.get('post_ident')
     name = request.json.get('name')
-    if not probno or not name:
+    if not post_type or not post_ident or not name:
         return {'ok': False, 'error': '参数不足。'}, 400
-    image = db.session.get(ProbImage, (probno, name))
+    image = get_image(post_type, post_ident, name)
     if not image:
         return {'ok': False, 'error': '未能找到图片。'}, 404
     if not current_user == image.uploader and not current_user.isadmin:
         abort(403)
     db.session.delete(image)
     db.session.commit()
-    return {'ok': True, 'url': url_for('images_list', probno=probno)}
+    return {'ok': True, 'url': url_for(
+        'images_list', post_type=post_type, post_ident=post_ident)}
 
 
 @app.route('/probs/<probno>/submit', methods=['POST'])
@@ -448,15 +451,15 @@ def api_upload_prob():
     isofficial = current_user.isadmin and request.form.get(
         'isofficial') == 'on'
     review_status = 1 if current_user.isadmin else -1
-    error = add_images(probno, imgfiles)
-    if error is not None:
-        return {'ok': False, 'error': str(error)}, 400
     status, prob = add_prob(
         probno=probno, probtitle=probtitle, statement=statement,
         answer=answers, source=current_user,
         review_status=review_status, isofficial=isofficial)
     if not status:
         return {'ok': False, 'error': str(prob)}, 400
+    error = add_images(0, prob.probno, imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}, 400
     add2labels(problabels, prob)
     return {'ok': True, 'url': prob.url()}
 
@@ -476,7 +479,7 @@ def api_edit_prob():
     statement = request.form.get('statement')
     answers = request.form.get('answers')
     imgfiles = request.files.getlist('imgfiles')
-    error = add_images(probno, imgfiles)
+    error = add_images(0, prob.probno, imgfiles)
     if error is not None:
         return {'ok': False, 'error': str(error)}, 400
     prob.edit(probtitle, problabels, statement, answers)
@@ -563,12 +566,12 @@ def api_upload_solution():
     soltitle = request.form.get('soltitle')
     content = request.form.get('solution')
     imgfiles = request.files.getlist('imgfiles')
-    error = add_images(probno, imgfiles)
-    if error is not None:
-        return {'ok': False, 'error': str(error)}, 400
     status, solution = add_solution(probno, soltitle, content)
     if not status:
         return {'ok': False, 'error': str(solution)}, 400
+    error = add_images(1, solution.get_post_ident(), imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}, 400
     return {'ok': True, 'url': solution.url()}
 
 
@@ -585,7 +588,7 @@ def api_edit_solution():
     soltitle = request.form.get('soltitle')
     content = request.form.get('solution')
     imgfiles = request.files.getlist('imgfiles')
-    error = add_images(probno, imgfiles)
+    error = add_images(1, solution.get_post_ident(), imgfiles)
     if error is not None:
         return {'ok': False, 'error': str(error)}, 400
     solution.edit(soltitle, content)

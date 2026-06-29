@@ -24,8 +24,9 @@ from anschecker import check_answers, testpoints_passedlist
 __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow',
     'find_user', 'register_user', 'unregister_user',
-    'Prob', 'ProbImage', 'ProbLabel', 'get_prob', 'add_prob',
+    'Prob', 'Image', 'ProbLabel', 'get_prob', 'add_prob',
     'get_solution', 'add_solution', 'add_images', 'add2labels',
+    'get_post', 'get_images_for_post', 'get_image',
     'Article', 'get_article', 'add_article',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
 ]
@@ -318,8 +319,6 @@ class Prob(db.Model):
     sourceuid = db.Column(db.Integer, db.ForeignKey('users.uid'))
     submissions = db.relationship(
         'Submission', backref='prob', cascade='all, delete')
-    images = db.relationship(
-        'ProbImage', backref='prob', cascade='all, delete')
     review_status = db.Column(db.Integer, default=-1)
     isofficial = db.Column(db.Boolean, default=False)
     review_comment = db.Column(db.Text)
@@ -463,10 +462,10 @@ class ProbSolution(db.Model):
         return self.probno < solution.probno
 
 
-class ProbImage(db.Model):
+class Image(db.Model):
     __tablename__ = 'images'
-    probno = db.Column(
-        db.String(16), db.ForeignKey('probs.probno'), primary_key=True)
+    post_type = db.Column(db.Integer, primary_key=True)
+    post_ident = db.Column(db.Text, primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
     size = db.Column(db.Integer)
@@ -488,6 +487,30 @@ class ProbLabel(db.Model):
 
 def get_prob(probno):
     return db.session.get(Prob, str(probno))
+
+
+def get_post(post_type, post_ident):
+    if post_type == 0:
+        return get_prob(post_ident)
+    if post_type == 1:
+        try:
+            probno, solno = csv2list(post_ident)
+        except Exception:
+            return None
+        return get_solution(probno, int(solno))
+    if post_type == 3:
+        return get_article(int(post_ident))
+    return None
+
+
+def get_images_for_post(post_type, post_ident):
+    return Image.query.filter_by(
+        post_type=int(post_type), post_ident=str(post_ident)
+    ).order_by(Image.name.asc()).all()
+
+
+def get_image(post_type, post_ident, name):
+    return db.session.get(Image, (int(post_type), str(post_ident), str(name)))
 
 
 def add_prob(**kwargs):
@@ -526,15 +549,16 @@ def add_solution(probno, title, content):
     return True, solution
 
 
-def add_images(probno, imgfiles):
+def add_images(post_type, post_ident, imgfiles):
     for imgfile in imgfiles:
-        if db.session.get(ProbImage, (probno, imgfile.filename)) is not None:
+        if get_image(post_type, post_ident, imgfile.filename) is not None:
             return '文件名与已有文件重复。'
     for imgfile in imgfiles:
         imgdata = imgfile.read()
         if len(imgdata):
-            img = ProbImage(
-                probno=probno, name=imgfile.filename, uid=current_user.uid,
+            img = Image(
+                post_type=int(post_type), post_ident=str(post_ident),
+                name=imgfile.filename, uid=current_user.uid,
                 size=len(imgdata), data=imgdata,
                 mimetype=mimetypes.guess_type(imgfile.filename)[0])
             db.session.add(img)
@@ -682,16 +706,7 @@ class Comment(db.Model):
             start=self.replies.copy()))
 
     def get_post(self):
-        if self.post_type == 0:
-            return get_prob(self.post_ident)
-        elif self.post_type == 1:
-            probno, solno = csv2list(self.post_ident)
-            return get_solution(probno, int(solno))
-        elif self.post_type == 2:
-            return None  # 私信信息，无实际对象
-        elif self.post_type == 3:
-            return get_article(int(self.post_ident))
-        return None  # 未知帖子类型
+        return get_post(self.post_type, self.post_ident)
 
     def editable_for(self, user):
         return user.is_authenticated and (user == self.user or user.isadmin)

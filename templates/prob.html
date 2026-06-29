@@ -28,7 +28,7 @@
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
     {%- endif -%}
     {{- view_solution(prob) -}}{{- upload_solution(prob) -}}
-    <a class="sidebar-link" href="{{ url_for('images_list', probno=prob.probno) }}" target="_blank">
+    <a class="sidebar-link" href="{{ url_for('images_list', post_type=0, post_ident=prob.probno) }}" target="_blank">
         <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
     </a>
     {%- if current_user.isadmin -%}
@@ -115,7 +115,8 @@
     {%- endif -%}
 </article>
 <script>
-    const markdownImageBasePath = "/images/{{ prob.probno|urlencode }}/";
+    const markdownImageBasePath = {{ (
+        "/images/0/" + prob.probno|urlencode + "/")|tojson }};
     const _toRender = [
         contentContainer, ...document.getElementsByClassName('comment-content'),
         ...document.querySelectorAll('.label-render')];

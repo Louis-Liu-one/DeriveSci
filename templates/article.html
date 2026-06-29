@@ -3,7 +3,7 @@
 {% from "includes/sidebar.html" import return2post, edit_article, delete_article %}
 {% from "includes/comment.html" import commentarea with context %}
 
-{% block title %}专栏{{ article.id }} - MathProbs{% endblock %}
+{% block title %}专栏：{{ article.title }} - MathProbs{% endblock %}
 
 {% block static_files %}
 <script src="https://fastly.jsdelivr.net/npm/markdown-it-anchor@9.2.0/dist/markdownItAnchor.umd.min.js"></script>
@@ -19,9 +19,7 @@
 <script src="{{ url_for('static', filename='article-utils.js') }}"></script>
 {% endblock %}
 
-{% block navbar_title %}
-专栏：{{ article.title }}
-{% endblock %}
+{% block navbar_title %}专栏：{{ article.title }}{% endblock %}
 
 {% block body %}
 <aside>

@@ -6,9 +6,12 @@ function bindImagesList() {
         row.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const name = row.dataset.name;
-                const probno = main.dataset.probno;
-                if (name && probno) window.location.href
-                    = `/probs/${encodeURIComponent(probno)}/images/${encodeURIComponent(name)}`;
+                const postType = main.dataset.postType;
+                const postIdent = main.dataset.postIdent;
+                if (name && postType && postIdent) window.location.href
+                    = `/images/${encodeURIComponent(postType)}/`
+                        `${encodeURIComponent(postIdent)}/`
+                        `${encodeURIComponent(name)}/view`;
             }
         });
         row.tabIndex = 0;
@@ -18,7 +21,8 @@ function bindImagesList() {
 function bindImagePreview() {
     const main = document.getElementById('imageMain');
     if (!main) return;
-    const probno = main.dataset.probno;
+    const postType = main.dataset.postType;
+    const postIdent = main.dataset.postIdent;
     const imagename = main.dataset.imagename;
     const display = document.getElementById('imageTitleDisplay');
     const form = document.getElementById('imageTitleForm');
@@ -41,7 +45,10 @@ function bindImagePreview() {
             try {
                 const resp = await fetch('/api/image/rename', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ probno, oldname: imagename, newname: newVal })
+                    body: JSON.stringify({
+                        post_type: postType, post_ident: postIdent,
+                        oldname: imagename, newname: newVal
+                    })
                 });
                 const data = await resp.json();
                 if (data.ok) {
@@ -66,7 +73,8 @@ function bindImagePreview() {
             const fileInput = document.getElementById('reuploadFile');
             if (!fileInput || !fileInput.files.length) { alert('请选择文件'); return; }
             const fd = new FormData();
-            fd.append('probno', probno);
+            fd.append('post_type', postType);
+            fd.append('post_ident', postIdent);
             fd.append('name', imagename);
             fd.append('imgfile', fileInput.files[0]);
             try {
@@ -84,7 +92,9 @@ function bindImagePreview() {
         try {
             const resp = await fetch('/api/image/delete', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ probno, name: imagename })
+                body: JSON.stringify({
+                    post_type: postType, post_ident: postIdent, name: imagename
+                })
             });
             const data = await resp.json();
             if (data.ok) window.location.href = data.url;

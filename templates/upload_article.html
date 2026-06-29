@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block navbar_title %}
-{% if editmode %}编辑{% else %}上传{% endif %}专栏
+{% if editmode %}编辑{% else %}撰写{% endif %}专栏
 {% endblock %}
 
 {% block body %}
@@ -69,9 +69,6 @@
     </p>
 </article>
 <script>
-    {
-        const mdPreviewButton = document.getElementById('mdPreviewButton');
-        mdPreviewButton.click();
-    }
+    document.getElementById('mdPreviewButton').click();
 </script>
 {% endblock %}

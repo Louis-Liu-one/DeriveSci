@@ -116,7 +116,8 @@
             initial: {{ (prob.as_labelnames()|list if editmode else [])|tojson }},
         });
     {%- if editmode -%}
-        const markdownImageBasePath = '/images/{{ prob.probno|urlencode }}/';
+        const markdownImageBasePath = {{ (
+            "/images/0/" + prob.probno|urlencode + "/")|tojson }};
         document.addEventListener('DOMContentLoaded', () => {
             addRawAnswers({{ prob.get_answer()|list|tojson }});
         });

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}问题{{ prob.probno }}的图片 - MathProbs{% endblock %}
+{% block title %}图片预览 - MathProbs{% endblock %}
 
 {% block static_files -%}
 <link rel="stylesheet" href="{{- url_for('static', filename='formstyle.css') -}}">
@@ -8,12 +8,13 @@
 <script src="{{- url_for('static', filename='images-utils.js') -}}"></script>
 {%- endblock %}
 
-{% block navbar_title %}{{ prob.probno }} — 图片预览{% endblock %}
+{% block navbar_title %}图片预览{% endblock %}
 
 {% block body %}
 <aside>
     <h3>图片操作</h3>
-    <a class="sidebar-link" href="{{ url_for('images_list', probno=prob.probno) }}">
+    <a class="sidebar-link" href="{{ url_for(
+        'images_list', post_type=post_type, post_ident=post_ident) }}">
         <div class="sidebar-item"><i class="fas fa-list"></i>图片列表</div>
     </a>
     {% if editable %}
@@ -26,7 +27,8 @@
     {% endif %}
 </aside>
 <article class="main-article" id="imageMain"
-    data-probno="{{ prob.probno }}" data-imagename="{{ image.name }}">
+    data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}"
+    data-imagename="{{ image.name }}">
     <h3 id="imageTitleDisplay">{{ image.name }}</h3>
     <form id="imageTitleForm" class="form-base no-edge hidden">
         <span>
@@ -36,7 +38,8 @@
     </form>
     <div class="image-preview">
         <img id="previewImage" src="{{- url_for(
-            'imagefile', probno=prob.probno, imagename=image.name) -}}">
+            'imagefile', post_type=post_type,
+            post_ident=post_ident, imagename=image.name) -}}">
     </div>
 </article>
 <dialog id="reuploadModal">

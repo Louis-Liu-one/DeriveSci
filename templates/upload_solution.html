@@ -74,13 +74,11 @@
 </article>
 <script>
     {%- if editmode -%}
-        const markdownImageBasePath = '/images/{{ prob.probno|urlencode }}/';
+        const markdownImageBasePath = {{ (
+            "/images/1/" + solution.get_post_ident()|urlencode + "/")|tojson }};
     {%- else -%}
         const markdownImageBasePath = '';
     {%- endif -%}
-    {
-        const mdPreviewButton = document.getElementById('mdPreviewButton');
-        mdPreviewButton.click();
-    }
+    document.getElementById('mdPreviewButton').click();
 </script>
 {% endblock %}

@@ -27,6 +27,11 @@
 <aside>
     {{- return2post(prob, "返回题目") -}}
     {{- upload_solution(prob) -}}
+    <a class="sidebar-link" href="{{ url_for(
+        'images_list', post_type=1,
+        post_ident=solution.get_post_ident()) }}" target="_blank">
+        <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
+    </a>
     {%- if current_user == solution.user or current_user.isadmin -%}
         {{- edit_solution(solution) -}}{{- delete_solution(solution) -}}
     {%- endif -%}
@@ -44,7 +49,8 @@
         solution.get_toplevel_comments()) -}}
 </article>
 <script>
-    const markdownImageBasePath = "/images/{{ prob.probno|urlencode }}/";
+    const markdownImageBasePath = {{ (
+        "/images/1/" + solution.get_post_ident()|urlencode + "/")|tojson }};
     renderElements([
         contentContainer, ...document.getElementsByClassName('comment-content')],
         markdownImageBasePath);
