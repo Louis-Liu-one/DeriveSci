@@ -84,6 +84,7 @@ section.intro-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: fit-content;
     padding: 2rem;
     border-radius: 16px;
     background: var(--surface-soft);
@@ -98,7 +99,23 @@ section.intro-section h1.main-title {
     line-height: 1.2;
 }
 
-section.intro-section h1.main-title span {
+section.intro-section div.title {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+section.intro-section div.title img {
+    width: 72px;
+    height: 72px;
+}
+
+section.intro-section div.title h1.main-title {
+    white-space: nowrap;
+    font-size: clamp(16px, 8vw, 36px);
+}
+
+section.intro-section div.title h1.main-title span {
     color: var(--accent);
 }
 
@@ -153,4 +170,54 @@ section.intro-section div.links-section a.link-btn:hover {
 section.intro-section div.links-section a.link-btn.primary {
     background: var(--primary);
     color: white;
+}
+
+@media (max-width: 768px) {
+    div.home-container {
+        flex-direction: column;
+        width: calc(100% - 2.5rem);
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+
+    section.intro-section,
+    section.problems-section {
+        box-sizing: border-box;
+        padding: 1.25rem;
+        margin: 0;
+        border-radius: 16px;
+    }
+
+    section.intro-section {
+        order: 1;
+    }
+
+    section.problems-section {
+        order: 2;
+    }
+
+    section.problems-section div.problems-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 1rem;
+    }
+
+    section.intro-section h1.main-title {
+        font-size: 2rem;
+    }
+
+    section.intro-section p.description {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+    }
+
+    section.intro-section div.links-section {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    section.intro-section div.links-section a.link-btn {
+        width: calc(100% - 40px);
+        justify-content: center;
+    }
 }

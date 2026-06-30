@@ -32,7 +32,10 @@
         </div>
     </section>
     <section class="intro-section">
-        <h1 class="main-title">探索数学之美，<br><span>解锁解题智慧</span></h1>
+        <div class="title">
+            <img src="{{ url_for('static', filename='images/favicon.svg') }}">
+            <h1 class="main-title">探索数学之美，<br><span>解锁解题智慧</span></h1>
+        </div>
         <p class="description">
             欢迎来到 <strong>MathProbsOnline</strong>，我是 <a href="
             {{- url_for('users', uid=2) -}}" target="_blank">LYX</a>。<br>
