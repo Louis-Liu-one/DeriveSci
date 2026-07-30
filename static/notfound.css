@@ -63,8 +63,8 @@ a.btn {
     background: var(--primary);
     color: white;
     text-decoration: none;
-    transition: transform .14s ease,
-        filter .14s ease, box-shadow .14s ease;
+    transition: transform .3s ease,
+        filter .3s ease, box-shadow .3s ease;
 }
 
 a.btn:hover {
@@ -92,7 +92,6 @@ a.btn-outline {
     }
 
     div.notfound-card {
-        box-sizing: border-box;
         flex-direction: column;
         height: 100%;
     }

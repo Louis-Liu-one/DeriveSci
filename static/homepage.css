@@ -175,14 +175,13 @@ section.intro-section div.links-section a.link-btn.primary {
 @media (max-width: 768px) {
     div.home-container {
         flex-direction: column;
-        width: calc(100% - 2.5rem);
+        width: 100%;
         padding: 1.25rem;
         gap: 1.25rem;
     }
 
     section.intro-section,
     section.problems-section {
-        box-sizing: border-box;
         padding: 1.25rem;
         margin: 0;
         border-radius: 16px;
@@ -217,7 +216,7 @@ section.intro-section div.links-section a.link-btn.primary {
     }
 
     section.intro-section div.links-section a.link-btn {
-        width: calc(100% - 40px);
+        width: 100%;
         justify-content: center;
     }
 }

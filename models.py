@@ -15,6 +15,7 @@ from flask import url_for
 from flask_login import LoginManager, UserMixin, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_moment import moment
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import MetaData
 
@@ -68,6 +69,21 @@ _utcnow = functools.partial(datetime.datetime.now, datetime.UTC)
 
 def utcfromnow(timestamp):
     return _utcnow() - timestamp.astimezone(datetime.UTC)
+
+
+def auto_format_time(timestamp):
+    timediff = utcfromnow(timestamp)
+    tsmoment = moment(timestamp)
+    if timediff < datetime.timedelta(hours=12):
+        return tsmoment.fromNow(refresh=True)
+    elif timediff < datetime.timedelta(days=6):
+        return tsmoment.calendar()
+    elif timediff < datetime.timedelta(days=15):
+        return tsmoment.fromNow(refresh=True)
+    elif timediff < datetime.timedelta(days=365):
+        return tsmoment.format('M 月 D 日')
+    else:
+        return tsmoment.format('Y 年 M 月 D 日')
 
 
 # =========================== 用户数据库与登录系统 ===========================
@@ -224,7 +240,8 @@ class User(db.Model, UserMixin):
                 chats[other] = {'unread': 0, 'messages': []}
             chats[other]['messages'].append({
                 'content': chatmsg.content, 'othersend': othersend,
-                'timestamp': chatmsg.timestamp.isoformat()})
+                'timestamp': chatmsg.timestamp.isoformat(),
+                'humanliketime': auto_format_time(chatmsg.timestamp)})
             if other not in lastvisits:
                 lastvisits[other] = max(get_chatlastvisit(
                     self.uid, other).lastvisit, from_time)

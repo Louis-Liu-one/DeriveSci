@@ -30,8 +30,8 @@ $$
 $$
 \begin{align}
     \begin{split}
-        \sqrt{1 - x^2} \mathrm dx &= (\cos u) \mathrm d(\sin u) \\
-        &= \cos^2 u \mathrm du
+        \sqrt{1 - x^2} \dx &= (\cos u) \dif(\sin u) \\
+        &= \cos^2 u \du
     \end{split}
 \end{align}
 $$
@@ -39,8 +39,8 @@ $$
 $$
 \begin{align}
     \begin{split}
-        \sqrt{1 - x^2} \mathrm dx &= (\cos u) \mathrm d(\sin u) \\
-        &= \cos^2 u \mathrm du
+        \sqrt{1 - x^2} \dx &= (\cos u) \dif(\sin u) \\
+        &= \cos^2 u \du
     \end{split}
 \end{align}
 $$
@@ -70,15 +70,15 @@ $$
 ```latex
 $$
 \begin{align*}
-    \int_{-\pi}^\pi \sin nx \mathrm dx &= 0 & \int_{-\pi}^\pi \cos nx \mathrm dx &= 0 \\
-    \int_{-\pi}^\pi \sin nx \sin kx \mathrm dx &= 0 & \int_{-\pi}^\pi \cos nx \cos kx \mathrm dx &= 0
+    \int_{-\pi}^\pi \sin nx \dx &= 0 & \int_{-\pi}^\pi \cos nx \dx &= 0 \\
+    \int_{-\pi}^\pi \sin nx \sin kx \dx &= 0 & \int_{-\pi}^\pi \cos nx \cos kx \dx &= 0
 \end{align*}
 $$
 ```
 $$
 \begin{align*}
-    \int_{-\pi}^\pi \sin nx \mathrm dx &= 0 & \int_{-\pi}^\pi \cos nx \mathrm dx &= 0 \\
-    \int_{-\pi}^\pi \sin nx \sin kx \mathrm dx &= 0 & \int_{-\pi}^\pi \cos nx \cos kx \mathrm dx &= 0
+    \int_{-\pi}^\pi \sin nx \dx &= 0 & \int_{-\pi}^\pi \cos nx \dx &= 0 \\
+    \int_{-\pi}^\pi \sin nx \sin kx \dx &= 0 & \int_{-\pi}^\pi \cos nx \cos kx \dx &= 0
 \end{align*}
 $$
 
@@ -105,8 +105,8 @@ $$
 ```latex
 $$
 \begin{align*}
-    &\mathrel{\phantom=} \int_{-\pi}^\pi \sin nx \cos kx \mathrm dx \quad (n \ne k) \\
-    &= \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \mathrm dx \\
+    &\mathrel{\phantom=} \int_{-\pi}^\pi \sin nx \cos kx \dx \quad (n \ne k) \\
+    &= \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \dx \\
     &= \left.\frac12\left(\frac{\sin(n + k)x}{n + k}
         + \frac{\sin(n - k)x}{n - k}\right)\right|_{-\pi}^\pi \\
     &= \frac12(0 + 0) - \frac12(0 + 0) = 0
@@ -117,8 +117,8 @@ $$
 ```latex
 $$
 \begin{align*}
-    & \int_{-\pi}^\pi \sin nx \cos kx \mathrm dx \quad (n \ne k) \\
-    ={}& \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \mathrm dx \\
+    & \int_{-\pi}^\pi \sin nx \cos kx \dx \quad (n \ne k) \\
+    ={}& \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \dx \\
     ={}& \left.\frac12\left(\frac{\sin(n + k)x}{n + k}
         + \frac{\sin(n - k)x}{n - k}\right)\right|_{-\pi}^\pi \\
     ={}& \frac12(0 + 0) - \frac12(0 + 0) = 0
@@ -129,8 +129,8 @@ $$
 以上两种方案都能得到如下的效果：
 $$
 \begin{align*}
-    & \int_{-\pi}^\pi \sin nx \cos kx \mathrm dx \quad (n \ne k) \\
-    ={}& \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \mathrm dx \\
+    & \int_{-\pi}^\pi \sin nx \cos kx \dx \quad (n \ne k) \\
+    ={}& \frac12\int_{-\pi}^\pi (\sin(n + k)x + \sin(n - k)x) \dx \\
     ={}& \left.\frac12\left(\frac{\sin(n + k)x}{n + k}
         + \frac{\sin(n - k)x}{n - k}\right)\right|_{-\pi}^\pi \\
     ={}& \frac12(0 + 0) - \frac12(0 + 0) = 0

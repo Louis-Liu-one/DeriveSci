@@ -19,6 +19,10 @@
         url(/static/fonts/Helvetica-Bold.woff) format('woff');
 }
 
+* {
+    box-sizing: border-box;
+}
+
 p.tips {
     color: var(--muted);
     font-size: 13px;
@@ -477,7 +481,7 @@ article.content-container nav.table-of-contents {
         backdrop-filter: blur(6px);
         gap: 10px;
         overflow-x: auto;
-        max-width: calc(100% - 40px);
+        max-width: calc(100% - 20px);
         opacity: 0;
         transform: translateY(-8px) scale(0.98);
         transition: opacity .18s ease, transform .18s ease;
@@ -533,7 +537,7 @@ article.content-container nav.table-of-contents {
     }
 
     article.toc-container {
-        height: calc(100vh - 140px);
+        height: calc(100vh - 110px);
     }
 
     /* Overlay that darkens the page when sidebar is open; clickable to close */
@@ -599,15 +603,8 @@ article.content-container nav.table-of-contents {
     article.body-article,
     article.right-side-article,
     article.content-container {
-        width: calc(100% - 60px);
+        width: calc(100% - 24px);
         margin: 10px 12px;
         overflow: visible;
-    }
-
-    /* Ensure overlays sit above other content */
-    .nav-more-panel,
-    aside,
-    .sidebar-overlay {
-        box-sizing: border-box;
     }
 }

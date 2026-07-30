@@ -10,8 +10,8 @@
 - 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout 等，具体参见 `requirements.txt`，可以直接使用 `pip` 安装，建议使用虚拟环境。命令如下：
 ```bash
 cd MathProbsOnline
-python -m venv webenv            # 创建环境
-source webenv/bin/activate       # 激活环境
+python -m venv .venv             # 创建环境
+source .venv/bin/activate        # 激活环境
 pip install -r requirements.txt  # 安装支持
 # 操作
 deactivate                       # 退出环境
@@ -22,7 +22,7 @@ deactivate                       # 退出环境
 FLASK_SECRET_KEY=密钥...
 export FLASK_SECRET_KEY
 ```
-你也可以将上述命令加入 `webenv/bin/activate` 中。然后，运行 `app.py`，或从他处导入：
+你也可以将上述命令加入 `.venv/bin/activate` 中。然后，运行 `app.py`，或从他处导入：
 ```python
 from app import app
 app.run()

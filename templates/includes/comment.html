@@ -17,16 +17,6 @@
 #}
 {% from "includes/users.html" import user_name, user_avatar_img %}
 
-{%- macro comment_timestamp(comment) -%}
-    {%- set timediff = utcfromnow(comment.timestamp) -%}
-    {%- set tsmoment = moment(comment.timestamp) -%}
-    {%- if timediff < timedelta(hours=12) -%}{{- tsmoment.fromNow(refresh=True) -}}
-    {%- elif timediff < timedelta(days=6) -%}{{- tsmoment.calendar() -}}
-    {%- elif timediff < timedelta(days=15) -%}{{- tsmoment.fromNow(refresh=True) -}}
-    {%- elif timediff < timedelta(days=365) -%}{{- tsmoment.format('M 月 D 日') -}}
-    {%- else -%}{{- tsmoment.format('Y 年 M 月 D 日') -}}{%- endif -%}
-{%- endmacro -%}
-
 {%- macro commentform_main(post_type, post_ident) -%}
     <form id="commentForm" class="form-base"{{-''-}}
         data-posttype="{{ post_type }}" data-postident="{{ post_ident }}">{{-''-}}
@@ -68,7 +58,7 @@
         </span>{{-''-}}
     </div>{{-''-}}
     <p class="comment-foot">
-        {{- comment_timestamp(comment) -}}
+        {{- auto_format_time(comment.timestamp) -}}
         {%- if not with_post -%}
             <i id="commentSenderButton" title="发表评论" class="fas fa-comment-dots"></i>
         {%- endif -%}

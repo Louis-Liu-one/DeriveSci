@@ -87,7 +87,7 @@ from flask import render_template, render_template_string, make_response
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_moment import Moment, moment as builtin_moment
 
-from models import db, init_app, utcfromnow, get_post
+from models import db, init_app, auto_format_time, get_post
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
 from models import ProbLabel, add2labels, get_article, add_article
@@ -97,7 +97,7 @@ from anschecker import TPStatus, latex
 
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_SECRET_KEY')
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 init_app(app)
 moment = Moment(app)
 
@@ -906,8 +906,7 @@ def api_user_unregister():
 app.jinja_env.add_extension('jinja2.ext.do')
 app.add_template_global(get_helplist(), 'helplist')
 app.add_template_global(find_user, 'find_user')
-app.add_template_global(utcfromnow, 'utcfromnow')
-app.add_template_global(datetime.timedelta, 'timedelta')
+app.add_template_global(auto_format_time, 'auto_format_time')
 app.add_template_global(TPStatus, 'TPStatus')
 with app.app_context():
     db.create_all()

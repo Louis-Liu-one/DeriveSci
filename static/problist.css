@@ -35,7 +35,6 @@ table.problist th {
 
 table.problist td,
 table.problist th {
-    box-sizing: border-box;
     border: none;
     padding: 8px 12px;
     font-family: Helvetica;
@@ -138,14 +137,6 @@ table.labellist td:hover {
     padding: 0 !important;
 }
 
-article.body-article.problist-container {
-    width: calc(45% + 36px);
-}
-
-article.main-article.problist-container {
-    width: calc(80% + 36px);
-}
-
 .problist-container div.problist-wrap {
     width: 100%;
     height: 100%;
@@ -173,13 +164,15 @@ article.main-article.problist-container {
 
 @media (max-width: 768px) {
 
-    article.main-article.problist-container,
-    article.body-article.problist-container,
-    article.right-side-article.problist-container {
-        width: calc(100% - 24px);
-    }
-
     .problist-container div.problist-wrap table.problist {
         overflow: hidden;
+    }
+
+    .problist-container div.problist-wrap table.problist td.probno {
+        font-size: 13px;
+    }
+
+    .problist-container div.problist-wrap table.problist td.problabels a.problabel {
+        font-size: 9px;
     }
 }

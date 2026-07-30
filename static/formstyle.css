@@ -193,7 +193,6 @@ form.form-base div.answer ul>li .subprob-header>.subprob-label-display p {
 
 form.form-base div.answer ul>li .subprob-header>.subprob-label-editor {
     width: 100%;
-    box-sizing: border-box;
     margin-right: 6px;
 }
 
@@ -303,21 +302,5 @@ form.form-base input::file-selector-button:disabled {
 
 .form-container form.form-base {
     border: none;
-    min-height: calc(100% - 36px);
-}
-
-article.body-article.form-container {
-    width: calc(45% + 36px);
-}
-
-article.right-side-article.form-container {
-    width: calc(30% + 36px);
-}
-
-@media (max-width: 768px) {
-
-    article.body-article.form-container,
-    article.right-side-article.form-container {
-        width: calc(100% - 24px);
-    }
+    min-height: 100%;
 }

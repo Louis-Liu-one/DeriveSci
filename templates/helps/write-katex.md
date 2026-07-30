@@ -93,9 +93,9 @@ $$ \sum_{n = 1}^\infty \frac1{n^s} = \prod_p \frac1{1 - p^{-s}} $$
 
 对于 $\int$ 等符号，其在行间公式模式下的上下标通常在角落处，例如：
 ```latex
-$$ I = \int_0^{+\infty} \frac{\sin x}x \mathrm dx $$
+$$ I = \int_0^{+\infty} \frac{\sin x}x \dx $$
 ```
-$$ I = \int_0^{+\infty} \frac{\sin x}x \mathrm dx $$
+$$ I = \int_0^{+\infty} \frac{\sin x}x \dx $$
 
 #### 行内公式上下标
 
@@ -257,8 +257,6 @@ $$
 `\mathfrak`   | 哥特体   | $\mathfrak{ABCDEFGHIJKLMNOPQRSTUVWXYZ}$ | $\mathfrak{1234567890}$
 
 其中 `\mathbb` 又作 `\Bbb`，其支持所有大写字母和 `k`。`\mathbb{k}` 又作 `\Bbbk`。
-
-例如，可以使用 `\mathrm dx` 渲染 $\mathrm dx$。注意，由于这里没有显式指定参数，命令后的第一个整体，即 `d` 被指定为第一个参数，故只有 `d` 被渲染为罗马体。
 
 #### 字体大小
 

@@ -1,8 +1,9 @@
 .DS_Store
 */.DS_Store
 __pycache__
-webenv
 instance
 migrations
+.env
+.venv
 .vscode
 .copilot-commit-message-instructions.md

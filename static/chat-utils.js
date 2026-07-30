@@ -49,6 +49,17 @@ async function updateUserLastVisit(receiverUid, senderUid) {
     } catch (err) { console.error(err); }
 }
 
+function toggleUserList(forceOpen) {
+    const container = document.querySelector('.chat-container');
+    if (!container) return;
+    const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !container.classList.contains('mobile-user-list-open');
+    container.classList.toggle('mobile-user-list-open', shouldOpen);
+}
+
+function closeUserList() {
+    toggleUserList(false);
+}
+
 async function switchUser(element, uid) {
     messageSenderArea.classList.toggle('hidden', false);
     if (window.viewCommentsItem) viewCommentsItem.style.display = 'none';
@@ -64,6 +75,7 @@ async function switchUser(element, uid) {
     messageArea.innerHTML = '';
     if (uid in window.allChats) addMessages(window.allChats[uid].messages, true);
     else window.allChats[uid] = { messages: [] };
+    closeUserList();
     await updateUserLastVisit(window.currentUid, uid);
 }
 
@@ -103,7 +115,13 @@ function addMessage(messageInfo, noAllChats) {
     divElement.classList.add('message');
     divElement.classList.toggle('other-message', messageInfo.othersend);
     divElement.classList.toggle('my-message', !messageInfo.othersend);
-    divElement.innerText = messageInfo.content;
+    divElement.innerHTML = `<span>${escapeHTML(messageInfo.content)}</span>
+        ${messageInfo.humanliketime}`;
+    if (typeof flask_moment_render === 'function') {
+        const timestampElement = divElement.querySelector('.flask-moment');
+        timestampElement.classList.toggle('timestamp', true);
+        flask_moment_render(timestampElement);
+    }
     messageArea.appendChild(divElement);
     messageArea.scrollTop = messageArea.scrollHeight;
     if (!target.value) window.allChats[target.value] = { messages: [] };
@@ -118,6 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeOfLastMessageByAllChats();
     if (!window.timeOfLastMessage) window.timeOfLastMessage = '';
     window.elements = {};
+    const userListToggleButton = document.querySelector('.mobile-user-list-toggle');
+    if (userListToggleButton)
+        userListToggleButton.addEventListener('click', () => toggleUserList());
     messageInputElement.addEventListener('keypress', (event) => {
         if (event.key == 'Enter' && messageInputElement.value) sendMessage();
     });

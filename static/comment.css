@@ -1,7 +1,7 @@
 div.comments-container {
     clear: both;
     font-family: Helvetica;
-    margin: 15px 0;
+    margin: 15px 0 0 0;
     padding: 18px;
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -67,7 +67,7 @@ div.comment-body i.avatar:hover {
 
 div.comment-body span.comment-text {
     flex-grow: 1;
-    word-wrap: anywhere;
+    overflow-wrap: anywhere;
     margin: 0 8px 8px 0;
 }
 

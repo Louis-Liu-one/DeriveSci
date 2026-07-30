@@ -9,8 +9,8 @@
             area.innerHTML = '';
             tags.forEach((t, i) => {
                 const a = document.createElement('a');
-                a.innerHTML = escapeHTML(t) + ' <i class="delete-button'
-                    + ' fas fa-circle-minus" data-i="' + i + '"></i>';
+                a.innerHTML = `${escapeHTML(t)} <i class="delete-button`
+                    + ` fas fa-circle-minus" data-i="${i}"></i>`;
                 area.appendChild(a);
             });
             // update a hidden JSON input for structured data
