@@ -29,6 +29,9 @@
     <a class="sidebar-link" href="javascript:void(0)" onclick="toggleArticleToc();">
         <div class="sidebar-item" id="tocToggleButton"><i class="fas fa-list"></i>目录导航</div>
     </a>
+    <a class="sidebar-link" href="{{ url_for('images_list', post_type=3, post_ident=article.get_post_ident()) }}" target="_blank">
+        <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
+    </a>
     <h3>专栏作者</h3>{{- user_sidebar(article.user) -}}
 </aside>
 <article id="contentContainer" class="markdown-body body-article">
@@ -36,15 +39,22 @@
 {{ article.content -}}
     </textarea>
 </article>
-<article class="toc-container" id="tocBlock"><h3>目录</h3></article>
+<article class="toc-container" id="tocBlock">
+    <div class="toc-title">
+        <h3>目录</h3><i class="fas fa-xmark" onclick="toggleArticleToc();"></i>
+    </div>
+</article>
 <article class="right-side-article">
     <h3>讨论区</h3>
     {{- commentarea(3, article.get_post_ident(), article.get_toplevel_comments()) -}}
 </article>
 <script>
+    const markdownImageBasePath = {{ (
+        "/images/3/" + article.get_post_ident()|urlencode + "/")|tojson }};
+    const _toRender = [
+        contentContainer, ...document.getElementsByClassName('comment-content')];
+    renderElements(_toRender, markdownImageBasePath);
     {
-        renderElement(contentContainer, bodyText.value, 'block');
-        renderElements([...document.getElementsByClassName('comment-content')]);
         const tocNavElement = contentContainer.querySelector('nav.table-of-contents');
         const tocToggleButton = document.getElementById('tocToggleButton');
         if (tocNavElement) tocBlock.appendChild(tocNavElement);

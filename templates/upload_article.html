@@ -49,6 +49,11 @@
             </textarea>
         </span>
         <span>
+            <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
+            <input type="file" id="imageFiles" name="imgfiles"
+                formenctype="multipart/form-data" accept="image/*" multiple>
+        </span>
+        <span>
             <button type="button" id="mdPreviewButton" onclick="renderElement(
                 mdPreview, article.value, 'block');">预览</button>
             {%- if editmode -%}

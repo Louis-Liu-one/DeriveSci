@@ -665,7 +665,11 @@ def api_upload_article():
         return {'ok': False, 'error': '用户未登录。'}, 401
     title = request.form.get('articletitle')
     content = request.form.get('article')
+    imgfiles = request.files.getlist('imgfiles')
     status, article = add_article(title, content)
+    error = add_images(3, article.get_post_ident(), imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}, 400
     if not status:
         return {'ok': False, 'error': str(article)}, 400
     return {'ok': True, 'url': article.url()}
@@ -683,6 +687,10 @@ def api_edit_article():
         abort(403)
     title = request.form.get('articletitle')
     content = request.form.get('article')
+    imgfiles = request.files.getlist('imgfiles')
+    error = add_images(3, article.get_post_ident(), imgfiles)
+    if error is not None:
+        return {'ok': False, 'error': str(error)}, 400
     article.edit(title, content)
     return {'ok': True, 'url': article.url()}
 
