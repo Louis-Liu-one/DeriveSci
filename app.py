@@ -82,6 +82,7 @@ import random
 import hashlib
 import datetime
 
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, abort, url_for, redirect
 from flask import render_template, render_template_string, make_response
 from flask_login import current_user, login_required, login_user, logout_user
@@ -95,9 +96,10 @@ from models import Image, add_images, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
 
-
+load_dotenv(override=True)
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 init_app(app)
 moment = Moment(app)
 

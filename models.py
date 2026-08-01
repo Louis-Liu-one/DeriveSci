@@ -18,6 +18,7 @@ from flask_migrate import Migrate
 from flask_moment import moment
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import MetaData
+from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 from anschecker import check_answers, testpoints_passedlist
 
@@ -26,7 +27,7 @@ __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow', 'get_post',
     'find_user', 'register_user', 'unregister_user',
     'Prob', 'ProbLabel', 'get_prob', 'add_prob',
-    'get_solution', 'add_solution', 'add2labels',
+    'get_solution', 'add_solution', 'add2labels', 'Submission',
     'Image', 'add_images', 'get_images_for_post', 'get_image',
     'Article', 'get_article', 'add_article',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
@@ -47,7 +48,6 @@ migrate = Migrate(db=db)
 
 
 def init_app(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
     db.init_app(app)
     migrate.init_app(app)
     login_manager.init_app(app)
@@ -97,7 +97,7 @@ class User(db.Model, UserMixin):
     gender = db.Column(db.Integer, default=0)
     password = db.Column(db.String(256), nullable=False)
     introduction = db.Column(db.Text)
-    avatar = db.Column(db.LargeBinary)
+    avatar = db.Column(MEDIUMBLOB())
     avmimetype = db.Column(db.String(64))
     avlastmodified = db.Column(db.DateTime, default=_utcnow, onupdate=_utcnow)
     submissions = db.relationship(
@@ -316,12 +316,12 @@ def unregister_user(user):
 class Image(db.Model):
     __tablename__ = 'images'
     post_type = db.Column(db.Integer, primary_key=True)
-    post_ident = db.Column(db.Text, primary_key=True)
+    post_ident = db.Column(db.String(64), primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
     size = db.Column(db.Integer)
     mimetype = db.Column(db.String(64))
-    data = db.Column(db.LargeBinary)
+    data = db.Column(MEDIUMBLOB())
     uploader = db.relationship('User', backref='uploaded_images')
 
 
@@ -714,7 +714,7 @@ class Comment(db.Model):
     # 帖子类型为2，帖子为私信，标识符为信息接收用户ID，不使用replyto、replies字段
     # 帖子类型为3，帖子为专栏，标识符为专栏ID
     post_type = db.Column(db.Integer, nullable=False)  # 帖子类型
-    post_ident = db.Column(db.Text, nullable=False)    # 帖子标识符
+    post_ident = db.Column(db.String(64), nullable=False)    # 帖子标识符
     replyto = db.relationship(
         'Comment', back_populates='replies', remote_side=[cmtid])
     replies = db.relationship(
