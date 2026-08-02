@@ -6,7 +6,7 @@
     {% if current_user == user %}我{% else %}{{ user.name }}{% endif %}
 {%- endmacro -%}
 
-{% block title %}{{ user_name(user) }}的主页 - MathProbs{% endblock %}
+{% block title %}{{ user_name(user) }}的主页 - DeriveSci{% endblock %}
 
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
@@ -29,7 +29,7 @@
 
 {% block body %}
 <aside>
-    <h3>欢迎来到MathProbsOnline</h3>
+    <h3>欢迎来到 DeriveSci</h3>
     {%- if current_user == user -%}
         <a class="sidebar-link" href="{{ url_for('upload_prob') }}">
             <div class="sidebar-item">

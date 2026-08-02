@@ -1,4 +1,4 @@
-'''MathProbsOnline.PythonAnyWhere.com
+'''
 Copyright (c) 2026 Louis Liu  All rights reserved.
 
 我们的网站支持如下的路由。
@@ -72,8 +72,6 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 
 
 以/api/开头的路由是 API 路由。
-
-已部署至：https://MathProbsOnline.PythonAnyWhere.com
 '''
 
 import os

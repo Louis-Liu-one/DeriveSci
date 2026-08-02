@@ -1,7 +1,7 @@
 
-# MathProbsOnline
+# DeriveSci
 
-为 [MathProbs 项目](https://github.com/Louis-Liu-one/MathProbs) 建立的网站，已上线，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
+为 [MathProbs 项目](https://github.com/Louis-Liu-one/MathProbs) 建立的网站项目。
 
 ## 构建方法
 
@@ -9,7 +9,7 @@
 
 - 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout 等，具体参见 `requirements.txt`，可以直接使用 `pip` 安装，建议使用虚拟环境。命令如下：
 ```bash
-cd MathProbsOnline
+cd DeriveSci
 python -m venv .venv             # 创建环境
 source .venv/bin/activate        # 激活环境
 pip install -r requirements.txt  # 安装支持
@@ -38,12 +38,6 @@ flask db init
 flask db migrate -m '更新描述...'
 flask db upgrade
 ```
-
-## 部署域名
-
-已经在 PythonAnyWhere 上部署，[点击前往](https://MathProbsOnline.PythonAnyWhere.com)。
-
-PythonAnyWhere 上使用的 Flask 密钥与仓库中的不同，仓库中的密钥仅作测试之用。
 
 ## 使用说明
 

@@ -1,4 +1,4 @@
-'''MathProbsOnline.PythonAnyWhere.com
+'''
 Copyright (c) 2026 Louis Liu  All rights reserved.
 
 数据库模型模块，实现网站所需的数据库操作。
