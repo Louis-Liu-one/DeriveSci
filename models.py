@@ -44,7 +44,7 @@ metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 login_manager = LoginManager()
 login_manager.login_view = 'login'
-migrate = Migrate(db=db)
+migrate = Migrate(db=db, compare_type=True)
 
 
 def init_app(app):
@@ -94,20 +94,26 @@ class User(db.Model, UserMixin):
     columns = 'uid', 'name', 'password'
     uid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
-    gender = db.Column(db.Integer, default=0)
+    gender = db.Column(db.Integer, default=0, server_default='0')
     password = db.Column(db.String(256), nullable=False)
     introduction = db.Column(db.Text)
     avatar = db.Column(MEDIUMBLOB())
     avmimetype = db.Column(db.String(64))
-    avlastmodified = db.Column(db.DateTime, default=_utcnow, onupdate=_utcnow)
+    avlastmodified = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+        onupdate=db.func.utc_timestamp(),
+        server_onupdate=db.func.utc_timestamp())
     submissions = db.relationship(
         'Submission', backref='user', cascade='all, delete')
     uploadedprobs = db.relationship('Prob', backref='source')
     solutions = db.relationship('ProbSolution', backref='user')
     articles = db.relationship('Article', backref='user')
     comments = db.relationship('Comment', backref='user')
-    cmtlastvisit = db.Column(db.DateTime, default=_utcnow)
-    isadmin = db.Column(db.Boolean, default=False)
+    cmtlastvisit = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
+    isadmin = db.Column(db.Boolean, default=False, server_default='0')
 
     def verify_password(self, password):
         return False if self.password is None else \
@@ -318,10 +324,14 @@ class Image(db.Model):
     post_type = db.Column(db.Integer, primary_key=True)
     post_ident = db.Column(db.String(64), primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    uid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='set null'))
     size = db.Column(db.Integer)
     mimetype = db.Column(db.String(64))
     data = db.Column(MEDIUMBLOB())
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
     uploader = db.relationship('User', backref='uploaded_images')
 
 
@@ -357,16 +367,20 @@ def get_image(post_type, post_ident, name):
 prob_label = db.Table(
     'probs_labels', db.Column(
         'probno', db.String(16),
-        db.ForeignKey('probs.probno'), primary_key=True),
+        db.ForeignKey('probs.probno', ondelete='cascade'), primary_key=True),
     db.Column(
         'labelname', db.String(16),
-        db.ForeignKey('labels.labelname'), primary_key=True))
+        db.ForeignKey('labels.labelname', ondelete='cascade'),
+        primary_key=True))
 
 
 class Prob(db.Model):
     __tablename__ = 'probs'
     probno = db.Column(db.String(16), primary_key=True)
     probtitle = db.Column(db.String(64))
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
     problabels = db.relationship(
         'ProbLabel', secondary=prob_label, back_populates='probs',
         collection_class=set)
@@ -374,11 +388,12 @@ class Prob(db.Model):
     answer = db.Column(db.Text)
     solutions = db.relationship(
         'ProbSolution', backref='prob', cascade='all, delete')
-    sourceuid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    sourceuid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='set null'))
     submissions = db.relationship(
         'Submission', backref='prob', cascade='all, delete')
-    review_status = db.Column(db.Integer, default=-1)
-    isofficial = db.Column(db.Boolean, default=False)
+    review_status = db.Column(db.Integer, default=-1, server_default='-1')
+    isofficial = db.Column(db.Boolean, default=False, server_default='0')
     review_comment = db.Column(db.Text)
 
     def get_answer(self):
@@ -467,11 +482,16 @@ class Submission(db.Model):
     __tablename__ = 'submissions'
     submitid = db.Column(db.Integer, primary_key=True)
     probno = db.Column(
-        db.String(16), db.ForeignKey('probs.probno'), nullable=False)
-    userid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+        db.String(16), db.ForeignKey('probs.probno', ondelete='cascade'),
+        nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='cascade'))
     answer = db.Column(db.Text, nullable=False)
     ispassed = db.Column(db.Boolean)
     score = db.Column(db.Integer)
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
 
     def __lt__(self, sub):
         return self.probno < sub.probno
@@ -480,11 +500,16 @@ class Submission(db.Model):
 class ProbSolution(db.Model):
     __tablename__ = 'solutions'
     probno = db.Column(
-        db.String(16), db.ForeignKey('probs.probno'), primary_key=True)
+        db.String(16), db.ForeignKey('probs.probno', ondelete='cascade'),
+        primary_key=True)
     solno = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    userid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='set null'))
     title = db.Column(db.String(128), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
 
     def url(self, anchor=None, **kwargs):
         return url_for('solutions', probno=self.probno, solno=self.solno,
@@ -607,9 +632,13 @@ def add2labels(labelnames, prob):
 class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    userid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='set null'))
     title = db.Column(db.String(128), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
 
     def url(self, anchor=None, **kwargs):
         return url_for('article', article_id=self.id, _anchor=anchor, **kwargs)
@@ -671,8 +700,9 @@ user_chat = db.Table(
         'uid_sender', db.Integer, db.ForeignKey(
             'users.uid', ondelete='cascade'), primary_key=True),
     db.Column(
-        'lastvisit', db.DateTime, nullable=False,
-        default=datetime.datetime.min.replace(tzinfo=datetime.UTC)))
+        'lastvisit', db.DateTime,
+        default=datetime.datetime(1000, 1, 1).replace(tzinfo=datetime.UTC),
+        server_default=db.text("'1000-01-01 00:00:00'")))
 
 
 def get_chatlastvisit(uid_receiver, uid_sender):
@@ -705,10 +735,14 @@ def update_chatlastvisit(uid_receiver, uid_sender):
 class Comment(db.Model):
     __tablename__ = 'comments'
     cmtid = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey('users.uid'))
+    uid = db.Column(db.Integer, db.ForeignKey(
+        'users.uid', ondelete='set null'))
     content = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=_utcnow)
-    replyto_id = db.Column(db.Integer, db.ForeignKey('comments.cmtid'))
+    timestamp = db.Column(
+        db.DateTime, default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp())
+    replyto_id = db.Column(db.Integer, db.ForeignKey(
+        'comments.cmtid', ondelete='set null'))
     # 帖子类型为0，帖子为题目，标识符为题目编号
     # 帖子类型为1，帖子为题解，标识符为CSV格式的题目编号与题解编号的组合
     # 帖子类型为2，帖子为私信，标识符为信息接收用户ID，不使用replyto、replies字段
