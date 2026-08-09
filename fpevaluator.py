@@ -470,6 +470,10 @@ def _as_array(tokens):
     return sp.Array(tokens)
 
 
+def _as_tuple(tokens):
+    return sp.Tuple(*tokens)
+
+
 def _as_finiteset(tokens):
     return sp.FiniteSet(*tokens)
 
@@ -702,6 +706,9 @@ RULE_parencall = (IDENTIFIER + OneOrMore(
 RULE_array = (LSQBRK + Opt(ZeroOrMore(
     RULE_expr + COMMA) + RULE_expr + Opt(COMMA))
     + RSQBRK).set_parse_action(_as_array)
+RULE_tuple = (LPAREN + Opt(
+    RULE_expr + COMMA + ZeroOrMore(RULE_expr + COMMA)
+    + Opt(RULE_expr) + Opt(COMMA)) + RPAREN).set_parse_action(_as_tuple)
 RULE_finiteset = (LBRACE + Opt(ZeroOrMore(
     RULE_expr + COMMA) + RULE_expr + Opt(COMMA))
     + RBRACE).set_parse_action(_as_finiteset)
@@ -711,7 +718,7 @@ RULE_condset = (
 RULE_parenexpr = (LPAREN + RULE_expr + RPAREN) | (
     ABS + RULE_expr + ABS).set_parse_action(_as_absvalue)
 RULE_primary = ((
-    RULE_array | RULE_finiteset | RULE_condset
+    RULE_array | RULE_tuple | RULE_finiteset | RULE_condset
     | RULE_parenexpr | RULE_parencall | RULE_atom)
     + ZeroOrMore(DOT + IDENTIFIER + ZeroOrMore(RULE_funcargs | RULE_slice))
     ).set_parse_action(_as_primary)

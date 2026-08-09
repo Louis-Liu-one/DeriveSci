@@ -39,7 +39,7 @@ def fpeval_with_timeout(parsed_answer, context=None):
 def check_answer(answer, userans_parsed, context=None):
     try:
         context_processed = {
-            key: fpeval(fpparse(val)) for key, val in context.items()}
+            key: fpeval(fpparse(str(val))) for key, val in context.items()}
         answer_parsed = fpparse_with_timeout(answer)
         answer_eval = fpeval_with_timeout(answer_parsed, context_processed)
     except BaseException:
