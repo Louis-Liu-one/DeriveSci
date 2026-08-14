@@ -10,7 +10,7 @@
 
 {% block navbar_title %}图片预览{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <h3>图片操作</h3>
     <a class="sidebar-link" href="{{ url_for(
@@ -26,6 +26,9 @@
         </div>
     {% endif %}
 </aside>
+{% endblock %}
+
+{% block body %}
 <article class="main-article" id="imageMain"
     data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}"
     data-imagename="{{ image.name }}">

@@ -17,7 +17,7 @@
 {% if editmode %}编辑{% else %}撰写{% endif %}专栏
 {% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {%- if editmode -%}
         {{- return2post(article, "返回专栏") -}}
@@ -30,7 +30,10 @@
         </a>
     {%- endif -%}
 </aside>
-<article class="body-article form-container">
+{% endblock %}
+
+{% block body %}
+<article class="body-article height-fixed-article form-container">
     <form class="form-base" id="editForm">
         {%- if editmode -%}
             <input type="hidden" name="article_id" id="articleId" value="{{ article.id }}">

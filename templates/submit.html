@@ -48,11 +48,14 @@
 
 {% block navbar_title %}我的提交{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {{- return2post(prob, "返回题目") -}}{{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
+{% endblock %}
+
+{% block body %}
 <article class="body-article">
     {%- set anslist = prob.get_answer() -%}
     {%- if anslist|length > 1 -%}

@@ -1,7 +1,7 @@
 
 # DeriveSci
 
-为 [MathProbs 项目](https://github.com/Louis-Liu-one/MathProbs) 建立的网站项目。由于域名 `derivesci.com` 正在进行备案流程，目前暂时不能访问。
+为 [MathProbs 项目](https://github.com/Louis-Liu-one/MathProbs) 建立的网站项目。域名 `derivesci.com` 已经完成 ICP 备案，现在可以访问。
 
 ## 构建方法
 

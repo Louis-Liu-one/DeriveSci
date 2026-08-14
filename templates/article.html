@@ -21,7 +21,7 @@
 
 {% block navbar_title %}专栏：{{ article.title }}{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {%- if current_user == article.user or current_user.isadmin -%}
         {{- edit_article(article) -}}{{- delete_article(article) -}}
@@ -34,6 +34,9 @@
     </a>
     <h3>专栏作者</h3>{{- user_sidebar(article.user) -}}
 </aside>
+{% endblock %}
+
+{% block body %}
 <article id="contentContainer" class="markdown-body body-article">
     <textarea id="bodyText">[toc]
 {{ article.content -}}
@@ -44,7 +47,7 @@
         <h3>目录</h3><i class="fas fa-xmark" onclick="toggleArticleToc();"></i>
     </div>
 </article>
-<article class="right-side-article">
+<article class="right-side-article height-fixed-article">
     <h3>讨论区</h3>
     {{- commentarea(3, article.get_post_ident(), article.get_toplevel_comments()) -}}
 </article>

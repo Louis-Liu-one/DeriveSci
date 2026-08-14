@@ -27,7 +27,7 @@
 {{- user_name(user) }}的主页
 {% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <h3>欢迎来到 DeriveSci</h3>
     {%- if current_user == user -%}
@@ -66,7 +66,10 @@
         </a>
     {%- endif -%}
 </aside>
-<article class="body-article">
+{% endblock %}
+
+{% block body %}
+<article class="body-article height-fixed-article">
     <h3>{{ user_name(user) }}的贡献</h3>
     <h4>{{ user_name(user) }}通过的题目</h4>
     {%- set passedprobs = user.get_passedprobs() -%}
@@ -77,12 +80,10 @@
     {%- set uploadedprobs = user.uploadedprobs.copy() -%}
     {%- if uploadedprobs -%}
         {%- do uploadedprobs.sort() -%}
-        {{- problist(
-            uploadedprobs, with_source=False,
-            with_review_status=True) -}}
+        {{- problist(uploadedprobs, with_source=False, with_review_status=True) -}}
     {%- else -%}<p>暂无</p>{%- endif -%}
 </article>
-<article class="right-side-article">
+<article class="right-side-article height-fixed-article">
     <div id="userIntroductionContainer">
         <h3>{{ user_name(user) }}的简介</h3>
         <form class="form-base no-edge hidden" id="introductionEditForm">

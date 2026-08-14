@@ -28,7 +28,7 @@
 
 {% block navbar_title %}私信聊天{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <a class="sidebar-link" href="{{ url_for('welcome') }}">
         <div class="sidebar-item">
@@ -47,7 +47,10 @@
         </div>
     </a>
 </aside>
-<article class="main-article">
+{% endblock %}
+
+{% block body %}
+<article class="main-article height-fixed-article">
     <div class="chat-container">
         <button type="button" class="mobile-user-list-toggle" title="显示聊天列表">
             <i class="fas fa-bars"></i>

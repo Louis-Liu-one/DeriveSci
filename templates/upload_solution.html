@@ -18,14 +18,17 @@
 {{ prob.probno }} — {% if editmode %}编辑{% else %}上传{% endif %}题解
 {% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {{- return2post(prob, "返回题目") -}}
     {%- if editmode -%}{{- return2post(solution, "返回题解") -}}{{- delete_solution(solution) -}}{%- endif -%}
     {{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
-<article class="body-article form-container">
+{% endblock %}
+
+{% block body %}
+<article class="body-article height-fixed-article form-container">
     <form class="form-base" id="editForm" enctype="multipart/form-data">
         <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
         {%- if editmode -%}

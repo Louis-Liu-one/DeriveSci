@@ -84,14 +84,22 @@ p.katex-block {
     overflow-x: auto;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+}
+
 /******************************* navbar *******************************/
 
 nav.navbar {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
     width: 100%;
     height: 80px;
+    flex-shrink: 0;
     background: var(--primary);
     box-shadow: 0 2px 10px #0000001a;
     z-index: 1000;
@@ -271,18 +279,16 @@ ul.navbar-items a {
 
 main {
     display: flex;
-    position: fixed;
-    top: 80px;
-    left: 0;
+    flex-grow: 1;
     width: 100%;
-    height: calc(100vh - 80px);
-    overflow-y: auto;
+    min-height: 0;
 }
 
 /******************************* sidebar *******************************/
 
 aside {
     width: 220px;
+    flex-shrink: 0;
     background: var(--surface-strong);
     border-right: 1px solid var(--border);
     overflow-y: auto;
@@ -355,8 +361,21 @@ a.sidebar-link {
 
 /******************************* blocks *******************************/
 
+div.article-container {
+    display: flex;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
 article {
     scroll-behavior: smooth;
+}
+
+article.height-fixed-article {
+    position: sticky;
+    top: 0;
+    height: inherit !important;
+    overflow-y: auto;
 }
 
 article.main-article,
@@ -366,8 +385,8 @@ article.toc-container,
 article.content-container {
     margin: 15px 18px 15px 0;
     padding: 18px;
+    height: fit-content;
     flex-grow: 1;
-    overflow-y: auto;
     border-radius: 12px;
     box-shadow: var(--shadow);
     background: var(--surface);
@@ -435,8 +454,44 @@ article.content-container nav.table-of-contents {
     display: none;
 }
 
+/******************************* footer *******************************/
+
+footer {
+    width: 100%;
+    height: 50px;
+    flex-shrink: 0;
+    background-color: var(--surface-soft);
+    border-top: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text);
+    padding: 5px;
+}
+
+footer p {
+    margin: 2px;
+}
+
+footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/******************************* responsive design *******************************/
+
 /* Responsive: mobile layout adjustments */
 @media (max-width: 768px) {
+
+    body {
+        height: fit-content;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
 
     ul.navbar-items {
         gap: 2px;
@@ -569,14 +624,7 @@ article.content-container nav.table-of-contents {
     /* Main: stack articles vertically and make full width;
         make main scrollable so navbar stays fixed */
     main {
-        display: flex;
         flex-direction: column;
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 80px);
-        overflow-y: auto;
         scroll-behavior: smooth;
         scrollbar-width: thin;
         scrollbar-color: #00000040 transparent;
@@ -597,6 +645,11 @@ article.content-container nav.table-of-contents {
 
     main::-webkit-scrollbar-thumb:hover {
         background: #00000042;
+    }
+
+    div.article-container {
+        flex-direction: column;
+        overflow: hidden;
     }
 
     article.main-article,

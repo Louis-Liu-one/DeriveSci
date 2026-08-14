@@ -147,7 +147,6 @@ table.labellist td:hover {
     margin: 0;
     width: 100%;
     border: none;
-    overflow: auto;
 }
 
 .problist-container div.problist-wrap table.problist thead tr.probhead th {

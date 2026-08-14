@@ -12,7 +12,7 @@
 
 {% block navbar_title %}图片列表{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <h3>图片管理</h3>
     {% if target and target.url %}
@@ -21,6 +21,9 @@
         </a>
     {% endif %}
 </aside>
+{% endblock %}
+
+{% block body %}
 {%- if images -%}
     <article class="main-article problist-container"
         id="imagesMain" data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}">

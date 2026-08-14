@@ -31,7 +31,7 @@
 {%- if oflabel -%}标签：{{- labelname -}}{%- else -%}题集{%- endif -%}
 {% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {%- if oflabel -%}
         <h3>题目标签</h3>
@@ -53,12 +53,15 @@
         {%- endif -%}
     {%- endif -%}
 </aside>
+{% endblock %}
+
+{% block body %}
 <article class="body-article problist-container">
     <p id="noResults" style="display: none; text-align: center;">暂无</p>
     {%- if reviewmode -%}{{- problist(probs, with_review_status=True) -}}
     {%- else -%}{{- problist(probs) -}}{%- endif -%}
 </article>
-<article class="right-side-article form-container">
+<article class="right-side-article height-fixed-article form-container">
     <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
         {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
         <h3>查询题目</h3>

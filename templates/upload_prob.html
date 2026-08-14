@@ -21,7 +21,7 @@
 {%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目
 {% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <h3>{%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目</h3>
     {%- if editmode -%}
@@ -29,7 +29,10 @@
         {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
     {%- endif -%}
 </aside>
-<article class="body-article form-container">
+{% endblock %}
+
+{% block body %}
+<article class="body-article height-fixed-article form-container">
     <form class="form-base" id="editForm" enctype="multipart/form-data">
         <span>
             <label for="probNo">编号：</label>

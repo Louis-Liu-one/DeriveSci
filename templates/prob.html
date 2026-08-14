@@ -22,7 +22,7 @@
 
 {% block navbar_title %}{{ prob.probno }} {{ prob.probtitle }}{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     {%- if current_user == prob.source or current_user.isadmin -%}
         {{- edit_prob(prob) -}}{{- delete_prob(prob) -}}
@@ -42,10 +42,13 @@
     {{- problabels_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
+{% endblock %}
+
+{% block body %}
 <article id="contentContainer" class="markdown-body body-article">
     <textarea id="bodyText">{{ prob.statement }}</textarea>
 </article>
-<article class="right-side-article">
+<article class="right-side-article height-fixed-article">
     {%- if prob.review_status != 1 -%}
         <p class="tips hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}

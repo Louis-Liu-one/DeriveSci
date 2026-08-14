@@ -8,7 +8,7 @@
 
 {% block navbar_title %}帮助列表{% endblock %}
 
-{% block body %}
+{% block sidebar %}
 <aside>
     <h3>帮助列表</h3>
     <a class="sidebar-link" href="{{ url_for('welcome') }}">
@@ -17,6 +17,9 @@
         </div>
     </a>
 </aside>
+{% endblock %}
+
+{% block body %}
 <article class="main-article">
     <div class="helplist-header">
         <h2>帮助主题</h2>

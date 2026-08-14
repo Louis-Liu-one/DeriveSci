@@ -82,7 +82,12 @@
     </nav>
     <main>
         <label for="sidebar-toggle" class="sidebar-overlay"></label>
-        {% block body %}{% endblock %}
+        {% block sidebar %}{% endblock %}
+        <div class="article-container">{% block body %}{% endblock %}</div>
     </main>
+    <footer>
+        <p><a href="https://beian.miit.gov.cn/"  target="_blank">粤ICP备2026116144号-1</a></p>
+        <p>© 2026 DeriveSci. All rights reserved.</p>
+    </footer>
 </body>
 </html>
