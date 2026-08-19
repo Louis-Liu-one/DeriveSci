@@ -50,107 +50,109 @@
 {% endblock %}
 
 {% block body %}
-<article class="main-article height-fixed-article">
-    <div class="chat-container">
-        <button type="button" class="mobile-user-list-toggle" title="显示聊天列表">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="user-list">
-            {%- if view_comments -%}
-                <div class="user-item active" id="viewCommentsItem">
-                    <div class="avatar-wrap"><i class="fas fa-envelope"></i></div>未读评论
-                </div>
-            {%- endif -%}
-            {%- set ns = namespace(active=False) -%}
-            {%- for uid in all_chats -%}
-                {%- set user = find_user(uid) -%}
-                {%- if activeuser and uid == activeuser.uid -%}
-                    {%- set ns.active = True -%}
+<div class="main-area height-fixed-area">
+    <article class="basic-article height-fixed-article">
+        <div class="chat-container">
+            <button type="button" class="mobile-user-list-toggle" title="显示聊天列表">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="user-list">
+                {%- if view_comments -%}
+                    <div class="user-item active" id="viewCommentsItem">
+                        <div class="avatar-wrap"><i class="fas fa-envelope"></i></div>未读评论
+                    </div>
                 {%- endif -%}
-                <div class="user-item {% if activeuser and uid == activeuser.uid -%}active{% endif %}"
-                    onclick="switchUser(this, {{ uid }});">
-                    <div class="avatar-wrap">
-                        {{- user_avatar_img(user) -}}
-                        {%- if all_chats[uid].unread -%}
-                            <div class="unread-badge">{{- all_chats[uid].unread|tojson -}}</div>
-                        {%- else -%}
-                            <div class="unread-badge" style="display: none;"></div>
-                        {%- endif -%}
-                    </div>
-                    {{- user_name(user) -}}
-                </div>
-            {%- endfor -%}
-            {%- if activeuser and not ns.active -%}
-                <div class="user-item active" onclick="switchUser(this, {{ activeuser.uid }});">
-                    <div class="avatar-wrap">{{- user_avatar_img(activeuser) -}}</div>{{- user_name(activeuser) -}}
-                </div>
-            {%- elif not all_chats -%}
-                <p class="tips">暂无私信对象，前往其他用户的主页添加私信。</p>
-            {%- endif -%}
-        </div>
-        <div class="chat-box">
-            {%- if view_comments -%}
-                <div class="chat-header" id="messageAreaTitle">未读评论</div>
-                <div class="message-area" id="messageArea">
-                    {%- set unread_sections = current_user.unread_comment_sections() -%}
-                    <div class="comment-section">
-                        <h3>回复我的评论</h3>
-                        {%- if unread_sections.replies -%}
-                            <div class="comments-container">
-                                {%- for comment in unread_sections.replies -%}
-                                    {{- commentdiv(comment, with_post=True) -}}
-                                    <div class="comments-sep"></div>
-                                {%- endfor -%}
-                            </div>
-                        {%- else -%}<p>暂无回复我的评论。</p>{%- endif -%}
-                    </div>
-                    <div class="comment-section">
-                        <h3>我上传的题目评论</h3>
-                        {%- if unread_sections.prob_comments -%}
-                            <div class="comments-container">
-                                {%- for comment in unread_sections.prob_comments -%}
-                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
-                                    <div class="comments-sep"></div>
-                                {%- endfor -%}
-                            </div>
-                        {%- else -%}<p>暂无题目评论。</p>{%- endif -%}
-                    </div>
-                    <div class="comment-section">
-                        <h3>我上传的题解评论</h3>
-                        {%- if unread_sections.solution_comments -%}
-                            <div class="comments-container">
-                                {%- for comment in unread_sections.solution_comments -%}
-                                    {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
-                                    <div class="comments-sep"></div>
-                                {%- endfor -%}
-                            </div>
-                        {%- else -%}<p>暂无题解评论。</p>{%- endif -%}
-                    </div>
-                    {% do current_user.update_cmtlastvisit() %}
-                </div>
-            {%- else -%}
-                <div class="chat-header" id="messageAreaTitle">
-                    {%- if activeuser -%}
+                {%- set ns = namespace(active=False) -%}
+                {%- for uid in all_chats -%}
+                    {%- set user = find_user(uid) -%}
+                    {%- if activeuser and uid == activeuser.uid -%}
+                        {%- set ns.active = True -%}
+                    {%- endif -%}
+                    <div class="user-item {% if activeuser and uid == activeuser.uid -%}active{% endif %}"
+                        onclick="switchUser(this, {{ uid }});">
                         <div class="avatar-wrap">
-                            {{- user_avatar_img(activeuser) -}}
-                        </div>{{- user_name(activeuser) -}}
-                    {%- else -%}消息列表{%- endif -%}
+                            {{- user_avatar_img(user) -}}
+                            {%- if all_chats[uid].unread -%}
+                                <div class="unread-badge">{{- all_chats[uid].unread|tojson -}}</div>
+                            {%- else -%}
+                                <div class="unread-badge" style="display: none;"></div>
+                            {%- endif -%}
+                        </div>
+                        {{- user_name(user) -}}
+                    </div>
+                {%- endfor -%}
+                {%- if activeuser and not ns.active -%}
+                    <div class="user-item active" onclick="switchUser(this, {{ activeuser.uid }});">
+                        <div class="avatar-wrap">{{- user_avatar_img(activeuser) -}}</div>{{- user_name(activeuser) -}}
+                    </div>
+                {%- elif not all_chats -%}
+                    <p class="tips">暂无私信对象，前往其他用户的主页添加私信。</p>
+                {%- endif -%}
+            </div>
+            <div class="chat-box">
+                {%- if view_comments -%}
+                    <div class="chat-header" id="messageAreaTitle">未读评论</div>
+                    <div class="message-area" id="messageArea">
+                        {%- set unread_sections = current_user.unread_comment_sections() -%}
+                        <div class="comment-section">
+                            <h3>回复我的评论</h3>
+                            {%- if unread_sections.replies -%}
+                                <div class="comments-container">
+                                    {%- for comment in unread_sections.replies -%}
+                                        {{- commentdiv(comment, with_post=True) -}}
+                                        <div class="comments-sep"></div>
+                                    {%- endfor -%}
+                                </div>
+                            {%- else -%}<p>暂无回复我的评论。</p>{%- endif -%}
+                        </div>
+                        <div class="comment-section">
+                            <h3>我上传的题目评论</h3>
+                            {%- if unread_sections.prob_comments -%}
+                                <div class="comments-container">
+                                    {%- for comment in unread_sections.prob_comments -%}
+                                        {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                        <div class="comments-sep"></div>
+                                    {%- endfor -%}
+                                </div>
+                            {%- else -%}<p>暂无题目评论。</p>{%- endif -%}
+                        </div>
+                        <div class="comment-section">
+                            <h3>我上传的题解评论</h3>
+                            {%- if unread_sections.solution_comments -%}
+                                <div class="comments-container">
+                                    {%- for comment in unread_sections.solution_comments -%}
+                                        {{- commentdiv(comment, with_post=True, secondlevel=True) -}}
+                                        <div class="comments-sep"></div>
+                                    {%- endfor -%}
+                                </div>
+                            {%- else -%}<p>暂无题解评论。</p>{%- endif -%}
+                        </div>
+                        {% do current_user.update_cmtlastvisit() %}
+                    </div>
+                {%- else -%}
+                    <div class="chat-header" id="messageAreaTitle">
+                        {%- if activeuser -%}
+                            <div class="avatar-wrap">
+                                {{- user_avatar_img(activeuser) -}}
+                            </div>{{- user_name(activeuser) -}}
+                        {%- else -%}消息列表{%- endif -%}
+                    </div>
+                    <div class="message-area" id="messageArea"></div>
+                {%- endif -%}
+                <div class="send-area{% if view_comments %} hidden{% endif %}"
+                    id="messageSenderArea">
+                    <input type="text" name="message" id="messageInputElement"
+                        placeholder="输入消息……" autocomplete="off"
+                        {%- if not activeuser -%}disabled{%- endif -%}>
+                    <input type="hidden" name="target" id="target"
+                        {%- if activeuser -%}value="{{ activeuser.uid }}"{%- endif -%}>
+                    <button type="button" id="messageSenderButton" onclick="sendMessage();"
+                        {%- if not activeuser -%}disabled{%- endif -%}>发送</button>
                 </div>
-                <div class="message-area" id="messageArea"></div>
-            {%- endif -%}
-            <div class="send-area{% if view_comments %} hidden{% endif %}"
-                id="messageSenderArea">
-                <input type="text" name="message" id="messageInputElement"
-                    placeholder="输入消息……" autocomplete="off"
-                    {%- if not activeuser -%}disabled{%- endif -%}>
-                <input type="hidden" name="target" id="target"
-                    {%- if activeuser -%}value="{{ activeuser.uid }}"{%- endif -%}>
-                <button type="button" id="messageSenderButton" onclick="sendMessage();"
-                    {%- if not activeuser -%}disabled{%- endif -%}>发送</button>
             </div>
         </div>
-    </div>
-</article>
+    </article>
+</div>
 <script>
     window.allChats = {{ all_chats|tojson }};
     window.currentUid = {{ current_user.uid|tojson }};

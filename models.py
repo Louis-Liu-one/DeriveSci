@@ -465,6 +465,9 @@ class Prob(db.Model):
     def editable_for(self, user):
         return user.is_authenticated and (user == self.source or user.isadmin)
 
+    def get_post_ident(self):
+        return self.probno
+
     def as_labelnames(self):
         return {label.labelname for label in self.problabels}
 

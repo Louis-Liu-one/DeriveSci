@@ -1,12 +1,18 @@
 div.comments-container {
     clear: both;
     font-family: Helvetica;
-    margin: 15px 0 0 0;
     padding: 18px;
-    border: 1px solid var(--border);
+    border: var(--border);
     border-radius: 12px;
     box-shadow: var(--shadow);
     background: var(--surface);
+}
+
+article.comments-container>div.comments-container {
+    height: 100%;
+    padding: 0;
+    border: none;
+    box-shadow: none;
 }
 
 div.comment {
@@ -140,7 +146,7 @@ div.subcomments {
 
 div.comments-sep {
     clear: both;
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border);
     margin: 20px 0 16px 0;
     position: relative;
 }

@@ -64,6 +64,10 @@ div.unread-badge {
     z-index: 10;
 }
 
+article {
+    scroll-behavior: smooth;
+}
+
 figure {
     margin: 15px 0;
     text-align: center;
@@ -290,12 +294,11 @@ aside {
     width: 220px;
     flex-shrink: 0;
     background: var(--surface-strong);
-    border-right: 1px solid var(--border);
+    border-right: var(--border);
     overflow-y: auto;
     font-family: Helvetica;
     padding: 15px 0;
     box-shadow: 2px 0 8px #0000000a;
-    margin-right: 18px;
 }
 
 aside h3 {
@@ -365,12 +368,10 @@ div.article-container {
     display: flex;
     overflow-y: auto;
     flex-grow: 1;
+    padding: 8px;
 }
 
-article {
-    scroll-behavior: smooth;
-}
-
+div.height-fixed-area,
 article.height-fixed-article {
     position: sticky;
     top: 0;
@@ -378,48 +379,56 @@ article.height-fixed-article {
     overflow-y: auto;
 }
 
-article.main-article,
-article.body-article,
-article.right-side-article,
+div.main-area,
+div.central-area,
+div.side-area,
+div.toc-area {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 24px;
+    padding: 8px;
+    height: fit-content;
+}
+
+article.basic-article,
 article.toc-container,
 article.content-container {
-    margin: 15px 18px 15px 0;
     padding: 18px;
     height: fit-content;
-    flex-grow: 1;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    border: var(--border);
     background: var(--surface);
     font-family: Helvetica;
 }
 
-article.main-article {
+div.main-area {
     width: 80%;
 }
 
-article.body-article {
+div.central-area {
     width: 45%;
 }
 
-article.body-article img {
+div.central-area img {
     width: 100%;
 }
 
-article.right-side-article {
+div.side-area {
     width: 30%;
 }
 
-article.right-side-article textarea.submit-input {
+div.toc-area {
+    width: 25%;
+}
+
+div.side-area textarea.submit-input {
     height: 80px;
 }
 
-article.right-side-article h3 {
+div.side-area h3 {
     clear: both;
-}
-
-article.toc-container {
-    width: 25%;
-    margin-left: 10px;
 }
 
 article.toc-container h3 {
@@ -435,18 +444,16 @@ nav.table-of-contents li {
 }
 
 nav.table-of-contents a,
-article.content-container a {
+article.content-container a,
+footer a {
     text-decoration: none;
     color: var(--accent);
 }
 
 nav.table-of-contents a:hover,
-article.content-container a:hover {
+article.content-container a:hover,
+footer a:hover {
     text-decoration: underline;
-}
-
-article.content-container {
-    width: 72%;
 }
 
 article#contentContainer,
@@ -461,7 +468,7 @@ footer {
     height: 50px;
     flex-shrink: 0;
     background-color: var(--surface-soft);
-    border-top: 1px solid var(--border);
+    border-top: var(--border);
     box-shadow: var(--shadow);
     text-align: center;
     font-size: 12px;
@@ -471,15 +478,6 @@ footer {
 
 footer p {
     margin: 2px;
-}
-
-footer a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
 }
 
 /******************************* responsive design *******************************/
@@ -582,7 +580,7 @@ footer a:hover {
         max-width: 320px;
         z-index: 1500;
         background: var(--surface-strong);
-        border-right: 1px solid var(--border);
+        border-right: var(--border);
         box-shadow: 2px 8px 30px #00000040;
         padding-top: 12px;
         overflow-y: auto;
@@ -592,6 +590,7 @@ footer a:hover {
     }
 
     article.toc-container {
+        top: 90px;
         height: calc(100vh - 110px);
     }
 
@@ -630,34 +629,16 @@ footer a:hover {
         scrollbar-color: #00000040 transparent;
     }
 
-    main::-webkit-scrollbar {
-        width: 12px;
-    }
-
-    main::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    main::-webkit-scrollbar-thumb {
-        background: #0000002e;
-        border-radius: 8px;
-    }
-
-    main::-webkit-scrollbar-thumb:hover {
-        background: #00000042;
-    }
-
     div.article-container {
         flex-direction: column;
         overflow: hidden;
     }
 
-    article.main-article,
-    article.body-article,
-    article.right-side-article,
+    div.main-area,
+    div.central-area,
+    div.side-area,
     article.content-container {
-        width: calc(100% - 24px);
-        margin: 10px 12px;
+        width: 100%;
         overflow: visible;
     }
 }

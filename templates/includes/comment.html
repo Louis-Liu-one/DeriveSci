@@ -17,7 +17,7 @@
 #}
 {% from "includes/users.html" import user_name, user_avatar_img %}
 
-{%- macro commentform_main(post_type, post_ident) -%}
+{%- macro commentform(post_type, post_ident) -%}
     <form id="commentForm" class="form-base"{{-''-}}
         data-posttype="{{ post_type }}" data-postident="{{ post_ident }}">{{-''-}}
         <span><textarea name="commenttext" class="submit-input"{{-''-}}
@@ -89,9 +89,9 @@
     </div>
 {%- endmacro -%}
 
-{%- macro commentarea(post_type, post_ident, comments) -%}
-    {{- commentform_main(post_type, post_ident) -}}
+{%- macro commentarea(comments, title='讨论区') -%}
     <div class="comments-container">
+        <h3>{{ title }}</h3>
         {%- if comments -%}
             {%- for comment in comments -%}
                 {{- commentdiv(comment, toplevel=True) -}}<div class="comments-sep"></div>

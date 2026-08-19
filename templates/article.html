@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "includes/users.html" import user_sidebar %}
 {% from "includes/sidebar.html" import return2post, edit_article, delete_article %}
-{% from "includes/comment.html" import commentarea with context %}
+{% from "includes/comment.html" import commentform, commentarea with context %}
 
 {% block title %}专栏：{{ article.title }} - DeriveSci{% endblock %}
 
@@ -37,19 +37,25 @@
 {% endblock %}
 
 {% block body %}
-<article id="contentContainer" class="markdown-body body-article">
-    <textarea id="bodyText">[toc]
+<div class="central-area">
+    <article id="contentContainer" class="markdown-body content-container">
+        <textarea id="bodyText">[toc]
 {{ article.content -}}
-    </textarea>
-</article>
+        </textarea>
+    </article>
+</div>
+<div class="side-area height-fixed-area">
+    <article class="basic-article form-container">
+        {{- commentform(3, article.get_post_ident()) -}}
+    </article>
+    <article class="basic-article comments-container">
+        {{- commentarea(article.get_toplevel_comments()) -}}
+    </article>
+</div>
 <article class="toc-container" id="tocBlock">
     <div class="toc-title">
         <h3>目录</h3><i class="fas fa-xmark" onclick="toggleArticleToc();"></i>
     </div>
-</article>
-<article class="right-side-article height-fixed-article">
-    <h3>讨论区</h3>
-    {{- commentarea(3, article.get_post_ident(), article.get_toplevel_comments()) -}}
 </article>
 <script>
     const markdownImageBasePath = {{ (

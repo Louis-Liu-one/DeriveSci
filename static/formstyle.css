@@ -1,5 +1,5 @@
 form.form-base {
-    border: 1px solid var(--border);
+    border: var(--border);
     border-radius: 12px;
     border-collapse: collapse;
     padding: 18px;
@@ -123,7 +123,7 @@ form.form-base div.answer-input i:hover {
 form.form-base div.answer ul {
     list-style-type: none;
     padding: 0;
-    border: 1px solid var(--border);
+    border: var(--border);
     border-radius: 12px;
     margin: 15px 0 8px 0;
     background: var(--surface-strong);
@@ -239,7 +239,7 @@ form.form-base select {
     padding: 8px 12px;
     line-height: 22px;
     background: var(--surface-strong);
-    border: 1px solid var(--border);
+    border: var(--border);
     border-radius: 8px;
     transition: border-color .25s ease;
 }
@@ -302,5 +302,6 @@ form.form-base input::file-selector-button:disabled {
 
 .form-container form.form-base {
     border: none;
+    box-shadow: none;
     min-height: 100%;
 }

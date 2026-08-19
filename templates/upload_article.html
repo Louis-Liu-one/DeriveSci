@@ -33,49 +33,53 @@
 {% endblock %}
 
 {% block body %}
-<article class="body-article height-fixed-article form-container">
-    <form class="form-base" id="editForm">
-        {%- if editmode -%}
-            <input type="hidden" name="article_id" id="articleId" value="{{ article.id }}">
-        {%- endif -%}
-        <span>
-            <label for="articleTitle">标题：</label>
-            <input required type="text" id="articleTitle" name="articletitle"
-                autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ article.title }}"{%- endif -%}>
-        </span>
-        <span>
-            <label for="article">内容：</label>
-            <textarea id="article" name="article" class="tall"
-                placeholder="以Markdown格式输入内容" spellcheck="false" required>
-                {%- if editmode -%}{{ article.content }}{%- endif -%}
-            </textarea>
-        </span>
-        <span>
-            <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
-            <input type="file" id="imageFiles" name="imgfiles"
-                formenctype="multipart/form-data" accept="image/*" multiple>
-        </span>
-        <span>
-            <button type="button" id="mdPreviewButton" onclick="renderElement(
-                mdPreview, article.value, 'block');">预览</button>
+<div class="central-area height-fixed-area">
+    <article class="basic-article form-container">
+        <form class="form-base" id="editForm">
             {%- if editmode -%}
-                <button type="button" onclick="editArticle();">修改</button>
-            {%- else -%}
-                <button type="button" onclick="uploadArticle();">上传</button>
+                <input type="hidden" name="article_id" id="articleId" value="{{ article.id }}">
             {%- endif -%}
-        </span>
-    </form>
-</article>
-<article class="right-side-article">
-    <h3>预览区</h3>
-    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+            <span>
+                <label for="articleTitle">标题：</label>
+                <input required type="text" id="articleTitle" name="articletitle"
+                    autocomplete="off" spellcheck="false"
+                    {%- if editmode -%}value="{{ article.title }}"{%- endif -%}>
+            </span>
+            <span>
+                <label for="article">内容：</label>
+                <textarea id="article" name="article" class="tall"
+                    placeholder="以Markdown格式输入内容" spellcheck="false" required>
+                    {%- if editmode -%}{{ article.content }}{%- endif -%}
+                </textarea>
+            </span>
+            <span>
+                <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
+                <input type="file" id="imageFiles" name="imgfiles"
+                    formenctype="multipart/form-data" accept="image/*" multiple>
+            </span>
+            <span>
+                <button type="button" id="mdPreviewButton" onclick="renderElement(
+                    mdPreview, article.value, 'block');">预览</button>
+                {%- if editmode -%}
+                    <button type="button" onclick="editArticle();">修改</button>
+                {%- else -%}
+                    <button type="button" onclick="uploadArticle();">上传</button>
+                {%- endif -%}
+            </span>
+        </form>
+    </article>
+</div>
+<div class="side-area">
+    <article class="basic-article">
+        <h3>预览区</h3>
+        <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+    </article>
     <p class="tips">
         <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
             <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
         </a>
     </p>
-</article>
+</div>
 <script>
     document.getElementById('mdPreviewButton').click();
 </script>

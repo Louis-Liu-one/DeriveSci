@@ -1,11 +1,13 @@
-article.main-article {
+article:has(div.chat-container) {
     padding: 0;
+    border: var(--border);
+    flex-grow: 1;
 }
 
 div.chat-container {
+    display: flex;
     width: 100%;
     height: 100%;
-    display: flex;
 }
 
 div.chat-container div.unread-badge {
@@ -16,7 +18,7 @@ div.chat-container div.unread-badge {
 div.user-list {
     width: 200px;
     background: var(--surface-strong);
-    border-right: 1px solid var(--border);
+    border-right: var(--border);
     padding: 15px;
 }
 
@@ -67,7 +69,7 @@ div.chat-header {
     display: flex;
     align-items: center;
     padding: 15px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border);
 }
 
 div.chat-header div.unread-badge {
@@ -124,7 +126,7 @@ div.message-area div.other-message span.timestamp {
 div.send-area {
     display: flex;
     padding: 15px;
-    border-top: 1px solid var(--border);
+    border-top: var(--border);
 }
 
 div.send-area input#messageInputElement {
@@ -171,17 +173,8 @@ div.send-area button:disabled {
 }
 
 @media (max-width: 768px) {
-    article:has(div.chat-container) {
-        height: calc(100vh - 100px);
-    }
-
-    article:has(div.chat-container:not(.mobile-user-list-open)) {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    div.chat-container {
-        position: relative;
+    div.article-container:has(div.chat-container) {
+        height: calc(100vh - 146px);
     }
 
     button.mobile-user-list-toggle {

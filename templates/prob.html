@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/users.html" import user_sidebar %}
-{% from "includes/comment.html" import commentarea with context %}
+{% from "includes/comment.html" import commentform, commentarea with context %}
 {% from "includes/sidebar.html"
     import edit_prob, delete_prob, view_solution, upload_solution %}
 
@@ -45,34 +45,41 @@
 {% endblock %}
 
 {% block body %}
-<article id="contentContainer" class="markdown-body body-article">
-    <textarea id="bodyText">{{ prob.statement }}</textarea>
-</article>
-<article class="right-side-article height-fixed-article">
+<div class="central-area">
+    <article id="contentContainer" class="markdown-body content-container">
+        <textarea id="bodyText">{{ prob.statement }}</textarea>
+    </article>
+</div>
+<div class="side-area{%- if prob.review_status == 1 %} height-fixed-area{% endif %}">
     {%- if prob.review_status != 1 -%}
         <p class="tips hidden" id="isOfficialPrompt">本题是官方题目。</p>
         {%- if prob.source == current_user -%}
             {%- if prob.review_status == 0 -%}<p class="tips">你的题目未通过审核。</p>
             {%- else -%}<p class="tips">你的题目待审核。</p>{%- endif -%}
             {%- if prob.review_comment -%}
-                <h3>审核意见</h3>
-                <div id="reviewCommentView" class="markdown-body">
-                    <textarea style="display: none">{{ prob.review_comment }}</textarea>
-                </div>
+                <article class="basic-article">
+                    <h3>审核意见</h3>
+                    <div id="reviewCommentView" class="markdown-body">
+                        <textarea style="display: none">{{ prob.review_comment }}</textarea>
+                    </div>
+                </article>
             {%- endif -%}
         {%- else -%}
-            <form class="form-base">
-                {%- if prob.review_status == 0 -%}<p class="tips">此题已被拒绝。</p>
-                {%- else -%}<p class="tips">此题待审核。</p>{%- endif -%}
-                <span>
-                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true);">通过</button>
-                    <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false);">拒绝</button>
-                </span>
-            </form>
-            <h3>审核意见</h3>
+            <article class="basic-article form-container">
+                <form class="form-base">
+                    {%- if prob.review_status == 0 -%}<p class="tips">此题已被拒绝。</p>
+                    {%- else -%}<p class="tips">此题待审核。</p>{%- endif -%}
+                    <span>
+                        <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, true);">通过</button>
+                        <button data-probno="{{ prob.probno }}" onclick="reviewProb(this, false);">拒绝</button>
+                    </span>
+                </form>
+            </article>
+            <article class="basic-article form-container">
             {%- if current_user.isadmin -%}
                 <form class="form-base" id="reviewCommentForm"
                     onsubmit="event.preventDefault(); saveReviewComment(thisSaveBtn);">
+                    <h3>审核意见</h3>
                     <span><textarea class="submit-input"
                         id="reviewCommentText" rows="6">{{ prob.review_comment or '' }}</textarea></span>
                     <span>
@@ -80,13 +87,15 @@
                     </span>
                 </form>
             {%- endif -%}
+            </article>
         {%- endif -%}
     {%- else -%}
         <p class="tips{% if not prob.isofficial %} hidden{%- endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
         {%- set anslist = prob.get_answer() -%}
         {%- if anslist -%}
-            <h3>提交答案</h3>
+            <article class="basic-article form-container">
             <form class="form-base" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
+                <h3>提交答案</h3>
                 {%- if anslist|length == 1 -%}
                     <span class="answers-input">
                         <div class="label-render">
@@ -112,11 +121,16 @@
                     </a>
                 </p>
                 <span><button type="submit">提交</button></span>
-            </form>
+            </form></article>
         {%- endif -%}
-        <h3>讨论区</h3>{{- commentarea(0, prob.probno, prob.get_toplevel_comments()) -}}
+        <article class="basic-article form-container">
+            {{- commentform(0, prob.get_post_ident()) -}}
+        </article>
+        <article class="basic-article comments-container">
+            {{- commentarea(prob.get_toplevel_comments()) -}}
+        </article>
     {%- endif -%}
-</article>
+</div>
 <script>
     const markdownImageBasePath = {{ (
         "/images/0/" + prob.probno|urlencode + "/")|tojson }};

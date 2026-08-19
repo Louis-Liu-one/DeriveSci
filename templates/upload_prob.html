@@ -32,86 +32,90 @@
 {% endblock %}
 
 {% block body %}
-<article class="body-article height-fixed-article form-container">
-    <form class="form-base" id="editForm" enctype="multipart/form-data">
-        <span>
-            <label for="probNo">编号：</label>
-            {%- if not editmode -%}
-                <input type="text" id="probNo" name="probno"
-                    autocomplete="off" spellcheck="false" required>
-            {%- else -%}
-                <input type="text" class="disabled" id="probNo" name="probno"
-                    value="{{ prob.probno }}" readonly>
-            {%- endif -%}
-        </span>
-        <span>
-            <label for="probTitle">名称：</label>
-            <input required type="text" id="probTitle" name="probtitle" autocomplete="off"
-                spellcheck="false" {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
-        </span>
-        <span>
-            <label for="probLabel">标签：</label>
-            <div class="label-input" id="labelArea"></div>
-            <input type="text" class="label-input" id="probLabel" name="problabel"
-                autocomplete="off" spellcheck="false" placeholder="输入题目标签，按回车键添加">
-        </span>
-        <span>
-            <label for="statement">描述：</label>
-            <textarea id="statement" name="statement" spellcheck="false"
-                placeholder="以Markdown格式输入题面" class="tall" required>
-                {%- if editmode -%}{{ prob.statement }}{%- endif -%}
-            </textarea>
-        </span>
-        <span>
-            <label for="answerInputElement">答案：</label>
-            <div class="answer">
-                <div class="answer-input">
-                    <input type="text" id="contextInputElement" name="context"
-                        autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
-                    <input type="text" id="answerInputElement" name="answer"
-                        autocomplete="off" spellcheck="false" placeholder="输入答案">
-                    <i class="fas fa-circle-plus"
-                        onclick="addAnswerHTML(contextInputElement, answerInputElement);"></i>
-                    <i class="fas fa-square-plus" title="添加小题" onclick="addSubprob();"></i>
+<div class="central-area height-fixed-area">
+    <article class="basic-article form-container">
+        <form class="form-base" id="editForm" enctype="multipart/form-data">
+            <span>
+                <label for="probNo">编号：</label>
+                {%- if not editmode -%}
+                    <input type="text" id="probNo" name="probno"
+                        autocomplete="off" spellcheck="false" required>
+                {%- else -%}
+                    <input type="text" class="disabled" id="probNo" name="probno"
+                        value="{{ prob.probno }}" readonly>
+                {%- endif -%}
+            </span>
+            <span>
+                <label for="probTitle">名称：</label>
+                <input required type="text" id="probTitle" name="probtitle" autocomplete="off"
+                    spellcheck="false" {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
+            </span>
+            <span>
+                <label for="probLabel">标签：</label>
+                <div class="label-input" id="labelArea"></div>
+                <input type="text" class="label-input" id="probLabel" name="problabel"
+                    autocomplete="off" spellcheck="false" placeholder="输入题目标签，按回车键添加">
+            </span>
+            <span>
+                <label for="statement">描述：</label>
+                <textarea id="statement" name="statement" spellcheck="false"
+                    placeholder="以Markdown格式输入题面" class="tall" required>
+                    {%- if editmode -%}{{ prob.statement }}{%- endif -%}
+                </textarea>
+            </span>
+            <span>
+                <label for="answerInputElement">答案：</label>
+                <div class="answer">
+                    <div class="answer-input">
+                        <input type="text" id="contextInputElement" name="context"
+                            autocomplete="off" spellcheck="false" placeholder="以JSON格式输入各变量或置空">
+                        <input type="text" id="answerInputElement" name="answer"
+                            autocomplete="off" spellcheck="false" placeholder="输入答案">
+                        <i class="fas fa-circle-plus"
+                            onclick="addAnswerHTML(contextInputElement, answerInputElement);"></i>
+                        <i class="fas fa-square-plus" title="添加小题" onclick="addSubprob();"></i>
+                    </div>
+                    <ul id="answerListElement"></ul>
                 </div>
-                <ul id="answerListElement"></ul>
-            </div>
-        </span>
-        <span>
-            <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
-            <input type="file" id="imageFiles" name="imgfiles"
-                formenctype="multipart/form-data" accept="image/*" multiple>
-        </span>
-        <span>
-            {%- if not editmode and current_user.isadmin -%}
-                <label for="addToOfficial">加入到官方题目？</label>
-                <input type="checkbox" name="isofficial"
-                    id="addToOfficial" {%- if isofficial -%}checked{%- endif -%}>
-            {%- endif -%}
-        </span>
-        <span>
-            <button type="button" id="mdPreviewButton" onclick="renderElement(
-                mdPreview, statement.value, 'block', markdownImageBasePath);">预览</button>
-            {%- if editmode -%}
-                <button type="button" onclick="editProb();">上传</button>
-            {%- else -%}
-                <button type="button" onclick="uploadProb();">上传</button>
-            {%- endif -%}
-        </span>
-    </form>
-</article>
-<article class="right-side-article">
-    <h3>预览区</h3>
-    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
-    <p class="tips">
-        <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
-            <i class="fas fa-circle-info"></i> 有关上传题目的帮助……
-        </a><br>
-        <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
-            <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
-        </a>
-    </p>
-</article>
+            </span>
+            <span>
+                <label for="imageFiles">{%- if editmode -%}更多{%- endif -%}图片：</label>
+                <input type="file" id="imageFiles" name="imgfiles"
+                    formenctype="multipart/form-data" accept="image/*" multiple>
+            </span>
+            <span>
+                {%- if not editmode and current_user.isadmin -%}
+                    <label for="addToOfficial">加入到官方题目？</label>
+                    <input type="checkbox" name="isofficial"
+                        id="addToOfficial" {%- if isofficial -%}checked{%- endif -%}>
+                {%- endif -%}
+            </span>
+            <span>
+                <button type="button" id="mdPreviewButton" onclick="renderElement(
+                    mdPreview, statement.value, 'block', markdownImageBasePath);">预览</button>
+                {%- if editmode -%}
+                    <button type="button" onclick="editProb();">上传</button>
+                {%- else -%}
+                    <button type="button" onclick="uploadProb();">上传</button>
+                {%- endif -%}
+            </span>
+        </form>
+    </article>
+</div>
+<div class="side-area">
+    <article>
+        <h3>预览区</h3>
+        <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+        <p class="tips">
+            <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
+                <i class="fas fa-circle-info"></i> 有关上传题目的帮助……
+            </a><br>
+            <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
+                <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
+            </a>
+        </p>
+    </article>
+</div>
 <script>
     if (typeof createTagInput === 'function')
         window.labelTagInput = createTagInput({

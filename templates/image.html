@@ -29,22 +29,24 @@
 {% endblock %}
 
 {% block body %}
-<article class="main-article" id="imageMain"
-    data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}"
-    data-imagename="{{ image.name }}">
-    <h3 id="imageTitleDisplay">{{ image.name }}</h3>
-    <form id="imageTitleForm" class="form-base no-edge hidden">
-        <span>
-            <input id="imageTitleInput" name="newname" value="{{ image.name }}">
-            <button id="saveTitleBtn">保存</button>
-        </span>
-    </form>
-    <div class="image-preview">
-        <img id="previewImage" src="{{- url_for(
-            'imagefile', post_type=post_type,
-            post_ident=post_ident, imagename=image.name) -}}">
-    </div>
-</article>
+<div class="main-area">
+    <article id="imageMain"
+        data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}"
+        data-imagename="{{ image.name }}">
+        <h3 id="imageTitleDisplay">{{ image.name }}</h3>
+        <form id="imageTitleForm" class="form-base no-edge hidden">
+            <span>
+                <input id="imageTitleInput" name="newname" value="{{ image.name }}">
+                <button id="saveTitleBtn">保存</button>
+            </span>
+        </form>
+        <div class="image-preview">
+            <img id="previewImage" src="{{- url_for(
+                'imagefile', post_type=post_type,
+                post_ident=post_ident, imagename=image.name) -}}">
+        </div>
+    </article>
+</div>
 <dialog id="reuploadModal">
     <form id="reuploadForm" class="form-base"
         method="dialog" enctype="multipart/form-data">

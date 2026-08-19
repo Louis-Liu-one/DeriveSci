@@ -11,14 +11,18 @@
 {% endblock %}
 
 {% block body %}
-<article class="toc-container height-fixed-article" id="tocBlock"><h3>目录</h3></article>
-<article class="content-container">
-    <div class="markdown-body" id="contentContainer">
-        <textarea id="helpContentTextArea">[toc]
+<div class="toc-area height-fixed-area">
+    <article class="toc-container" id="tocBlock"><h3>目录</h3></article>
+</div>
+<div class="main-area">
+    <article class="content-container">
+        <div class="markdown-body" id="contentContainer">
+            <textarea id="helpContentTextArea">[toc]
 {% include filename -%}
-        </textarea>
-    </div>
-</article>
+            </textarea>
+        </div>
+    </article>
+</div>
 <script>
     {
         renderElement(contentContainer, helpContentTextArea.value);

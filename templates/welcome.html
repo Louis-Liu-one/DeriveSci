@@ -69,53 +69,57 @@
 {% endblock %}
 
 {% block body %}
-<article class="body-article height-fixed-article">
-    <h3>{{ user_name(user) }}的贡献</h3>
-    <h4>{{ user_name(user) }}通过的题目</h4>
-    {%- set passedprobs = user.get_passedprobs() -%}
-    {%- if passedprobs -%}
-        {{- problist(passedprobs, with_source=False) -}}
-    {%- else -%}<p>暂无</p>{%- endif -%}
-    <h4>{{ user_name(user) }}上传的题目</h4>
-    {%- set uploadedprobs = user.uploadedprobs.copy() -%}
-    {%- if uploadedprobs -%}
-        {%- do uploadedprobs.sort() -%}
-        {{- problist(uploadedprobs, with_source=False, with_review_status=True) -}}
-    {%- else -%}<p>暂无</p>{%- endif -%}
-</article>
-<article class="right-side-article height-fixed-article">
-    <div id="userIntroductionContainer">
-        <h3>{{ user_name(user) }}的简介</h3>
-        <form class="form-base no-edge hidden" id="introductionEditForm">
-            <span>
-                <textarea id="introductionTextarea" name="introduction"
-                    class="submit-input" spellcheck="false"
-                    placeholder="简要介绍你自己，以 Markdown 格式">
-                    {{- user.introduction or '' -}}
-                </textarea>
-            </span>
-        </form>
-        <div id="userIntroductionDisplay" class="markdown-body">
-            <textarea>{{ user.introduction }}</textarea>
+<div class="central-area height-fixed-area">
+    <article class="basic-article">
+        <h3>{{ user_name(user) }}的贡献</h3>
+        <h4>{{ user_name(user) }}通过的题目</h4>
+        {%- set passedprobs = user.get_passedprobs() -%}
+        {%- if passedprobs -%}
+            {{- problist(passedprobs, with_source=False) -}}
+        {%- else -%}<p>暂无</p>{%- endif -%}
+        <h4>{{ user_name(user) }}上传的题目</h4>
+        {%- set uploadedprobs = user.uploadedprobs.copy() -%}
+        {%- if uploadedprobs -%}
+            {%- do uploadedprobs.sort() -%}
+            {{- problist(uploadedprobs, with_source=False, with_review_status=True) -}}
+        {%- else -%}<p>暂无</p>{%- endif -%}
+    </article>
+</div>
+<div class="side-area height-fixed-area">
+    <article class="basic-article">
+        <div id="userIntroductionContainer">
+            <h3>{{ user_name(user) }}的简介</h3>
+            <form class="form-base no-edge hidden" id="introductionEditForm">
+                <span>
+                    <textarea id="introductionTextarea" name="introduction"
+                        class="submit-input" spellcheck="false"
+                        placeholder="简要介绍你自己，以 Markdown 格式">
+                        {{- user.introduction or '' -}}
+                    </textarea>
+                </span>
+            </form>
+            <div id="userIntroductionDisplay" class="markdown-body">
+                <textarea>{{ user.introduction }}</textarea>
+            </div>
         </div>
-    </div>
-    <h3>{{ user_name(user) }}的文章</h3>
-    <h4>{{ user_name(user) }}的专栏</h4>
-    {%- set articles = user.articles.copy() -%}
-    {%- if articles -%}
-        {%- do articles.sort() -%}
-        {{- articlelist(articles, with_head=True, with_user=False) -}}
-    {%- else -%}<p>暂无</p>{%- endif -%}
+        <h3>{{ user_name(user) }}的文章</h3>
+        <h4>{{ user_name(user) }}的专栏</h4>
+        {%- set articles = user.articles.copy() -%}
+        {%- if articles -%}
+            {%- do articles.sort() -%}
+            {{- articlelist(articles, with_head=True, with_user=False) -}}
+        {%- else -%}<p>暂无</p>{%- endif -%}
 
-    <h4>{{ user_name(user) }}上传的题解</h4>
-    {%- set solutions = user.solutions.copy() -%}
-    {%- if solutions -%}
-        {%- do solutions.sort() -%}
-        {{- solutionlist(
-            solutions, with_head=True,
-            with_probno=True, with_user=False) -}}
-    {%- else -%}<p>暂无</p>{%- endif -%}
-</article>
+        <h4>{{ user_name(user) }}上传的题解</h4>
+        {%- set solutions = user.solutions.copy() -%}
+        {%- if solutions -%}
+            {%- do solutions.sort() -%}
+            {{- solutionlist(
+                solutions, with_head=True,
+                with_probno=True, with_user=False) -}}
+        {%- else -%}<p>暂无</p>{%- endif -%}
+    </article>
+</div>
 {%- if user == current_user -%}
     <script>
         let originalIntroduction

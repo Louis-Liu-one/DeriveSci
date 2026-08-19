@@ -56,16 +56,68 @@
 {% endblock %}
 
 {% block body %}
-<article class="body-article">
-    {%- set anslist = prob.get_answer() -%}
-    {%- if anslist|length > 1 -%}
-        <p class="overall-score">
-            <strong>总体得分：</strong> {{ colored_score(submission.score) }}
-        </p>
-        {%- for sub_i in range(testpoints|length) -%}
+<div class="central-area">
+    <article>
+        {%- set anslist = prob.get_answer() -%}
+        {%- if anslist|length > 1 -%}
+            <p class="overall-score">
+                <strong>总体得分：</strong> {{ colored_score(submission.score) }}
+            </p>
+            {%- for sub_i in range(testpoints|length) -%}
+                {%- set sub_pts = namespace(value=0) -%}
+                {%- set sub_total = testpoints[sub_i]|length -%}
+                {%- for s in testpoints[sub_i] -%}
+                    {%- if s == TPStatus.CORRECT -%}
+                        {%- set sub_pts.value = sub_pts.value + 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if sub_total > 0 -%}
+                    {%- set sub_score = (100 * sub_pts.value) // sub_total -%}
+                {%- else -%}{%- set sub_score = 0 -%}{%- endif -%}
+                <div class="subprob-block" id="subprob-{{ sub_i }}">
+                    <div class="subprob-title">
+                        <h4>小题 {{ sub_i + 1 }}</h4>
+                        <div class="tpstatus-inline">
+                            {{- testpoint_status_div(prob, testpoints[sub_i]) -}}
+                        </div>
+                    </div>
+                    <table class="subprob-table">
+                        <tr>
+                            <th>小题描述</th>
+                            <td>
+                                <div class="label-render">
+                                    <textarea class="label-text">
+                                        {{- anslist[sub_i].label
+                                            or ('小题 ' ~ (sub_i+1) ~ ' 的答案') -}}
+                                    </textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>我的答案</th>
+                            <td><pre><code>{{ submission_answer_parsed[sub_i]
+                                if submission_answer_parsed else '' }}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <th>求值结果</th>
+                            <td>
+                                <div class="answer-block" id="answerBlock-{{ sub_i }}">
+                                    <textarea id="answerText-{{ sub_i }}">
+                                        {%- if answer_latex and answer_latex[sub_i] -%}
+                                            ${{ answer_latex[sub_i] }}$
+                                        {%- else -%}无法求值{%- endif -%}
+                                    </textarea>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr><th>我的得分</th><td>{{- colored_score(sub_score) -}}</td></tr>
+                    </table>
+                </div>
+            {%- endfor -%}
+        {%- else -%}
             {%- set sub_pts = namespace(value=0) -%}
-            {%- set sub_total = testpoints[sub_i]|length -%}
-            {%- for s in testpoints[sub_i] -%}
+            {%- set sub_total = testpoints[0]|length -%}
+            {%- for s in testpoints[0] -%}
                 {%- if s == TPStatus.CORRECT -%}
                     {%- set sub_pts.value = sub_pts.value + 1 -%}
                 {%- endif -%}
@@ -73,102 +125,52 @@
             {%- if sub_total > 0 -%}
                 {%- set sub_score = (100 * sub_pts.value) // sub_total -%}
             {%- else -%}{%- set sub_score = 0 -%}{%- endif -%}
-            <div class="subprob-block" id="subprob-{{ sub_i }}">
-                <div class="subprob-title">
-                    <h4>小题 {{ sub_i + 1 }}</h4>
-                    <div class="tpstatus-inline">
-                        {{- testpoint_status_div(prob, testpoints[sub_i]) -}}
-                    </div>
-                </div>
+            <div class="subprob-block">
                 <table class="subprob-table">
                     <tr>
                         <th>小题描述</th>
                         <td>
                             <div class="label-render">
                                 <textarea class="label-text">
-                                    {{- anslist[sub_i].label
-                                        or ('小题 ' ~ (sub_i+1) ~ ' 的答案') -}}
+                                    {{- anslist[0].label or ('小题 ' ~ 1 ~ ' 的答案') -}}
                                 </textarea>
                             </div>
                         </td>
                     </tr>
                     <tr>
+                        <th>提交状态</th>
+                        <td>{{- testpoint_status_div(prob, testpoints[0]) -}}</td>
+                    </tr>
+                    <tr>
                         <th>我的答案</th>
-                        <td><pre><code>{{ submission_answer_parsed[sub_i]
-                            if submission_answer_parsed else '' }}</code></pre></td>
+                        <td><pre><code>{{- submission_answer_parsed[0]
+                            if submission_answer_parsed else submission.answer -}}</code></pre></td>
                     </tr>
                     <tr>
                         <th>求值结果</th>
                         <td>
-                            <div class="answer-block" id="answerBlock-{{ sub_i }}">
-                                <textarea id="answerText-{{ sub_i }}">
-                                    {%- if answer_latex and answer_latex[sub_i] -%}
-                                        ${{ answer_latex[sub_i] }}$
+                            <div class="answer-block" id="answerBlock">
+                                <textarea id="answerText">
+                                    {%- if answer_latex and answer_latex[0] -%}${{ answer_latex[0] }}$
                                     {%- else -%}无法求值{%- endif -%}
                                 </textarea>
                             </div>
                         </td>
                     </tr>
-                    <tr><th>我的得分</th><td>{{- colored_score(sub_score) -}}</td></tr>
+                    <tr><th>我的得分</th><td>{{- colored_score(submission.score) -}}</td></tr>
                 </table>
             </div>
-        {%- endfor -%}
-    {%- else -%}
-        {%- set sub_pts = namespace(value=0) -%}
-        {%- set sub_total = testpoints[0]|length -%}
-        {%- for s in testpoints[0] -%}
-            {%- if s == TPStatus.CORRECT -%}
-                {%- set sub_pts.value = sub_pts.value + 1 -%}
-            {%- endif -%}
-        {%- endfor -%}
-        {%- if sub_total > 0 -%}
-            {%- set sub_score = (100 * sub_pts.value) // sub_total -%}
-        {%- else -%}{%- set sub_score = 0 -%}{%- endif -%}
-        <div class="subprob-block">
-            <table class="subprob-table">
-                <tr>
-                    <th>小题描述</th>
-                    <td>
-                        <div class="label-render">
-                            <textarea class="label-text">
-                                {{- anslist[0].label or ('小题 ' ~ 1 ~ ' 的答案') -}}
-                            </textarea>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>提交状态</th>
-                    <td>{{- testpoint_status_div(prob, testpoints[0]) -}}</td>
-                </tr>
-                <tr>
-                    <th>我的答案</th>
-                    <td><pre><code>{{- submission_answer_parsed[0]
-                        if submission_answer_parsed else submission.answer -}}</code></pre></td>
-                </tr>
-                <tr>
-                    <th>求值结果</th>
-                    <td>
-                        <div class="answer-block" id="answerBlock">
-                            <textarea id="answerText">
-                                {%- if answer_latex and answer_latex[0] -%}${{ answer_latex[0] }}$
-                                {%- else -%}无法求值{%- endif -%}
-                            </textarea>
-                        </div>
-                    </td>
-                </tr>
-                <tr><th>我的得分</th><td>{{- colored_score(submission.score) -}}</td></tr>
-            </table>
-        </div>
-    {%- endif -%}
-    <p class="tips">
-        <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
-            <i class="fas fa-circle-info"></i> 有关提交答案的帮助……
-        </a>
-    </p>
-</article>
-<article class="right-side-article">
-    <h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}
-</article>
+        {%- endif -%}
+        <p class="tips">
+            <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
+                <i class="fas fa-circle-info"></i> 有关提交答案的帮助……
+            </a>
+        </p>
+    </article>
+</div>
+<div class="side-area">
+    <article><h3>查看题解</h3>{{- solutionlist(prob.solutions) -}}</article>
+</div>
 <script>
     renderElements([
         ...document.querySelectorAll('div[id^="answerBlock"]'),

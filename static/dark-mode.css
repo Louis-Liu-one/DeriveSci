@@ -5,7 +5,7 @@
     --surface-soft: #172337;
     --text: #e5e7eb;
     --muted: #94a3b8;
-    --border: #273449;
+    --border: 1px solid #273449;
     --primary: #1b365d;
     --primary-soft: #1d4ed8;
     --accent: #60a5fa;
@@ -57,10 +57,10 @@
     option {
         color: var(--text);
         background: transparent;
-        border-color: var(--border);
+        border: var(--border);
     }
 
-    article.body-article img:not(.avatar),
+    article.content-container img:not(.avatar),
     div.markdown-preview-block img:not(.avatar),
     div.image-preview img {
         filter: invert(1);

@@ -1,6 +1,6 @@
 article.toc-container {
     position: fixed;
-    top: 80px;
+    top: 90px;
     right: 15px;
     width: 320px;
     max-height: calc(100vh - 120px);
@@ -43,16 +43,11 @@ article.toc-container div.toc-title i:hover {
 
 @media (max-width: 768px) {
     article.toc-container {
-        right: 0;
         left: auto;
-        z-index: 1200;
+        z-index: 1500;
         width: 48%;
-        height: calc(100vh - 110px);
+        height: fit-content;
         padding-top: 12px;
         transform: translateX(-100%);
-    }
-
-    article.toc-container.open {
-        transform: translateX(0);
     }
 }

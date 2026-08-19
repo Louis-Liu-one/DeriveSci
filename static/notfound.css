@@ -14,6 +14,7 @@ div.notfound-card {
     background: linear-gradient(135deg,
             var(--surface-strong), var(--surface));
     box-shadow: var(--shadow);
+    border: var(--border);
     display: flex;
     align-items: center;
 }
@@ -75,7 +76,7 @@ a.btn:hover {
 
 a.btn-outline {
     background: transparent;
-    border: 1px solid var(--border);
+    border: var(--border);
     color: var(--text);
     padding: 10px 16px;
     border-radius: 8px;
@@ -85,10 +86,7 @@ a.btn-outline {
 @media (max-width: 768px) {
 
     article.notfound-hero {
-        box-shadow: none;
-        border: none;
         padding: 0;
-        width: calc(100% - 24px);
     }
 
     div.notfound-card {

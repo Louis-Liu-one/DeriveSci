@@ -20,42 +20,44 @@
 {% endblock %}
 
 {% block body %}
-<article class="main-article">
-    <div class="helplist-header">
-        <h2>帮助主题</h2>
-        <div class="helplist-search">
-            <input id="helpSearch" type="search" placeholder="搜索帮助（输入关键字）...">
+<div class="main-area">
+    <article class="basic-article">
+        <div class="helplist-header">
+            <h2>帮助主题</h2>
+            <div class="helplist-search">
+                <input id="helpSearch" type="search" placeholder="搜索帮助（输入关键字）...">
+            </div>
         </div>
-    </div>
-    <div id="helpGrid" class="help-grid">
-        {%- for item in helplist -%}
-            <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}"
-                target="_blank" data-title="{{ item.title }}" data-desc="{{ item.description }}">
-                <div class="card-icon">
-                    <i class="{{ item.icon if item.icon else 'fas fa-circle-info' }}"></i>
-                </div>
-                <div class="card-body">
-                    <h3>{{ item.title }}</h3>
-                    <p>{{ item.description or '点击查看详细说明' }}</p>
-                </div>
-            </a>
-        {%- endfor -%}
-    </div>
-    <script>
-        {
-            const input = document.getElementById('helpSearch');
-            const grid = document.getElementById('helpGrid');
-            input.addEventListener('input', function () {
-                const q = this.value.trim().toLowerCase();
-                const cards = grid.querySelectorAll('.help-card');
-                cards.forEach(c => {
-                    const title = (c.dataset.title || '').toLowerCase();
-                    const desc = (c.dataset.desc || '').toLowerCase();
-                    c.style.display = (title.indexOf(q) !== -1
-                        || desc.indexOf(q) !== -1) ? 'flex' : 'none';
-                });
+        <div id="helpGrid" class="help-grid">
+            {%- for item in helplist -%}
+                <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}"
+                    target="_blank" data-title="{{ item.title }}" data-desc="{{ item.description }}">
+                    <div class="card-icon">
+                        <i class="{{ item.icon if item.icon else 'fas fa-circle-info' }}"></i>
+                    </div>
+                    <div class="card-body">
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.description or '点击查看详细说明' }}</p>
+                    </div>
+                </a>
+            {%- endfor -%}
+        </div>
+    </article>
+</div>
+<script>
+    {
+        const input = document.getElementById('helpSearch');
+        const grid = document.getElementById('helpGrid');
+        input.addEventListener('input', function () {
+            const q = this.value.trim().toLowerCase();
+            const cards = grid.querySelectorAll('.help-card');
+            cards.forEach(c => {
+                const title = (c.dataset.title || '').toLowerCase();
+                const desc = (c.dataset.desc || '').toLowerCase();
+                c.style.display = (title.indexOf(q) !== -1
+                    || desc.indexOf(q) !== -1) ? 'flex' : 'none';
             });
-        }
-    </script>
-</article>
+        });
+    }
+</script>
 {% endblock %}

@@ -28,53 +28,57 @@
 {% endblock %}
 
 {% block body %}
-<article class="body-article height-fixed-article form-container">
-    <form class="form-base" id="editForm" enctype="multipart/form-data">
-        <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
-        {%- if editmode -%}
-            <input type="hidden" name="solno" id="solNo" value="{{ solution.solno }}">
-        {%- endif -%}
-        <span>
-            <label for="solTitle">标题：</label>
-            <input required type="text" id="solTitle" name="soltitle"
-                autocomplete="off" spellcheck="false"
-                {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
-        </span>
-        <span>
-            <label for="solution">内容：</label>
-            <textarea id="solution" name="solution" class="tall"
-                placeholder="以Markdown格式输入题解" spellcheck="false" required>
-                {%- if editmode -%}{{ solution.content }}{%- endif -%}
-            </textarea>
-        </span>
-        <span>
-            <label for="imageFiles">{% if editmode %}更多{% endif %}图片：</label>
-            <input type="file" id="imageFiles" name="imgfiles"
-                formenctype="multipart/form-data" accept="image/*" multiple>
-        </span>
-        <span>
-            <button type="button" id="mdPreviewButton" onclick="renderElement(
-                mdPreview, solution.value, 'block', markdownImageBasePath);">预览</button>
+<div class="central-area height-fixed-area">
+    <article class="basic-article form-container">
+        <form class="form-base" id="editForm" enctype="multipart/form-data">
+            <input type="hidden" name="probno" id="probNo" value="{{ prob.probno }}">
             {%- if editmode -%}
-                <button type="button" onclick="editSolution();">上传</button>
-            {%- else -%}
-                <button type="button" onclick="uploadSolution();">上传</button>
+                <input type="hidden" name="solno" id="solNo" value="{{ solution.solno }}">
             {%- endif -%}
-        </span>
-    </form>
-</article>
-<article class="right-side-article">
-    <h3>预览区</h3>
-    <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
-    <p class="tips">
-        <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
-            <i class="fas fa-circle-info"></i> 有关上传题解的帮助……
-        </a><br>
-        <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
-            <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
-        </a>
-    </p>
-</article>
+            <span>
+                <label for="solTitle">标题：</label>
+                <input required type="text" id="solTitle" name="soltitle"
+                    autocomplete="off" spellcheck="false"
+                    {%- if editmode -%}value="{{ solution.title }}"{%- endif -%}>
+            </span>
+            <span>
+                <label for="solution">内容：</label>
+                <textarea id="solution" name="solution" class="tall"
+                    placeholder="以Markdown格式输入题解" spellcheck="false" required>
+                    {%- if editmode -%}{{ solution.content }}{%- endif -%}
+                </textarea>
+            </span>
+            <span>
+                <label for="imageFiles">{% if editmode %}更多{% endif %}图片：</label>
+                <input type="file" id="imageFiles" name="imgfiles"
+                    formenctype="multipart/form-data" accept="image/*" multiple>
+            </span>
+            <span>
+                <button type="button" id="mdPreviewButton" onclick="renderElement(
+                    mdPreview, solution.value, 'block', markdownImageBasePath);">预览</button>
+                {%- if editmode -%}
+                    <button type="button" onclick="editSolution();">上传</button>
+                {%- else -%}
+                    <button type="button" onclick="uploadSolution();">上传</button>
+                {%- endif -%}
+            </span>
+        </form>
+    </article>
+</div>
+<div class="side-area">
+    <article>
+        <h3>预览区</h3>
+        <div class="markdown-body markdown-preview-block" id="mdPreview"></div>
+        <p class="tips">
+            <a target="_blank" href="{{ url_for('helps', howto='upload-probs-and-solutions') }}">
+                <i class="fas fa-circle-info"></i> 有关上传题解的帮助……
+            </a><br>
+            <a target="_blank" href="{{ url_for('helps', howto='write-markdown') }}">
+                <i class="fas fa-circle-info"></i> 有关编写 Markdown 的帮助……
+            </a>
+        </p>
+    </article>
+</div>
 <script>
     {%- if editmode -%}
         const markdownImageBasePath = {{ (

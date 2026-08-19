@@ -2,7 +2,7 @@
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/tables.html" import solutionlist %}
 {% from "includes/users.html" import user_sidebar %}
-{% from "includes/comment.html" import commentarea with context %}
+{% from "includes/comment.html" import commentform, commentarea with context %}
 {% from "includes/sidebar.html"
     import return2post, upload_solution, edit_solution, delete_solution %}
 
@@ -42,15 +42,20 @@
 {% endblock %}
 
 {% block body %}
-<article id="contentContainer" class="markdown-body body-article">
-    <textarea id="bodyText">{{ solution.content }}</textarea>
-</article>
-<article class="right-side-article height-fixed-article">
-    <h3>更多题解</h3>{{- solutionlist(suggested) -}}
-    <h3>讨论区</h3>
-    {{- commentarea(1, solution.get_post_ident(),
-        solution.get_toplevel_comments()) -}}
-</article>
+<div class="central-area">
+    <article id="contentContainer" class="markdown-body content-container">
+        <textarea id="bodyText">{{ solution.content }}</textarea>
+    </article>
+</div>
+<div class="side-area height-fixed-area">
+    <article><h3>更多题解</h3>{{- solutionlist(suggested) -}}</article>
+    <article class="basic-article form-container">
+        {{- commentform(1, solution.get_post_ident()) -}}
+    </article>
+    <article class="basic-article comments-container">
+        {{- commentarea(solution.get_toplevel_comments()) -}}
+    </article>
+</div>
 <script>
     const markdownImageBasePath = {{ (
         "/images/1/" + solution.get_post_ident()|urlencode + "/")|tojson }};

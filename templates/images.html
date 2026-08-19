@@ -24,43 +24,45 @@
 {% endblock %}
 
 {% block body %}
-{%- if images -%}
-    <article class="main-article problist-container"
-        id="imagesMain" data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}">
-        <div class="problist-wrap">
-            <table class="problist">
-                <thead>
-                    <tr class="probhead">
-                        <th>文件名</th><th>大小</th><th>上传者</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {%- for img in images -%}
-                        <tr class="image-row" data-name="{{- img.name -}}"
-                            data-url="{{- url_for('image_preview',
-                                post_type=post_type, post_ident=post_ident,
-                                imagename=img.name) -}}"
-                            onclick="location.href = this.dataset.url;">
-                            <td class="probno filename">{{- img.name -}}</td>
-                            <td>{{ (img.size or 0)|filesizeformat }}</td>
-                            <td class="source">
-                                {%- if img.uploader -%}
-                                    <div>
-                                        {{- user_avatar_img(img.uploader) -}}
-                                        {{- user_name(img.uploader) -}}
-                                    </div>
-                                {%- else -%}系统{%- endif -%}
-                            </td>
+<div class="main-area height-fixed-area">
+    {%- if images -%}
+        <article class="basic-article problist-container"
+            id="imagesMain" data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}">
+            <div class="problist-wrap">
+                <table class="problist">
+                    <thead>
+                        <tr class="probhead">
+                            <th>文件名</th><th>大小</th><th>上传者</th>
                         </tr>
-                    {%- endfor -%}
-                </tbody>
-            </table>
-        </div>
-    </article>
-{%- else -%}
-    <article class="main-article" id="imagesMain"
-        data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}">
-        <p>暂无图片</p>
-    </article>
-{%- endif -%}
+                    </thead>
+                    <tbody>
+                        {%- for img in images -%}
+                            <tr class="image-row" data-name="{{- img.name -}}"
+                                data-url="{{- url_for('image_preview',
+                                    post_type=post_type, post_ident=post_ident,
+                                    imagename=img.name) -}}"
+                                onclick="location.href = this.dataset.url;">
+                                <td class="probno filename">{{- img.name -}}</td>
+                                <td>{{ (img.size or 0)|filesizeformat }}</td>
+                                <td class="source">
+                                    {%- if img.uploader -%}
+                                        <div>
+                                            {{- user_avatar_img(img.uploader) -}}
+                                            {{- user_name(img.uploader) -}}
+                                        </div>
+                                    {%- else -%}系统{%- endif -%}
+                                </td>
+                            </tr>
+                        {%- endfor -%}
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    {%- else -%}
+        <article id="imagesMain"
+            data-post-type="{{ post_type }}" data-post-ident="{{ post_ident }}">
+            <p>暂无图片</p>
+        </article>
+    {%- endif -%}
+</div>
 {% endblock %}
