@@ -6,6 +6,7 @@
 
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='grid-container.css') }}">
 {% endblock %}
 
 {% block navbar_title %}题目标签{% endblock %}
@@ -18,20 +19,14 @@
 <div class="main-area">
     <article>
         <h3>所有标签</h3>
-        <table class="labellist">
-            {%- for i in range(0, labels|length, 5) -%}
-                <tr>
-                    {%- for dif in range(5) -%}
-                        {%- if i + dif < labels|length -%}
-                            <td data-url="{{ labels[i + dif].url() }}"{{-''-}}
-                                onclick="window.open(this.dataset.url);">
-                                {{- labels[i + dif].labelname -}}
-                            </td>
-                        {%- endif -%}
-                    {%- endfor -%}
-                </tr>
+        <div class="grid-container">
+            {%- for label in labels -%}
+                <div class="grid-item" data-url="{{ label.url() }}"{{-''-}}
+                    onclick="window.open(this.dataset.url);">
+                    {{- label.labelname -}}
+                </div>
             {%- endfor -%}
-        </table>
+        </div>
     </article>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/tables.html" import solutionlist %}
 {% from "includes/users.html" import user_sidebar %}
-{% from "includes/comment.html" import commentform, commentarea with context %}
+{% from "includes/comment.html" import comment_section with context %}
 {% from "includes/sidebar.html"
     import return2post, upload_solution, edit_solution, delete_solution %}
 
@@ -48,13 +48,8 @@
     </article>
 </div>
 <div class="side-area height-fixed-area">
-    <article><h3>更多题解</h3>{{- solutionlist(suggested) -}}</article>
-    <article class="basic-article form-container">
-        {{- commentform(1, solution.get_post_ident()) -}}
-    </article>
-    <article class="basic-article comments-container">
-        {{- commentarea(solution.get_toplevel_comments()) -}}
-    </article>
+    <h3>更多题解</h3><article>{{- solutionlist(suggested) -}}</article>
+    {{- comment_section(solution) -}}
 </div>
 <script>
     const markdownImageBasePath = {{ (

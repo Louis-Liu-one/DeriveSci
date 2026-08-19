@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "includes/problabels.html" import problabels_sidebar %}
 {% from "includes/users.html" import user_sidebar %}
-{% from "includes/comment.html" import commentform, commentarea with context %}
+{% from "includes/comment.html" import comment_section with context %}
 {% from "includes/sidebar.html"
     import edit_prob, delete_prob, view_solution, upload_solution %}
 
@@ -93,47 +93,43 @@
         <p class="tips{% if not prob.isofficial %} hidden{%- endif -%}" id="isOfficialPrompt">本题是官方题目。</p>
         {%- set anslist = prob.get_answer() -%}
         {%- if anslist -%}
+            <h3>提交答案</h3>
             <article class="basic-article form-container">
-            <form class="form-base" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
-                <h3>提交答案</h3>
-                {%- if anslist|length == 1 -%}
-                    <span class="answers-input">
-                        <div class="label-render">
-                            <textarea class="label-text" style="display: none;">{{ anslist[0].label or '提交答案' }}：</textarea>
-                        </div>
-                        <textarea name="answertext" class="submit-input" spellcheck="false"></textarea>
-                    </span>
-                {%- else -%}
-                    {%- for i in range(anslist|length) -%}
+                <form class="form-base" method="POST" action="{{ url_for('submit', probno=prob.probno) }}">
+                    {%- if anslist|length == 1 -%}
                         <span class="answers-input">
                             <div class="label-render">
-                                <textarea class="label-text" style="display: none">
-                                    {{- anslist[i].label or ('小题 ' ~ (i + 1) ~ ' 的答案') -}}：
-                                </textarea>
+                                <textarea class="label-text" style="display: none;">{{ anslist[0].label or '提交答案' }}：</textarea>
                             </div>
                             <textarea name="answertext" class="submit-input" spellcheck="false"></textarea>
                         </span>
-                    {%- endfor -%}
-                {%- endif -%}
-                <p class="tips">
-                    <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
-                        <i class="fas fa-circle-info"></i> 有关提交答案的帮助……
-                    </a>
-                </p>
-                <span><button type="submit">提交</button></span>
-            </form></article>
+                    {%- else -%}
+                        {%- for i in range(anslist|length) -%}
+                            <span class="answers-input">
+                                <div class="label-render">
+                                    <textarea class="label-text" style="display: none">
+                                        {{- anslist[i].label or ('小题 ' ~ (i + 1) ~ ' 的答案') -}}：
+                                    </textarea>
+                                </div>
+                                <textarea name="answertext" class="submit-input" spellcheck="false"></textarea>
+                            </span>
+                        {%- endfor -%}
+                    {%- endif -%}
+                    <p class="tips">
+                        <a target="_blank" href="{{ url_for('helps', howto='submit-answers') }}">
+                            <i class="fas fa-circle-info"></i> 有关提交答案的帮助……
+                        </a>
+                    </p>
+                    <span><button type="submit">提交</button></span>
+                </form>
+            </article>
         {%- endif -%}
-        <article class="basic-article form-container">
-            {{- commentform(0, prob.get_post_ident()) -}}
-        </article>
-        <article class="basic-article comments-container">
-            {{- commentarea(prob.get_toplevel_comments()) -}}
-        </article>
+        {{- comment_section(prob) -}}
     {%- endif -%}
 </div>
 <script>
     const markdownImageBasePath = {{ (
-        "/images/0/" + prob.probno|urlencode + "/")|tojson }};
+        "/images/0/" + prob.get_post_ident()|urlencode + "/")|tojson }};
     const _toRender = [
         contentContainer, ...document.getElementsByClassName('comment-content'),
         ...document.querySelectorAll('.label-render')];

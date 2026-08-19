@@ -89,13 +89,22 @@
     </div>
 {%- endmacro -%}
 
-{%- macro commentarea(comments, title='讨论区') -%}
+{%- macro commentarea(comments) -%}
     <div class="comments-container">
-        <h3>{{ title }}</h3>
         {%- if comments -%}
             {%- for comment in comments -%}
                 {{- commentdiv(comment, toplevel=True) -}}<div class="comments-sep"></div>
             {%- endfor -%}
         {%- else -%}<p>暂无讨论</p>{%- endif -%}
     </div>
+{%- endmacro -%}
+
+{%- macro comment_section(post, title='讨论区') -%}
+    <h3>{{ title }}</h3>
+    <article class="basic-article form-container">
+        {{- commentform(post.post_type, post.get_post_ident()) -}}
+    </article>
+    <article class="basic-article comments-container">
+        {{- commentarea(post.get_toplevel_comments()) -}}
+    </article>
 {%- endmacro -%}

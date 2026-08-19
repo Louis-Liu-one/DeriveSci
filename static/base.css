@@ -189,15 +189,13 @@ ul.navbar-items li.logo:active {
 
 ul.navbar-items li.navbar-title {
     font-family: Helvetica-Bold;
-    font-size: 28px;
+    font-size: clamp(15px, 2.5vw, 24px);
     font-weight: bold;
     color: white;
     flex-direction: row;
     align-items: center;
     height: 100%;
-    line-height: 27px;
     margin-right: auto;
-    /* limit title width and allow wrapping when it overflows */
     max-width: 60%;
     white-space: normal;
     overflow-wrap: anywhere;
@@ -368,7 +366,8 @@ div.article-container {
     display: flex;
     overflow-y: auto;
     flex-grow: 1;
-    padding: 8px;
+    padding: 18px 42px;
+    gap: 18px;
 }
 
 div.height-fixed-area,
@@ -379,16 +378,17 @@ article.height-fixed-article {
     overflow-y: auto;
 }
 
-div.main-area,
-div.central-area,
-div.side-area,
-div.toc-area {
+div:is(.main-area, .central-area, .side-area, .toc-area) {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     gap: 24px;
     padding: 8px;
     height: fit-content;
+}
+
+div:is(.main-area, .central-area, .side-area)>:where(h1, h2, h3, h4, h5, h6) {
+    margin: 0;
 }
 
 article.basic-article,
@@ -411,16 +411,16 @@ div.central-area {
     width: 45%;
 }
 
-div.central-area img {
-    width: 100%;
-}
-
 div.side-area {
     width: 30%;
 }
 
 div.toc-area {
     width: 25%;
+}
+
+div.central-area img {
+    width: 100%;
 }
 
 div.side-area textarea.submit-input {
@@ -480,9 +480,8 @@ footer p {
     margin: 2px;
 }
 
-/******************************* responsive design *******************************/
+/******************************* responsive *******************************/
 
-/* Responsive: mobile layout adjustments */
 @media (max-width: 768px) {
 
     body {
@@ -495,7 +494,6 @@ footer p {
         gap: 2px;
     }
 
-    /* Hide full navbar items, keep title/avatar and toggles */
     ul.navbar-items a:has(.navbar-item),
     ul.navbar-items li.logo {
         display: none;
@@ -503,10 +501,12 @@ footer p {
 
     ul.navbar-items a:has(.navbar-item.navbar-avatar),
     ul.navbar-items .sidebar-toggle-btn,
-    ul.navbar-items li.navbar-title,
-    ul.navbar-items .navbar-avatar,
     ul.navbar-items .nav-more-toggle {
         display: flex;
+    }
+
+    ul.navbar-items li.navbar-title {
+        font-size: clamp(15px, 6vw, 24px);
     }
 
     ul.navbar-items .navbar-item.sidebar-toggle-btn,
@@ -516,11 +516,6 @@ footer p {
         padding: 6px 4px;
     }
 
-    ul.navbar-items li.navbar-title {
-        font-size: 21px;
-    }
-
-    /* Nav-more panel: hidden by default, shown when checkbox checked (animated) */
     nav.navbar div.nav-more-panel {
         display: flex;
         position: absolute;
@@ -568,7 +563,6 @@ footer p {
         font-family: Helvetica, Arial, sans-serif;
     }
 
-    /* Sidebar/TOC container is off-canvas by default; slide in when toggled */
     aside,
     article.toc-container {
         display: block;
@@ -594,7 +588,6 @@ footer p {
         height: calc(100vh - 110px);
     }
 
-    /* Overlay that darkens the page when sidebar is open; clickable to close */
     .sidebar-overlay {
         position: fixed;
         top: 0;
@@ -608,7 +601,6 @@ footer p {
         transition: opacity .2s ease;
     }
 
-    /* When toggled, reveal sidebar and overlay */
     #sidebar-toggle:checked~main .sidebar-overlay {
         opacity: 1;
         pointer-events: auto;
@@ -620,18 +612,15 @@ footer p {
         visibility: visible;
     }
 
-    /* Main: stack articles vertically and make full width;
-        make main scrollable so navbar stays fixed */
     main {
         flex-direction: column;
         scroll-behavior: smooth;
-        scrollbar-width: thin;
-        scrollbar-color: #00000040 transparent;
     }
 
     div.article-container {
         flex-direction: column;
         overflow: hidden;
+        padding: 6px;
     }
 
     div.main-area,

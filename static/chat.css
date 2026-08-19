@@ -173,8 +173,12 @@ div.send-area button:disabled {
 }
 
 @media (max-width: 768px) {
-    div.article-container:has(div.chat-container) {
-        height: calc(100vh - 146px);
+    body {
+        height: 100vh;
+    }
+
+    div.article-container {
+        height: 100%;
     }
 
     button.mobile-user-list-toggle {

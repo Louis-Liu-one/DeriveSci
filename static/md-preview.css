@@ -1,6 +1,9 @@
 div.markdown-preview-block {
+    border: var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
     padding: 10px;
-    margin-top: 15px;
     overflow-x: auto;
 }
 

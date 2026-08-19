@@ -395,6 +395,7 @@ class Prob(db.Model):
     review_status = db.Column(db.Integer, default=-1, server_default='-1')
     isofficial = db.Column(db.Boolean, default=False, server_default='0')
     review_comment = db.Column(db.Text)
+    post_type = 0
 
     def get_answer(self):
         if not self.answer:
@@ -513,6 +514,7 @@ class ProbSolution(db.Model):
     timestamp = db.Column(
         db.DateTime, default=db.func.utc_timestamp(),
         server_default=db.func.utc_timestamp())
+    post_type = 1
 
     def url(self, anchor=None, **kwargs):
         return url_for('solutions', probno=self.probno, solno=self.solno,
@@ -642,6 +644,7 @@ class Article(db.Model):
     timestamp = db.Column(
         db.DateTime, default=db.func.utc_timestamp(),
         server_default=db.func.utc_timestamp())
+    post_type = 3
 
     def url(self, anchor=None, **kwargs):
         return url_for('article', article_id=self.id, _anchor=anchor, **kwargs)

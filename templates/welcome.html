@@ -10,13 +10,15 @@
 
 {% block static_files %}
 <link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='grid-container.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
 <script src="{{ url_for('static', filename='user-utils.js') }}"></script>
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 <style>
+    .grid-container.probno-container { font-family: AndaleMono; }
     @media (max-width: 768px) {
-        article.body-article { order: 2; }
-        article.right-side-article { order: 1; }
+        div.central-area { order: 2; }
+        div.side-area { order: 1; }
     }
 </style>
 {% endblock %}
@@ -70,14 +72,23 @@
 
 {% block body %}
 <div class="central-area height-fixed-area">
-    <article class="basic-article">
-        <h3>{{ user_name(user) }}的贡献</h3>
-        <h4>{{ user_name(user) }}通过的题目</h4>
+    <h3>{{ user_name(user) }}的贡献</h3>
+    <h4>{{ user_name(user) }}通过的题目</h4>
+    <article>
         {%- set passedprobs = user.get_passedprobs() -%}
         {%- if passedprobs -%}
-            {{- problist(passedprobs, with_source=False) -}}
+            <div class="grid-container probno-container">
+                {%- for prob in passedprobs -%}
+                    <div class="grid-item" data-url="{{ prob.url() }}"{{-''-}}
+                        onclick="window.open(this.dataset.url);">
+                        {{- prob.probno -}}
+                    </div>
+                {%- endfor -%}
+            </div>
         {%- else -%}<p>暂无</p>{%- endif -%}
-        <h4>{{ user_name(user) }}上传的题目</h4>
+    </article>
+    <h4>{{ user_name(user) }}上传的题目</h4>
+    <article>
         {%- set uploadedprobs = user.uploadedprobs.copy() -%}
         {%- if uploadedprobs -%}
             {%- do uploadedprobs.sort() -%}
@@ -86,9 +97,9 @@
     </article>
 </div>
 <div class="side-area height-fixed-area">
-    <article class="basic-article">
+    <h3>{{ user_name(user) }}的简介</h3>
+    <article>
         <div id="userIntroductionContainer">
-            <h3>{{ user_name(user) }}的简介</h3>
             <form class="form-base no-edge hidden" id="introductionEditForm">
                 <span>
                     <textarea id="introductionTextarea" name="introduction"
@@ -102,15 +113,18 @@
                 <textarea>{{ user.introduction }}</textarea>
             </div>
         </div>
-        <h3>{{ user_name(user) }}的文章</h3>
-        <h4>{{ user_name(user) }}的专栏</h4>
+    </article>
+    <h3>{{ user_name(user) }}的文章</h3>
+    <h4>{{ user_name(user) }}的专栏</h4>
+    <article>
         {%- set articles = user.articles.copy() -%}
         {%- if articles -%}
             {%- do articles.sort() -%}
             {{- articlelist(articles, with_head=True, with_user=False) -}}
         {%- else -%}<p>暂无</p>{%- endif -%}
-
-        <h4>{{ user_name(user) }}上传的题解</h4>
+    </article>
+    <h4>{{ user_name(user) }}上传的题解</h4>
+    <article>
         {%- set solutions = user.solutions.copy() -%}
         {%- if solutions -%}
             {%- do solutions.sort() -%}
