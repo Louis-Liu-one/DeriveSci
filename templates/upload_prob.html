@@ -120,7 +120,7 @@
     if (typeof createTagInput === 'function')
         window.labelTagInput = createTagInput({
             inputId: 'probLabel', areaId: 'labelArea',
-            initial: {{ (prob.as_labelnames()|list if editmode else [])|tojson }},
+            initial: {{ (prob.as_tagtitles()|list if editmode else [])|tojson }},
         });
     {%- if editmode -%}
         const markdownImageBasePath = {{ (

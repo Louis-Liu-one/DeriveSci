@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{%- macro problem_card(icon, labelname) -%}
+{%- macro problem_card(icon, tagtitle) -%}
     <div class="problem-card" role="button" onclick="window.open(this.dataset.url);"
-        data-url="{{ url_for('problistoflabel', labelname=labelname) }}">
+        data-url="{{ url_for('problistoflabel', tagtitle=tagtitle) }}">
         <div class="problem-img"><i class="fas fa-{{ icon }}"></i></div>
         <div class="problem-info">
-            <div class="problem-title">{{ labelname }}</div>
+            <div class="problem-title">{{ tagtitle }}</div>
         </div>
     </div>
 {%- endmacro -%}

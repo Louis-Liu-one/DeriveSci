@@ -26,7 +26,7 @@ from anschecker import check_answers, testpoints_passedlist
 __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow', 'get_post',
     'find_user', 'register_user', 'unregister_user',
-    'Prob', 'ProbLabel', 'get_prob', 'add_prob',
+    'Prob', 'Tag', 'get_prob', 'add_prob',
     'get_solution', 'add_solution', 'add2labels', 'Submission',
     'Image', 'add_images', 'get_images_for_post', 'get_image',
     'Article', 'get_article', 'add_article',
@@ -364,13 +364,13 @@ def get_image(post_type, post_ident, name):
 # =========================== 题目数据库 ===========================
 
 
-prob_label = db.Table(
-    'probs_labels', db.Column(
+prob_tag = db.Table(
+    'probs_tags', db.Column(
         'probno', db.String(16),
         db.ForeignKey('probs.probno', ondelete='cascade'), primary_key=True),
     db.Column(
-        'labelname', db.String(16),
-        db.ForeignKey('labels.labelname', ondelete='cascade'),
+        'tagtitle', db.String(16),
+        db.ForeignKey('tags.tagtitle', ondelete='cascade'),
         primary_key=True))
 
 
@@ -382,7 +382,7 @@ class Prob(db.Model):
         db.DateTime, default=db.func.utc_timestamp(),
         server_default=db.func.utc_timestamp())
     problabels = db.relationship(
-        'ProbLabel', secondary=prob_label, back_populates='probs',
+        'Tag', secondary=prob_tag, back_populates='probs',
         collection_class=set)
     statement = db.Column(db.Text, nullable=False)
     answer = db.Column(db.Text)
@@ -456,7 +456,7 @@ class Prob(db.Model):
             self.statement = statement
         self.answer = answer
         self.problabels = {get_label(
-            labelname, create=True) for labelname in problabels}
+            tagtitle, create=True) for tagtitle in problabels}
         db.session.commit()
 
     def viewable_for(self, user):
@@ -469,8 +469,8 @@ class Prob(db.Model):
     def get_post_ident(self):
         return self.probno
 
-    def as_labelnames(self):
-        return {label.labelname for label in self.problabels}
+    def as_tagtitles(self):
+        return {label.tagtitle for label in self.problabels}
 
     def url(self, anchor=None, **kwargs):
         return url_for('probs', probno=self.probno, _anchor=anchor, **kwargs)
@@ -550,15 +550,15 @@ class ProbSolution(db.Model):
         return self.probno < solution.probno
 
 
-class ProbLabel(db.Model):
-    __tablename__ = 'labels'
-    labelname = db.Column(db.String(16), primary_key=True)
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    tagtitle = db.Column(db.String(16), primary_key=True)
     probs = db.relationship(
-        'Prob', secondary=prob_label, back_populates='problabels',
+        'Prob', secondary=prob_tag, back_populates='problabels',
         collection_class=set)
 
     def url(self):
-        return url_for('problistoflabel', labelname=self.labelname)
+        return url_for('problistoflabel', tagtitle=self.tagtitle)
 
 
 def get_prob(probno):
@@ -615,18 +615,18 @@ def add_solution(probno, title, content):
     return True, solution
 
 
-def get_label(labelname, create=False):
-    label = db.session.get(ProbLabel, str(labelname))
+def get_label(tagtitle, create=False):
+    label = db.session.get(Tag, str(tagtitle))
     if create and label is None:
-        label = ProbLabel(labelname=str(labelname))
+        label = Tag(tagtitle=str(tagtitle))
         db.session.add(label)
         db.session.commit()
     return label
 
 
-def add2labels(labelnames, prob):
-    for labelname in set(labelnames):
-        label = get_label(labelname, create=True)
+def add2labels(tagtitles, prob):
+    for tagtitle in set(tagtitles):
+        label = get_label(tagtitle, create=True)
         label.probs.add(prob)
     db.session.commit()
 

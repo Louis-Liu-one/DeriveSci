@@ -4,7 +4,7 @@
 {% block load_markdown %}{% endblock %}
 
 {% block title %}
-{%- if oflabel -%}标签：{{- labelname }} {% else -%}题集 {% endif -%}
+{%- if oflabel -%}标签：{{- tagtitle }} {% else -%}题集 {% endif -%}
 - DeriveSci
 {% endblock %}
 
@@ -15,7 +15,7 @@
     window.PROBS_DATA = {{ probs_data|tojson }};
     window.REVIEWMODE = {{ 'true' if reviewmode else 'false' }};
     window.OF_LABEL = {{ 'true' if oflabel else 'false' }};
-    window.LABEL_NAME = {{ labelname|tojson if oflabel else 'null' }};
+    window.LABEL_NAME = {{ tagtitle|tojson if oflabel else 'null' }};
 </script>
 <script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
 <script src="{{ url_for('static', filename='tag-input.js') }}"></script>
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block navbar_title %}
-{%- if oflabel -%}标签：{{- labelname -}}{%- else -%}题集{%- endif -%}
+{%- if oflabel -%}标签：{{- tagtitle -}}{%- else -%}题集{%- endif -%}
 {% endblock %}
 
 {% block sidebar %}
@@ -66,7 +66,7 @@
 <div class="side-area height-fixed-area">
     <h3>查询题目</h3>
     <article class="basic-article form-container">
-        <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', labelname=labelname) -}}
+        <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', tagtitle=tagtitle) -}}
             {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
             <span>
                 <label for="probNo">编号：</label>

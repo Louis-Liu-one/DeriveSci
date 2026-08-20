@@ -32,7 +32,7 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 
 标签、题集与题目页面：
 /labels/                          所有标签
-/labels/<labelname>               单个标签
+/labels/<tagtitle>               单个标签
 /upload-prob                      上传题目
 /probs/                           题集
 /probs/<probno>                   题目
@@ -89,7 +89,7 @@ from flask_moment import Moment, moment as builtin_moment
 from models import db, init_app, auto_format_time, get_post
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
-from models import ProbLabel, add2labels, get_article, add_article
+from models import Tag, add2labels, get_article, add_article
 from models import Image, add_images, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
@@ -307,21 +307,20 @@ def problist():
 
 @app.route('/labels/')
 def labellist():
-    return render_template('labellist.html', labels=ProbLabel.query.all())
+    return render_template('labellist.html', labels=Tag.query.all())
 
 
-@app.route('/labels/<labelname>')
-def problistoflabel(labelname):
-    # Label page: server renders problems that have the given label
+@app.route('/labels/<tagtitle>')
+def problistoflabel(tagtitle):
     base_query = Prob.query.filter(Prob.problabels.any(
-        ProbLabel.labelname == labelname))
+        Tag.tagtitle == tagtitle))
     if not current_user.is_authenticated or not current_user.isadmin:
         base_query = base_query.filter(Prob.review_status == 1)
     all_query = base_query.order_by(Prob.probno.asc())
     probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
-        'problist.html', labelname=labelname, oflabel=True, form={},
+        'problist.html', tagtitle=tagtitle, oflabel=True, form={},
         probs=probs, probs_data=probs_data, query=None)
 
 
@@ -425,13 +424,13 @@ def api_search_probs_content():
     reviewmode = data.get('reviewmode') \
         or request.args.get('reviewmode') == 'True'
     oflabel = data.get('oflabel') or False
-    labelname = data.get('labelname') or None
+    tagtitle = data.get('tagtitle') or None
     if not statement:
         return jsonify({'results': []})
     # build query inline: optionally restrict to label, respect visibility
     q = Prob.query
-    if oflabel and labelname:
-        q = q.filter(Prob.problabels.any(ProbLabel.labelname == labelname))
+    if oflabel and tagtitle:
+        q = q.filter(Prob.problabels.any(Tag.tagtitle == tagtitle))
     if not reviewmode:
         q = q.filter(Prob.review_status == 1)
     q = q.filter(Prob.statement.like(f"%{statement}%"))

@@ -177,7 +177,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         statement: statementVal,
                         reviewmode: window.REVIEWMODE === true || window.REVIEWMODE === 'true',
                         oflabel: window.OF_LABEL === true || window.OF_LABEL === 'true',
-                        labelname: window.LABEL_NAME || null
+                        tagtitle: window.LABEL_NAME || null
                     })
                 });
                 if (resp.ok) {

@@ -23,7 +23,7 @@
             {%- for label in labels -%}
                 <div class="grid-item" data-url="{{ label.url() }}"{{-''-}}
                     onclick="window.open(this.dataset.url);">
-                    {{- label.labelname -}}
+                    {{- label.tagtitle -}}
                 </div>
             {%- endfor -%}
         </div>
