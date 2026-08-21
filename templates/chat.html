@@ -16,14 +16,14 @@
 {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
 {{- moment.locale('zh-cn') -}}
 {%- if view_comments -%}
-    <link rel="stylesheet" href="{{- url_for('static', filename='comment.css') -}}">
-    <link rel="stylesheet" href="{{- url_for('static', filename='formstyle.css') -}}">
-    <script src="{{ url_for('static', filename='md-render.js') }}"></script>
-    <script src="{{ url_for('static', filename='comment-utils.js') }}"></script>
+    <link rel="stylesheet" href="{{- url_for('static', filename='css/comment.css') -}}">
+    <link rel="stylesheet" href="{{- url_for('static', filename='css/formstyle.css') -}}">
+    <script src="{{ url_for('static', filename='js/md-render.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/comment-utils.js') }}"></script>
 {%- endif -%}
-<link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
-<script src="{{ url_for('static', filename='chat-utils.js') }}"></script>
-<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+<script src="{{ url_for('static', filename='js/chat-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user-utils.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}私信聊天{% endblock %}

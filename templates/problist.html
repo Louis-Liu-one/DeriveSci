@@ -9,16 +9,16 @@
 {% endblock %}
 
 {% block static_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formstyle.css') }}">
 <script>
     window.PROBS_DATA = {{ probs_data|tojson }};
     window.REVIEWMODE = {{ 'true' if reviewmode else 'false' }};
     window.OF_TAG = {{ 'true' if oftag else 'false' }};
     window.TAG_NAME = {{ tagtitle|tojson if oftag else 'null' }};
 </script>
-<script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
-<script src="{{ url_for('static', filename='tag-input.js') }}"></script>
+<script src="{{ url_for('static', filename='js/problist-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tag-input.js') }}"></script>
 <style>
     @media (max-width: 768px) {
         div.central-area { order: 2; }

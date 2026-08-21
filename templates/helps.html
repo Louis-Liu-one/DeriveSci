@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bnf.min.js"></script>
 <script src="https://fastly.jsdelivr.net/npm/markdown-it-anchor@9.2.0/dist/markdownItAnchor.umd.min.js"></script>
 <script src="https://fastly.jsdelivr.net/npm/markdown-it-toc-done-right@4.2.0/dist/markdownItTocDoneRight.umd.min.js"></script>
-<script src="{{ url_for('static', filename='md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='js/md-render.js') }}"></script>
 {% endblock %}
 
 {% block sidebar %}
@@ -29,11 +29,10 @@
 <script>
     {
         const contentContainer = document.getElementById('contentContainer');
-        const helpContentTextArea = document.getElementById('helpContentTextArea');
-        const tocBlock = document.getElementById('tocBlock');
+        renderElements([contentContainer]);
         const tocNavElement = contentContainer.querySelector('nav.table-of-contents');
+        const tocBlock = document.getElementById('tocBlock');
         const navTitle = document.getElementById('navTitle');
-        renderElement(contentContainer, helpContentTextArea.value);
         if (tocNavElement) tocBlock.appendChild(tocNavElement);
         else navTitle.style.display = 'none';
         contentContainer.querySelector('h1').style.display = 'none';

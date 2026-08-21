@@ -1,0 +1,50 @@
+:root {
+    --bg: #0c1118;
+    --surface: #111827;
+    --surface-strong: #131a24;
+    --surface-soft: #172337;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: 1px solid #273449;
+    --primary: #1b365d;
+    --primary-soft: #1d4ed8;
+    --accent: #60a5fa;
+    --danger: #ff6b6b;
+    --shadow: 0 2px 18px #00000059;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    html,
+    body {
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    body {
+        color-scheme: dark;
+    }
+
+    a,
+    a:visited {
+        color: var(--accent);
+    }
+
+    body,
+    button,
+    input,
+    textarea,
+    select,
+    optgroup,
+    option {
+        color: var(--text);
+        background: transparent;
+        border: var(--border);
+    }
+
+    article.content-container img:not(.avatar),
+    div.markdown-preview-block img:not(.avatar),
+    div.image-preview img {
+        filter: invert(1);
+    }
+}

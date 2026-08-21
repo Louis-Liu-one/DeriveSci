@@ -1,0 +1,241 @@
+article:has(div.chat-container) {
+    padding: 0;
+    border: var(--border);
+    flex-grow: 1;
+}
+
+div.chat-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font-family: var(--sans-font);
+}
+
+div.chat-container div.unread-badge {
+    top: -4px;
+    right: -4px;
+}
+
+div.user-list {
+    width: 200px;
+    background: var(--surface-strong);
+    border-right: var(--border);
+    padding: 15px;
+}
+
+button.mobile-user-list-toggle {
+    display: none;
+}
+
+div.user-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+div.user-item:hover,
+div.user-item.active {
+    background: var(--surface-soft);
+}
+
+div.avatar-wrap {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    align-content: center;
+}
+
+div.avatar-wrap img {
+    height: 100%;
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+div.avatar-wrap i {
+    font-size: 25px;
+}
+
+div.chat-box {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+div.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: var(--border);
+}
+
+div.chat-header div.unread-badge {
+    display: none !important;
+}
+
+div.message-area {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: var(--surface);
+}
+
+div.message-area div.message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: fit-content;
+    max-width: 60%;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 15px;
+    line-height: 1.5;
+}
+
+div.message-area div.message span {
+    width: fit-content;
+    overflow-wrap: anywhere;
+}
+
+div.message-area div.message span.timestamp {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+div.message-area div.my-message {
+    background: var(--primary);
+    color: white;
+    margin-left: auto;
+    border-top-right-radius: 0;
+}
+
+div.message-area div.other-message {
+    background: var(--surface-strong);
+    color: var(--text);
+    margin-right: auto;
+    border-top-left-radius: 0;
+}
+
+div.message-area div.other-message span.timestamp {
+    margin-left: auto;
+}
+
+div.send-area {
+    display: flex;
+    padding: 15px;
+    border-top: var(--border);
+}
+
+div.send-area input#messageInputElement {
+    flex-grow: 1;
+    min-width: 0;
+    font-size: 15px;
+    padding: 5px 10px;
+    line-height: 27px;
+    background: var(--surface-strong);
+    border: none;
+    border-radius: 18px;
+}
+
+div.send-area input#messageInputElement:focus {
+    outline-color: lightskyblue;
+}
+
+div.send-area input#messageInputElement:disabled {
+    cursor: not-allowed;
+}
+
+div.send-area button {
+    border: none;
+    border-radius: 18px;
+    background: var(--primary);
+    color: white;
+    line-height: 27px;
+    font-size: 15px;
+    width: 120px;
+    margin-left: 15px;
+    transition: .5s;
+}
+
+div.send-area button:hover {
+    background: var(--primary-soft);
+    cursor: pointer;
+    transition: .5s;
+}
+
+div.send-area button:disabled {
+    background: var(--primary);
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    body {
+        height: 100vh;
+    }
+
+    div.article-container {
+        height: 100%;
+    }
+
+    button.mobile-user-list-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 20;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 10px #00000024;
+    }
+
+    div.user-list {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 15;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        overflow-y: auto;
+    }
+
+    div.chat-container.mobile-user-list-open div.user-list {
+        transform: translateX(0);
+    }
+
+    div.chat-box {
+        width: 100%;
+    }
+
+    div.chat-header {
+        padding-right: 58px;
+    }
+
+    div.message-area {
+        padding: 15px;
+    }
+
+    div.message-area div.message {
+        max-width: 80%;
+    }
+
+    div.send-area {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    div.send-area button {
+        width: 72px;
+        margin-left: 0;
+    }
+}

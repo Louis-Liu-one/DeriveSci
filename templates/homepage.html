@@ -13,7 +13,7 @@
 {% block title %}欢迎 - DeriveSci{% endblock %}
 
 {% block static_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
 {% endblock %}
 
 {% block navbar_title %}欢迎{% endblock %}
@@ -33,7 +33,7 @@
     </section>
     <section class="intro-section">
         <div class="title">
-            <img src="{{ url_for('static', filename='images/favicon.svg') }}">
+            <img src="{{ url_for('static', filename='favicon.svg') }}">
             <h1 class="main-title">探索数理之美，<br><span>解锁解题智慧</span></h1>
         </div>
         <p class="description">

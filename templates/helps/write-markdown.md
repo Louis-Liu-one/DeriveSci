@@ -266,18 +266,18 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 使用
 ```markdown
-![ImageAlt]({{ url_for('static', filename='images/favicon.svg') }} "图片标题")
+![ImageAlt]({{ url_for('static', filename='favicon.svg') }} "图片标题")
 ```
 插入图片，效果为
 
-![ImageAlt]({{ url_for('static', filename='images/favicon.svg') }} "图片标题")
+![ImageAlt]({{ url_for('static', filename='favicon.svg') }} "图片标题")
 
 其中 `"图片标题"` 省略时，标题使用 `ImageAlt`。如果无需标题，则可以使用
 ```markdown
-![]({{ url_for('static', filename='images/favicon.svg') }})
+![]({{ url_for('static', filename='favicon.svg') }})
 ```
 
-![]({{ url_for('static', filename='images/favicon.svg') }})
+![]({{ url_for('static', filename='favicon.svg') }})
 
 有关具体如何在你上传的题目、题解中插入图片及细则，参见[上传题目与题解相关事宜]({{ url_for('helps', howto='upload-probs-and-solutions', _anchor='图片上传') }})。
 

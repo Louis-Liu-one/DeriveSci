@@ -7,13 +7,13 @@
 {% endblock %}
 
 {% block static_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='md-preview.css') }}">
-<script src="{{ url_for('static', filename='md-render.js') }}"></script>
-<script src="{{ url_for('static', filename='edit-prob.js') }}"></script>
-<script src="{{ url_for('static', filename='tag-input.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/md-preview.css') }}">
+<script src="{{ url_for('static', filename='js/md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='js/edit-prob.js') }}"></script>
+<script src="{{ url_for('static', filename='js/tag-input.js') }}"></script>
 {%- if editmode -%}
-    <script src="{{ url_for('static', filename='prob-utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/prob-utils.js') }}"></script>
 {%- endif -%}
 {% endblock %}
 

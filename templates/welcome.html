@@ -9,13 +9,13 @@
 {% block title %}{{ user_name(user) }}的主页 - DeriveSci{% endblock %}
 
 {% block static_files %}
-<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='grid-container.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
-<script src="{{ url_for('static', filename='user-utils.js') }}"></script>
-<script src="{{ url_for('static', filename='md-render.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/grid-container.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formstyle.css') }}">
+<script src="{{ url_for('static', filename='js/user-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/md-render.js') }}"></script>
 <style>
-    .grid-container.probno-container { font-family: AndaleMono; }
+    .grid-container.probno-container { font-family: var(--mono-font); }
     @media (max-width: 768px) {
         div.central-area { order: 2; }
         div.side-area { order: 1; }
@@ -97,23 +97,25 @@
     </article>
 </div>
 <div class="side-area height-fixed-area">
-    <h3>{{ user_name(user) }}的简介</h3>
-    <article>
-        <div id="userIntroductionContainer">
-            <form class="form-base no-edge hidden" id="introductionEditForm">
-                <span>
-                    <textarea id="introductionTextarea" name="introduction"
-                        class="submit-input" spellcheck="false"
-                        placeholder="简要介绍你自己，以 Markdown 格式">
-                        {{- user.introduction or '' -}}
-                    </textarea>
-                </span>
-            </form>
-            <div id="userIntroductionDisplay" class="markdown-body">
-                <textarea>{{ user.introduction }}</textarea>
+    {%- if user == current_user or user.introduction -%}
+        <h3>{{ user_name(user) }}的简介</h3>
+        <article>
+            <div id="userIntroductionContainer">
+                <form class="form-base no-edge hidden" id="introductionEditForm">
+                    <span>
+                        <textarea id="introductionTextarea" name="introduction"
+                            class="submit-input" spellcheck="false"
+                            placeholder="简要介绍你自己，以 Markdown 格式">
+                            {{- user.introduction or '' -}}
+                        </textarea>
+                    </span>
+                </form>
+                <div id="userIntroductionDisplay" class="markdown-body">
+                    <textarea>{{ user.introduction }}</textarea>
+                </div>
             </div>
-        </div>
-    </article>
+        </article>
+    {%- endif -%}
     <h3>{{ user_name(user) }}的文章</h3>
     <h4>{{ user_name(user) }}的专栏</h4>
     <article>

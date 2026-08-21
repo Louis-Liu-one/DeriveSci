@@ -10,13 +10,13 @@
 <script src="https://fastly.jsdelivr.net/npm/markdown-it-toc-done-right@4.2.0/dist/markdownItTocDoneRight.umd.min.js"></script>
 {{- moment.include_moment(local_js='https://fastly.jsdelivr.net/npm/moment@2.30.1/min/moment-with-locales.min.js') -}}
 {{- moment.locale('zh-cn') -}}
-<link rel="stylesheet" href="{{ url_for('static', filename='problist.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='comment.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='formstyle.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='article.css') }}">
-<script src="{{ url_for('static', filename='md-render.js') }}"></script>
-<script src="{{ url_for('static', filename='comment-utils.js') }}"></script>
-<script src="{{ url_for('static', filename='article-utils.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/problist.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
+<script src="{{ url_for('static', filename='js/md-render.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comment-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/article-utils.js') }}"></script>
 {% endblock %}
 
 {% block navbar_title %}专栏：{{ article.title }}{% endblock %}

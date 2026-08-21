@@ -14,8 +14,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/favicon.svg', v=2) }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.svg', v=2) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg', v=2) }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.svg', v=2) }}">
     <script>
         escapeHTML = (str) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
         unescapeHTML = (str) => str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
@@ -32,9 +32,9 @@
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
     {%- endblock -%}
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='light-mode.css') }}" media="(prefers-color-scheme: light)">
-    <link rel="stylesheet" href="{{ url_for('static', filename='dark-mode.css') }}" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/light-mode.css') }}" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>
@@ -47,7 +47,7 @@
             </li>
             <li class="logo">
                 <a href="{{ url_for('homepage') }}"> 
-                    <img src="{{ url_for('static', filename='images/favicon.svg') }}"><br>DeriveSci
+                    <img src="{{ url_for('static', filename='favicon.svg') }}"><br>DeriveSci
                 </a>
             </li>
             <li id="navbarTitleElement" class="navbar-title">{%- block navbar_title -%}{%- endblock -%}</li>
