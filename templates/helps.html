@@ -2,6 +2,8 @@
 
 {% block title %}帮助 - DeriveSci{% endblock %}
 
+{% block navbar_title %}帮助 — {{ help_info.title }}{% endblock %}
+
 {% block static_files %}
 <script src="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/languages/latex.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/bnf.min.js"></script>
@@ -10,27 +12,31 @@
 <script src="{{ url_for('static', filename='md-render.js') }}"></script>
 {% endblock %}
 
+{% block sidebar %}
+<aside><h3 id="navTitle">目录</h3><div class="sidebar-content-container" id="tocBlock"></article></aside>
+{% endblock %}
+
 {% block body %}
-<div class="toc-area height-fixed-area">
-    <article class="toc-container" id="tocBlock"><h3>目录</h3></article>
-</div>
 <div class="main-area">
     <article class="content-container">
         <div class="markdown-body" id="contentContainer">
             <textarea id="helpContentTextArea">[toc]
-{% include filename -%}
+{% include help_info.file -%}
             </textarea>
         </div>
     </article>
 </div>
 <script>
     {
-        renderElement(contentContainer, helpContentTextArea.value);
+        const contentContainer = document.getElementById('contentContainer');
+        const helpContentTextArea = document.getElementById('helpContentTextArea');
+        const tocBlock = document.getElementById('tocBlock');
         const tocNavElement = contentContainer.querySelector('nav.table-of-contents');
+        const navTitle = document.getElementById('navTitle');
+        renderElement(contentContainer, helpContentTextArea.value);
         if (tocNavElement) tocBlock.appendChild(tocNavElement);
-        const firstH1 = contentContainer.querySelector('h1');
-        navbarTitleElement.innerHTML = `帮助 — ${firstH1.innerHTML}`;
-        firstH1.style.display = 'none';
+        else navTitle.style.display = 'none';
+        contentContainer.querySelector('h1').style.display = 'none';
     }
 </script>
 {% endblock %}

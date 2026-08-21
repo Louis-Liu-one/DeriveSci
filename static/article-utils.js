@@ -37,7 +37,7 @@ function toggleArticleToc() {
     if (!toc) return;
     const tocNav = toc.querySelector('nav.table-of-contents');
     if (!tocNav || !tocNav.innerHTML) return;
-    const isOpen = toc.classList.toggle('open');
+    toc.classList.toggle('open');
     if (window.matchMedia('(max-width: 768px)').matches) {
         const sidebarToggle = document.getElementById('sidebar-toggle');
         if (sidebarToggle && sidebarToggle.checked)

@@ -31,20 +31,20 @@ Copyright (c) 2026 Louis Liu  All rights reserved.
 /helps/<howto> 查看帮助
 
 标签、题集与题目页面：
-/labels/                          所有标签
-/labels/<tagtitle>               单个标签
-/upload-prob                      上传题目
-/probs/                           题集
-/probs/<probno>                   题目
-/probs/<probno>/submit            提交答案
-/probs/<probno>/edit              编辑题目
-/api/prob/upload                  上传题目
-/api/prob/set-official            将题目添加到官方题集
-/api/prob/review                  通过/拒绝题目的审核
-/api/prob/review-comment          保存审核意见
-/api/prob/edit                    编辑题目
-/api/prob/delete                  删除题目
-/api/prob/search-content          搜索题目内容
+/tags/                   所有标签
+/tags/<tagtitle>         单个标签
+/upload-prob             上传题目
+/probs/                  题集
+/probs/<probno>          题目
+/probs/<probno>/submit   提交答案
+/probs/<probno>/edit     编辑题目
+/api/prob/upload         上传题目
+/api/prob/set-official   将题目添加到官方题集
+/api/prob/review         通过/拒绝题目的审核
+/api/prob/review-comment 保存审核意见
+/api/prob/edit           编辑题目
+/api/prob/delete         删除题目
+/api/prob/search-content 搜索题目内容
 
 题解页面：
 /probs/<probno>/upload-solution        上传题解
@@ -89,7 +89,7 @@ from flask_moment import Moment, moment as builtin_moment
 from models import db, init_app, auto_format_time, get_post
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
-from models import Tag, add2labels, get_article, add_article
+from models import Tag, add2tags, get_article, add_article
 from models import Image, add_images, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
@@ -102,14 +102,16 @@ init_app(app)
 moment = Moment(app)
 
 
-def get_helplist():
+def get_helps_info():
     helpdir = os.path.join(app.root_path, app.template_folder, 'helps')
-    jsonpath = os.path.join(helpdir, 'helplist.json')
+    jsonpath = os.path.join(helpdir, 'helps-info.json')
     if os.path.exists(jsonpath):
         with open(jsonpath, 'r', encoding='utf-8') as fh:
-            return [entry for entry in json.load(fh) if (
-                'identifier' in entry or 'id' in entry) and 'title' in entry]
-    return []
+            return json.load(fh)
+    return {}
+
+
+helps_info = get_helps_info()
 
 
 @app.errorhandler(404)
@@ -305,14 +307,14 @@ def problist():
         probs=probs, probs_data=probs_data, form={})
 
 
-@app.route('/labels/')
-def labellist():
-    return render_template('labellist.html', labels=Tag.query.all())
+@app.route('/tags/')
+def taglist():
+    return render_template('taglist.html', tags=Tag.query.all())
 
 
-@app.route('/labels/<tagtitle>')
-def problistoflabel(tagtitle):
-    base_query = Prob.query.filter(Prob.problabels.any(
+@app.route('/tags/<tagtitle>')
+def problistoftag(tagtitle):
+    base_query = Prob.query.filter(Prob.tags.any(
         Tag.tagtitle == tagtitle))
     if not current_user.is_authenticated or not current_user.isadmin:
         base_query = base_query.filter(Prob.review_status == 1)
@@ -320,7 +322,7 @@ def problistoflabel(tagtitle):
     probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
-        'problist.html', tagtitle=tagtitle, oflabel=True, form={},
+        'problist.html', tagtitle=tagtitle, oftag=True, form={},
         probs=probs, probs_data=probs_data, query=None)
 
 
@@ -423,18 +425,17 @@ def api_search_probs_content():
     statement = data.get('statement', '')
     reviewmode = data.get('reviewmode') \
         or request.args.get('reviewmode') == 'True'
-    oflabel = data.get('oflabel') or False
+    oftag = data.get('oftag') or False
     tagtitle = data.get('tagtitle') or None
     if not statement:
         return jsonify({'results': []})
-    # build query inline: optionally restrict to label, respect visibility
     q = Prob.query
-    if oflabel and tagtitle:
-        q = q.filter(Prob.problabels.any(Tag.tagtitle == tagtitle))
+    if oftag and tagtitle:
+        q = q.filter(Prob.tags.any(Tag.tagtitle == tagtitle))
     if not reviewmode:
         q = q.filter(Prob.review_status == 1)
-    q = q.filter(Prob.statement.like(f"%{statement}%"))
-    q = q.order_by(Prob.probno.asc())
+    q = q.filter(Prob.statement.like(
+        f"%{statement}%")).order_by(Prob.probno.asc())
     probs_list = list(q)
     return jsonify({'results': [p.probno for p in probs_list]})
 
@@ -445,7 +446,7 @@ def api_upload_prob():
         return {'ok': False, 'error': '用户未登录。'}, 401
     probno = request.form.get('probno')
     probtitle = request.form.get('probtitle')
-    problabels = json.loads(request.form.get('problabels', '[]'))
+    tags = json.loads(request.form.get('tags', '[]'))
     statement = request.form.get('statement')
     answers = request.form.get('answers')
     imgfiles = request.files.getlist('imgfiles')
@@ -461,7 +462,7 @@ def api_upload_prob():
     error = add_images(0, prob.probno, imgfiles)
     if error is not None:
         return {'ok': False, 'error': str(error)}, 400
-    add2labels(problabels, prob)
+    add2tags(tags, prob)
     return {'ok': True, 'url': prob.url()}
 
 
@@ -476,14 +477,14 @@ def api_edit_prob():
     if not prob.editable_for(current_user):
         abort(403)  # 无编辑权限
     probtitle = request.form.get('probtitle')
-    problabels = json.loads(request.form.get('problabels', '[]'))
+    tags = json.loads(request.form.get('tags', '[]'))
     statement = request.form.get('statement')
     answers = request.form.get('answers')
     imgfiles = request.files.getlist('imgfiles')
     error = add_images(0, prob.probno, imgfiles)
     if error is not None:
         return {'ok': False, 'error': str(error)}, 400
-    prob.edit(probtitle, problabels, statement, answers)
+    prob.edit(probtitle, tags, statement, answers)
     return {'ok': True, 'url': prob.url()}
 
 
@@ -549,7 +550,7 @@ def api_delete_prob():
         return {'ok': False, 'error': '未能找到题目。'}, 404
     if not prob.editable_for(current_user):
         abort(403)  # 无删除权限
-    prob.problabels.clear()
+    prob.tags.clear()
     clear_comments(prob)
     db.session.delete(prob)
     db.session.commit()
@@ -615,18 +616,15 @@ def api_delete_solution():
 
 @app.route('/helps/<howto>')
 def helps(howto):
-    if not howto.endswith('.md'):
-        howto += '.md'
-    path = os.path.join(app.root_path, app.template_folder, 'helps', howto)
-    if os.path.exists(path):
-        return render_template(
-            'helps.html', filename=os.path.join('helps', howto))
-    return render_template('notfound.html', error='未能找到帮助文档。'), 404
+    help_info = helps_info.get(howto)
+    if help_info is None:
+        return render_template('notfound.html', error='未能找到帮助文档。'), 404
+    return render_template('helps.html', help_info=help_info)
 
 
 @app.route('/helps/')
 def helplist():
-    return render_template('helplist.html')
+    return render_template('helplist.html', helps_info=helps_info)
 
 
 # =========================== 专栏各项网页与API ===========================
@@ -911,7 +909,6 @@ def api_user_unregister():
 
 
 app.jinja_env.add_extension('jinja2.ext.do')
-app.add_template_global(get_helplist(), 'helplist')
 app.add_template_global(find_user, 'find_user')
 app.add_template_global(auto_format_time, 'auto_format_time')
 app.add_template_global(TPStatus, 'TPStatus')

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "includes/problabels.html" import problabels_sidebar %}
+{% from "includes/tags.html" import tags_sidebar %}
 {% from "includes/users.html" import user_sidebar %}
 {% from "includes/sidebar.html" import return2post, delete_solution %}
 
@@ -22,7 +22,7 @@
 <aside>
     {{- return2post(prob, "返回题目") -}}
     {%- if editmode -%}{{- return2post(solution, "返回题解") -}}{{- delete_solution(solution) -}}{%- endif -%}
-    {{- problabels_sidebar(prob) -}}
+    {{- tags_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
 </aside>
 {% endblock %}

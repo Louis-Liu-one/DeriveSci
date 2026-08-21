@@ -4,7 +4,7 @@
 {% block load_markdown %}{% endblock %}
 
 {% block title %}
-{%- if oflabel -%}标签：{{- tagtitle }} {% else -%}题集 {% endif -%}
+{%- if oftag -%}标签：{{- tagtitle }} {% else -%}题集 {% endif -%}
 - DeriveSci
 {% endblock %}
 
@@ -14,8 +14,8 @@
 <script>
     window.PROBS_DATA = {{ probs_data|tojson }};
     window.REVIEWMODE = {{ 'true' if reviewmode else 'false' }};
-    window.OF_LABEL = {{ 'true' if oflabel else 'false' }};
-    window.LABEL_NAME = {{ tagtitle|tojson if oflabel else 'null' }};
+    window.OF_TAG = {{ 'true' if oftag else 'false' }};
+    window.TAG_NAME = {{ tagtitle|tojson if oftag else 'null' }};
 </script>
 <script src="{{ url_for('static', filename='problist-utils.js') }}"></script>
 <script src="{{ url_for('static', filename='tag-input.js') }}"></script>
@@ -28,14 +28,14 @@
 {% endblock %}
 
 {% block navbar_title %}
-{%- if oflabel -%}标签：{{- tagtitle -}}{%- else -%}题集{%- endif -%}
+{%- if oftag -%}标签：{{- tagtitle -}}{%- else -%}题集{%- endif -%}
 {% endblock %}
 
 {% block sidebar %}
 <aside>
-    {%- if oflabel -%}
+    {%- if oftag -%}
         <h3>题目标签</h3>
-        <a class="sidebar-link" href="{{ url_for('labellist') }}">
+        <a class="sidebar-link" href="{{ url_for('taglist') }}">
             <div class="sidebar-item"><i class="fas fa-tags"></i>所有标签</div>
         </a>
     {%- else -%}
@@ -66,7 +66,7 @@
 <div class="side-area height-fixed-area">
     <h3>查询题目</h3>
     <article class="basic-article form-container">
-        <form class="form-base" method="post" action="{%- if oflabel -%}{{- url_for('problistoflabel', tagtitle=tagtitle) -}}
+        <form class="form-base" method="post" action="{%- if oftag -%}{{- url_for('problistoftag', tagtitle=tagtitle) -}}
             {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
             <span>
                 <label for="probNo">编号：</label>
@@ -84,15 +84,15 @@
                     value="{{ form.get('statement', '') }}" placeholder="查询内容中含有指定文本的题目">
             </span>
             <span>
-                <label for="probLabels">标签：</label>
-                <div class="label-input" id="probLabelsArea"></div>
-                <input type="text" class="label-input" id="probLabels" name="problabels" autocomplete="off"
-                    spellcheck="false" placeholder="输入题目标签，回车添加" value="{{ form.get('problabels', '') }}">
+                <label for="probTags">标签：</label>
+                <div class="tag-input" id="probTagsArea"></div>
+                <input type="text" class="tag-input" id="probTags" name="tags" autocomplete="off"
+                    spellcheck="false" placeholder="输入题目标签，回车添加" value="{{ form.get('tags', '') }}">
             </span>
             <span>
                 <label for="source">来源：</label>
-                <div class="label-input" id="sourceArea"></div>
-                <input type="text" class="label-input" id="source" name="source" autocomplete="off"
+                <div class="tag-input" id="sourceArea"></div>
+                <input type="text" class="tag-input" id="source" name="source" autocomplete="off"
                     placeholder="输入来源用户名，回车添加" spellcheck="false" value="{{ form.get('source', '') }}">
             </span>
             {%- if reviewmode -%}
@@ -120,15 +120,17 @@
 </div>
 <script>
     {%- if form.get('probtype') -%}
-        probType.value = ({{ form.probtype|tojson }}).toString();
+        const probTypeInputElement = document.getElementById('probType');
+        probTypeInputElement.value = ({{ form.probtype|tojson }}).toString();
     {%- endif -%}
     {%- if form.get('review_status') -%}
-        reviewStatus.value = ({{ form.review_status|tojson }}).toString();
+        const reviewStatusInputElement = document.getElementById('reviewStatus');
+        reviewStatusInputElement.value = ({{ form.review_status|tojson }}).toString();
     {%- endif -%}
     document.addEventListener('DOMContentLoaded', function () {
         const handler = (tags) => window.applyProblistFilter();
         createTagInput({
-            inputId: 'probLabels', areaId: 'probLabelsArea',
+            inputId: 'probTags', areaId: 'probTagsArea',
             onTagAdd: handler, onTagRemove: handler,
         });
         createTagInput({

@@ -1,0 +1,26 @@
+
+{%- macro tags_sidebar(prob) -%}
+    {%- if prob.tags -%}
+        <h3>题目标签</h3>
+        {%- for tag in prob.tags -%}
+            <a class="sidebar-link" target="_blank" href="{{ url_for(
+                    'problistoftag', tagtitle=tag.tagtitle) }}">
+                <div class="sidebar-item">{{ tag.tagtitle }}</div>
+            </a>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro tags_problist(prob) -%}
+    <td class="tags">
+        {%- if prob.tags -%}
+            {%- for probtag in prob.tags -%}
+                <a class="probtag" target="_blank" href="{{ url_for(
+                    'problistoftag', tagtitle=probtag.tagtitle) }}"{{-''-}}
+                    onclick="event.stopPropagation();">
+                    {{- probtag.tagtitle -}}
+                </a>
+            {%- endfor -%}
+        {%- else -%}无标签{%- endif -%}
+    </td>
+{%- endmacro -%}

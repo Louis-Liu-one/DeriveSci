@@ -1,4 +1,4 @@
-{% from "includes/problabels.html" import problabels_problist %}
+{% from "includes/tags.html" import tags_problist %}
 {% from "includes/users.html" import user_avatar_img, user_name %}
 
 {%- macro problist(probs, with_source=True, with_review_status=False) -%}
@@ -15,14 +15,14 @@
                 {%- for prob in probs -%}
                     <tr data-url="{{ prob.url() }}" data-probno="{{ prob.probno }}"{{-''-}}
                         data-title="{{ (prob.probtitle or '')|lower }}"{{-''-}}
-                        data-labels="{{ prob.as_tagtitles()|list|tojson|forceescape }}"{{-''-}}
+                        data-tags="{{ prob.as_tagtitles()|list|tojson|forceescape }}"{{-''-}}
                         data-source="{{ (prob.source.name if prob.source else '') }}"{{-''-}}
                         data-isofficial="{{ 1 if prob.isofficial else 0 }}"{{-''-}}
                         data-review="{{ prob.review_status }}"{{-''-}}
                         onclick="window.open(this.dataset.url);">{{-''-}}
                         <td class="probno">{{ prob.probno }}</td>{{-''-}}
                         <td class="probtitle">{{ prob.probtitle }}</td>
-                        {{- problabels_problist(prob) -}}
+                        {{- tags_problist(prob) -}}
                         {%- if with_source -%}
                             <td class="source"{%- if prob.source -%}data-url="{{ prob.source.url() }}"{{-''-}}
                                 onclick="event.stopPropagation(); window.open(this.dataset.url);"{%- endif -%}>{{-''-}}

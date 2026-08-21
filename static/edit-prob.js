@@ -8,35 +8,35 @@ function renderSubprobs() {
         li.className = 'subprob'; li.dataset.index = i;
         const header = document.createElement('div');
         header.className = 'subprob-header';
-        // header contains rendered label area and delete button
+        // header contains rendered tag area and delete button
         header.innerHTML = `<i class="minus delete-subprob `
             + `fas fa-square-minus" data-i="${i}"></i>`;
-        const labelDisplay = document.createElement('div');
-        labelDisplay.className = 'subprob-label-display';
-        const labelEditor = document.createElement('input');
-        labelEditor.id = `label-editor-${i}`;
-        labelEditor.className = 'subprob-label-editor';
-        labelEditor.autocomplete = 'off';
-        labelEditor.style.display = 'none';
-        labelEditor.rows = 3;
-        const defaultLabel = `小题 ${i + 1} 的答案`;
-        labelEditor.value = sub.label || defaultLabel;
-        // render initial label (use default if none provided)
-        renderElement(labelDisplay, sub.label || defaultLabel, 'block');
-        header.prepend(labelDisplay);
-        header.prepend(labelEditor);
-        // clicking labelDisplay switches to editor
-        labelDisplay.onclick = (ev) => {
+        const tagDisplay = document.createElement('div');
+        tagDisplay.className = 'subprob-tag-display';
+        const tagEditor = document.createElement('input');
+        tagEditor.id = `tag-editor-${i}`;
+        tagEditor.className = 'subprob-tag-editor';
+        tagEditor.autocomplete = 'off';
+        tagEditor.style.display = 'none';
+        tagEditor.rows = 3;
+        const defaultTag = `小题 ${i + 1} 的答案`;
+        tagEditor.value = sub.tag || defaultTag;
+        // render initial tag (use default if none provided)
+        renderElement(tagDisplay, sub.tag || defaultTag, 'block');
+        header.prepend(tagDisplay);
+        header.prepend(tagEditor);
+        // clicking tagDisplay switches to editor
+        tagDisplay.onclick = (ev) => {
             ev.stopPropagation();
-            labelDisplay.style.display = 'none';
-            labelEditor.style.display = 'block'; labelEditor.focus();
+            tagDisplay.style.display = 'none';
+            tagEditor.style.display = 'block'; tagEditor.focus();
         };
-        labelEditor.addEventListener('blur', () => {
-            sub.label = labelEditor.value || '';
-            labelEditor.style.display = 'none';
-            labelDisplay.style.display = 'block';
-            if (sub.label) renderElement(labelDisplay, sub.label, 'block');
-            else renderElement(labelDisplay, defaultLabel, 'block');
+        tagEditor.addEventListener('blur', () => {
+            sub.tag = tagEditor.value || '';
+            tagEditor.style.display = 'none';
+            tagDisplay.style.display = 'block';
+            if (sub.tag) renderElement(tagDisplay, sub.tag, 'block');
+            else renderElement(tagDisplay, defaultTag, 'block');
         });
         // clicking header selects
         header.onclick = () => selectSubprob(i);
@@ -74,7 +74,7 @@ function renderSubprobs() {
 }
 
 function addSubprob() {
-    subprobs.push({ label: '', tps: [] });
+    subprobs.push({ tag: '', tps: [] });
     window.selectedSub = subprobs.length - 1;
     renderSubprobs();
 }
@@ -90,7 +90,7 @@ function addTestpointToSelected(context, answer) {
     const parsed = JSON.parse(context);
     if (window.selectedSub === undefined) addSubprob();
     if (!subprobs[window.selectedSub])
-        subprobs[window.selectedSub] = { label: '', tps: [] };
+        subprobs[window.selectedSub] = { tag: '', tps: [] };
     subprobs[window.selectedSub].tps.push([parsed, answer]);
     renderSubprobs();
 }
@@ -111,10 +111,10 @@ function removeTestpoint(subIndex, tpIndex) {
 
 function addRawAnswers(rawAnswerList) {
     if (!rawAnswerList) return;
-    // accept two shapes: list of dicts {label, tps} or list of tps (legacy)
+    // accept two shapes: list of dicts {tag, tps} or list of tps (legacy)
     subprobs = rawAnswerList.map(sub => {
-        if (Array.isArray(sub)) return { label: '', tps: sub.map(a => [a[0], a[1]]) };
-        return { label: sub.label || '', tps: (sub.tps || []).map(a => [a[0], a[1]]) };
+        if (Array.isArray(sub)) return { tag: '', tps: sub.map(a => [a[0], a[1]]) };
+        return { tag: sub.tag || '', tps: (sub.tps || []).map(a => [a[0], a[1]]) };
     });
     renderSubprobs();
 }
@@ -128,8 +128,8 @@ function addHiddenInputElementForList(form, name, list) {
 
 async function uploadProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
-    const labels = window.labelTagInput ? window.labelTagInput.getTags() : [];
-    addHiddenInputElementForList(editForm, 'problabels', labels);
+    const tags = window.tagInput ? window.tagInput.getTags() : [];
+    addHiddenInputElementForList(editForm, 'tags', tags);
     try {
         const response = await fetch(
             '/api/prob/upload', { method: 'POST', body: new FormData(editForm) });
@@ -141,8 +141,8 @@ async function uploadProb() {
 
 async function editProb() {
     addHiddenInputElementForList(editForm, 'answers', subprobs);
-    const labels = window.labelTagInput ? window.labelTagInput.getTags() : [];
-    addHiddenInputElementForList(editForm, 'problabels', labels);
+    const tags = window.tagInput ? window.tagInput.getTags() : [];
+    addHiddenInputElementForList(editForm, 'tags', tags);
     try {
         const response = await fetch(
             '/api/prob/edit', { method: 'POST', body: new FormData(editForm) });

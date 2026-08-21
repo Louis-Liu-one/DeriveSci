@@ -50,7 +50,7 @@ table.problist td.probtitle {
     width: 20%;
 }
 
-table.problist td.problabels {
+table.problist td.tags {
     width: 30%;
 }
 
@@ -88,7 +88,7 @@ table.problist td.review-status {
     width: 12%;
 }
 
-table.problist a.problabel {
+table.problist a.probtag {
     text-decoration: none;
     font-size: 14px;
     color: var(--text);
@@ -100,7 +100,7 @@ table.problist a.problabel {
     transition: all .25s ease;
 }
 
-table.problist a.problabel:hover {
+table.problist a.probtag:hover {
     background: var(--primary);
     color: white;
     transform: translateY(-1px);
@@ -148,7 +148,7 @@ table.problist a.problabel:hover {
         font-size: 13px;
     }
 
-    .problist-container div.problist-wrap table.problist td.problabels a.problabel {
+    .problist-container div.problist-wrap table.problist td.tags a.probtag {
         font-size: 9px;
     }
 }

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "includes/problabels.html" import problabels_sidebar %}
+{% from "includes/tags.html" import tags_sidebar %}
 {% from "includes/tables.html" import solutionlist %}
 {% from "includes/users.html" import user_sidebar %}
 {% from "includes/comment.html" import comment_section with context %}
@@ -35,7 +35,7 @@
     {%- if current_user == solution.user or current_user.isadmin -%}
         {{- edit_solution(solution) -}}{{- delete_solution(solution) -}}
     {%- endif -%}
-    {{- problabels_sidebar(prob) -}}
+    {{- tags_sidebar(prob) -}}
     <h3>题目来源</h3>{{- user_sidebar(prob.source) -}}
     <h3>题解来源</h3>{{- user_sidebar(solution.user) -}}
 </aside>

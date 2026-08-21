@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // set up client-side filtering for fields except 'statement'
     const probNo = document.getElementById('probNo');
     const probTitle = document.getElementById('probTitle');
-    const probLabels = document.getElementById('probLabels');
+    const probTags = document.getElementById('probTags');
     const source = document.getElementById('source');
     const probType = document.getElementById('probType');
     const reviewStatus = document.getElementById('reviewStatus');
@@ -71,14 +71,14 @@ window.addEventListener('DOMContentLoaded', () => {
         // title
         const qtitle = normalize(probTitle && probTitle.value);
         if (qtitle && !normalize(d.title).includes(qtitle)) return false;
-        let wantLabels = [];
-        const probLabelsJson = document.getElementById('probLabels_json');
-        if (probLabelsJson && probLabelsJson.value)
-            wantLabels = JSON.parse(probLabelsJson.value || '[]');
-        else wantLabels = [];
-        if (wantLabels.length) {
-            const have = JSON.parse(d.labels || '[]').map(s => s.toString().toLowerCase());
-            for (const w of wantLabels)
+        let wantTags = [];
+        const probTagsJson = document.getElementById('probTags_json');
+        if (probTagsJson && probTagsJson.value)
+            wantTags = JSON.parse(probTagsJson.value || '[]');
+        else wantTags = [];
+        if (wantTags.length) {
+            const have = JSON.parse(d.tags || '[]').map(s => s.toString().toLowerCase());
+            for (const w of wantTags)
                 if (!have.includes(w.toLowerCase ? w.toLowerCase() : w)) return false;
         }
         let wantSrc = [];
@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // expose filter function globally so tag-input.js can call it
     window.applyProblistFilter = applyFilter;
 
-    const inputs = [probNo, probTitle, probLabels, source];
+    const inputs = [probNo, probTitle, probTags, source];
     inputs.forEach(inp => {
         if (inp) inp.addEventListener('input', debounce(applyFilter, 120));
     });
@@ -176,8 +176,8 @@ window.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         statement: statementVal,
                         reviewmode: window.REVIEWMODE === true || window.REVIEWMODE === 'true',
-                        oflabel: window.OF_LABEL === true || window.OF_LABEL === 'true',
-                        tagtitle: window.LABEL_NAME || null
+                        oftag: window.OF_TAG === true || window.OF_TAG === 'true',
+                        tagtitle: window.TAG_NAME || null
                     })
                 });
                 if (resp.ok) {

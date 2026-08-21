@@ -309,7 +309,11 @@ aside h3 {
     letter-spacing: .5px;
 }
 
-div.sidebar-item {
+aside div.sidebar-content-container {
+    margin: 0 10px;
+}
+
+aside div.sidebar-item {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -323,8 +327,7 @@ div.sidebar-item {
     transition: all .25s ease;
 }
 
-div.sidebar-item i,
-div.sidebar-item img {
+aside div.sidebar-item :where(i, img) {
     margin-right: 10px !important;
     width: 18px;
     height: 18px;
@@ -332,42 +335,43 @@ div.sidebar-item img {
     color: var(--accent);
 }
 
-div.sidebar-item img.avatar {
+aside div.sidebar-item img.avatar {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     margin-right: 6px;
 }
 
-div.sidebar-item:not(.disabled):hover {
+aside div.sidebar-item:not(.disabled):hover {
     background: var(--primary);
     color: white;
     border-right: 3px solid var(--primary-soft);
     cursor: pointer;
 }
 
-div.sidebar-item:not(.disabled):hover i {
+aside div.sidebar-item:not(.disabled):hover i {
     color: white;
 }
 
-div.sidebar-item.disabled {
+aside div.sidebar-item.disabled {
     color: var(--muted);
     background: var(--surface-strong);
 }
 
-a.sidebar-link {
+aside a.sidebar-link {
     text-decoration: none;
     color: inherit;
 }
 
-/******************************* blocks *******************************/
+/******************************* articles *******************************/
 
 div.article-container {
     display: flex;
     overflow-y: auto;
     flex-grow: 1;
-    padding: 18px 42px;
+    padding: 24px 72px;
     gap: 18px;
+    scroll-behavior: smooth;
 }
 
 div.height-fixed-area,
@@ -376,9 +380,10 @@ article.height-fixed-article {
     top: 0;
     height: inherit !important;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
-div:is(.main-area, .central-area, .side-area, .toc-area) {
+div:is(.main-area, .central-area, .side-area) {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -404,7 +409,7 @@ article.content-container {
 }
 
 div.main-area {
-    width: 80%;
+    width: 75%;
 }
 
 div.central-area {
@@ -413,10 +418,6 @@ div.central-area {
 
 div.side-area {
     width: 30%;
-}
-
-div.toc-area {
-    width: 25%;
 }
 
 div.central-area img {
@@ -457,7 +458,8 @@ footer a:hover {
 }
 
 article#contentContainer,
-article.content-container nav.table-of-contents {
+article.content-container nav.table-of-contents,
+div.height-fixed-area:has(article.height-fixed-article)::-webkit-scrollbar {
     display: none;
 }
 
@@ -585,6 +587,7 @@ footer p {
 
     article.toc-container {
         top: 90px;
+        left: 10px;
         height: calc(100vh - 110px);
     }
 
@@ -606,8 +609,7 @@ footer p {
         pointer-events: auto;
     }
 
-    #sidebar-toggle:checked~main aside,
-    #sidebar-toggle:checked~main article.toc-container {
+    #sidebar-toggle:checked~main aside {
         transform: translateX(0);
         visibility: visible;
     }

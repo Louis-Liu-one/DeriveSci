@@ -12,6 +12,8 @@ const md = markdownit({ html: true })
             '\\T': '\\mathrm{T}', '\\trans': '\\mathrm{T}',
             '\\paren': '\\left(#1\\right)',
             '\\abs': '\\left\\lvert#1\\right\\rvert',
+            '\\lcm': '\\operatorname{lcm}',
+            '\\U': '\\mathbb{U}', '\\Q': '\\mathbb{Q}',
         }
     })
     .use(mdItPluginFigure.figure);

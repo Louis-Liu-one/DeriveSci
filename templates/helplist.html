@@ -29,15 +29,14 @@
             </div>
         </div>
         <div id="helpGrid" class="help-grid">
-            {%- for item in helplist -%}
-                <a class="help-card" href="{{ url_for('helps', howto=item.identifier) }}"
-                    target="_blank" data-title="{{ item.title }}" data-desc="{{ item.description }}">
+            {%- for identifier, info in helps_info.items() -%}
+                <a class="help-card" href="{{ url_for('helps', howto=identifier) }}"
+                    target="_blank" data-title="{{ info.title }}" data-desc="{{ info.description }}">
                     <div class="card-icon">
-                        <i class="{{ item.icon if item.icon else 'fas fa-circle-info' }}"></i>
+                        <i class="{{ info.icon if info.icon else 'fas fa-circle-info' }}"></i>
                     </div>
                     <div class="card-body">
-                        <h3>{{ item.title }}</h3>
-                        <p>{{ item.description or '点击查看详细说明' }}</p>
+                        <h3>{{ info.title }}</h3><p>{{ info.description or '点击查看详细说明' }}</p>
                     </div>
                 </a>
             {%- endfor -%}

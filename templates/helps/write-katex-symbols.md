@@ -221,7 +221,7 @@ $$ a \heartsuit b \quad a \mathbin\heartsuit b $$
 `\supsetneqq`       | $\supsetneqq$       |`\varsubsetneq`     | $\varsubsetneq$     |`\varsubsetneqq`    | $\varsubsetneqq$
 `\varsupsetneq`     | $\varsupsetneq$     |`\varsupsetneqq`    | $\varsupsetneqq$
 
-使用 `\mathrel` 命令将其参数当作关系符处理，其用法与 `\mathbin` 相同。参见[运算符](#运算符)一节。
+使用 `\mathrel` 命令将其参数当作关系符处理，其用法与 `\mathbin` 相同。参见[二元运算符](#二元运算符)一节。
 
 #### 各种箭头
 
@@ -282,9 +282,9 @@ $$ \mathrm{CO + CuO \stackrel\triangle= Cu + CO_2} $$
 ```
 其中方括号包围的是可选参数，可以省略。如下是一个例子：
 ```latex
-$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2 \uparrow} $$
+$$ \mathrm{2H_2O_2 \xlongequal{\text{土豆丝}} 2H_2O + O_2 \uparrow} $$
 ```
-$$ \mathrm{2H_2O_2 \xlongequal{土豆丝} 2H_2O + O_2 \uparrow} $$
+$$ \mathrm{2H_2O_2 \xlongequal{\text{土豆丝}} 2H_2O + O_2 \uparrow} $$
 
 ## 括号与定界符
 
@@ -383,12 +383,19 @@ $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 `\dif` | $\dif$ | `\e` 或 `\E` | $\e$ | `\i` 或 `\I` | $\i$
 `\dx` | $\dx$ | `\dy` | $\dy$ | `\dz` | $\dz$
 `\dt` | $\dt$ | `\du` | $\du$ | `\dv` | $\dv$
+`\qed` 或 `\qedsymbol` | $\qed$ | `\T` 或 `\trans` | $\T$ | `\lcm` | $\lcm$
+`\U` | $\U$ | `\Q` | $\Q$
 
 同时，我们预定义了 `\paren` 命令用于定界符圆括号：
 ```latex
 $$ \left(\frac12\right) \Lrarr \paren{\frac12} $$
 ```
 $$ \left(\frac12\right) \Lrarr \paren{\frac12} $$
+`\abs` 命令用于定界符竖线：
+```latex
+$$ \left\lvert\frac12\right\rvert \Lrarr \abs{\frac12} $$
+```
+$$ \left\lvert\frac12\right\rvert \Lrarr \abs{\frac12} $$
 
 ## 参考与引用
 

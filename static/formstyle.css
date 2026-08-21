@@ -40,7 +40,7 @@ form.form-base label {
     line-height: 30px;
 }
 
-form.form-base div.label-input {
+form.form-base div.tag-input {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -48,7 +48,7 @@ form.form-base div.label-input {
     min-width: 0;
 }
 
-form.form-base div.label-input a {
+form.form-base div.tag-input a {
     text-decoration: none;
     font-size: 14px;
     color: var(--text);
@@ -62,7 +62,7 @@ form.form-base div.label-input a {
     font-family: Helvetica;
 }
 
-form.form-base div.label-input a:hover {
+form.form-base div.tag-input a:hover {
     transform: translateY(-.6px) scale(1.01);
     box-shadow: var(--shadow);
     background: var(--primary);
@@ -70,21 +70,21 @@ form.form-base div.label-input a:hover {
     border-color: var(--primary);
 }
 
-form.form-base div.label-input a i.delete-button {
+form.form-base div.tag-input a i.delete-button {
     transition: all .25s ease;
     color: var(--primary);
 }
 
-form.form-base div.label-input a:hover i.delete-button {
+form.form-base div.tag-input a:hover i.delete-button {
     color: white;
 }
 
-form.form-base div.label-input a i.delete-button:hover {
+form.form-base div.tag-input a i.delete-button:hover {
     transform: rotate(90deg);
     cursor: pointer;
 }
 
-form.form-base input.label-input {
+form.form-base input.tag-input {
     min-width: 140px;
     margin-left: 6px;
 }
@@ -182,16 +182,16 @@ form.form-base div.answer ul>li .subprob-header {
     margin-bottom: 6px;
 }
 
-form.form-base div.answer ul>li .subprob-header>.subprob-label-display {
+form.form-base div.answer ul>li .subprob-header>.subprob-tag-display {
     display: block;
 }
 
-form.form-base div.answer ul>li .subprob-header>.subprob-label-display p {
+form.form-base div.answer ul>li .subprob-header>.subprob-tag-display p {
     min-width: 0;
     margin: 0;
 }
 
-form.form-base div.answer ul>li .subprob-header>.subprob-label-editor {
+form.form-base div.answer ul>li .subprob-header>.subprob-tag-editor {
     width: 100%;
     margin-right: 6px;
 }

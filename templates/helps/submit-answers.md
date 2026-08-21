@@ -53,23 +53,23 @@ f(x, y, z) = x^2 + 2*y^2 + 3*z^2;
 则使用 `f(1, 2, 3)`、`f(1, 2, z=3)`、`f(1, z=3, y=2)` 效果相同。
 
 以下是常用的 SymPy 函数：
-用法 | 意义
-:-: | ---
-`Pow(x, n)` 或 `x^n`、`sqrt(x)` 或 `x^(1/2)` | 指数或平方根
-`Abs(x)` 或 `\|x\|` | 取绝对值
-`exp(x)` 或 `E^x` | 以 $\mathrm e$ 为底的指数函数
-`log(x)` 或 `ln(x)`、`log(x, b)` 或 `ln(x, b)` | 自然对数或以 $b$ 为底的对数
-`factorial(x)` | 阶乘
-`gcd(m, n)`、`lcm(m, n)` | 最大公约数或最小公倍数
-`divisors(n)` | 求整数的因子
-`isprime(p)` | 判断是否为素数
-`diff(cos(x), x)`、`diff(cos(x), x, 2)` | 求一阶或高阶导数或偏导数
-`integrate(cos(x), x)`、`integrate(exp(-x), (x, 0, oo))` | 求不定积分或定积分
-`integrate(exp(-x^2 - y^2), (x, -oo, oo)， (y, -oo, oo))` | 求多重积分
-`limit(sin(x)/x, x, 0)` | 求极限
-`(1, 2, 3)` | 创建元组
-`Matrix([[1, 2, 3], [4, 5, 6]])` | 创建矩阵
-`eye(6)` | 创建单位矩阵
+用法 | 表达式 | 意义
+:-: | :-: | ---
+`Pow(x, n)` 或 `x^n`、`sqrt(x)` 或 `x^(1/2)` | $x^n, \sqrt x$ | 指数或平方根
+`Abs(x)` 或 `\|x\|` | $\abs x$ | 取绝对值
+`exp(x)` 或 `E^x` | $\E^x$ | 以 $\mathrm e$ 为底的指数函数
+`log(x)` 或 `ln(x)`、`log(x, b)` 或 `ln(x, b)` | $\ln x, \log_b x$ | 自然对数或以 $b$ 为底的对数
+`factorial(x)` | $x!$ | 阶乘
+`gcd(m, n)`、`lcm(m, n)` | $\gcd(m, n), \lcm(m, n)$ | 最大公约数或最小公倍数
+`divisors(n)` | - | 求整数的因子
+`isprime(p)` | - | 判断是否为素数
+`diff(cos(x), x)`、`diff(cos(x), x, 2)` | $\frac\dif\dx\cos x, \frac{\dif^2}{\dx^2}\cos x$ | 求一阶或高阶导数或偏导数
+`integrate(cos(x), x)`、`integrate(exp(-x), (x, 0, oo))` | $\int\cos x\dx, \int_0^{+\infty}\E^{-x}\dx$ | 求不定积分或定积分
+`integrate(exp(-x^2 - y^2), (x, -oo, oo)， (y, -oo, oo))` | $\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}\E^{-x^2 - y^2}\dx\dy$ | 求多重积分
+`limit(sin(x)/x, x, 0)` | $\lim_{x \to 0}\frac{\sin x}x$ | 求极限
+`(1, 2, 3)` | $(1, 2, 3)$ | 创建元组
+`Matrix([[1, 2, 3], [4, 5, 6]])` | $\begin{pmatrix}1 & 2 & 3 \\ 4 & 5 & 6\end{pmatrix}$ | 创建矩阵
+`eye(6)` | $I_6$ 或作 $E_6$ | 创建单位矩阵
 
 ### 对象属性与方法
 
@@ -155,12 +155,12 @@ S = {x in Naturals | 14 <= x <= 36};
 下面的标识符是一些预定义的集合，可以直接使用：
 名称 | 意义
 :------------: | ---
-`UniversalSet` | 全集 $\mathbb U$
+`UniversalSet` | 全集 $\U$
 `Reals`        | 实数集 $\R$
-`Rationals`    | 有理数集 $\mathbb Q$
+`Rationals`    | 有理数集 $\Q$
 `Integers`     | 整数集 $\Z$
 `Naturals0`    | 自然数集 $\N$，包含 $0$
-`Naturals`     | 正整数集 $\N^+$（又作 $\N^*$、$\N_+$），不含 $0$
+`Naturals`     | 正整数集 $\N^+$（或作 $\N^*$、$\N_+$），不含 $0$
 `EmptySet`     | 空集 $\emptyset$
 
 #### 集合的常用操作

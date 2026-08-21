@@ -20,10 +20,10 @@
     <article>
         <h3>所有标签</h3>
         <div class="grid-container">
-            {%- for label in labels -%}
-                <div class="grid-item" data-url="{{ label.url() }}"{{-''-}}
+            {%- for tag in tags -%}
+                <div class="grid-item" data-url="{{ tag.url() }}"{{-''-}}
                     onclick="window.open(this.dataset.url);">
-                    {{- label.tagtitle -}}
+                    {{- tag.tagtitle -}}
                 </div>
             {%- endfor -%}
         </div>

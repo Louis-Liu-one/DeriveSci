@@ -27,7 +27,7 @@ __all__ = [
     'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow', 'get_post',
     'find_user', 'register_user', 'unregister_user',
     'Prob', 'Tag', 'get_prob', 'add_prob',
-    'get_solution', 'add_solution', 'add2labels', 'Submission',
+    'get_solution', 'add_solution', 'add2tags', 'Submission',
     'Image', 'add_images', 'get_images_for_post', 'get_image',
     'Article', 'get_article', 'add_article',
     'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
@@ -381,7 +381,7 @@ class Prob(db.Model):
     timestamp = db.Column(
         db.DateTime, default=db.func.utc_timestamp(),
         server_default=db.func.utc_timestamp())
-    problabels = db.relationship(
+    tags = db.relationship(
         'Tag', secondary=prob_tag, back_populates='probs',
         collection_class=set)
     statement = db.Column(db.Text, nullable=False)
@@ -449,14 +449,14 @@ class Prob(db.Model):
             Comment.replyto_id.is_(None)).order_by(
             Comment.timestamp.desc()).all()
 
-    def edit(self, probtitle, problabels, statement, answer):
+    def edit(self, probtitle, tags, statement, answer):
         if probtitle:
             self.probtitle = probtitle
         if statement:
             self.statement = statement
         self.answer = answer
-        self.problabels = {get_label(
-            tagtitle, create=True) for tagtitle in problabels}
+        self.tags = {get_tag(
+            tagtitle, create=True) for tagtitle in tags}
         db.session.commit()
 
     def viewable_for(self, user):
@@ -470,7 +470,7 @@ class Prob(db.Model):
         return self.probno
 
     def as_tagtitles(self):
-        return {label.tagtitle for label in self.problabels}
+        return {tag.tagtitle for tag in self.tags}
 
     def url(self, anchor=None, **kwargs):
         return url_for('probs', probno=self.probno, _anchor=anchor, **kwargs)
@@ -554,11 +554,11 @@ class Tag(db.Model):
     __tablename__ = 'tags'
     tagtitle = db.Column(db.String(16), primary_key=True)
     probs = db.relationship(
-        'Prob', secondary=prob_tag, back_populates='problabels',
+        'Prob', secondary=prob_tag, back_populates='tags',
         collection_class=set)
 
     def url(self):
-        return url_for('problistoflabel', tagtitle=self.tagtitle)
+        return url_for('problistoftag', tagtitle=self.tagtitle)
 
 
 def get_prob(probno):
@@ -615,19 +615,19 @@ def add_solution(probno, title, content):
     return True, solution
 
 
-def get_label(tagtitle, create=False):
-    label = db.session.get(Tag, str(tagtitle))
-    if create and label is None:
-        label = Tag(tagtitle=str(tagtitle))
-        db.session.add(label)
+def get_tag(tagtitle, create=False):
+    tag = db.session.get(Tag, str(tagtitle))
+    if create and tag is None:
+        tag = Tag(tagtitle=str(tagtitle))
+        db.session.add(tag)
         db.session.commit()
-    return label
+    return tag
 
 
-def add2labels(tagtitles, prob):
+def add2tags(tagtitles, prob):
     for tagtitle in set(tagtitles):
-        label = get_label(tagtitle, create=True)
-        label.probs.add(prob)
+        tag = get_tag(tagtitle, create=True)
+        tag.probs.add(prob)
     db.session.commit()
 
 

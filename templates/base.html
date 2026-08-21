@@ -67,7 +67,7 @@
                 {%- else -%}{{- navbar_item(url_for('chat', view_comments=True), 'envelope-circle-check', '评论') -}}{%- endif -%}
             {%- endif -%}
             {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {{- navbar_item(url_for('labellist'), 'tags', '标签') -}}
+            {{- navbar_item(url_for('taglist'), 'tags', '标签') -}}
             {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
         </ul>
         <div class="nav-more-panel" aria-hidden="true">
@@ -76,7 +76,7 @@
                 <a class="nav-more-link" href="{{ url_for('chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
             {%- endif -%}
             <a class="nav-more-link" href="{{ url_for('problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
-            <a class="nav-more-link" href="{{ url_for('labellist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
+            <a class="nav-more-link" href="{{ url_for('taglist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
             <a class="nav-more-link" href="{{ url_for('helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
         </div>
     </nav>

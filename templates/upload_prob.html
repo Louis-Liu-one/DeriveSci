@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "includes/problabels.html" import problabels_sidebar %}
+{% from "includes/tags.html" import tags_sidebar %}
 {% from "includes/sidebar.html" import return2post, delete_prob %}
 
 {% block title %}
@@ -26,7 +26,7 @@
     <h3>{%- if editmode -%}编辑{%- else -%}上传{%- endif -%}题目</h3>
     {%- if editmode -%}
         {{- return2post(prob, "返回题目") -}}
-        {{- delete_prob(prob) -}}{{- problabels_sidebar(prob) -}}
+        {{- delete_prob(prob) -}}{{- tags_sidebar(prob) -}}
     {%- endif -%}
 </aside>
 {% endblock %}
@@ -51,9 +51,9 @@
                     spellcheck="false" {%- if editmode -%}value="{{ prob.probtitle }}"{%- endif -%}>
             </span>
             <span>
-                <label for="probLabel">标签：</label>
-                <div class="label-input" id="labelArea"></div>
-                <input type="text" class="label-input" id="probLabel" name="problabel"
+                <label for="probTag">标签：</label>
+                <div class="tag-input" id="tagArea"></div>
+                <input type="text" class="tag-input" id="probTag" name="probtag"
                     autocomplete="off" spellcheck="false" placeholder="输入题目标签，按回车键添加">
             </span>
             <span>
@@ -118,8 +118,8 @@
 </div>
 <script>
     if (typeof createTagInput === 'function')
-        window.labelTagInput = createTagInput({
-            inputId: 'probLabel', areaId: 'labelArea',
+        window.tagInput = createTagInput({
+            inputId: 'probTag', areaId: 'tagArea',
             initial: {{ (prob.as_tagtitles()|list if editmode else [])|tojson }},
         });
     {%- if editmode -%}
@@ -131,9 +131,6 @@
     {%- else -%}
         const markdownImageBasePath = '';
     {%- endif -%}
-    {
-        const mdPreviewButton = document.getElementById('mdPreviewButton');
-        mdPreviewButton.click();
-    }
+    document.getElementById('mdPreviewButton').click();
 </script>
 {% endblock %}
