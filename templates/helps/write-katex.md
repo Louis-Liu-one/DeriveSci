@@ -2,7 +2,7 @@
 
 ## 摘要
 
-**Markdown** 是一种轻量级标记语言。我们的网站中所有的题目、题解、评论等需要或可能需要格式化排版的内容全部使用 Markdown 输入。我们为 Markdown 输入添加了 $\KaTeX$ 公式的支持。由于 $\KaTeX$ 公式内容较多，故单分为此篇。其它 Markdown 语法可以在[此处]({{ url_for('helps', howto='write-markdown') }})找到。
+**Markdown** 是一种轻量级标记语言。我们的网站中所有的题目、题解、评论等需要或可能需要格式化排版的内容全部使用 Markdown 输入。我们为 Markdown 输入添加了 $\KaTeX$ 公式的支持。由于 $\KaTeX$ 公式内容较多，故单分为此篇。其它 Markdown 语法可以在[此处]({{ url_for('helps.helps', howto='write-markdown') }})找到。
 
 本篇内容仅包含常用的公式用法，更多内容参见[此处](https://katex.org/docs/support_table)。
 
@@ -233,7 +233,7 @@ $$
 \end{pmatrix}_{n \times n}
 $$
 
-对于行内公式，可以使用 `smallmatrix` 环境。其提供的矩阵不带括号，可以通过[定界符]({{ url_for('helps', howto='write-markdown-equations-symbols', _anchor='定界符') }})添加。例如，`\left( \begin{smallmatrix} a & b \\ c & d \end{smallmatrix} \right)` 在行内渲染得到 $\left( \begin{smallmatrix} a & b \\ c & d \end{smallmatrix} \right)$。
+对于行内公式，可以使用 `smallmatrix` 环境。其提供的矩阵不带括号，可以通过[定界符]({{ url_for('helps.helps', howto='write-markdown-equations-symbols', _anchor='定界符') }})添加。例如，`\left( \begin{smallmatrix} a & b \\ c & d \end{smallmatrix} \right)` 在行内渲染得到 $\left( \begin{smallmatrix} a & b \\ c & d \end{smallmatrix} \right)$。
 
 ## 字体、符号与文字
 
@@ -345,7 +345,7 @@ $$
 
 ### 数学符号
 
-公式中可以插入各种符号。前往[这里]({{ url_for('helps', howto='write-katex-symbols') }})查看符号表。
+公式中可以插入各种符号。前往[这里]({{ url_for('helps.helps', howto='write-katex-symbols') }})查看符号表。
 
 ### 插入正文文字
 
@@ -363,7 +363,7 @@ $$ \text{能量 $E$} = \text{质量 $m$} \times \text{光速 $c$}^2 $$
 
 ## 多行公式排版
 
-参见[此处]({{ url_for('helps', howto='write-katex-multiline') }})。
+参见[此处]({{ url_for('helps.helps', howto='write-katex-multiline') }})。
 
 ## 参考与引用
 

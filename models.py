@@ -18,7 +18,7 @@ from flask_migrate import Migrate
 from flask_moment import moment
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import MetaData
-from sqlalchemy import LargeBinary as MEDIUMBLOB
+from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 from anschecker import check_answers, testpoints_passedlist
 
@@ -367,10 +367,11 @@ def get_image(post_type, post_ident, name):
 prob_tag = db.Table(
     'probs_tags', db.Column(
         'probno', db.String(16),
-        db.ForeignKey('probs.probno', ondelete='cascade'), primary_key=True),
+        db.ForeignKey('probs.probno', ondelete='cascade', onupdate='cascade'),
+        primary_key=True),
     db.Column(
         'tagtitle', db.String(16),
-        db.ForeignKey('tags.tagtitle', ondelete='cascade'),
+        db.ForeignKey('tags.tagtitle', ondelete='cascade', onupdate='cascade'),
         primary_key=True))
 
 

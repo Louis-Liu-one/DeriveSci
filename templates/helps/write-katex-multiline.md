@@ -137,7 +137,7 @@ $$
 \end{align*}
 $$
 
-`\mathrel` 命令参见[此处]({{ url_for('helps', howto='write-katex-symbols', _anchor='二元关系符') }})。
+`\mathrel` 命令参见[此处]({{ url_for('helps.helps', howto='write-katex-symbols', _anchor='二元关系符') }})。
 
 ## 合并公式成块
 
