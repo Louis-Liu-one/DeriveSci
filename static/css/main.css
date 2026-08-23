@@ -1,0 +1,65 @@
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    overflow: hidden;
+    height: 100vh;
+}
+
+div.unread-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+    background: var(--danger);
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 2px 5px #00000026;
+    z-index: 10;
+}
+
+article {
+    scroll-behavior: smooth;
+}
+
+figure {
+    margin: 15px 0;
+    text-align: center;
+}
+
+figcaption {
+    margin-top: 8px;
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+}
+
+dialog:has(>form.form-base:only-child) {
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+}
+
+dialog::backdrop {
+    background: #00000066;
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    min-height: 0;
+}
+
+@media (max-width: 768px) {
+    body {
+        height: fit-content;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+}

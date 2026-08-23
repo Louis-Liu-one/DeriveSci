@@ -6,9 +6,11 @@
         <table class="problist">
             <thead>
                 <tr class="probhead">
-                    <th>编号</th><th>名称</th><th>标签</th>
-                    {%- if with_source -%}<th>来源</th>{%- endif -%}
-                    {%- if with_review_status -%}<th>状态</th>{%- endif -%}
+                    <th class="probno">编号</th>
+                    <th class="probtitle">名称</th>
+                    <th class="tags">标签</th>
+                    {%- if with_source -%}<th class="source">来源</th>{%- endif -%}
+                    {%- if with_review_status -%}<th class="review-status">状态</th>{%- endif -%}
                 </tr>
             </thead>
             <tbody>

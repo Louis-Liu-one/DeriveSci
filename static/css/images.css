@@ -12,16 +12,6 @@ div.image-preview {
     margin-top: 12px;
 }
 
-dialog#reuploadModal {
-    border: none;
-    border-radius: 12px;
-    padding: 0;
-}
-
-dialog::backdrop {
-    background: #00000066;
-}
-
 img#previewImage {
     width: 100%;
 }

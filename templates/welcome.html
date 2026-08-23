@@ -97,25 +97,23 @@
     </article>
 </div>
 <div class="side-area height-fixed-area">
-    {%- if user == current_user or user.introduction -%}
-        <h3>{{ user_name(user) }}的简介</h3>
-        <article>
-            <div id="userIntroductionContainer">
-                <form class="form-base no-edge hidden" id="introductionEditForm">
-                    <span>
-                        <textarea id="introductionTextarea" name="introduction"
-                            class="submit-input" spellcheck="false"
-                            placeholder="简要介绍你自己，以 Markdown 格式">
-                            {{- user.introduction or '' -}}
-                        </textarea>
-                    </span>
-                </form>
-                <div id="userIntroductionDisplay" class="markdown-body">
-                    <textarea>{{ user.introduction }}</textarea>
-                </div>
+    <h3 id="userIntroductionTitle">{{ user_name(user) }}的简介</h3>
+    <article>
+        <div id="userIntroductionContainer">
+            <form class="form-base no-edge hidden" id="introductionEditForm">
+                <span>
+                    <textarea id="introductionTextarea" name="introduction"
+                        class="submit-input" spellcheck="false"
+                        placeholder="简要介绍你自己，以 Markdown 格式">
+                        {{- user.introduction or '' -}}
+                    </textarea>
+                </span>
+            </form>
+            <div id="userIntroductionDisplay" class="markdown-body">
+                <textarea id="userIntroductionContent">{{ user.introduction }}</textarea>
             </div>
-        </article>
-    {%- endif -%}
+        </div>
+    </article>
     <h3>{{ user_name(user) }}的文章</h3>
     <h4>{{ user_name(user) }}的专栏</h4>
     <article>
@@ -150,15 +148,13 @@
     </script>
 {%- elif user != current_user -%}
     <script>
-        document.getElementById('userIntroductionContainer')
-            .classList.add('hidden');
+        document.getElementById('userIntroductionContainer').classList.add('hidden');
+        document.getElementById('userIntroductionTitle').classList.add('hidden');
     </script>
 {%- else -%}
     <script>
-        document.getElementById('userIntroductionDisplay')
-            .classList.add('hidden');
-        document.getElementById('introductionEditForm')
-            .classList.remove('hidden');
+        document.getElementById('userIntroductionDisplay').classList.add('hidden');
+        document.getElementById('introductionEditForm').classList.remove('hidden');
     </script>
 {%- endif -%}
 {% endblock %}

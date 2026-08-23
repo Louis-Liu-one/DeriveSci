@@ -84,7 +84,6 @@ form.form-base div.tag-input a i.delete-button:hover {
 }
 
 form.form-base input.tag-input {
-    min-width: 140px;
     margin-left: 6px;
 }
 

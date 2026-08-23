@@ -89,7 +89,7 @@ from flask_moment import Moment, moment as builtin_moment
 from models import db, init_app, auto_format_time, get_post
 from models import find_user, register_user, unregister_user
 from models import Prob, get_prob, add_prob, get_solution, add_solution
-from models import Tag, add2tags, get_article, add_article
+from models import Tag, get_tag, add2tags, get_article, add_article
 from models import Image, add_images, get_images_for_post, get_image
 from models import Comment, get_comment, clear_comments, update_chatlastvisit
 from anschecker import TPStatus, latex
@@ -314,8 +314,9 @@ def taglist():
 
 @app.route('/tags/<tagtitle>')
 def problistoftag(tagtitle):
-    base_query = Prob.query.filter(Prob.tags.any(
-        Tag.tagtitle == tagtitle))
+    if not get_tag(tagtitle):
+        return render_template('notfound.html', error='未能找到标签。'), 404
+    base_query = Prob.query.filter(Prob.tags.any(Tag.tagtitle == tagtitle))
     if not current_user.is_authenticated or not current_user.isadmin:
         base_query = base_query.filter(Prob.review_status == 1)
     all_query = base_query.order_by(Prob.probno.asc())
@@ -323,7 +324,7 @@ def problistoftag(tagtitle):
     probs = list(all_query)
     return render_template(
         'problist.html', tagtitle=tagtitle, oftag=True, form={},
-        probs=probs, probs_data=probs_data, query=None)
+        probs=probs, probs_data=probs_data)
 
 
 @app.route('/probs/<probno>')
@@ -417,6 +418,23 @@ def upload_solution(probno):
     if not prob:
         return render_template('notfound.html', error='未能找到题目。'), 404
     return render_template('upload_solution.html', prob=prob)
+
+
+@app.route('/api/tag/rename', methods=['POST'])
+def api_rename_tag():
+    if not current_user.is_authenticated:
+        return {'ok': False, 'error': '用户未登录。'}, 401
+    if not current_user.isadmin:
+        abort(403)  # 无编辑标签的权限
+    old_title = request.json.get('old_title')
+    new_title = request.json.get('new_title')
+    tag = get_tag(old_title)
+    if not tag:
+        return {'ok': False, 'error': '未能找到标签。'}, 404
+    status, result = tag.rename(new_title)
+    if not status:
+        return {'ok': False, 'error': str(result)}, 400
+    return {'ok': True, 'url': result.url()}
 
 
 @app.route('/api/prob/search-content', methods=['POST'])

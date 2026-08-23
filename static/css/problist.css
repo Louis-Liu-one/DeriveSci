@@ -14,8 +14,14 @@ table.problist tr {
     transition: all .25s ease;
 }
 
-table.problist tr:nth-child(even) {
+table.problist tr:nth-child(even),
+table.problist tr:nth-child(even) td {
     background: var(--surface-strong);
+}
+
+table.problist tr:nth-child(odd),
+table.problist tr:nth-child(odd) td {
+    background: var(--surface);
 }
 
 table.problist tr:not(.probhead):hover {
@@ -24,46 +30,49 @@ table.problist tr:not(.probhead):hover {
 }
 
 table.problist th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
     text-align: left;
     background: var(--surface-soft);
     color: var(--text);
     font-weight: 500;
     padding: 10px 12px;
     white-space: nowrap;
+    font-family: var(--sans-font);
 }
 
 table.problist td,
 table.problist th {
     border: none;
-    padding: 8px 12px;
+    padding: 8px;
+}
+
+table.problist th.probno {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    min-width: 80px;
+}
+
+table.problist th.probtitle,
+table.problist th.tags {
+    min-width: 180px;
 }
 
 table.problist td.probno {
-    width: 13%;
+    position: sticky;
+    left: 0;
+    z-index: 5;
     font-family: var(--mono-font);
     word-break: break-all;
-}
-
-table.problist td.probtitle {
-    width: 20%;
-}
-
-table.problist td.tags {
-    width: 30%;
-}
-
-table.problist td.source {
-    width: 24%;
-}
-
-table.problist td.soluser {
-    width: 40%;
 }
 
 table.problist td.source div,
 table.problist td.soluser div {
     display: flex;
     align-items: center;
+    white-space: nowrap;
 }
 
 table.problist td.source div img,
@@ -82,11 +91,7 @@ table.problist td.soluser div i {
     margin-right: 4px;
 }
 
-table.problist td.review-status {
-    width: 12%;
-}
-
-table.problist a.probtag {
+table.problist td.tags>a.probtag {
     text-decoration: none;
     font-size: 14px;
     color: var(--text);
@@ -96,9 +101,10 @@ table.problist a.probtag {
     display: inline-block;
     padding: 4px 8px;
     transition: all .25s ease;
+    white-space: nowrap;
 }
 
-table.problist a.probtag:hover {
+table.problist td.tags>a.probtag:hover {
     background: var(--primary);
     color: white;
     transform: translateY(-1px);
@@ -108,46 +114,21 @@ table.problist a.probtag:hover {
 .problist-container {
     padding: 0 !important;
     height: 100% !important;
+    border: none !important;
 }
 
-.problist-container div.problist-wrap {
+div.problist-wrap {
     width: 100%;
     height: 100%;
     border-radius: 12px;
-    overflow-y: auto;
+    overflow: auto;
 }
 
-.problist-container div.problist-wrap table.problist {
+div.problist-wrap table.problist {
     margin: 0;
-    width: 100%;
-    overflow-y: auto;
-    border: none;
+    overflow: auto;
 }
 
-.problist-container div.problist-wrap>table.problist thead>tr.probhead>th {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background: var(--surface-soft);
-    font-family: var(--sans-font);
-}
-
-.problist-container div.problist-wrap table.problist tr.filler td {
+div.problist-wrap table.problist tr.filler td {
     pointer-events: none;
-}
-
-
-@media (max-width: 768px) {
-
-    .problist-container div.problist-wrap table.problist {
-        overflow: hidden;
-    }
-
-    .problist-container div.problist-wrap table.problist td.probno {
-        font-size: 13px;
-    }
-
-    .problist-container div.problist-wrap table.problist td.tags a.probtag {
-        font-size: 9px;
-    }
 }

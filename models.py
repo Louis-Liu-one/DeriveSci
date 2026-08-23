@@ -367,10 +367,11 @@ def get_image(post_type, post_ident, name):
 prob_tag = db.Table(
     'probs_tags', db.Column(
         'probno', db.String(16),
-        db.ForeignKey('probs.probno', ondelete='cascade'), primary_key=True),
+        db.ForeignKey('probs.probno', ondelete='cascade', onupdate='cascade'),
+        primary_key=True),
     db.Column(
         'tagtitle', db.String(16),
-        db.ForeignKey('tags.tagtitle', ondelete='cascade'),
+        db.ForeignKey('tags.tagtitle', ondelete='cascade', onupdate='cascade'),
         primary_key=True))
 
 
@@ -560,9 +561,25 @@ class Tag(db.Model):
     def url(self):
         return url_for('problistoftag', tagtitle=self.tagtitle)
 
+    def rename(self, new_title):
+        if not new_title:
+            return False, '标签标题不能为空。'
+        target_tag = get_tag(new_title)
+        if target_tag is not None:
+            return self.merge_with(target_tag)
+        self.tagtitle = new_title
+        db.session.commit()
+        return True, self
 
-def get_prob(probno):
-    return db.session.get(Prob, str(probno))
+    def merge_with(self, target_tag):
+        if not isinstance(target_tag, Tag):
+            return False, '目标标签不存在。'
+        for prob in list(self.probs):
+            prob.tags.remove(self)
+            prob.tags.add(target_tag)
+        db.session.delete(self)
+        db.session.commit()
+        return True, target_tag
 
 
 def get_post(post_type, post_ident):
@@ -577,6 +594,10 @@ def get_post(post_type, post_ident):
     if post_type == 3:
         return get_article(int(post_ident))
     return None
+
+
+def get_prob(probno):
+    return db.session.get(Prob, str(probno))
 
 
 def add_prob(**kwargs):

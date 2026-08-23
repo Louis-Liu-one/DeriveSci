@@ -32,9 +32,12 @@
         <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
     {%- endblock -%}
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/basic.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/light-mode.css') }}" media="(prefers-color-scheme: light)">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}" media="(prefers-color-scheme: dark)">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>

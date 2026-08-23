@@ -25,7 +25,6 @@ function adjustProblist() {
     const totalH = headH + bodyH;
 
     if (totalH < wrapH) {
-        const sample = tbody.querySelector('tr');
         const needed = Math.ceil((wrapH - totalH) / headH);
         const cols = table.querySelectorAll('tr.probhead th').length || 3;
         for (let i = 0; i < needed; i++) {
@@ -36,8 +35,8 @@ function adjustProblist() {
             }
             tbody.appendChild(tr);
         }
-        wrap.style.overflow = 'hidden';
-    } else wrap.style.overflow = '';
+        wrap.style.overflowY = 'hidden';
+    } else wrap.style.overflowY = '';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
