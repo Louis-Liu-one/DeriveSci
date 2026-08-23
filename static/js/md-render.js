@@ -13,7 +13,7 @@ const md = markdownit({ html: true })
             '\\paren': '\\left(#1\\right)',
             '\\abs': '\\left\\lvert#1\\right\\rvert',
             '\\lcm': '\\operatorname{lcm}',
-            '\\U': '\\mathbb{U}', '\\Q': '\\mathbb{Q}',
+            '\\U': '\\mathbb{U}', '\\C': '\\mathbb{C}', '\\Q': '\\mathbb{Q}',
         }
     })
     .use(mdItPluginFigure.figure);

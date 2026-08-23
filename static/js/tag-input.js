@@ -9,6 +9,7 @@
             area.innerHTML = '';
             tags.forEach((t, i) => {
                 const a = document.createElement('a');
+                a.className = 'tag';
                 a.innerHTML = `${escapeHTML(t)} <i class="delete-button`
                     + ` fas fa-circle-minus" data-i="${i}"></i>`;
                 area.appendChild(a);

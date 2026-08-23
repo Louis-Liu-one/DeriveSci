@@ -384,7 +384,7 @@ $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 `\dx` | $\dx$ | `\dy` | $\dy$ | `\dz` | $\dz$
 `\dt` | $\dt$ | `\du` | $\du$ | `\dv` | $\dv$
 `\qed` 或 `\qedsymbol` | $\qed$ | `\T` 或 `\trans` | $\T$ | `\lcm` | $\lcm$
-`\U` | $\U$ | `\Q` | $\Q$
+`\U` | $\U$ | `\C` | $\C$ | `\Q` | $\Q$
 
 同时，我们预定义了 `\paren` 命令用于定界符圆括号：
 ```latex

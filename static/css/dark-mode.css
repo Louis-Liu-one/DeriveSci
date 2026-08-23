@@ -42,9 +42,9 @@
         border: var(--border);
     }
 
-    article.content-container img:not(.avatar),
-    div.markdown-preview-block img:not(.avatar),
-    div.image-preview img {
+    article:not(.no-image-invert).content-container img:not(.avatar),
+    div:not(.no-image-invert).markdown-preview-block img:not(.avatar),
+    div:not(.no-image-invert).image-preview img {
         filter: invert(1);
     }
 }

@@ -1,7 +1,6 @@
 .DS_Store
 */.DS_Store
 __pycache__
-instance
 migrations
 .env
 .venv

@@ -156,6 +156,7 @@ S = {x in Naturals | 14 <= x <= 36};
 名称 | 意义
 :------------: | ---
 `UniversalSet` | 全集 $\U$
+`Complexes`    | 复数集 $\C$
 `Reals`        | 实数集 $\R$
 `Rationals`    | 有理数集 $\Q$
 `Integers`     | 整数集 $\Z$

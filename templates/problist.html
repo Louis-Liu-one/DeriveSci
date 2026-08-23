@@ -126,20 +126,20 @@
     </article>
 </div>
 {%- if oftag and current_user.isadmin -%}
-<dialog id="renameTagModal">
-    <form id="renameTagForm" class="form-base" method="dialog">
-        <h3>重命名标签</h3>
-        <span>
-            <label for="newTagTitle">新标签名：</label>
-            <input type="text" id="newTagTitle" name="new_title" autocomplete="off"
-                spellcheck="false" placeholder="输入新的标签名">
-        </span>
-        <span>
-            <button type="button" id="renameTagCancel">取消</button>
-            <button type="submit">重命名</button>
-        </span>
-    </form>
-</dialog>
+    <dialog id="renameTagModal">
+        <form id="renameTagForm" class="form-base" method="dialog">
+            <h3>重命名标签</h3>
+            <span>
+                <label for="newTagTitle">新标签名：</label>
+                <input type="text" id="newTagTitle" name="new_title" autocomplete="off"
+                    spellcheck="false" placeholder="输入新的标签名">
+            </span>
+            <span>
+                <button type="button" id="renameTagCancel">取消</button>
+                <button type="submit">重命名</button>
+            </span>
+        </form>
+    </dialog>
 {%- endif -%}
 <script>
     {%- if form.get('probtype') -%}

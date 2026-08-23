@@ -14,11 +14,11 @@
 {%- macro tags_problist(prob) -%}
     <td class="tags">
         {%- if prob.tags -%}
-            {%- for probtag in prob.tags -%}
-                <a class="probtag" target="_blank" href="{{ url_for(
-                    'problistoftag', tagtitle=probtag.tagtitle) }}"{{-''-}}
+            {%- for tag in prob.tags -%}
+                <a class="tag" target="_blank" href="{{ url_for(
+                    'problistoftag', tagtitle=tag.tagtitle) }}"{{-''-}}
                     onclick="event.stopPropagation();">
-                    {{- probtag.tagtitle -}}
+                    {{- tag.tagtitle -}}
                 </a>
             {%- endfor -%}
         {%- else -%}无标签{%- endif -%}

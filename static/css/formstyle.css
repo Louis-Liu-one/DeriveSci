@@ -48,37 +48,16 @@ form.form-base div.tag-input {
     min-width: 0;
 }
 
-form.form-base div.tag-input a {
-    text-decoration: none;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--surface-soft);
-    margin: 2px 0;
-    border: 1px solid var(--surface-soft);
-    border-radius: 8px;
-    display: inline-block;
-    padding: 4px 8px;
-    transition: all .25s ease;
-}
-
-form.form-base div.tag-input a:hover {
-    transform: translateY(-.6px) scale(1.01);
-    box-shadow: var(--shadow);
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-form.form-base div.tag-input a i.delete-button {
+form.form-base div.tag-input a.tag i.delete-button {
     transition: all .25s ease;
     color: var(--primary);
 }
 
-form.form-base div.tag-input a:hover i.delete-button {
+form.form-base div.tag-input a.tag:hover i.delete-button {
     color: white;
 }
 
-form.form-base div.tag-input a i.delete-button:hover {
+form.form-base div.tag-input a.tag i.delete-button:hover {
     transform: rotate(90deg);
     cursor: pointer;
 }
