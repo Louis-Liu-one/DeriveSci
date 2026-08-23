@@ -61,6 +61,26 @@
         <p id="noResults" style="display: none; text-align: center;">暂无</p>
         {%- if reviewmode -%}{{- problist(probs, with_review_status=True) -}}
         {%- else -%}{{- problist(probs) -}}{%- endif -%}
+{%- if pagination and pagination.pages > 1 -%}
+        <nav class="pagination">
+            {%- if pagination.has_prev -%}
+                <a href="{{ url_for(request.endpoint, page=pagination.prev_num, per_page=pagination.per_page, reviewmode=reviewmode, tagtitle=tagtitle if oftag else None) }}" class="page-link">&laquo; 上一页</a>
+            {%- endif -%}
+            {%- for p in range(1, pagination.pages + 1) -%}
+                {%- if p == pagination.page -%}
+                    <span class="page-current">{{ p }}</span>
+                {%- elif p <= 3 or p > pagination.pages - 3 or (p >= pagination.page - 2 and p <= pagination.page + 2) -%}
+                    <a href="{{ url_for(request.endpoint, page=p, per_page=pagination.per_page, reviewmode=reviewmode, tagtitle=tagtitle if oftag else None) }}" class="page-link">{{ p }}</a>
+                {%- elif p == 4 or p == pagination.pages - 3 -%}
+                    <span class="page-ellipsis">&hellip;</span>
+                {%- endif -%}
+            {%- endfor -%}
+            {%- if pagination.has_next -%}
+                <a href="{{ url_for(request.endpoint, page=pagination.next_num, per_page=pagination.per_page, reviewmode=reviewmode, tagtitle=tagtitle if oftag else None) }}" class="page-link">下一页 &raquo;</a>
+            {%- endif -%}
+            <span class="page-info">共 {{ pagination.total }} 题</span>
+        </nav>
+        {%- endif -%}
     </article>
 </div>
 <div class="side-area height-fixed-area">

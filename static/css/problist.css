@@ -151,3 +151,36 @@ table.problist a.probtag:hover {
         font-size: 9px;
     }
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 0;
+    flex-wrap: wrap;
+}
+.pagination .page-link {
+    padding: 4px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--text-color);
+}
+.pagination .page-link:hover {
+    background: var(--hover-bg);
+}
+.pagination .page-current {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--accent-color);
+    color: #fff;
+}
+.pagination .page-ellipsis {
+    padding: 4px 2px;
+    color: var(--text-muted);
+}
+.pagination .page-info {
+    margin-left: 12px;
+    color: var(--text-muted);
+    font-size: 0.9em;
+}
