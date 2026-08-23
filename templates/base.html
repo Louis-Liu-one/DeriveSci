@@ -38,6 +38,7 @@
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>
+<div id="loading-bar"></div>
     <input id="sidebar-toggle" type="checkbox" class="hidden">
     <input id="nav-more-toggle" type="checkbox" class="hidden">
     <nav class="navbar">
@@ -89,5 +90,31 @@
         <p><a href="https://beian.miit.gov.cn/"  target="_blank">粤ICP备2026116144号-1</a></p>
         <p>© 2026 DeriveSci. All rights reserved.</p>
     </footer>
+
+<script>
+(function() {
+    var bar = document.getElementById("loading-bar");
+    var timer = null;
+    function start() {
+        if (bar) { bar.className = "running"; bar.style.opacity = "1"; }
+    }
+    function done() {
+        if (bar) { bar.className = "done"; timer = setTimeout(function() { bar.className = ""; }, 500); }
+    }
+    document.addEventListener("DOMContentLoaded", function() { done(); });
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a");
+        if (a && a.href && !a.target && a.origin === location.origin && !a.href.startsWith("javascript:")) {
+            start();
+        }
+    });
+    var origFetch = window.fetch;
+    window.fetch = function() {
+        start();
+        return origFetch.apply(this, arguments).finally(function() { done(); });
+    };
+})();
+</script>
+
 </body>
 </html>

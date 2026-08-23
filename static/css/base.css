@@ -654,3 +654,23 @@ footer p {
         overflow: visible;
     }
 }
+#loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--accent-color, #4a90d9);
+    z-index: 9999;
+    transition: width 0.3s ease;
+}
+#loading-bar.running {
+    width: 70%;
+    transition: width 3s cubic-bezier(0.1, 0.7, 0.5, 1);
+}
+#loading-bar.done {
+    width: 100%;
+    transition: width 0.2s ease;
+    opacity: 0;
+    transition: width 0.2s ease, opacity 0.3s ease 0.2s;
+}
