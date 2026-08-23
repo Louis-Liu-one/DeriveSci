@@ -37,5 +37,5 @@
 
 {% block right_content %}
 <h2>已有账号？</h2>
-<a href="{{ url_for('login', next=next) }}"><button class="jump" type="button">登录</button></a>
+<a href="{{ url_for('auth.login', next=next) }}"><button class="jump" type="button">登录</button></a>
 {% endblock %}

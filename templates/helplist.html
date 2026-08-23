@@ -11,7 +11,7 @@
 {% block sidebar %}
 <aside>
     <h3>帮助列表</h3>
-    <a class="sidebar-link" href="{{ url_for('welcome') }}">
+    <a class="sidebar-link" href="{{ url_for('auth.welcome') }}">
         <div class="sidebar-item">
             <i class="fas fa-circle-left"></i>返回主页
         </div>
@@ -30,7 +30,7 @@
         </div>
         <div id="helpGrid" class="help-grid">
             {%- for identifier, info in helps_info.items() -%}
-                <a class="help-card" href="{{ url_for('helps', howto=identifier) }}"
+                <a class="help-card" href="{{ url_for('helps.helps', howto=identifier) }}"
                     target="_blank" data-title="{{ info.title }}" data-desc="{{ info.description }}">
                     <div class="card-icon">
                         <i class="{{ info.icon if info.icon else 'fas fa-circle-info' }}"></i>

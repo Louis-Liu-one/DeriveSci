@@ -29,7 +29,7 @@
     <a class="sidebar-link" href="javascript:void(0)" onclick="toggleArticleToc();">
         <div class="sidebar-item" id="tocToggleButton"><i class="fas fa-list"></i>目录导航</div>
     </a>
-    <a class="sidebar-link" href="{{ url_for('images_list', post_type=3, post_ident=article.get_post_ident()) }}" target="_blank">
+    <a class="sidebar-link" href="{{ url_for('images.images_list', post_type=3, post_ident=article.get_post_ident()) }}" target="_blank">
         <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
     </a>
     <h3>专栏作者</h3>{{- user_sidebar(article.user) -}}

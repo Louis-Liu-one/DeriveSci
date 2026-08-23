@@ -46,7 +46,7 @@
                 <label for="sidebar-toggle"><i class="fas fa-bars"></i></label>
             </li>
             <li class="logo">
-                <a href="{{ url_for('homepage') }}"> 
+                <a href="{{ url_for('auth.homepage') }}"> 
                     <img src="{{ url_for('static', filename='favicon.svg') }}"><br>DeriveSci
                 </a>
             </li>
@@ -54,30 +54,30 @@
             <li class="navbar-item nav-more-toggle" title="更多">
                 <label for="nav-more-toggle"><i class="fas fa-ellipsis-h"></i></label>
             </li>
-            <a href="{{ url_for('welcome') }}" target="_blank">
+            <a href="{{ url_for('auth.welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}{{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}
                     {%- else -%}<i class="fas fa-user"></i><br>未登录{%- endif -%}
                 </li>
             </a>
             {%- if current_user.is_authenticated -%}
-                {{- navbar_item(url_for('chat'), 'comments', '私信', current_user.unread_chats_num()) -}}
+                {{- navbar_item(url_for('social.chat'), 'comments', '私信', current_user.unread_chats_num()) -}}
                 {%- set unread_comments = current_user.unread_comments_count() -%}
-                {%- if unread_comments -%}{{- navbar_item(url_for('chat', view_comments=True), 'envelope', '评论', unread_comments) -}}
-                {%- else -%}{{- navbar_item(url_for('chat', view_comments=True), 'envelope-circle-check', '评论') -}}{%- endif -%}
+                {%- if unread_comments -%}{{- navbar_item(url_for('social.chat', view_comments=True), 'envelope', '评论', unread_comments) -}}
+                {%- else -%}{{- navbar_item(url_for('social.chat', view_comments=True), 'envelope-circle-check', '评论') -}}{%- endif -%}
             {%- endif -%}
-            {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {{- navbar_item(url_for('taglist'), 'tags', '标签') -}}
-            {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
+            {{- navbar_item(url_for('probs.problist'), 'book', '题集') -}}
+            {{- navbar_item(url_for('probs.taglist'), 'tags', '标签') -}}
+            {{- navbar_item(url_for('helps.helplist'), 'circle-info', '帮助') -}}
         </ul>
         <div class="nav-more-panel" aria-hidden="true">
             {%- if current_user.is_authenticated -%}
-                <a class="nav-more-link" href="{{ url_for('chat') }}"><i class="fas fa-comments"></i><span>私信</span></a>
-                <a class="nav-more-link" href="{{ url_for('chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
+                <a class="nav-more-link" href="{{ url_for('social.chat') }}"><i class="fas fa-comments"></i><span>私信</span></a>
+                <a class="nav-more-link" href="{{ url_for('social.chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
             {%- endif -%}
-            <a class="nav-more-link" href="{{ url_for('problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
-            <a class="nav-more-link" href="{{ url_for('taglist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
-            <a class="nav-more-link" href="{{ url_for('helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
+            <a class="nav-more-link" href="{{ url_for('probs.problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
+            <a class="nav-more-link" href="{{ url_for('probs.taglist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
+            <a class="nav-more-link" href="{{ url_for('helps.helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
         </div>
     </nav>
     <main>

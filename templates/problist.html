@@ -35,18 +35,18 @@
 <aside>
     {%- if oftag -%}
         <h3>题目标签</h3>
-        <a class="sidebar-link" href="{{ url_for('taglist') }}">
+        <a class="sidebar-link" href="{{ url_for('probs.taglist') }}">
             <div class="sidebar-item"><i class="fas fa-tags"></i>所有标签</div>
         </a>
     {%- else -%}
         <h3>题集</h3>
         {%- if current_user.is_authenticated and current_user.isadmin -%}
             {%- if reviewmode -%}
-                <a class="sidebar-link" href="{{ url_for('problist') }}">
+                <a class="sidebar-link" href="{{ url_for('probs.problist') }}">
                     <div class="sidebar-item"><i class="fas fa-book"></i>访客模式</div>
                 </a>
             {%- else -%}
-                <a class="sidebar-link" href="{{ url_for('problist', reviewmode=True) }}">
+                <a class="sidebar-link" href="{{ url_for('probs.problist', reviewmode=True) }}">
                     <div class="sidebar-item"><i class="fas fa-book-open-reader"></i>审核模式</div>
                 </a>
             {%- endif -%}
@@ -66,8 +66,8 @@
 <div class="side-area height-fixed-area">
     <h3>查询题目</h3>
     <article class="basic-article form-container">
-        <form class="form-base" method="post" action="{%- if oftag -%}{{- url_for('problistoftag', tagtitle=tagtitle) -}}
-            {%- else -%}{{- url_for('problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
+        <form class="form-base" method="post" action="{%- if oftag -%}{{- url_for('probs.problistoftag', tagtitle=tagtitle) -}}
+            {%- else -%}{{- url_for('probs.problist', reviewmode=True if reviewmode else False) -}}{%- endif -%}">
             <span>
                 <label for="probNo">编号：</label>
                 <input type="text" id="probNo" name="probno" autocomplete="off"
