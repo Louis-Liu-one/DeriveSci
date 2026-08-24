@@ -1,9 +1,9 @@
 # 贡献者 (Contributors)
 
-[我](https://github.com/Louis-Liu-one) 代表 `DeriveSci` 项目感谢以下开发者的支持与贡献！
+[我](https://github.com/Louis-Liu-one)代表 `DeriveSci` 项目感谢以下开发者的支持与贡献！
 
-- **[Zatursure]** (PR #2)
-  - 拆分项目为 `blueprints`
+- **[Zatursure](https://github.com/zatursure)** ([PR #2](https://github.com/Louis-Liu-one/DeriveSci/pull/2))
+  - 拆分项目，提升架构
   - 添加题集分页，优化性能
   - 添加加载条
 
