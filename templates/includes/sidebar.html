@@ -21,19 +21,19 @@
 {%- endmacro -%}
 
 {%- macro upload_solution(prob) -%}
-    <a class="sidebar-link" target="_blank" href="{{ url_for('upload_solution', probno=prob.probno) }}">
+    <a class="sidebar-link" target="_blank" href="{{ url_for('probs.upload_solution', probno=prob.probno) }}">
         <div class="sidebar-item"><i class="fas fa-cloud-arrow-up"></i>上传题解</div>
     </a>
 {%- endmacro -%}
 
 {%- macro edit_prob(prob) -%}
-    <a class="sidebar-link" target="_blank" href="{{ url_for('edit_prob', probno=prob.probno) }}">
+    <a class="sidebar-link" target="_blank" href="{{ url_for('probs.edit_prob', probno=prob.probno) }}">
         <div class="sidebar-item"><i class="fas fa-pen-to-square"></i>编辑题目</div>
     </a>
 {%- endmacro -%}
 
 {%- macro edit_solution(solution) -%}
-    <a class="sidebar-link" target="_blank" href="{{ url_for('edit_solution',
+    <a class="sidebar-link" target="_blank" href="{{ url_for('probs.edit_solution',
             probno=solution.probno, solno=solution.solno) }}">
         <div class="sidebar-item"><i class="fas fa-pen-to-square"></i>编辑题解</div>
     </a>
@@ -55,7 +55,7 @@
 {%- endmacro -%}
 
 {%- macro edit_article(article) -%}
-    <a class="sidebar-link" target="_blank" href="{{ url_for('edit_article', article_id=article.id) }}">
+    <a class="sidebar-link" target="_blank" href="{{ url_for('articles.edit_article', article_id=article.id) }}">
         <div class="sidebar-item"><i class="fas fa-pen-to-square"></i>编辑专栏</div>
     </a>
 {%- endmacro -%}

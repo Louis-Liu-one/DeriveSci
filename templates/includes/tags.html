@@ -4,7 +4,7 @@
         <h3>题目标签</h3>
         {%- for tag in prob.tags -%}
             <a class="sidebar-link" target="_blank" href="{{ url_for(
-                    'problistoftag', tagtitle=tag.tagtitle) }}">
+                    'probs.problistoftag', tagtitle=tag.tagtitle) }}">
                 <div class="sidebar-item">{{ tag.tagtitle }}</div>
             </a>
         {%- endfor -%}
@@ -16,7 +16,7 @@
         {%- if prob.tags -%}
             {%- for tag in prob.tags -%}
                 <a class="tag" target="_blank" href="{{ url_for(
-                    'problistoftag', tagtitle=tag.tagtitle) }}"{{-''-}}
+                    'probs.problistoftag', tagtitle=tag.tagtitle) }}"{{-''-}}
                     onclick="event.stopPropagation();">
                     {{- tag.tagtitle -}}
                 </a>

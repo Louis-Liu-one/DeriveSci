@@ -38,7 +38,7 @@
                     <tbody>
                         {%- for img in images -%}
                             <tr class="image-row" data-name="{{- img.name -}}"
-                                data-url="{{- url_for('image_preview',
+                                data-url="{{- url_for('images.image_preview',
                                     post_type=post_type, post_ident=post_ident,
                                     imagename=img.name) -}}"
                                 onclick="location.href = this.dataset.url;">

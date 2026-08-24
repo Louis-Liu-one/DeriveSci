@@ -101,7 +101,7 @@ $$
 ### 对齐连等式
 
 对于连等式，为了避免丑陋的间距，有如下两种解决方案：
-1. 在等号前使用 `&` 符，并在首行添加[幻影盒子]({{ url_for('helps', howto='write-katex', _anchor='水平间距与盒子') }})，例如：
+1. 在等号前使用 `&` 符，并在首行添加[幻影盒子]({{ url_for('helps.helps', howto='write-katex', _anchor='水平间距与盒子') }})，例如：
 ```latex
 $$
 \begin{align*}
@@ -137,7 +137,7 @@ $$
 \end{align*}
 $$
 
-`\mathrel` 命令参见[此处]({{ url_for('helps', howto='write-katex-symbols', _anchor='二元关系符') }})。
+`\mathrel` 命令参见[此处]({{ url_for('helps.helps', howto='write-katex-symbols', _anchor='二元关系符') }})。
 
 ## 合并公式成块
 

@@ -52,7 +52,7 @@ Heading 2
 
 ## 公式
 
-我们为 Markdown 文本提供了 $\KaTeX$ 公式的支持。由于公式内容较多，故不在此处展示，可以前往[KaTeX 公式指南]({{ url_for('helps', howto='write-katex') }})一节浏览。
+我们为 Markdown 文本提供了 $\KaTeX$ 公式的支持。由于公式内容较多，故不在此处展示，可以前往[KaTeX 公式指南]({{ url_for('helps.helps', howto='write-katex') }})一节浏览。
 
 ## 引用
 
@@ -254,11 +254,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 使用
 ```markdown
-[上传题目]({{ url_for('upload_prob') }})
+[上传题目]({{ url_for('probs.upload_prob') }})
 ```
-创建链接，渲染效果为[上传题目]({{ url_for('upload_prob') }})。
+创建链接，渲染效果为[上传题目]({{ url_for('probs.upload_prob') }})。
 
-你也可以为链接添加标题：`[上传题目]({{ url_for('upload_prob') }} "单击此处跳转")`，渲染效果为[上传题目]({{ url_for('upload_prob') }} "单击此处跳转")。当鼠标悬停在带有标题的链接上时，标题就会显示在鼠标旁边。
+你也可以为链接添加标题：`[上传题目]({{ url_for('probs.upload_prob') }} "单击此处跳转")`，渲染效果为[上传题目]({{ url_for('probs.upload_prob') }} "单击此处跳转")。当鼠标悬停在带有标题的链接上时，标题就会显示在鼠标旁边。
 
 使用尖括号 `<>` 可以很简便地将网址或邮箱转换为链接。例如，使用 `<https://github.com/Louis-Liu-one/MathProbsOnline>` 得到 <https://github.com/Louis-Liu-one/MathProbsOnline>。
 
@@ -279,7 +279,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 ![]({{ url_for('static', filename='favicon.svg') }})
 
-有关具体如何在你上传的题目、题解中插入图片及细则，参见[上传题目与题解相关事宜]({{ url_for('helps', howto='upload-probs-and-solutions', _anchor='图片上传') }})。
+有关具体如何在你上传的题目、题解中插入图片及细则，参见[上传题目与题解相关事宜]({{ url_for('helps.helps', howto='upload-probs-and-solutions', _anchor='图片上传') }})。
 
 ## HTML 标签
 

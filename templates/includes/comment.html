@@ -38,7 +38,7 @@
 
 {%- macro commentavatar(comment) -%}
     <span class="avatar"{%- if comment.user -%}
-        data-url="{{ url_for('users', uid=comment.user.uid) }}"{{-''-}}
+        data-url="{{ url_for('auth.users', uid=comment.user.uid) }}"{{-''-}}
         onclick="window.open(this.dataset.url);"{%- endif -%}>
         {{- user_avatar_img(comment.user) -}}
     </span>

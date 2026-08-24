@@ -41,6 +41,7 @@
     {%- block static_files -%}{%- endblock -%}
 </head>
 <body>
+    <div id="loading-bar"></div>
     <input id="sidebar-toggle" type="checkbox" class="hidden">
     <input id="nav-more-toggle" type="checkbox" class="hidden">
     <nav class="navbar">
@@ -49,7 +50,7 @@
                 <label for="sidebar-toggle"><i class="fas fa-bars"></i></label>
             </li>
             <li class="logo">
-                <a href="{{ url_for('homepage') }}"> 
+                <a href="{{ url_for('auth.homepage') }}"> 
                     <img src="{{ url_for('static', filename='favicon.svg') }}"><br>DeriveSci
                 </a>
             </li>
@@ -57,30 +58,30 @@
             <li class="navbar-item nav-more-toggle" title="更多">
                 <label for="nav-more-toggle"><i class="fas fa-ellipsis-h"></i></label>
             </li>
-            <a href="{{ url_for('welcome') }}" target="_blank">
+            <a href="{{ url_for('auth.welcome') }}" target="_blank">
                 <li class="navbar-item navbar-avatar">
                     {%- if current_user.is_authenticated -%}{{- user_avatar_img(current_user) -}}<br>{{- current_user.name -}}
                     {%- else -%}<i class="fas fa-user"></i><br>未登录{%- endif -%}
                 </li>
             </a>
             {%- if current_user.is_authenticated -%}
-                {{- navbar_item(url_for('chat'), 'comments', '私信', current_user.unread_chats_num()) -}}
+                {{- navbar_item(url_for('social.chat'), 'comments', '私信', current_user.unread_chats_num()) -}}
                 {%- set unread_comments = current_user.unread_comments_count() -%}
-                {%- if unread_comments -%}{{- navbar_item(url_for('chat', view_comments=True), 'envelope', '评论', unread_comments) -}}
-                {%- else -%}{{- navbar_item(url_for('chat', view_comments=True), 'envelope-circle-check', '评论') -}}{%- endif -%}
+                {%- if unread_comments -%}{{- navbar_item(url_for('social.chat', view_comments=True), 'envelope', '评论', unread_comments) -}}
+                {%- else -%}{{- navbar_item(url_for('social.chat', view_comments=True), 'envelope-circle-check', '评论') -}}{%- endif -%}
             {%- endif -%}
-            {{- navbar_item(url_for('problist'), 'book', '题集') -}}
-            {{- navbar_item(url_for('taglist'), 'tags', '标签') -}}
-            {{- navbar_item(url_for('helplist'), 'circle-info', '帮助') -}}
+            {{- navbar_item(url_for('probs.problist'), 'book', '题集') -}}
+            {{- navbar_item(url_for('probs.taglist'), 'tags', '标签') -}}
+            {{- navbar_item(url_for('helps.helplist'), 'circle-info', '帮助') -}}
         </ul>
         <div class="nav-more-panel" aria-hidden="true">
             {%- if current_user.is_authenticated -%}
-                <a class="nav-more-link" href="{{ url_for('chat') }}"><i class="fas fa-comments"></i><span>私信</span></a>
-                <a class="nav-more-link" href="{{ url_for('chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
+                <a class="nav-more-link" href="{{ url_for('social.chat') }}"><i class="fas fa-comments"></i><span>私信</span></a>
+                <a class="nav-more-link" href="{{ url_for('social.chat', view_comments=True) }}"><i class="fas fa-envelope"></i><span>评论</span></a>
             {%- endif -%}
-            <a class="nav-more-link" href="{{ url_for('problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
-            <a class="nav-more-link" href="{{ url_for('taglist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
-            <a class="nav-more-link" href="{{ url_for('helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
+            <a class="nav-more-link" href="{{ url_for('probs.problist') }}"><i class="fas fa-book"></i><span>题集</span></a>
+            <a class="nav-more-link" href="{{ url_for('probs.taglist') }}"><i class="fas fa-tags"></i><span>标签</span></a>
+            <a class="nav-more-link" href="{{ url_for('helps.helplist') }}"><i class="fas fa-circle-info"></i><span>帮助</span></a>
         </div>
     </nav>
     <main>
@@ -92,5 +93,31 @@
         <p><a href="https://beian.miit.gov.cn/"  target="_blank">粤ICP备2026116144号-1</a></p>
         <p>© 2026 DeriveSci. All rights reserved.</p>
     </footer>
+
+<script>
+(function() {
+    var bar = document.getElementById("loading-bar");
+    var timer = null;
+    function start() {
+        if (bar) { bar.className = "running"; bar.style.opacity = "1"; }
+    }
+    function done() {
+        if (bar) { bar.className = "done"; timer = setTimeout(function() { bar.className = ""; }, 500); }
+    }
+    document.addEventListener("DOMContentLoaded", function() { done(); });
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a");
+        if (a && a.href && !a.target && a.origin === location.origin && !a.href.startsWith("javascript:")) {
+            start();
+        }
+    });
+    var origFetch = window.fetch;
+    window.fetch = function() {
+        start();
+        return origFetch.apply(this, arguments).finally(function() { done(); });
+    };
+})();
+</script>
+
 </body>
 </html>

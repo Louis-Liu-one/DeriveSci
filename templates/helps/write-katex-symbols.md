@@ -94,9 +94,9 @@ $\KaTeX$ 公式支持的符号表浩如烟海，本篇帮助仅提供若干常�
 `\injlim`     | $\injlim$     | `\projlim`    | $\projlim$    | `\varinjlim`  | $\varinjlim$
 `\varprojlim` | $\varprojlim$
 
-这类算子的上下标一般在上方、下方或角落处，参见[特殊符号上下标]({{ url_for('helps', howto='write-markdown-equations', _anchor='特殊符号上下标') }})一节。
+这类算子的上下标一般在上方、下方或角落处，参见[特殊符号上下标]({{ url_for('helps.helps', howto='write-markdown-equations', _anchor='特殊符号上下标') }})一节。
 
-可以使用 `\limits`、`\nolimits` 等命令控制上下标的位置，参见[改变上下标的位置]({{ url_for('helps', howto='write-markdown-equations', _anchor='改变上下标的位置') }})一节。
+可以使用 `\limits`、`\nolimits` 等命令控制上下标的位置，参见[改变上下标的位置]({{ url_for('helps.helps', howto='write-markdown-equations', _anchor='改变上下标的位置') }})一节。
 
 ### 普通算子
 
@@ -372,7 +372,7 @@ $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 $$ 1, \dots, n \qquad 1 + \dots + n \qquad a_1 = \dots = a_n $$
 此外，还可以使用上表中的第二行五个细分的省略号，分别对应逗号（comma）、二元运算符与关系符（binary）、乘法运算（multiplication）、积分（integral）和其它情形（other）。
 
-省略号可以用于排版矩阵，参见[矩阵]({{ url_for('helps', howto='write-markdown-equations', _anchor='矩阵') }})一节。
+省略号可以用于排版矩阵，参见[矩阵]({{ url_for('helps.helps', howto='write-markdown-equations', _anchor='矩阵') }})一节。
 
 ## 预定义的新符号
 

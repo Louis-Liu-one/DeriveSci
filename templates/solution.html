@@ -28,7 +28,7 @@
     {{- return2post(prob, "返回题目") -}}
     {{- upload_solution(prob) -}}
     <a class="sidebar-link" href="{{ url_for(
-        'images_list', post_type=1,
+        'images.images_list', post_type=1,
         post_ident=solution.get_post_ident()) }}" target="_blank">
         <div class="sidebar-item"><i class="fas fa-image"></i>图片管理</div>
     </a>

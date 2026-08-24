@@ -23,11 +23,11 @@
 
 {% block right_content %}
 <h2>没有账号？</h2>
-<a href="{{ url_for('register', next=next) }}">
+<a href="{{ url_for('auth.register', next=next) }}">
     <button class="jump" type="button">立即注册</button>
 </a>
 <h2>不想登录或注册？</h2>
-<a href="{{ url_for('problist') }}">
+<a href="{{ url_for('probs.problist') }}">
     <button class="jump" type="button">直接看题</button>
 </a>
 {% endblock %}
