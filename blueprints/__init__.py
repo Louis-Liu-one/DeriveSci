@@ -1,6 +1,6 @@
-'''
+"""
 Copyright (c) 2026 Zatursure  All rights reserved.
-'''
+"""
 
 from .auth import auth_bp, register_auth_api
 from .probs import probs_bp, register_probs_api

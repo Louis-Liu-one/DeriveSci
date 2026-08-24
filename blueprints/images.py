@@ -1,9 +1,16 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-图片操作相关路由
-'''
+图片操作相关路由：
+/images/<int:post_type>/<post_ident>/                  查看内容的图片列表
+/images/<int:post_type>/<post_ident>/<imagename>       图片文件实际链接
+/images/<int:post_type>/<post_ident>/<imagename>/view  查看图片预览
+
+/api/image/reupload           重新上传图片（接口）
+/api/image/rename             重命名图片（接口）
+/api/image/delete             删除图片（接口）
+"""
 
 import hashlib
 
@@ -60,15 +67,26 @@ def register_images_api(app):
         if exists:
             return {"ok": False, "error": "目标文件名已存在。"}, 400
         newimg = Image(
-            post_type=image.post_type, post_ident=image.post_ident,
-            name=newname, uid=image.uid, size=image.size,
-            mimetype=image.mimetype, data=image.data)
+            post_type=image.post_type,
+            post_ident=image.post_ident,
+            name=newname,
+            uid=image.uid,
+            size=image.size,
+            mimetype=image.mimetype,
+            data=image.data,
+        )
         db.session.add(newimg)
         db.session.delete(image)
         db.session.commit()
-        return {"ok": True, "newurl": url_for(
-            "images.image_preview", post_type=post_type, post_ident=post_ident,
-            imagename=newname)}
+        return {
+            "ok": True,
+            "newurl": url_for(
+                "images.image_preview",
+                post_type=post_type,
+                post_ident=post_ident,
+                imagename=newname,
+            ),
+        }
 
     @app.route("/api/image/delete", methods=["POST"])
     def api_image_delete():
@@ -86,8 +104,12 @@ def register_images_api(app):
             abort(403)
         db.session.delete(image)
         db.session.commit()
-        return {"ok": True, "url": url_for(
-            "images.images_list", post_type=post_type, post_ident=post_ident)}
+        return {
+            "ok": True,
+            "url": url_for(
+                "images.images_list", post_type=post_type, post_ident=post_ident
+            ),
+        }
 
 
 @images_bp.route("/<int:post_type>/<post_ident>/")
@@ -97,8 +119,12 @@ def images_list(post_type, post_ident):
         return render_template("notfound.html", error="未能找到内容。"), 404
     images = get_images_for_post(post_type, post_ident)
     return render_template(
-        "images.html", target=post, post_type=post_type,
-        post_ident=post_ident, images=images)
+        "images.html",
+        target=post,
+        post_type=post_type,
+        post_ident=post_ident,
+        images=images,
+    )
 
 
 @images_bp.route("/<int:post_type>/<post_ident>/<imagename>/view")
@@ -110,11 +136,16 @@ def image_preview(post_type, post_ident, imagename):
     if not image:
         return render_template("notfound.html", error="未能找到图片。"), 404
     editable = current_user.is_authenticated and (
-        hasattr(image, "uid") and current_user.uid == image.uid
-        or current_user.isadmin)
+        hasattr(image, "uid") and current_user.uid == image.uid or current_user.isadmin
+    )
     return render_template(
-        "image.html", target=post, post_type=post_type,
-        post_ident=post_ident, image=image, editable=editable)
+        "image.html",
+        target=post,
+        post_type=post_type,
+        post_ident=post_ident,
+        image=image,
+        editable=editable,
+    )
 
 
 @images_bp.route("/<int:post_type>/<post_ident>/<imagename>")

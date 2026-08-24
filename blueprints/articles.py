@@ -1,9 +1,16 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-专栏相关路由
-'''
+专栏相关路由：
+/articles/upload                上传专栏
+/articles/<int:article_id>      查看专栏
+/articles/<int:article_id>/edit 编辑专栏
+
+/api/article/upload             上传专栏（接口）
+/api/article/edit               编辑专栏（接口）
+/api/article/delete             删除专栏（接口）
+"""
 
 from flask import Blueprint, request, abort, url_for, redirect, render_template
 from flask_login import current_user, login_required

@@ -236,7 +236,7 @@ class User(db.Model, UserMixin):
         chats_list = Comment.query.filter(
             Comment.post_type == 2, Comment.timestamp > from_time,
             (Comment.uid == self.uid) | (Comment.post_ident == str(self.uid))
-            ).order_by(Comment.timestamp.asc()).all()
+        ).order_by(Comment.timestamp.asc()).all()
         chats, lastvisits = {}, {}
         for chatmsg in chats_list:
             other, othersend = chatmsg.uid, True
@@ -258,7 +258,7 @@ class User(db.Model, UserMixin):
     def unread_chats_num(self):
         chats_list = Comment.query.filter(
             Comment.post_type == 2, Comment.post_ident == str(self.uid)
-            ).order_by(Comment.timestamp.asc()).all()
+        ).order_by(Comment.timestamp.asc()).all()
         unread_num, lastvisits = 0, {}
         for chatmsg in chats_list:
             other = chatmsg.uid

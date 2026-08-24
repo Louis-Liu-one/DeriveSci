@@ -1,12 +1,15 @@
-
 import enum
 from sympy import latex, Array, Expr
 from func_timeout import func_timeout, FunctionTimedOut
 from fpevaluator import fpparse, fpeval, ParseException
 
 __all__ = [
-    'TPStatus', 'check_answer', 'check_answers',
-    'testpoints_passedlist', 'latex']
+    "TPStatus",
+    "check_answer",
+    "check_answers",
+    "testpoints_passedlist",
+    "latex",
+]
 
 
 class TPStatus(enum.Enum):
@@ -22,32 +25,37 @@ class TPStatus(enum.Enum):
 def _judge_equal(expr1, expr2):
     if isinstance(expr1, Array) and isinstance(expr2, Array):
         return expr1.shape == expr2.shape and all(
-            _judge_equal(expr1[i], expr2[i]) for i in range(expr1.shape[0]))
+            _judge_equal(expr1[i], expr2[i]) for i in range(expr1.shape[0])
+        )
     elif isinstance(expr1, Expr) and isinstance(expr2, Expr):
         return expr1.equals(expr2)
     return expr1 == expr2
 
 
 def fpparse_with_timeout(answer):
-    return func_timeout(.1, fpparse, args=(answer,))
+    return func_timeout(0.1, fpparse, args=(answer,))
 
 
 def fpeval_with_timeout(parsed_answer, context=None):
-    return func_timeout(.3, fpeval, args=(parsed_answer, context))
+    return func_timeout(0.3, fpeval, args=(parsed_answer, context))
 
 
 def check_answer(answer, userans_parsed, context=None):
     try:
         context_processed = {
-            key: fpeval(fpparse(str(val))) for key, val in context.items()}
+            key: fpeval(fpparse(str(val))) for key, val in context.items()
+        }
         answer_parsed = fpparse_with_timeout(answer)
         answer_eval = fpeval_with_timeout(answer_parsed, context_processed)
     except BaseException:
         return TPStatus.ANSERR
     try:
         userans_eval = fpeval_with_timeout(userans_parsed, context_processed)
-        return TPStatus.CORRECT if _judge_equal(
-            answer_eval, userans_eval) else TPStatus.INCORRECT
+        return (
+            TPStatus.CORRECT
+            if _judge_equal(answer_eval, userans_eval)
+            else TPStatus.INCORRECT
+        )
     except FunctionTimedOut:
         return TPStatus.TIMEOUT
     except ParseException:
@@ -63,8 +71,9 @@ def check_answers(answers, userans):
             userans_nocontext = fpeval_with_timeout(userans_parsed)
         except BaseException:  # 直接求值的结果不参与答案检查，故不对其任何错误进行处理
             userans_nocontext = None
-        return userans_nocontext, [check_answer(
-            answer, userans_parsed, context) for context, answer in answers]
+        return userans_nocontext, [
+            check_answer(answer, userans_parsed, context) for context, answer in answers
+        ]
     except FunctionTimedOut:
         return None, [TPStatus.TIMEOUT] * len(answers)
     except ParseException:

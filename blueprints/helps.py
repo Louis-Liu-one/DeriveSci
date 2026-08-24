@@ -1,9 +1,11 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-帮助页面相关路由
-'''
+帮助页面相关路由：
+/helps/                       帮助页面列表
+/helps/<howto>                帮助页面
+"""
 
 import os
 import json
@@ -13,8 +15,8 @@ from flask import Blueprint, render_template
 helps_bp = Blueprint("helps", __name__, url_prefix="/helps")
 
 helpdir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "templates", "helps")
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates", "helps"
+)
 jsonpath = os.path.join(helpdir, "helps-info.json")
 if os.path.exists(jsonpath):
     with open(jsonpath, "r", encoding="utf-8") as fh:

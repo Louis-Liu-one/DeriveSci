@@ -1,13 +1,27 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-用户社交相关路由
-'''
+社交相关路由：
+/social/chat                        聊天页面
+
+/api/comment/post                  发布评论（接口）
+/api/comment/delete                删除评论（接口）
+/api/chat/update-lastvisit         更新聊天最后访问时间（接口）
+/api/chat/send                     发送聊天消息（接口）
+/api/chat/messages                 获取聊天消息（接口）
+"""
 
 import datetime
 
-from flask import Blueprint, request, jsonify, abort, render_template, render_template_string
+from flask import (
+    Blueprint,
+    request,
+    jsonify,
+    abort,
+    render_template,
+    render_template_string,
+)
 from flask_login import current_user, login_required
 from flask_moment import moment as builtin_moment
 
@@ -44,18 +58,25 @@ def register_social_api(app):
         if not content:
             return {"ok": False, "error": "评论内容不能为空。"}, 400
         comment = Comment(
-            user=current_user, content=content,
-            post_type=post_type, post_ident=post_ident,
-            replyto_id=replyto_id)
+            user=current_user,
+            content=content,
+            post_type=post_type,
+            post_ident=post_ident,
+            replyto_id=replyto_id,
+        )
         db.session.add(comment)
         db.session.commit()
         rendered_html = render_template_string(
-            "{% from \"includes/comment.html\" import commentdiv with context %}"
+            '{% from "includes/comment.html" import commentdiv with context %}'
             "{{ commentdiv(comment, toplevel=toplevel, "
-            "secondlevel=secondlevel) }}", comment=comment,
-            toplevel=not bool(replyto_id), secondlevel=bool(replyto_id)
-            and comment.replyto and not comment.replyto.replyto_id,
-            moment=builtin_moment)
+            "secondlevel=secondlevel) }}",
+            comment=comment,
+            toplevel=not bool(replyto_id),
+            secondlevel=bool(replyto_id)
+            and comment.replyto
+            and not comment.replyto.replyto_id,
+            moment=builtin_moment,
+        )
         return {"ok": True, "html": rendered_html, "is_reply": bool(replyto_id)}
 
     @app.route("/api/chat/update-lastvisit", methods=["POST"])
@@ -86,9 +107,13 @@ def register_social_api(app):
         try:
             receiver_uid = int(request.json.get("receiver_uid"))
             lastmsgtime = request.json.get("lastmsgtime")
-            return jsonify(find_user(receiver_uid).all_chats(
-                datetime.datetime.fromisoformat(
-                    lastmsgtime) if lastmsgtime else None))
+            return jsonify(
+                find_user(receiver_uid).all_chats(
+                    datetime.datetime.fromisoformat(lastmsgtime)
+                    if lastmsgtime
+                    else None
+                )
+            )
         except BaseException:
             return {}, 400
 

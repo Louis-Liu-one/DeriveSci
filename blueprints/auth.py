@@ -1,9 +1,24 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-账号管理相关路由
-'''
+网站基础设施相关路由：
+/auth/                        网站首页
+/auth/home                    网站首页
+/auth/login                   用户登录页面
+/auth/register                用户注册页面
+/auth/welcome                 用户欢迎页面
+/auth/users/<int:uid>         用户个人主页
+/auth/edit-profile            编辑用户资料页面
+/auth/avatars/<int:uid>       用户头像文件
+
+/api/user/login               用户登录（接口）
+/api/user/register            用户注册（接口）
+/api/user/edit-profile        编辑用户资料（接口）
+/api/user/edit-introduction   编辑用户简介（接口）
+/api/user/logout              用户登出（接口）
+/api/user/unregister          注销用户（接口）
+"""
 
 import hashlib
 import datetime
@@ -36,7 +51,8 @@ def register_auth_api(app):
         password_confirmation = request.form.get("password_confirmation")
         avatar = request.files.get("avatar")
         status, user = register_user(
-            name, gender, password, password_confirmation, avatar)
+            name, gender, password, password_confirmation, avatar
+        )
         if status:
             login_user(user, remember=True)
             return {"ok": True}
@@ -52,7 +68,8 @@ def register_auth_api(app):
         avatar = request.files.get("avatar")
         gender = int(request.form.get("gender"))
         error = current_user.edit_profile(
-            username, password, password_confirmation, avatar, gender)
+            username, password, password_confirmation, avatar, gender
+        )
         if error is None:
             return {"ok": True, "url": url_for("auth.welcome")}
         return {"ok": False, "error": str(error)}, 400
@@ -149,7 +166,8 @@ def avatarfile(uid):
     if if_modified_since:
         try:
             client_time = datetime.datetime.strptime(
-                if_modified_since, "%a, %d %b %Y %H:%M:%S GMT")
+                if_modified_since, "%a, %d %b %Y %H:%M:%S GMT"
+            )
             if client_time >= user.avlastmodified.replace(microsecond=0):
                 return "", 304
         except ValueError:
@@ -158,6 +176,7 @@ def avatarfile(uid):
     response.headers["Content-Type"] = user.avmimetype or "image/jpeg"
     response.headers["ETag"] = etag
     response.headers["Last-Modified"] = user.avlastmodified.strftime(
-        "%a, %d %b %Y %H:%M:%S GMT")
+        "%a, %d %b %Y %H:%M:%S GMT"
+    )
     response.headers["Cache-Control"] = "public, max-age=600"
     return response

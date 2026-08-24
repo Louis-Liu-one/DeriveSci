@@ -1,9 +1,37 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 Copyright (c) 2026 Zatursure  All rights reserved.
 
-问题/题解/标签相关路由
-'''
+题目相关路由：
+/probs/upload                           上传题目
+/probs/collections/                     题目列表
+/probs/collections/<probno>             查看题目
+/probs/collections/<probno>/edit        编辑题目
+/probs/collections/<probno>/submit      提交题目答案
+
+/api/prob/search-content      搜索题目内容（接口）
+/api/prob/upload              上传题目（接口）
+/api/prob/edit                编辑题目（接口）
+/api/prob/review              审核题目（接口）
+/api/prob/review-comment      保存题目审核意见（接口）
+/api/prob/set-official        设置题目为官方题目（接口）
+/api/prob/delete              删除题目（接口）
+
+题解相关路由：
+/probs/collections/<probno>/upload-solution                   上传题解
+/probs/collections/<probno>/solutions/<int:solno>             查看题解
+/probs/collections/<probno>/solutions/<int:solno>/edit        编辑题解
+
+/api/solution/upload           上传题解（接口）
+/api/solution/edit             编辑题解（接口）
+/api/solution/delete           删除题解（接口）
+
+标签相关路由：
+/probs/tags/                       标签列表
+/probs/tags/<tagtitle>             查看标签下的题目列表
+
+/api/tag/rename               重命名标签（接口）
+"""
 
 import json
 import random
@@ -50,8 +78,7 @@ def register_probs_api(app):
             q = q.filter(Prob.tags.any(Tag.tagtitle == tagtitle))
         if not reviewmode:
             q = q.filter(Prob.review_status == 1)
-        q = q.filter(Prob.statement.like(
-            f"%{statement}%")).order_by(Prob.probno.asc())
+        q = q.filter(Prob.statement.like(f"%{statement}%")).order_by(Prob.probno.asc())
         probs_list = list(q)
         return jsonify({"results": [p.probno for p in probs_list]})
 
@@ -68,9 +95,14 @@ def register_probs_api(app):
         isofficial = current_user.isadmin and request.form.get("isofficial") == "on"
         review_status = 1 if current_user.isadmin else -1
         status, prob = add_prob(
-            probno=probno, probtitle=probtitle, statement=statement,
-            answer=answers, source=current_user,
-            review_status=review_status, isofficial=isofficial)
+            probno=probno,
+            probtitle=probtitle,
+            statement=statement,
+            answer=answers,
+            source=current_user,
+            review_status=review_status,
+            isofficial=isofficial,
+        )
         if not status:
             return {"ok": False, "error": str(prob)}, 400
         error = add_images(0, prob.probno, imgfiles)
@@ -117,8 +149,10 @@ def register_probs_api(app):
             prob.review_comment = review_comment
         db.session.commit()
         return {
-            "ok": True, "accept": accept,
-            "url": prob.url() if accept else url_for("probs.problist")}
+            "ok": True,
+            "accept": accept,
+            "url": prob.url() if accept else url_for("probs.problist"),
+        }
 
     @app.route("/api/prob/review-comment", methods=["POST"])
     def api_save_review_comment():
@@ -230,13 +264,18 @@ def problist():
     if reviewmode:
         all_query = Prob.query.order_by(Prob.probno.asc())
     else:
-        all_query = Prob.query.filter(
-            Prob.review_status == 1).order_by(Prob.probno.asc())
+        all_query = Prob.query.filter(Prob.review_status == 1).order_by(
+            Prob.probno.asc()
+        )
     probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
-        "problist.html", reviewmode=reviewmode,
-        probs=probs, probs_data=probs_data, form={})
+        "problist.html",
+        reviewmode=reviewmode,
+        probs=probs,
+        probs_data=probs_data,
+        form={},
+    )
 
 
 @probs_bp.route("/tags/")
@@ -253,8 +292,14 @@ def problistoftag(tagtitle):
     probs_data = [p.probno for p in all_query]
     probs = list(all_query)
     return render_template(
-        "problist.html", tagtitle=tagtitle, oftag=True, form={},
-        probs=probs, probs_data=probs_data, query=None)
+        "problist.html",
+        tagtitle=tagtitle,
+        oftag=True,
+        form={},
+        probs=probs,
+        probs_data=probs_data,
+        query=None,
+    )
 
 
 @probs_bp.route("/collections/<probno>")
@@ -273,7 +318,9 @@ def submit(probno):
     if not prob or not prob.viewable_for(current_user):
         return render_template("notfound.html", error="未能找到题目。"), 404
     answer_payload = answers if len(answers) > 1 else (answers[0] if answers else "")
-    answer_eval, testpoints, submission = prob.add_submission(current_user, answer_payload)
+    answer_eval, testpoints, submission = prob.add_submission(
+        current_user, answer_payload
+    )
     if isinstance(answer_eval, list):
         answer_latex = [latex(a) if a is not None else None for a in answer_eval]
     else:
@@ -289,9 +336,13 @@ def submit(probno):
         except Exception:
             submission_answer_parsed = [submission.answer]
     return render_template(
-        "submit.html", answer_latex=answer_latex,
-        prob=prob, submission=submission, testpoints=testpoints,
-        submission_answer_parsed=submission_answer_parsed)
+        "submit.html",
+        answer_latex=answer_latex,
+        prob=prob,
+        submission=submission,
+        testpoints=testpoints,
+        submission_answer_parsed=submission_answer_parsed,
+    )
 
 
 @probs_bp.route("/collections/<probno>/solutions/<int:solno>")
@@ -304,7 +355,8 @@ def solutions(probno, solno):
     solutions.remove(solution)
     suggested = random.sample(solutions, min(len(solutions), 3))
     return render_template(
-        "solution.html", prob=prob, solution=solution, suggested=suggested)
+        "solution.html", prob=prob, solution=solution, suggested=suggested
+    )
 
 
 @probs_bp.route("/collections/<probno>/edit")
@@ -327,8 +379,8 @@ def edit_solution(probno, solno):
     if current_user != solution.user and not current_user.isadmin:
         return redirect(solution.url())
     return render_template(
-        "upload_solution.html", editmode=True,
-        prob=solution.prob, solution=solution)
+        "upload_solution.html", editmode=True, prob=solution.prob, solution=solution
+    )
 
 
 @probs_bp.route("/upload")
