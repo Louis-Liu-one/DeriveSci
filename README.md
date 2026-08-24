@@ -17,12 +17,15 @@ pip install -r requirements.txt  # 安装支持
 deactivate                       # 退出环境
 ```
 
-- 所有构建都完成时，先将你的 Flask 密钥设置在 `FLASK_SECRET_KEY` 环境变量中：
+- 所有构建都完成时，先创建 `.env` 文件，在其中将你的 Flask 密钥设置在 `FLASK_SECRET_KEY` 环境变量中：
 ```bash
 FLASK_SECRET_KEY=密钥...
-export FLASK_SECRET_KEY
 ```
-你也可以将上述命令加入 `.venv/bin/activate` 中。然后，运行 `app.py`，或从他处导入：
+并设置你的 MySQL 数据库，例如：
+```bash
+SQLALCHEMY_DATABASE_URI='mysql+pymysql://[用户名称]:[密码]@localhost/[数据库名称]'
+```
+然后，运行 `app.py`，或从他处导入：
 ```python
 from app import app
 app.run()
