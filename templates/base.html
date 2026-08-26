@@ -90,7 +90,12 @@
         <div class="article-container">{% block body %}{% endblock %}</div>
     </main>
     <footer>
-        <p><a href="https://beian.miit.gov.cn/"  target="_blank">粤ICP备2026116144号-1</a></p>
+        <p class="beian-info">
+            <a class="beian-link" href="https://beian.miit.gov.cn/" rel="noreferrer" target="_blank">粤ICP备2026116144号-1</a>
+            <a class="beian-link" href="https://beian.mps.gov.cn/#/query/webSearch?code=44030002016012" rel="noreferrer" target="_blank">
+                <img class="beian-icon" src="{{ url_for('static', filename='images/beian-icon.png') }}" alt="备案图标">粤公网安备44030002016012号
+            </a>
+        </p>
         <p>© 2026 DeriveSci. All rights reserved.</p>
     </footer>
     <script>

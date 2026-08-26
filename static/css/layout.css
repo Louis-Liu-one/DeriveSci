@@ -178,13 +178,15 @@ div.height-fixed-area::-webkit-scrollbar {
 /******************************* footer *******************************/
 
 footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     height: 50px;
     flex-shrink: 0;
     background-color: var(--surface-soft);
     border-top: var(--border);
     box-shadow: var(--shadow);
-    text-align: center;
     font-size: 12px;
     color: var(--text);
     padding: 5px;
@@ -192,6 +194,23 @@ footer {
 
 footer p {
     margin: 2px;
+}
+
+footer p.beian-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: var(--sans-font);
+}
+
+footer p.beian-info a.beian-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+footer p.beian-info a.beian-link img.beian-icon {
+    width: 13px;
+    margin-right: 4px;
 }
 
 /******************************* responsive *******************************/
