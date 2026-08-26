@@ -47,10 +47,7 @@ div.comment-body i.avatar {
     height: 40px;
     margin-top: 2px;
     flex-shrink: 0;
-}
-
-div.comment-body img.avatar,
-div.comment-body i.avatar {
+    object-fit: cover;
     border-radius: 50%;
     transition: all .25s ease;
     border: 2px solid transparent;

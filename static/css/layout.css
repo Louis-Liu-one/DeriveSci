@@ -52,6 +52,7 @@ aside div.sidebar-item img.avatar {
     height: 24px;
     border-radius: 50%;
     margin-right: 6px;
+    object-fit: cover;
 }
 
 aside div.sidebar-item:not(.disabled):hover {
