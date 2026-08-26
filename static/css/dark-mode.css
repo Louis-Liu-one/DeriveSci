@@ -8,27 +8,15 @@
     --border: 1px solid #273449;
     --primary: #1b365d;
     --primary-soft: #1d4ed8;
-    --accent: #60a5fa;
+    --accent: #34aae0;
     --strong-accent: #4a90d9;
     --danger: #ff6b6b;
     --shadow: 0 2px 18px #00000059;
 }
 
 @media (prefers-color-scheme: dark) {
-
-    html,
-    body {
-        background: var(--bg);
-        color: var(--text);
-    }
-
     body {
         color-scheme: dark;
-    }
-
-    a,
-    a:visited {
-        color: var(--accent);
     }
 
     body,

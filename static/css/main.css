@@ -52,7 +52,7 @@ dialog::backdrop {
 a.tag {
     text-decoration: none;
     font-size: 14px;
-    color: var(--text) !important;
+    color: var(--text);
     background: var(--surface-soft);
     margin: 2px 6px 2px 0;
     border-radius: 8px;
@@ -63,7 +63,9 @@ a.tag {
     cursor: pointer;
 }
 
-a.tag:hover {
+a.tag:hover,
+a.tag:focus,
+a.tag:active {
     background: var(--primary);
     color: white;
     transform: translateY(-1px);

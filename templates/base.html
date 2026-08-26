@@ -51,7 +51,7 @@
             </li>
             <li class="logo">
                 <a href="{{ url_for('auth.homepage') }}"> 
-                    <img src="{{ url_for('static', filename='favicon.svg') }}"><br>DeriveSci
+                    <img src="{{ url_for('static', filename='favicon-white.svg') }}"><br>DeriveSci
                 </a>
             </li>
             <li id="navbarTitleElement" class="navbar-title">{%- block navbar_title -%}{%- endblock -%}</li>
@@ -93,31 +93,29 @@
         <p><a href="https://beian.miit.gov.cn/"  target="_blank">粤ICP备2026116144号-1</a></p>
         <p>© 2026 DeriveSci. All rights reserved.</p>
     </footer>
-
-<script>
-(function() {
-    var bar = document.getElementById("loading-bar");
-    var timer = null;
-    function start() {
-        if (bar) { bar.className = "running"; bar.style.opacity = "1"; }
-    }
-    function done() {
-        if (bar) { bar.className = "done"; timer = setTimeout(function() { bar.className = ""; }, 500); }
-    }
-    document.addEventListener("DOMContentLoaded", function() { done(); });
-    document.addEventListener("click", function(e) {
-        var a = e.target.closest("a");
-        if (a && a.href && !a.target && a.origin === location.origin && !a.href.startsWith("javascript:")) {
-            start();
-        }
-    });
-    var origFetch = window.fetch;
-    window.fetch = function() {
-        start();
-        return origFetch.apply(this, arguments).finally(function() { done(); });
-    };
-})();
-</script>
-
+    <script>
+        (function() {
+            var bar = document.getElementById("loading-bar");
+            var timer = null;
+            function start() {
+                if (bar) { bar.className = "running"; bar.style.opacity = "1"; }
+            }
+            function done() {
+                if (bar) { bar.className = "done"; timer = setTimeout(function() { bar.className = ""; }, 500); }
+            }
+            document.addEventListener("DOMContentLoaded", function() { done(); });
+            document.addEventListener("click", function(e) {
+                var a = e.target.closest("a");
+                if (a && a.href && !a.target && a.origin === location.origin && !a.href.startsWith("javascript:")) {
+                    start();
+                }
+            });
+            var originalFetch = window.fetch;
+            window.fetch = function() {
+                start();
+                return originalFetch.apply(this, arguments).finally(function() { done(); });
+            };
+        })();
+    </script>
 </body>
 </html>

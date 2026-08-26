@@ -58,7 +58,7 @@
 
 上传图片后还要在正文中用 Markdown 语法插入图片：
 ```markdown
-![ImageAlt](image.svg)
+![图片标题](image.svg)
 ```
 否则即使图片已经上传到数据库中，也不会显示。请勿重复上传图片。
 
@@ -77,15 +77,15 @@
 ```
 processing of PostScript specials is disabled (Ghostscript not found)
 ```
-这时，应该为 `dvisvgm` 命令添加 `--libgs=` 参数以配置 GhostScript 动态库。如果你的电脑上没有 GhostScript 动态库，可以使用 Brew 安装：
+导致生成的 SVG 文件没有内容。这时，应该为 `dvisvgm` 命令添加 `--libgs=` 参数指定 GhostScript 动态库的位置。对于 MacOS 用户，如果你的电脑上没有 GhostScript 动态库，可以使用 Brew 安装：
 ```bash
 brew install ghostscript
 ```
 此时，你的 GhostScript 动态库*可能*在：
 ```
-/usr/local/Cellar/ghostscript/10.05.1/lib/libgs.10.05.dylib
+/usr/local/opt/ghostscript/lib/libgs.dylib
 ```
-具体位置取决于你的 Brew 安装目录和 GhostScript 版本。
+具体位置取决于你的 Brew 安装目录。
 
 ### 为什么我输入了答案，但上传后没有显示提交框？
 
