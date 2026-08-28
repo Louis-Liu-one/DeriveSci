@@ -69,6 +69,13 @@ class Context:
             and identifier in self.master
         )
 
+    def _find_binding(self, identifier):
+        if isinstance(identifier, str):
+            identifier = sp.Symbol(identifier)
+        if identifier in self.context:
+            return self
+        return self.master._find_binding(identifier) if self.master is not None else None
+
     def __getitem__(self, identifier):
         if isinstance(identifier, str):
             identifier = sp.Symbol(identifier)
@@ -80,7 +87,10 @@ class Context:
                 return self.context[identifier]
             return identifier
         elif identifier in self.nonlocals:
-            return self.master[identifier]
+            binding = self.master._find_binding(identifier)
+            if binding is None:
+                raise NameError(f"free variable '{identifier}' is not bound")
+            return binding.context[identifier]
         elif identifier in self.context:
             return self.context[identifier]
         elif self.master is None:
@@ -95,7 +105,10 @@ class Context:
             if self.master is not None:
                 self.master[identifier] = value
         elif identifier in self.nonlocals:
-            self.master[identifier] = value
+            binding = self.master._find_binding(identifier)
+            if binding is None:
+                raise NameError(f"free variable '{identifier}' is not bound")
+            binding.context[identifier] = value
         else:
             self.context[identifier] = value
 
@@ -108,7 +121,7 @@ class Context:
             )
         elif self.master is None:
             raise SyntaxError("nonlocal declaration not allowed at module level")
-        elif identifier not in self.master:
+        elif self.master._find_binding(identifier) is None:
             raise SyntaxError(f"no binding for nonlocal '{identifier}' found")
         self.nonlocals.add(identifier)
 
