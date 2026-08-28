@@ -5,6 +5,7 @@ import types
 import operator as op
 import functools
 import sympy as sp
+from sympy.tensor.array import NDimArray
 from pyparsing import Literal, Suppress, Word, Regex
 from pyparsing import Forward, Opt, ZeroOrMore, OneOrMore
 from pyparsing import identchars, identbodychars
@@ -888,6 +889,15 @@ def _evaluate_context_value(value):
     return _as_sympy(value)
 
 
+def _simplify_result(result):
+    result = _as_sympy(result)
+    if isinstance(result, sp.Tuple):
+        return sp.Tuple(*(_simplify_result(item) for item in result))
+    if isinstance(result, NDimArray):
+        return result.applyfunc(_simplify_result)
+    return sp.simplify(result)
+
+
 def fpeval(parsed_string, context=None):
     """计算语句的返回值。"""
     if context is not None:
@@ -900,6 +910,4 @@ def fpeval(parsed_string, context=None):
             )
         )
     result = parsed_string.do()
-    return sp.simplify(
-        _as_sympy(result.value if isinstance(result, ReturnValue) else result)
-    )
+    return _simplify_result(result.value if isinstance(result, ReturnValue) else result)
