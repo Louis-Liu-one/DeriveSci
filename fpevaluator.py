@@ -212,7 +212,7 @@ class FPElement:
         `context` 参数接受一个字典，若指定了 `local_scope=True`，
         则在调用栈中创建新的变量作用域，其包含的初始变量在 `context` 中。
         """
-        pass
+        raise NotImplementedError(f"{type(self).__name__}.do() is not implemented")
 
 
 class FPExpression(FPElement):
@@ -585,6 +585,7 @@ def _as_general_parencall(result, *argslist, check_sympyfunc=True):
             result = sp.IndexedBase(result)[args.slices]
             flag = False
             continue
+        args = list(args)
         kwargs = args.pop() if args and isinstance(args[-1], dict) else {}
         str_kwargs = {str(key): val for key, val in kwargs.items()}
         if isinstance(result, _function_type):
@@ -913,6 +914,8 @@ def _simplify_result(result):
 
 def fpeval(parsed_string, context=None):
     """计算语句的返回值。"""
+    if parsed_string.stack is None:
+        parsed_string.setup_stack(ProgramStack())
     if context is not None:
         parsed_string.setup_stack(
             ProgramStack(
