@@ -882,17 +882,19 @@ def fpparse(string, setup_stack=True):
     return parse_result
 
 
+def _evaluate_context_value(value):
+    if isinstance(value, str):
+        return fpeval(fpparse(value))
+    return _as_sympy(value)
+
+
 def fpeval(parsed_string, context=None):
     """计算语句的返回值。"""
     if context is not None:
         parsed_string.setup_stack(
             ProgramStack(
                 {
-                    _ident2symbol(key): (
-                        val
-                        if isinstance(val, int | float | complex | sp.Basic)
-                        else fpeval(fpparse(val))
-                    )
+                    _ident2symbol(key): _evaluate_context_value(val)
                     for key, val in context.items()
                 }
             )
