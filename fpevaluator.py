@@ -26,7 +26,7 @@ ParserElement.enable_packrat()
 
 
 def _update_funceval(ns, funceval):
-    ns.update({"eval": funceval})
+    ns.update({"eval": funceval, "_fpevaluator_function": True})
 
 
 def _as_sympy(obj):
@@ -216,17 +216,19 @@ class FPExpression(FPElement):
     def do(self, context=None, local_scope=False):
         if local_scope:
             self.stack.add_context(context)
-        symbols_dict = {
-            symbol: self.stack[symbol] for symbol in self.expr.atoms(sp.Symbol)
-        }
-        functions_dict = {
-            function.func: self.stack[function.func]
-            for function in self.expr.atoms(sp.Function)
-        }
-        result = self.expr.subs(symbols_dict).subs(functions_dict)
-        if local_scope:
-            self.stack.pop_context()
-        return _as_sympy(result)
+        try:
+            symbols_dict = {
+                symbol: self.stack[symbol] for symbol in self.expr.atoms(sp.Symbol)
+            }
+            functions_dict = {
+                function.func: self.stack[function.func]
+                for function in self.expr.atoms(sp.Function)
+            }
+            result = self.expr.subs(symbols_dict).subs(functions_dict)
+            return _as_sympy(result)
+        finally:
+            if local_scope:
+                self.stack.pop_context()
 
 
 class ReturnStatement(FPElement):
@@ -291,10 +293,32 @@ class FuncDefine(FPElement):
         def _func_eval(cls, *args):
             args = list(args)
             kwargs = args.pop() if args and isinstance(args[-1], dict | sp.Dict) else {}
+            kwargs = {str(key): value for key, value in kwargs.items()}
+            if len(args) > len(self.funcargs):
+                raise TypeError(
+                    f"{self.funcident}() takes {len(self.funcargs)} "
+                    f"argument(s) but {len(args)} were given"
+                )
+            duplicate_args = set(kwargs).intersection(self.funcargs[: len(args)])
+            if duplicate_args:
+                name = next(iter(duplicate_args))
+                raise TypeError(f"{self.funcident}() got multiple values for '{name}'")
+            unknown_kwargs = set(kwargs).difference(self.funcargs)
+            if unknown_kwargs:
+                name = next(iter(unknown_kwargs))
+                raise TypeError(f"{self.funcident}() got an unexpected keyword '{name}'")
+            missing_args = [
+                name for name in self.funcargs[len(args) :] if name not in kwargs
+            ]
+            if missing_args:
+                raise TypeError(
+                    f"{self.funcident}() missing {len(missing_args)} required "
+                    f"argument(s): {', '.join(missing_args)}"
+                )
             result = self.funcbody.do(
                 {
                     **{sp.Symbol(key): val for key, val in zip(self.funcargs, args)},
-                    **kwargs,
+                    **{sp.Symbol(key): val for key, val in kwargs.items()},
                 },
                 local_scope=True,
             )
@@ -354,7 +378,9 @@ class WhileLoop(FPElement):
 
     def do(self, context=None, local_scope=False):
         while self.condition.do():
-            self.body.do()
+            result = self.body.do()
+            if isinstance(result, ReturnValue):
+                return result
 
 
 class GlobalStatement(FPElement):
@@ -548,7 +574,10 @@ def _as_general_parencall(result, *argslist, check_sympyfunc=True):
         kwargs = args.pop() if args and isinstance(args[-1], dict) else {}
         str_kwargs = {str(key): val for key, val in kwargs.items()}
         if isinstance(result, _function_type):
-            result = result(*args, **str_kwargs)
+            if getattr(result, "_fpevaluator_function", False):
+                result = result(*args, kwargs) if kwargs else result(*args)
+            else:
+                result = result(*args, **str_kwargs)
             flag = False
             continue
         elif (
