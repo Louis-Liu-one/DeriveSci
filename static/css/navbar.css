@@ -168,6 +168,7 @@ ul.navbar-items li.navbar-item img {
 
 ul.navbar-items li.navbar-item img {
     border-radius: 50%;
+    object-fit: cover;
 }
 
 ul.navbar-items li.navbar-item:hover {

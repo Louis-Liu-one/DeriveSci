@@ -1,8 +1,8 @@
-'''
+"""
 Copyright (c) 2026 Louis Liu  All rights reserved.
 
 数据库模型模块，实现网站所需的数据库操作。
-'''
+"""
 
 import io
 import csv
@@ -22,28 +22,48 @@ from sqlalchemy.dialects.mysql import MEDIUMBLOB
 
 from anschecker import check_answers, testpoints_passedlist
 
-
 __all__ = [
-    'init_app', 'db', 'csv2list', 'list2csv', 'utcfromnow', 'get_post',
-    'find_user', 'register_user', 'unregister_user',
-    'Prob', 'Tag', 'get_prob', 'add_prob',
-    'get_solution', 'add_solution', 'add2tags', 'Submission',
-    'Image', 'add_images', 'get_images_for_post', 'get_image',
-    'Article', 'get_article', 'add_article',
-    'Comment', 'get_comment', 'clear_comments', 'update_chatlastvisit',
+    "init_app",
+    "db",
+    "csv2list",
+    "list2csv",
+    "utcfromnow",
+    "get_post",
+    "find_user",
+    "register_user",
+    "unregister_user",
+    "Prob",
+    "Tag",
+    "get_prob",
+    "add_prob",
+    "get_solution",
+    "add_solution",
+    "add2tags",
+    "Submission",
+    "Image",
+    "add_images",
+    "get_images_for_post",
+    "get_image",
+    "Article",
+    "get_article",
+    "add_article",
+    "Comment",
+    "get_comment",
+    "clear_comments",
+    "update_chatlastvisit",
 ]
 
 convention = {
-    'ix': 'ix_%(column_0_label)s',
-    'uq': 'uq_%(table_name)s_%(column_0_name)s',
-    'ck': 'ck_%(table_name)s_%(constraint_name)s',
-    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-    'pk': 'pk_%(table_name)s',
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
 }
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = "auth.login"
 migrate = Migrate(db=db, compare_type=True)
 
 
@@ -81,54 +101,60 @@ def auto_format_time(timestamp):
     elif timediff < datetime.timedelta(days=15):
         return tsmoment.fromNow(refresh=True)
     elif timediff < datetime.timedelta(days=365):
-        return tsmoment.format('M 月 D 日')
+        return tsmoment.format("M 月 D 日")
     else:
-        return tsmoment.format('Y 年 M 月 D 日')
+        return tsmoment.format("Y 年 M 月 D 日")
 
 
 # =========================== 用户数据库与登录系统 ===========================
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-    columns = 'uid', 'name', 'password'
+    __tablename__ = "users"
+    columns = "uid", "name", "password"
     uid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
-    gender = db.Column(db.Integer, default=0, server_default='0')
+    gender = db.Column(db.Integer, default=0, server_default="0")
     password = db.Column(db.String(256), nullable=False)
     introduction = db.Column(db.Text)
     avatar = db.Column(MEDIUMBLOB())
     avmimetype = db.Column(db.String(64))
     avlastmodified = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
+        db.DateTime,
+        default=db.func.utc_timestamp(),
         server_default=db.func.utc_timestamp(),
         onupdate=db.func.utc_timestamp(),
-        server_onupdate=db.func.utc_timestamp())
-    submissions = db.relationship(
-        'Submission', backref='user', cascade='all, delete')
-    uploadedprobs = db.relationship('Prob', backref='source')
-    solutions = db.relationship('ProbSolution', backref='user')
-    articles = db.relationship('Article', backref='user')
-    comments = db.relationship('Comment', backref='user')
+        server_onupdate=db.func.utc_timestamp(),
+    )
+    submissions = db.relationship("Submission", backref="user", cascade="all, delete")
+    uploadedprobs = db.relationship("Prob", backref="source")
+    solutions = db.relationship("ProbSolution", backref="user")
+    articles = db.relationship("Article", backref="user")
+    comments = db.relationship("Comment", backref="user")
     cmtlastvisit = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
-    isadmin = db.Column(db.Boolean, default=False, server_default='0')
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
+    isadmin = db.Column(db.Boolean, default=False, server_default="0")
 
     def verify_password(self, password):
-        return False if self.password is None else \
-            check_password_hash(self.password, password)
+        return (
+            False
+            if self.password is None
+            else check_password_hash(self.password, password)
+        )
 
-    def edit_profile(
-            self, name, password, password_confirmation, avatarfile, gender):
+    def edit_profile(self, name, password, password_confirmation, avatarfile, gender):
         user_exists = db.session.query(
-            User.query.filter_by(name=name).exists()).scalar()
+            User.query.filter_by(name=name).exists()
+        ).scalar()
         if name != self.name and user_exists:
-            return '用户名与其他用户重复。'
+            return "用户名与其他用户重复。"
         elif password != password_confirmation:
-            return '密码与确认密码不一致。'
+            return "密码与确认密码不一致。"
         elif not name:
-            return '用户名不能为空。'
+            return "用户名不能为空。"
         avatardata = avatarfile.read()
         if name and name != self.name:
             self.name = name
@@ -146,30 +172,40 @@ class User(db.Model, UserMixin):
         probscores = {}
         for submission in self.submissions:
             prob = submission.prob
-            if prob not in probscores or prob in probscores \
-                    and probscores[prob] < submission.score:
+            if (
+                prob not in probscores
+                or prob in probscores
+                and probscores[prob] < submission.score
+            ):
                 probscores[prob] = submission.score
         return probscores
 
     def get_passedprobs(self):
-        return sorted([
-            prob for prob, score in self.get_probscores().items()
-            if score == 100])
+        return sorted(
+            [prob for prob, score in self.get_probscores().items() if score == 100]
+        )
 
     def unread_reply_comments(self):
         is_mine = Comment.replyto.has(Comment.uid == self.uid)
-        return Comment.query.filter(
-            is_mine if self.cmtlastvisit is None
-            else is_mine & (self.cmtlastvisit < Comment.timestamp)).order_by(
-            Comment.timestamp.desc()).all()
+        return (
+            Comment.query.filter(
+                is_mine
+                if self.cmtlastvisit is None
+                else is_mine & (self.cmtlastvisit < Comment.timestamp)
+            )
+            .order_by(Comment.timestamp.desc())
+            .all()
+        )
 
     def unread_comments_on_my_probs(self):
         probnos = [prob.probno for prob in self.uploadedprobs]
         if not probnos:
             return []
         query = Comment.query.filter(
-            Comment.post_type == 0, Comment.post_ident.in_(probnos),
-            Comment.replyto_id.is_(None))
+            Comment.post_type == 0,
+            Comment.post_ident.in_(probnos),
+            Comment.replyto_id.is_(None),
+        )
         if self.cmtlastvisit is not None:
             query = query.filter(Comment.timestamp > self.cmtlastvisit)
         return query.order_by(Comment.timestamp.desc()).all()
@@ -179,33 +215,42 @@ class User(db.Model, UserMixin):
         if not sol_ids:
             return []
         query = Comment.query.filter(
-            Comment.post_type == 1, Comment.post_ident.in_(sol_ids),
-            Comment.replyto_id.is_(None))
+            Comment.post_type == 1,
+            Comment.post_ident.in_(sol_ids),
+            Comment.replyto_id.is_(None),
+        )
         if self.cmtlastvisit is not None:
             query = query.filter(Comment.timestamp > self.cmtlastvisit)
         return query.order_by(Comment.timestamp.desc()).all()
 
     def unread_comments_count(self):
-        reply_query = Comment.query.filter(
-            Comment.replyto.has(Comment.uid == self.uid))
+        reply_query = Comment.query.filter(Comment.replyto.has(Comment.uid == self.uid))
         probnos = [prob.probno for prob in self.uploadedprobs]
-        solution_ids = [
-            solution.get_post_ident() for solution in self.solutions]
-        prob_query = Comment.query.filter(
-            Comment.post_type == 0, Comment.post_ident.in_(probnos),
-            Comment.replyto_id.is_(None)) if probnos else None
-        sol_query = Comment.query.filter(
-            Comment.post_type == 1, Comment.post_ident.in_(solution_ids),
-            Comment.replyto_id.is_(None)) if solution_ids else None
+        solution_ids = [solution.get_post_ident() for solution in self.solutions]
+        prob_query = (
+            Comment.query.filter(
+                Comment.post_type == 0,
+                Comment.post_ident.in_(probnos),
+                Comment.replyto_id.is_(None),
+            )
+            if probnos
+            else None
+        )
+        sol_query = (
+            Comment.query.filter(
+                Comment.post_type == 1,
+                Comment.post_ident.in_(solution_ids),
+                Comment.replyto_id.is_(None),
+            )
+            if solution_ids
+            else None
+        )
         if self.cmtlastvisit is not None:
-            reply_query = reply_query.filter(
-                Comment.timestamp > self.cmtlastvisit)
+            reply_query = reply_query.filter(Comment.timestamp > self.cmtlastvisit)
             if prob_query is not None:
-                prob_query = prob_query.filter(
-                    Comment.timestamp > self.cmtlastvisit)
+                prob_query = prob_query.filter(Comment.timestamp > self.cmtlastvisit)
             if sol_query is not None:
-                sol_query = sol_query.filter(
-                    Comment.timestamp > self.cmtlastvisit)
+                sol_query = sol_query.filter(Comment.timestamp > self.cmtlastvisit)
         total = reply_query.count()
         if prob_query is not None:
             total += prob_query.count()
@@ -215,9 +260,9 @@ class User(db.Model, UserMixin):
 
     def unread_comment_sections(self):
         return {
-            'replies': self.unread_reply_comments(),
-            'prob_comments': self.unread_comments_on_my_probs(),
-            'solution_comments': self.unread_comments_on_my_solutions(),
+            "replies": self.unread_reply_comments(),
+            "prob_comments": self.unread_comments_on_my_probs(),
+            "solution_comments": self.unread_comments_on_my_solutions(),
         }
 
     def update_cmtlastvisit(self):
@@ -225,61 +270,77 @@ class User(db.Model, UserMixin):
         db.session.commit()
 
     def chat_to(self, uid, msg):
-        message = Comment(
-            user=self, content=str(msg), post_type=2, post_ident=str(uid))
+        message = Comment(user=self, content=str(msg), post_type=2, post_ident=str(uid))
         db.session.add(message)
         db.session.commit()
 
     def all_chats(self, from_time=None):
         if from_time is None:
             from_time = datetime.datetime.min
-        chats_list = Comment.query.filter(
-            Comment.post_type == 2, Comment.timestamp > from_time,
-            (Comment.uid == self.uid) | (Comment.post_ident == str(self.uid))
-        ).order_by(Comment.timestamp.asc()).all()
+        chats_list = (
+            Comment.query.filter(
+                Comment.post_type == 2,
+                Comment.timestamp > from_time,
+                (Comment.uid == self.uid) | (Comment.post_ident == str(self.uid)),
+            )
+            .order_by(Comment.timestamp.asc())
+            .all()
+        )
         chats, lastvisits = {}, {}
         for chatmsg in chats_list:
             other, othersend = chatmsg.uid, True
             if other == self.uid:
                 other, othersend = int(chatmsg.post_ident), False
             if other not in chats:
-                chats[other] = {'unread': 0, 'messages': []}
-            chats[other]['messages'].append({
-                'content': chatmsg.content, 'othersend': othersend,
-                'timestamp': chatmsg.timestamp.isoformat(),
-                'humanliketime': auto_format_time(chatmsg.timestamp)})
+                chats[other] = {"unread": 0, "messages": []}
+            chats[other]["messages"].append(
+                {
+                    "content": chatmsg.content,
+                    "othersend": othersend,
+                    "timestamp": chatmsg.timestamp.isoformat(),
+                    "humanliketime": auto_format_time(chatmsg.timestamp),
+                }
+            )
             if other not in lastvisits:
-                lastvisits[other] = max(get_chatlastvisit(
-                    self.uid, other).lastvisit, from_time)
-            chats[other]['unread'] += othersend \
-                and lastvisits[other] < chatmsg.timestamp
+                lastvisits[other] = max(
+                    get_chatlastvisit(self.uid, other).lastvisit, from_time
+                )
+            chats[other]["unread"] += (
+                othersend and lastvisits[other] < chatmsg.timestamp
+            )
         return chats
 
     def unread_chats_num(self):
-        chats_list = Comment.query.filter(
-            Comment.post_type == 2, Comment.post_ident == str(self.uid)
-        ).order_by(Comment.timestamp.asc()).all()
+        chats_list = (
+            Comment.query.filter(
+                Comment.post_type == 2, Comment.post_ident == str(self.uid)
+            )
+            .order_by(Comment.timestamp.asc())
+            .all()
+        )
         unread_num, lastvisits = 0, {}
         for chatmsg in chats_list:
             other = chatmsg.uid
             if other not in lastvisits:
-                lastvisits[other] = get_chatlastvisit(
-                    self.uid, other).lastvisit
+                lastvisits[other] = get_chatlastvisit(self.uid, other).lastvisit
             unread_num += lastvisits[other] < chatmsg.timestamp
         return unread_num
 
     def url(self, anchor=None, **kwargs):
-        return url_for('auth.users', uid=self.uid, _anchor=anchor, **kwargs)
+        return url_for("auth.users", uid=self.uid, _anchor=anchor, **kwargs)
 
     def get_id(self):
         return self.uid
 
 
-def find_user(val, key='uid'):
+def find_user(val, key="uid"):
     if not val or key not in User.columns:
         return None
-    user = db.session.get(User, val) if key == 'uid' \
+    user = (
+        db.session.get(User, val)
+        if key == "uid"
         else User.query.filter_by(**{key: val}).first()
+    )
     return user
 
 
@@ -289,13 +350,9 @@ def load_user(uid):
 
 
 def register_user(name, gender, password, password_confirmation, avatarfile):
-    user_exists = db.session.query(
-        User.query.filter_by(name=name).exists()).scalar()
-    if name and password and not user_exists \
-            and password == password_confirmation:
-        user = User(
-            name=name, gender=gender,
-            password=generate_password_hash(password))
+    user_exists = db.session.query(User.query.filter_by(name=name).exists()).scalar()
+    if name and password and not user_exists and password == password_confirmation:
+        user = User(name=name, gender=gender, password=generate_password_hash(password))
         if avatarfile is not None:
             user.avatar = avatarfile.read()
             user.avmimetype = mimetypes.guess_type(avatarfile.filename)[0]
@@ -303,11 +360,11 @@ def register_user(name, gender, password, password_confirmation, avatarfile):
         db.session.commit()
         return True, user
     elif password != password_confirmation:
-        return False, '密码与确认密码不一致。'
+        return False, "密码与确认密码不一致。"
     elif user_exists:
-        return False, '用户名与其他用户重复。'
+        return False, "用户名与其他用户重复。"
     else:
-        return False, '账户创建失败。'
+        return False, "账户创建失败。"
 
 
 def unregister_user(user):
@@ -320,41 +377,48 @@ def unregister_user(user):
 
 
 class Image(db.Model):
-    __tablename__ = 'images'
+    __tablename__ = "images"
     post_type = db.Column(db.Integer, primary_key=True)
     post_ident = db.Column(db.String(64), primary_key=True)
     name = db.Column(db.String(64), primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='set null'))
+    uid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="set null"))
     size = db.Column(db.Integer)
     mimetype = db.Column(db.String(64))
     data = db.Column(MEDIUMBLOB())
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
-    uploader = db.relationship('User', backref='uploaded_images')
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
+    uploader = db.relationship("User", backref="uploaded_images")
 
 
 def add_images(post_type, post_ident, imgfiles):
     for imgfile in imgfiles:
         if get_image(post_type, post_ident, imgfile.filename) is not None:
-            return '文件名与已有文件重复。'
+            return "文件名与已有文件重复。"
     for imgfile in imgfiles:
         imgdata = imgfile.read()
         if len(imgdata):
             img = Image(
-                post_type=int(post_type), post_ident=str(post_ident),
-                name=imgfile.filename, uid=current_user.uid,
-                size=len(imgdata), data=imgdata,
-                mimetype=mimetypes.guess_type(imgfile.filename)[0])
+                post_type=int(post_type),
+                post_ident=str(post_ident),
+                name=imgfile.filename,
+                uid=current_user.uid,
+                size=len(imgdata),
+                data=imgdata,
+                mimetype=mimetypes.guess_type(imgfile.filename)[0],
+            )
             db.session.add(img)
     db.session.commit()
 
 
 def get_images_for_post(post_type, post_ident):
-    return Image.query.filter_by(
-        post_type=int(post_type), post_ident=str(post_ident)
-    ).order_by(Image.name.asc()).all()
+    return (
+        Image.query.filter_by(post_type=int(post_type), post_ident=str(post_ident))
+        .order_by(Image.name.asc())
+        .all()
+    )
 
 
 def get_image(post_type, post_ident, name):
@@ -365,36 +429,41 @@ def get_image(post_type, post_ident, name):
 
 
 prob_tag = db.Table(
-    'probs_tags', db.Column(
-        'probno', db.String(16),
-        db.ForeignKey('probs.probno', ondelete='cascade', onupdate='cascade'),
-        primary_key=True),
+    "probs_tags",
     db.Column(
-        'tagtitle', db.String(16),
-        db.ForeignKey('tags.tagtitle', ondelete='cascade', onupdate='cascade'),
-        primary_key=True))
+        "probno",
+        db.String(16),
+        db.ForeignKey("probs.probno", ondelete="cascade", onupdate="cascade"),
+        primary_key=True,
+    ),
+    db.Column(
+        "tagtitle",
+        db.String(16),
+        db.ForeignKey("tags.tagtitle", ondelete="cascade", onupdate="cascade"),
+        primary_key=True,
+    ),
+)
 
 
 class Prob(db.Model):
-    __tablename__ = 'probs'
+    __tablename__ = "probs"
     probno = db.Column(db.String(16), primary_key=True)
     probtitle = db.Column(db.String(64))
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
     tags = db.relationship(
-        'Tag', secondary=prob_tag, back_populates='probs',
-        collection_class=set)
+        "Tag", secondary=prob_tag, back_populates="probs", collection_class=set
+    )
     statement = db.Column(db.Text, nullable=False)
     answer = db.Column(db.Text)
-    solutions = db.relationship(
-        'ProbSolution', backref='prob', cascade='all, delete')
-    sourceuid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='set null'))
-    submissions = db.relationship(
-        'Submission', backref='prob', cascade='all, delete')
-    review_status = db.Column(db.Integer, default=-1, server_default='-1')
-    isofficial = db.Column(db.Boolean, default=False, server_default='0')
+    solutions = db.relationship("ProbSolution", backref="prob", cascade="all, delete")
+    sourceuid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="set null"))
+    submissions = db.relationship("Submission", backref="prob", cascade="all, delete")
+    review_status = db.Column(db.Integer, default=-1, server_default="-1")
+    isofficial = db.Column(db.Boolean, default=False, server_default="0")
     review_comment = db.Column(db.Text)
     post_type = 0
 
@@ -420,8 +489,8 @@ class Prob(db.Model):
         answer_evals = []
         testpoints_list = []
         for i, sub in enumerate(answers):
-            ua = userans_list[i] if i < len(userans_list) else ''
-            tps_def = sub['tps']
+            ua = userans_list[i] if i < len(userans_list) else ""
+            tps_def = sub["tps"]
             ua_eval, tps = check_answers(tps_def, ua)
             answer_evals.append(ua_eval)
             testpoints_list.append(tps)
@@ -432,23 +501,28 @@ class Prob(db.Model):
         passedlist = []
         for sub in testpoints:
             passedlist.extend(testpoints_passedlist(sub))
-        stored_answer = json.dumps(
-            answer) if not isinstance(answer, str) else answer
+        stored_answer = json.dumps(answer) if not isinstance(answer, str) else answer
         submission = Submission(
-            user=user, answer=stored_answer,
+            user=user,
+            answer=stored_answer,
             ispassed=all(passedlist) if passedlist else False,
-            score=100 * sum(passedlist) // len(passedlist)
-            if passedlist else 0)
+            score=100 * sum(passedlist) // len(passedlist) if passedlist else 0,
+        )
         db.session.add(submission)
         submission.prob = self
         db.session.commit()
         return answer_eval, testpoints, submission
 
     def get_toplevel_comments(self):
-        return Comment.query.filter(
-            Comment.post_type == 0, Comment.post_ident == self.probno,
-            Comment.replyto_id.is_(None)).order_by(
-            Comment.timestamp.desc()).all()
+        return (
+            Comment.query.filter(
+                Comment.post_type == 0,
+                Comment.post_ident == self.probno,
+                Comment.replyto_id.is_(None),
+            )
+            .order_by(Comment.timestamp.desc())
+            .all()
+        )
 
     def edit(self, probtitle, tags, statement, answer):
         if probtitle:
@@ -456,13 +530,15 @@ class Prob(db.Model):
         if statement:
             self.statement = statement
         self.answer = answer
-        self.tags = {get_tag(
-            tagtitle, create=True) for tagtitle in tags}
+        self.tags = {get_tag(tagtitle, create=True) for tagtitle in tags}
         db.session.commit()
 
     def viewable_for(self, user):
-        return self.review_status == 1 or user.is_authenticated and (
-            user == self.source or user.isadmin)
+        return (
+            self.review_status == 1
+            or user.is_authenticated
+            and (user == self.source or user.isadmin)
+        )
 
     def editable_for(self, user):
         return user.is_authenticated and (user == self.source or user.isadmin)
@@ -474,62 +550,76 @@ class Prob(db.Model):
         return {tag.tagtitle for tag in self.tags}
 
     def url(self, anchor=None, **kwargs):
-        return url_for('probs.probs', probno=self.probno, _anchor=anchor, **kwargs)
+        return url_for("probs.probs", probno=self.probno, _anchor=anchor, **kwargs)
 
     def __str__(self):
-        return f'问题 {self.probno}'
+        return f"问题 {self.probno}"
 
     def __lt__(self, prob):
         return self.probno < prob.probno
 
 
 class Submission(db.Model):
-    __tablename__ = 'submissions'
+    __tablename__ = "submissions"
     submitid = db.Column(db.Integer, primary_key=True)
     probno = db.Column(
-        db.String(16), db.ForeignKey('probs.probno', ondelete='cascade'),
-        nullable=False)
-    userid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='cascade'))
+        db.String(16), db.ForeignKey("probs.probno", ondelete="cascade"), nullable=False
+    )
+    userid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="cascade"))
     answer = db.Column(db.Text, nullable=False)
     ispassed = db.Column(db.Boolean)
     score = db.Column(db.Integer)
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
 
     def __lt__(self, sub):
         return self.probno < sub.probno
 
 
 class ProbSolution(db.Model):
-    __tablename__ = 'solutions'
+    __tablename__ = "solutions"
     probno = db.Column(
-        db.String(16), db.ForeignKey('probs.probno', ondelete='cascade'),
-        primary_key=True)
+        db.String(16),
+        db.ForeignKey("probs.probno", ondelete="cascade"),
+        primary_key=True,
+    )
     solno = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='set null'))
+    userid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="set null"))
     title = db.Column(db.String(128), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
     post_type = 1
 
     def url(self, anchor=None, **kwargs):
-        return url_for('probs.solutions', probno=self.probno, solno=self.solno,
-                       _anchor=anchor, **kwargs)
+        return url_for(
+            "probs.solutions",
+            probno=self.probno,
+            solno=self.solno,
+            _anchor=anchor,
+            **kwargs,
+        )
 
     def get_post_ident(self):
         return list2csv([self.probno, self.solno])
 
     def get_toplevel_comments(self):
         post_ident = self.get_post_ident()
-        return Comment.query.filter(
-            Comment.post_type == 1, Comment.post_ident == post_ident,
-            Comment.replyto_id.is_(None)).order_by(
-            Comment.timestamp.desc()).all()
+        return (
+            Comment.query.filter(
+                Comment.post_type == 1,
+                Comment.post_ident == post_ident,
+                Comment.replyto_id.is_(None),
+            )
+            .order_by(Comment.timestamp.desc())
+            .all()
+        )
 
     def edit(self, title, content):
         if title:
@@ -545,25 +635,25 @@ class ProbSolution(db.Model):
         return user.is_authenticated and (user == self.user or user.isadmin)
 
     def __str__(self):
-        return f'问题 {self.probno} 的题解：{self.title}'
+        return f"问题 {self.probno} 的题解：{self.title}"
 
     def __lt__(self, solution):
         return self.probno < solution.probno
 
 
 class Tag(db.Model):
-    __tablename__ = 'tags'
+    __tablename__ = "tags"
     tagtitle = db.Column(db.String(16), primary_key=True)
     probs = db.relationship(
-        'Prob', secondary=prob_tag, back_populates='tags',
-        collection_class=set)
+        "Prob", secondary=prob_tag, back_populates="tags", collection_class=set
+    )
 
     def url(self):
-        return url_for('probs.problistoftag', tagtitle=self.tagtitle)
+        return url_for("probs.problistoftag", tagtitle=self.tagtitle)
 
     def rename(self, new_title):
         if not new_title:
-            return False, '标签标题不能为空。'
+            return False, "标签标题不能为空。"
         target_tag = get_tag(new_title)
         if target_tag is not None:
             return self.merge_with(target_tag)
@@ -573,7 +663,7 @@ class Tag(db.Model):
 
     def merge_with(self, target_tag):
         if not isinstance(target_tag, Tag):
-            return False, '目标标签不存在。'
+            return False, "目标标签不存在。"
         for prob in list(self.probs):
             prob.tags.remove(self)
             prob.tags.add(target_tag)
@@ -601,15 +691,15 @@ def get_prob(probno):
 
 
 def add_prob(**kwargs):
-    probno = kwargs.get('probno')
-    probtitle = kwargs.get('probtitle')
-    statement = kwargs.get('statement')
+    probno = kwargs.get("probno")
+    probtitle = kwargs.get("probtitle")
+    statement = kwargs.get("statement")
     if not probtitle:
-        return False, '题目标题不能为空。'
+        return False, "题目标题不能为空。"
     elif not statement:
-        return False, '题目描述不能为空。'
+        return False, "题目描述不能为空。"
     elif get_prob(probno) is not None:
-        return False, f'以{probno}为编号的题目已存在。'
+        return False, f"以{probno}为编号的题目已存在。"
     prob = Prob(**kwargs)
     db.session.add(prob)
     db.session.commit()
@@ -622,15 +712,19 @@ def get_solution(probno, solno):
 
 def add_solution(probno, title, content):
     if not title:
-        return False, '题解标题不能为空。'
+        return False, "题解标题不能为空。"
     elif not content:
-        return False, '题解内容不能为空。'
+        return False, "题解内容不能为空。"
     prob = get_prob(probno)
     if not prob:
-        return False, '未能找到题目。'
+        return False, "未能找到题目。"
     solution = ProbSolution(
-        prob=prob, solno=len(prob.solutions),
-        user=current_user, title=title, content=content)
+        prob=prob,
+        solno=len(prob.solutions),
+        user=current_user,
+        title=title,
+        content=content,
+    )
     db.session.add(solution)
     db.session.commit()
     return True, solution
@@ -656,29 +750,35 @@ def add2tags(tagtitles, prob):
 
 
 class Article(db.Model):
-    __tablename__ = 'articles'
+    __tablename__ = "articles"
     id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='set null'))
+    userid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="set null"))
     title = db.Column(db.String(128), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
     post_type = 3
 
     def url(self, anchor=None, **kwargs):
-        return url_for('articles.article', article_id=self.id, _anchor=anchor, **kwargs)
+        return url_for("articles.article", article_id=self.id, _anchor=anchor, **kwargs)
 
     def get_post_ident(self):
         return str(self.id)
 
     def get_toplevel_comments(self):
         post_ident = self.get_post_ident()
-        return Comment.query.filter(
-            Comment.post_type == 3, Comment.post_ident == post_ident,
-            Comment.replyto_id.is_(None)).order_by(
-            Comment.timestamp.desc()).all()
+        return (
+            Comment.query.filter(
+                Comment.post_type == 3,
+                Comment.post_ident == post_ident,
+                Comment.replyto_id.is_(None),
+            )
+            .order_by(Comment.timestamp.desc())
+            .all()
+        )
 
     def edit(self, title, content):
         if title:
@@ -694,7 +794,7 @@ class Article(db.Model):
         return user.is_authenticated and (user == self.user or user.isadmin)
 
     def __str__(self):
-        return f'专栏：{self.title}'
+        return f"专栏：{self.title}"
 
     def __lt__(self, article):
         return self.id < article.id
@@ -706,11 +806,10 @@ def get_article(article_id):
 
 def add_article(title, content):
     if not title:
-        return False, '专栏标题不能为空。'
+        return False, "专栏标题不能为空。"
     elif not content:
-        return False, '专栏内容不能为空。'
-    article = Article(
-        user=current_user, title=title, content=content)
+        return False, "专栏内容不能为空。"
+    article = Article(user=current_user, title=title, content=content)
     db.session.add(article)
     db.session.commit()
     return True, article
@@ -720,28 +819,45 @@ def add_article(title, content):
 
 
 user_chat = db.Table(
-    'user_chats', db.Column(
-        'uid_receiver', db.Integer, db.ForeignKey(
-            'users.uid', ondelete='cascade'), primary_key=True),
+    "user_chats",
     db.Column(
-        'uid_sender', db.Integer, db.ForeignKey(
-            'users.uid', ondelete='cascade'), primary_key=True),
+        "uid_receiver",
+        db.Integer,
+        db.ForeignKey("users.uid", ondelete="cascade"),
+        primary_key=True,
+    ),
     db.Column(
-        'lastvisit', db.DateTime,
+        "uid_sender",
+        db.Integer,
+        db.ForeignKey("users.uid", ondelete="cascade"),
+        primary_key=True,
+    ),
+    db.Column(
+        "lastvisit",
+        db.DateTime,
         default=datetime.datetime(1000, 1, 1).replace(tzinfo=datetime.UTC),
-        server_default=db.text("'1000-01-01 00:00:00'")))
+        server_default=db.text("'1000-01-01 00:00:00'"),
+    ),
+)
 
 
 def get_chatlastvisit(uid_receiver, uid_sender):
-    result = db.session.execute(user_chat.select().where(
-        user_chat.c.uid_receiver == uid_receiver,
-        user_chat.c.uid_sender == uid_sender)).first()
-    if result is None:
-        db.session.execute(user_chat.insert().values(
-            uid_receiver=uid_receiver, uid_sender=uid_sender))
-        result = db.session.execute(user_chat.select().where(
+    result = db.session.execute(
+        user_chat.select().where(
             user_chat.c.uid_receiver == uid_receiver,
-            user_chat.c.uid_sender == uid_sender)).first()
+            user_chat.c.uid_sender == uid_sender,
+        )
+    ).first()
+    if result is None:
+        db.session.execute(
+            user_chat.insert().values(uid_receiver=uid_receiver, uid_sender=uid_sender)
+        )
+        result = db.session.execute(
+            user_chat.select().where(
+                user_chat.c.uid_receiver == uid_receiver,
+                user_chat.c.uid_sender == uid_sender,
+            )
+        ).first()
         db.session.commit()
     return result
 
@@ -749,42 +865,54 @@ def get_chatlastvisit(uid_receiver, uid_sender):
 def update_chatlastvisit(uid_receiver, uid_sender):
     exists = get_chatlastvisit(uid_receiver, uid_sender)
     if not exists:
-        db.session.execute(user_chat.insert().values(
-            uid_receiver=uid_receiver, uid_sender=uid_sender,
-            lastvisit=_utcnow()))
+        db.session.execute(
+            user_chat.insert().values(
+                uid_receiver=uid_receiver, uid_sender=uid_sender, lastvisit=_utcnow()
+            )
+        )
     else:
-        db.session.execute(user_chat.update().where(
-            user_chat.c.uid_receiver == uid_receiver,
-            user_chat.c.uid_sender == uid_sender).values(lastvisit=_utcnow()))
+        db.session.execute(
+            user_chat.update()
+            .where(
+                user_chat.c.uid_receiver == uid_receiver,
+                user_chat.c.uid_sender == uid_sender,
+            )
+            .values(lastvisit=_utcnow())
+        )
     db.session.commit()
 
 
 class Comment(db.Model):
-    __tablename__ = 'comments'
+    __tablename__ = "comments"
     cmtid = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, db.ForeignKey(
-        'users.uid', ondelete='set null'))
+    uid = db.Column(db.Integer, db.ForeignKey("users.uid", ondelete="set null"))
     content = db.Column(db.Text)
     timestamp = db.Column(
-        db.DateTime, default=db.func.utc_timestamp(),
-        server_default=db.func.utc_timestamp())
-    replyto_id = db.Column(db.Integer, db.ForeignKey(
-        'comments.cmtid', ondelete='set null'))
+        db.DateTime,
+        default=db.func.utc_timestamp(),
+        server_default=db.func.utc_timestamp(),
+    )
+    replyto_id = db.Column(
+        db.Integer, db.ForeignKey("comments.cmtid", ondelete="set null")
+    )
     # 帖子类型为0，帖子为题目，标识符为题目编号
     # 帖子类型为1，帖子为题解，标识符为CSV格式的题目编号与题解编号的组合
     # 帖子类型为2，帖子为私信，标识符为信息接收用户ID，不使用replyto、replies字段
     # 帖子类型为3，帖子为专栏，标识符为专栏ID
     post_type = db.Column(db.Integer, nullable=False)  # 帖子类型
-    post_ident = db.Column(db.String(64), nullable=False)    # 帖子标识符
-    replyto = db.relationship(
-        'Comment', back_populates='replies', remote_side=[cmtid])
+    post_ident = db.Column(db.String(64), nullable=False)  # 帖子标识符
+    replyto = db.relationship("Comment", back_populates="replies", remote_side=[cmtid])
     replies = db.relationship(
-        'Comment', back_populates='replyto', cascade='all, delete')
+        "Comment", back_populates="replyto", cascade="all, delete"
+    )
 
     def get_all_replies(self):
-        return sorted(sum(
-            [comment.get_all_replies() for comment in self.replies],
-            start=self.replies.copy()))
+        return sorted(
+            sum(
+                [comment.get_all_replies() for comment in self.replies],
+                start=self.replies.copy(),
+            )
+        )
 
     def get_post(self):
         return get_post(self.post_type, self.post_ident)
