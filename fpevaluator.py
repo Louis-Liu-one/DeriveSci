@@ -5,7 +5,6 @@ import types
 import operator as op
 import functools
 import sympy as sp
-from sympy.tensor.array import NDimArray
 from pyparsing import Literal, Suppress, Word, Regex
 from pyparsing import Forward, Opt, ZeroOrMore, OneOrMore
 from pyparsing import identchars, identbodychars
@@ -74,7 +73,9 @@ class Context:
             identifier = sp.Symbol(identifier)
         if identifier in self.context:
             return self
-        return self.master._find_binding(identifier) if self.master is not None else None
+        return (
+            self.master._find_binding(identifier) if self.master is not None else None
+        )
 
     def __getitem__(self, identifier):
         if isinstance(identifier, str):
@@ -320,7 +321,9 @@ class FuncDefine(FPElement):
             unknown_kwargs = set(kwargs).difference(self.funcargs)
             if unknown_kwargs:
                 name = next(iter(unknown_kwargs))
-                raise TypeError(f"{self.funcident}() got an unexpected keyword '{name}'")
+                raise TypeError(
+                    f"{self.funcident}() got an unexpected keyword '{name}'"
+                )
             missing_args = [
                 name for name in self.funcargs[len(args) :] if name not in kwargs
             ]
@@ -907,7 +910,7 @@ def _simplify_result(result):
     result = _as_sympy(result)
     if isinstance(result, sp.Tuple):
         return sp.Tuple(*(_simplify_result(item) for item in result))
-    if isinstance(result, NDimArray):
+    if isinstance(result, sp.NDimArray):
         return result.applyfunc(_simplify_result)
     return sp.simplify(result)
 

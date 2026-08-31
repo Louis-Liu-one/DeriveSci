@@ -6,4 +6,3 @@ migrations
 .venv
 .vscode
 .copilot-commit-message-instructions.md
-instance/
