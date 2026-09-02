@@ -1,3 +1,6 @@
+**重要提示：此 repo 已经废弃，请勿再向此 repo 提交 Pull Requests！**
+
+近日，为了项目持续发展，作者计划从 Flask+Jinja2 模式转为后端 Flask、前端 Vue+NaiveUI 实现前后端分离的模式，目前正在持续开发。若要提交 PR，请转到新的 repo：[DeriveSci 后端](https://github.com/Louis-Liu-one/DeriveSci-Backend)、[DeriveSci 前端](https://github.com/Louis-Liu-one/DeriveSci-Frontend)
 
 # DeriveSci
 
@@ -8,6 +11,7 @@
 - 项目使用 `markdown-it` 渲染 Markdown，使用 `mdit/plugin-katex` 插件和 KaTeX 引擎渲染数学公式，使用 Font Awesome 渲染图标。初次进入网页时，需要加载各项 CDN，速度较慢，敬请谅解。
 
 - 网页服务所需的Python第三方库有：SymPy、PyParsing、Werkzeug、Flask、Flask-Login、Flask-SQLAlchemy、Flask-Migrate、func_timeout 等，具体参见 `requirements.txt`，可以直接使用 `pip` 安装，建议使用虚拟环境。命令如下：
+
 ```bash
 cd DeriveSci
 python -m venv .venv             # 创建环境
@@ -18,25 +22,34 @@ deactivate                       # 退出环境
 ```
 
 - 所有构建都完成时，先创建 `.env` 文件，在其中将你的 Flask 密钥设置在 `FLASK_SECRET_KEY` 环境变量中：
+
 ```bash
 FLASK_SECRET_KEY=密钥...
 ```
+
 并设置你的 MySQL 数据库，例如：
+
 ```bash
 SQLALCHEMY_DATABASE_URI='mysql+pymysql://[用户名称]:[密码]@localhost/[数据库名称]'
 ```
+
 然后，运行 `app.py`，或从他处导入：
+
 ```python
 from app import app
 app.run()
 ```
+
 此时，网页可在 `localhost:5000` 访问。
 
 - 初始化 Flask-Migrate 时，使用
+
 ```bash
 flask db init
 ```
+
 代码进行修改后，更新数据库时，使用
+
 ```bash
 flask db migrate -m '更新描述...'
 flask db upgrade
@@ -54,6 +67,7 @@ flask db upgrade
 4. 以上内容的解释权归网站运营方所有。
 
 使用时应该注意：
+
 1. 必须遵守国家相关法律法规，不能进行违法行为；
 2. 上传的题目、题解内容必须依法依规；要以学习为主，不包含无关内容；上传的题目要有编号，建议按照统一的格式；
 3. 上传的任何图片（包括但不限于问题、题解附带图片、用户头像）必须依法依规；建议将大小控制在 100KB 以下，以保证访问速度；建议使用 SVG 格式、JPEG 格式的图像，以提高访问速度；在题目、题解正文中要用 Markdown 语法插入图像，否则图像不会显示，图像路径直接使用 `<图像文件名称>` 即可；
