@@ -32,7 +32,7 @@ table.problist tr:not(.probhead):hover {
 table.problist th {
     position: sticky;
     top: 0;
-    z-index: 3;
+    z-index: 10;
     text-align: left;
     background: var(--surface-soft);
     color: var(--text);
@@ -51,7 +51,7 @@ table.problist th {
 table.problist th.probno {
     position: sticky;
     left: 0;
-    z-index: 8;
+    z-index: 15;
     min-width: 80px;
 }
 
